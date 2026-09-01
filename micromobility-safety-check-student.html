@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Micromobility Safety Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2A3A;
+    --paper:#F5F6F3;
+    --paper-line:#DEE2E1;
+    --steel:#3D6B8C;
+    --steel-dark:#274A61;
+    --amber:#D9822B;
+    --amber-dark:#95591A;
+    --teal:#1E8C82;
+    --teal-dark:#146059;
+    --gold:#C9A227;
+    --gold-dark:#8C6F16;
+    --data:#6C5B9E;
+    --data-dark:#463A6B;
+    --cream:#FDFDFB;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image: repeating-linear-gradient(rgba(61,107,140,0.06) 0px, rgba(61,107,140,0.06) 1px, transparent 1px, transparent 26px);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:740px;margin:0 auto;padding:0 24px 80px;}
+
+  header.hero{
+    background:var(--ink);
+    background-image: repeating-linear-gradient(rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 26px);
+    color:var(--cream);
+    padding:44px 24px 38px;
+  }
+  .hero-inner{max-width:740px;margin:0 auto;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#9FC1D9;letter-spacing:.03em;margin:0 0 14px;text-transform:uppercase;}
+  h1.title{font-family:'Oswald',sans-serif;font-weight:600;font-size:34px;line-height:1.16;margin:0 0 12px;max-width:18ch;text-transform:uppercase;}
+  .hero p.lede{font-size:16px;max-width:56ch;color:#D6DEE4;margin:0 0 8px;}
+  .meta-row{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;}
+  .meta-item{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9FC1D9;}
+  .meta-item b{display:block;font-size:16px;color:var(--cream);font-family:'Oswald',sans-serif;font-weight:600;}
+
+  section{padding:34px 0;border-bottom:1px solid var(--paper-line);}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--steel-dark);margin:0 0 8px;text-transform:uppercase;letter-spacing:.02em;}
+  h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:23px;margin:0 0 14px;max-width:24ch;text-transform:uppercase;}
+  h3{font-family:'Oswald',sans-serif;font-weight:500;font-size:17px;margin:18px 0 8px;text-transform:uppercase;}
+  p{max-width:64ch;margin:0 0 14px;font-size:15.5px;}
+  strong{color:var(--ink);}
+
+  .case-box{background:var(--cream);border:1px solid var(--paper-line);border-radius:8px;padding:18px 22px;margin:16px 0;font-size:15.5px;}
+
+  figure{margin:18px 0;}
+  figure img{width:100%;max-width:420px;display:block;border-radius:8px;border:1px solid var(--paper-line);}
+  figcaption{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6b7885;margin-top:8px;max-width:420px;}
+
+  .group-band{
+    color:var(--cream);margin:0 -24px;padding:8px 24px 2px;
+  }
+  .group-band.a{background:var(--steel-dark);}
+  .group-band.b{background:var(--teal-dark);}
+  .group-band .wrap-in{max-width:692px;margin:0 auto;padding:26px 0;}
+  .group-band h2{color:var(--cream);}
+  .group-band .eyebrow{color:#CDE0EA;}
+  .group-band p{color:#D6DEE4;}
+
+  .role-row{display:flex;flex-direction:column;gap:12px;margin:18px 0;}
+  .role-card{background:var(--cream);border:1px solid var(--paper-line);border-radius:8px;padding:16px 18px;border-top:5px solid var(--amber);}
+  .role-card.data{border-top-color:var(--data);}
+  .role-card.fair{border-top-color:var(--gold);}
+  .role-card.report{border-top-color:var(--teal);}
+  .role-card .rt{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--amber-dark);margin:0 0 4px;}
+  .role-card.data .rt{color:var(--data-dark);}
+  .role-card.fair .rt{color:var(--gold-dark);}
+  .role-card.report .rt{color:var(--teal-dark);}
+  .role-card h3{margin:0 0 6px;font-size:17px;}
+  .role-card p{font-size:14px;margin-bottom:8px;}
+  .role-card .job{font-size:13px;background:#fff;border:1px solid var(--paper-line);border-radius:6px;padding:8px 12px;margin-top:6px;}
+  .role-card .job b{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;color:#5b6472;display:block;margin-bottom:2px;}
+
+  .callout{background:var(--cream);border-left:4px solid var(--steel);border-radius:6px;padding:14px 18px;margin:18px 0;}
+  .callout p:last-child{margin-bottom:0;}
+  .callout .k{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--steel-dark);margin:0 0 6px;text-transform:uppercase;}
+
+  footer{padding:28px 24px 54px;}
+  footer p{color:#5b6472;font-size:13.5px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="tag">Physical Science · Case File</p>
+    <h1 class="title">The Micromobility Safety Check</h1>
+    <p class="lede">Cities across the U.S. are rewriting the rules for e-scooters and e-bikes this year — and your group is about to investigate exactly the kind of question city safety boards are asking right now.</p>
+    <div class="meta-row">
+      <div class="meta-item"><b>10 min</b>with your group</div>
+      <div class="meta-item"><b>2</b>scenarios, one per group</div>
+      <div class="meta-item"><b>No materials</b>needed</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section id="why">
+  <p class="eyebrow">The big picture</p>
+  <h2>A real safety debate, happening in cities right now</h2>
+  <p>In 2026, cities from Kansas City to New York to Los Angeles have all passed new speed limits, age rules, and safety requirements for e-scooters and e-bikes. One reason: emergency room visits for e-scooter and e-bike injuries among riders under 18 have risen sharply in the past few years. City officials, safety boards, and manufacturers are all trying to figure out what actually makes these rides more dangerous — and what would make them safer.</p>
+  <p>Your class is splitting into two investigation teams. Each team gets a different real safety question that a city might actually be asking. You won't need any special vocabulary today — just sharp eyes and good teamwork.</p>
+</section>
+
+<div class="group-band a">
+  <div class="wrap-in">
+    <p class="eyebrow">Group A</p>
+    <h2>Does wheel size change top speed?</h2>
+    <p>Residents have been complaining that some e-scooters seem to zip down sidewalks much faster than others. A city safety board wants to know if wheel size is the reason.</p>
+  </div>
+</div>
+
+<section id="group-a">
+  <figure>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Bird_scooters_on_the_sidewalk_in_San_Jose.jpg" alt="E-scooters parked on a sidewalk">
+    <figcaption>Real shared e-scooters, parked exactly where a city safety board would test them.</figcaption>
+  </figure>
+  <div class="case-box">
+    <p>The safety board tests two scooter models on the same stretch of sidewalk: one with small 8-inch wheels, and one with larger 10-inch wheels. The same rider rides each scooter the same distance, and the board times how long each trip takes.</p>
+  </div>
+
+  <div class="role-row">
+    <div class="role-card">
+      <p class="rt">Role 1</p>
+      <h3>The Change Spotter</h3>
+      <p>Find the ONE thing the safety board is deliberately testing between the two scooters.</p>
+      <div class="job"><b>Report out</b>What's the one thing being compared here?</div>
+    </div>
+    <div class="role-card data">
+      <p class="rt">Role 2</p>
+      <h3>The Data Detective</h3>
+      <p>Figure out exactly what the board needs to record to answer their question.</p>
+      <div class="job"><b>Report out</b>What has to be measured on each ride? What would you need to calculate to actually compare the two scooters fairly?</div>
+    </div>
+    <div class="role-card fair">
+      <p class="rt">Role 3</p>
+      <h3>The Fairness Checker</h3>
+      <p>Think about everything else about this test that needs to be identical for it to be a fair comparison.</p>
+      <div class="job"><b>Report out</b>Name at least two things that must stay exactly the same between the two scooter tests. What could go wrong if they didn't?</div>
+    </div>
+    <div class="role-card report">
+      <p class="rt">Role 4</p>
+      <h3>The Field Reporter</h3>
+      <p>Pull your team's three answers together into one short summary.</p>
+      <div class="job"><b>Report out</b>In one or two sentences, explain to the rest of the class what your team is testing and how.</div>
+    </div>
+  </div>
+</section>
+
+<div class="group-band b">
+  <div class="wrap-in">
+    <p class="eyebrow">Group B</p>
+    <h2>Does a wet road change stopping distance?</h2>
+    <p>City officials are worried about scooter riders crashing at crosswalks — especially in bad weather. A safety board wants to know how much wet pavement actually affects braking.</p>
+  </div>
+</div>
+
+<section id="group-b">
+  <figure>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/WalkinginTherainOH_%281%29_%281%29.jpg" alt="A wet, rain-soaked road">
+    <figcaption>Wet pavement changes how much grip a wheel actually has — exactly what this test is checking.</figcaption>
+  </figure>
+  <div class="case-box">
+    <p>The safety board tests the same scooter, ridden by the same rider at the same starting speed, braking hard on two different surfaces: dry pavement and wet pavement. They measure how far the scooter slides before coming to a complete stop on each surface.</p>
+  </div>
+
+  <div class="role-row">
+    <div class="role-card">
+      <p class="rt">Role 1</p>
+      <h3>The Change Spotter</h3>
+      <p>Find the ONE thing the safety board is deliberately testing between the two braking tests.</p>
+      <div class="job"><b>Report out</b>What's the one thing being compared here?</div>
+    </div>
+    <div class="role-card data">
+      <p class="rt">Role 2</p>
+      <h3>The Data Detective</h3>
+      <p>Figure out exactly what the board needs to record to answer their question.</p>
+      <div class="job"><b>Report out</b>What has to be measured on each braking test? How would you make sure that measurement is accurate?</div>
+    </div>
+    <div class="role-card fair">
+      <p class="rt">Role 3</p>
+      <h3>The Fairness Checker</h3>
+      <p>Think about everything else about this test that needs to be identical for it to be a fair comparison.</p>
+      <div class="job"><b>Report out</b>Name at least two things that must stay exactly the same between the two braking tests. What could go wrong if they didn't?</div>
+    </div>
+    <div class="role-card report">
+      <p class="rt">Role 4</p>
+      <h3>The Field Reporter</h3>
+      <p>Pull your team's three answers together into one short summary.</p>
+      <div class="job"><b>Report out</b>In one or two sentences, explain to the rest of the class what your team is testing and how.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p class="k">If your group only has 3 people</p>
+    <p>Combine the Data Detective and Field Reporter jobs — one person can handle both.</p>
+  </div>
+</section>
+
+<section id="compare">
+  <p class="eyebrow">When both groups are back</p>
+  <h2>Compare notes</h2>
+  <p>Group A tested speed. Group B tested braking. Different questions, same city safety board — and as you'll see when both Field Reporters share out, both teams just did the exact same kind of scientific thinking to get there.</p>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Physical Science — Case File Investigation · 8th Grade</p>
+  </div>
+</footer>
+
+</body>
+</html>
