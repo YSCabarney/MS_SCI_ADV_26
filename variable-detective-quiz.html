@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variable Detective — Interactive Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#22331F;
+    --paper:#FBFAF2;
+    --paper-line:#E6E3D2;
+    --leaf:#3F8C4C;
+    --leaf-dark:#2C6338;
+    --coral:#EE7B45;
+    --coral-dark:#B95323;
+    --sky:#2C93A8;
+    --sky-dark:#1C6577;
+    --sun:#E3A526;
+    --sun-dark:#96701A;
+    --cream:#FFFDF6;
+    --red:#C0463A;
+    --data:#7A5EA8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image: radial-gradient(circle, rgba(63,140,76,0.10) 1.6px, transparent 1.6px);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Nunito',sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px 80px;}
+
+  header.hero{
+    background:var(--leaf-dark);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.09) 1.6px, transparent 1.6px);
+    background-size: 22px 22px;
+    color:var(--cream);
+    padding:44px 24px 36px;
+  }
+  .hero-inner{max-width:720px;margin:0 auto;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#BFE3C4;letter-spacing:.02em;margin:0 0 14px;text-transform:uppercase;}
+  h1.title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:38px;line-height:1.1;margin:0 0 12px;max-width:15ch;}
+  .hero p.lede{font-size:16.5px;max-width:52ch;color:#E3F1E1;margin:0;}
+
+  /* score bar */
+  .scorebar{
+    position:sticky;top:0;z-index:5;
+    background:var(--cream);
+    border-bottom:2px solid var(--paper-line);
+    padding:12px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:'Baloo 2',sans-serif;font-weight:600;font-size:15px;
+  }
+  .scorebar .sb-inner{max-width:720px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;}
+  .score-track{flex:1;height:10px;background:var(--paper-line);border-radius:6px;margin:0 16px;overflow:hidden;}
+  .score-fill{height:100%;background:var(--leaf);width:0%;transition:width .3s ease;}
+  #scoreLabel{white-space:nowrap;color:var(--leaf-dark);}
+
+  section{padding:20px 0 8px;}
+
+  .quickref{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 8px;}
+  .qr-chip{flex:1 1 150px;background:var(--cream);border-radius:10px;padding:12px 14px;border-top:5px solid var(--coral);font-size:13.5px;}
+  .qr-chip.dv{border-top-color:var(--sky);}
+  .qr-chip.cv{border-top-color:var(--sun);}
+  .qr-chip.data{border-top-color:var(--data);}
+  .qr-chip b{display:block;font-family:'Baloo 2',sans-serif;font-size:15px;margin-bottom:2px;}
+
+  .q-card{
+    background:#fff;border:1px solid var(--paper-line);border-radius:12px;
+    padding:20px 22px 22px;margin:20px 0;
+  }
+  .q-card.locked{opacity:0.55;}
+  .scenario-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--leaf-dark);text-transform:uppercase;margin:0 0 6px;}
+  .scenario-text{font-size:15.5px;margin:0 0 18px;background:var(--paper);border-radius:8px;padding:14px 16px;}
+
+  .subq{margin-bottom:18px;}
+  .subq:last-child{margin-bottom:0;}
+  .subq-prompt{
+    font-family:'Baloo 2',sans-serif;font-weight:600;font-size:16px;
+    margin:0 0 10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .type-badge{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+    padding:3px 9px;border-radius:20px;color:#fff;text-transform:uppercase;
+  }
+  .badge-iv{background:var(--coral);}
+  .badge-dv{background:var(--sky);}
+  .badge-cv{background:var(--sun);}
+  .badge-data{background:var(--data);}
+
+  .opt-list{display:flex;flex-direction:column;gap:8px;}
+  .opt-btn{
+    text-align:left;
+    font-family:'Nunito',sans-serif;font-size:14.5px;
+    padding:11px 14px;border-radius:8px;
+    border:2px solid var(--paper-line);
+    background:var(--cream);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .opt-btn:hover:not(:disabled){border-color:var(--leaf);}
+  .opt-btn:disabled{cursor:default;}
+  .opt-btn.correct{background:#E4F2E4;border-color:var(--leaf);color:var(--leaf-dark);font-weight:700;}
+  .opt-btn.wrong{background:#FBE6E3;border-color:var(--red);color:var(--red);}
+  .opt-btn.dim{opacity:0.45;}
+
+  .feedback{
+    margin-top:10px;font-size:13.5px;
+    padding:10px 14px;border-radius:8px;
+    display:none;
+  }
+  .feedback.show{display:block;}
+  .feedback.good{background:#E4F2E4;color:var(--leaf-dark);}
+
+  .hint{font-size:13px;color:#8a7a3f;margin-top:8px;display:none;}
+  .hint.show{display:block;}
+
+  .finale{
+    display:none;
+    background:var(--leaf-dark);color:var(--cream);
+    border-radius:14px;padding:32px 28px;margin:26px 0 10px;text-align:center;
+  }
+  .finale.show{display:block;}
+  .finale h2{font-family:'Baloo 2',sans-serif;font-size:26px;margin:0 0 10px;}
+  .finale p{color:#E3F1E1;font-size:15.5px;margin:0;}
+  .finale .big{font-family:'Baloo 2',sans-serif;font-size:44px;margin:8px 0;}
+
+  footer{padding:24px 24px 50px;}
+  footer p{color:#5b6472;font-size:13.5px;max-width:720px;margin:0 auto;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="tag">Life Science · Variable Detective</p>
+    <h1 class="title">Can You Spot the Variables?</h1>
+    <p class="lede">Six real experiments — including the vertical jump investigation your class is running. For each one, figure out what changed, what was measured, what stayed the same, and what data actually needs to be collected. Get it wrong and you'll get a nudge — no answers are just handed to you.</p>
+  </div>
+</header>
+
+<div class="scorebar">
+  <div class="sb-inner">
+    <span id="scoreLabel">Score: 0 / 15</span>
+    <div class="score-track"><div class="score-fill" id="scoreFill"></div></div>
+    <span id="scoreEmoji">🔎</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section id="quickref">
+  <div class="quickref">
+    <div class="qr-chip"><b>Independent</b>What the scientist changes on purpose</div>
+    <div class="qr-chip dv"><b>Dependent</b>What the scientist measures as a result</div>
+    <div class="qr-chip cv"><b>Control</b>What stays exactly the same every time</div>
+    <div class="qr-chip data"><b>Data to Collect</b>The exact measurements you'll record</div>
+  </div>
+</section>
+
+<section id="quiz"></section>
+
+<div class="finale" id="finale">
+  <h2>🕵️ You're an Official Variable Detective!</h2>
+  <div class="big" id="finalScore">15 / 15</div>
+  <p>Every experiment has these three pieces hiding in it — now you know how to find them in your own project.</p>
+</div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Life Science — Independent, Dependent &amp; Control Variables</p>
+  </div>
+</footer>
+
+<script>
+const DATA = [
+  {
+    scenario: "A student waters one group of bean plants with 50 mL of water each day, and another group with 100 mL of water each day. The pot, the soil, and the sunlight are exactly the same for every plant. After two weeks, she measures how tall each plant grew.",
+    parts: [
+      {type:'iv', prompt:"What did the scientist CHANGE on purpose?",
+        options:["Height of the plant", "Amount of water given each day", "Type of soil used"], correct:1,
+        explain:"The amount of water is the one thing she deliberately set differently between the two groups — that makes it the independent variable."},
+      {type:'cv', prompt:"What was kept exactly the SAME for every plant?",
+        options:["Amount of water given each day", "Height of the plant", "The pot, soil, and sunlight"], correct:2,
+        explain:"The pot, soil, and sunlight were held identical on purpose, so they couldn't be blamed for any difference in the results."},
+      {type:'dv', prompt:"What did the scientist MEASURE to find her result?",
+        options:["Height of the plant after two weeks", "Amount of water given each day", "Type of soil used"], correct:0,
+        explain:"Plant height is the outcome she observed and recorded — it's what she was watching to see if it was affected."}
+    ]
+  },
+  {
+    scenario: "A student builds paper airplanes with three different wing widths — narrow, medium, and wide. He throws each plane the exact same way, from the exact same spot, using the exact same kind of paper, and measures how far each one flies.",
+    parts: [
+      {type:'dv', prompt:"What did the scientist MEASURE?",
+        options:["How far each plane flies", "The wing width", "The kind of paper used"], correct:0,
+        explain:"Flight distance is the result being measured — the outcome that depends on the wing width."},
+      {type:'iv', prompt:"What did the scientist CHANGE on purpose?",
+        options:["The throwing spot", "The wing width", "How far each plane flies"], correct:1,
+        explain:"Wing width is the one thing deliberately set differently across the three planes."},
+      {type:'cv', prompt:"What stayed the SAME for every plane?",
+        options:["The wing width", "How far each plane flies", "The paper type and throwing spot"], correct:2,
+        explain:"Same paper, same throw, same spot — held constant so wing width is the only real difference between trials."}
+    ]
+  },
+  {
+    scenario: "A student places identical ice cubes into three cups of water — one cold, one room-temperature, and one warm — and times how long each ice cube takes to completely melt. Each cup holds the same amount of water.",
+    parts: [
+      {type:'cv', prompt:"What was kept the SAME across all three cups?",
+        options:["The water temperature", "Time to melt", "The amount of water in each cup"], correct:2,
+        explain:"Every cup held the same amount of water — only the temperature was allowed to differ."},
+      {type:'dv', prompt:"What did the scientist MEASURE?",
+        options:["Time for the ice cube to melt", "The water temperature", "The amount of water"], correct:0,
+        explain:"Melting time is the outcome recorded for each cup — the thing that depends on the water's temperature."},
+      {type:'iv', prompt:"What did the scientist CHANGE on purpose?",
+        options:["The amount of water", "Time to melt", "The water temperature"], correct:2,
+        explain:"Water temperature is the one condition deliberately set differently — cold, room-temperature, and warm."}
+    ]
+  },
+  {
+    scenario: "A class is split into two groups before a quiz. One group studies for 15 minutes, the other studies for 30 minutes. Both groups study the exact same material and take the exact same quiz.",
+    parts: [
+      {type:'iv', prompt:"What did the teacher CHANGE on purpose?",
+        options:["The quiz score", "The amount of study time", "The study material"], correct:1,
+        explain:"Study time (15 vs. 30 minutes) is the one thing set differently between the two groups."},
+      {type:'dv', prompt:"What was MEASURED as the result?",
+        options:["The amount of study time", "The study material", "The quiz score"], correct:2,
+        explain:"Quiz score is the outcome — what the teacher is checking to see if study time made a difference."},
+      {type:'cv', prompt:"What stayed the SAME for both groups?",
+        options:["The amount of study time", "The study material and the quiz itself", "The quiz score"], correct:1,
+        explain:"Same material, same quiz — held identical so study time is the only real difference between the groups."}
+    ]
+  },
+  {
+    scenario: "A student makes three pitchers of lemonade with different amounts of sugar — low, medium, and high. Each pitcher uses the same amount of water and lemon juice. Ten classmates taste all three and rate how much they like each one.",
+    parts: [
+      {type:'dv', prompt:"What did the classmates' ratings MEASURE?",
+        options:["The amount of sugar", "How much people liked each lemonade", "The amount of water used"], correct:1,
+        explain:"The taste rating is the outcome collected — it's what the amount of sugar might be affecting."},
+      {type:'cv', prompt:"What was kept the SAME in every pitcher?",
+        options:["The amount of sugar", "How much people liked it", "The amount of water and lemon juice"], correct:2,
+        explain:"Water and lemon juice amounts were held identical, so sugar is the only thing that changed between pitchers."},
+      {type:'iv', prompt:"What did the scientist CHANGE on purpose?",
+        options:["The amount of sugar", "How much people liked it", "The amount of lemon juice"], correct:0,
+        explain:"Sugar amount (low, medium, high) is the one thing deliberately varied between the three pitchers."}
+    ]
+  },
+  {
+    scenario: "A gym class investigates whether a 5-minute dynamic warm-up affects how high students can jump. Working in groups, each student first jumps 3 times with no warm-up — a Measurer reads the height and a Recorder logs each trial. The group then completes the same 5-minute warm-up together, and each student jumps 3 more times, which are measured and logged the same way.",
+    parts: [
+      {type:'iv', prompt:"What is being CHANGED on purpose?",
+        options:["Whether a dynamic warm-up was completed", "Vertical jump height", "The number of trials per student"], correct:0,
+        explain:"Warm-up vs. no warm-up is the one condition being deliberately set differently for the same students."},
+      {type:'dv', prompt:"What will be MEASURED as the result?",
+        options:["The 5-minute warm-up routine", "Vertical jump height, in inches", "Which student goes first"], correct:1,
+        explain:"Jump height is the outcome being measured — what the warm-up might be affecting."},
+      {type:'cv', prompt:"Which of these should stay the SAME for a fair test?",
+        options:["Vertical jump height", "Whether a warm-up happens", "The same students, same jump technique, same measuring method"], correct:2,
+        explain:"Keeping the students, technique, and measuring method identical means warm-up is the only real difference between the two rounds."},
+      {type:'data', prompt:"What data does the group actually need to collect for each student?",
+        options:["Just one final jump height", "Jump height (inches) for 3 trials with no warm-up AND 3 trials after warm-up", "How tired each student feels"], correct:1,
+        explain:"Multiple trials in both conditions let the group calculate an average for each student, instead of relying on a single jump that could be a fluke."}
+    ]
+  }
+];
+
+const TYPE_LABEL = {iv:'Independent', dv:'Dependent', cv:'Control', data:'Data to Collect'};
+let totalScore = 0;
+const TOTAL_QUESTIONS = DATA.reduce((n,s)=>n+s.parts.length,0);
+let questionsCompleted = 0;
+
+function updateScoreBar(){
+  document.getElementById('scoreLabel').textContent = `Score: ${totalScore} / ${TOTAL_QUESTIONS}`;
+  document.getElementById('scoreFill').style.width = (totalScore/TOTAL_QUESTIONS*100) + '%';
+  const emoji = document.getElementById('scoreEmoji');
+  if (questionsCompleted === TOTAL_QUESTIONS) emoji.textContent = '🏆';
+  else if (totalScore > questionsCompleted*0.6) emoji.textContent = '🔥';
+  else emoji.textContent = '🔎';
+}
+
+function buildQuiz(){
+  const container = document.getElementById('quiz');
+  DATA.forEach((scen, si) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `<p class="scenario-num">Experiment ${si+1} of ${DATA.length}</p>
+      <p class="scenario-text">${scen.scenario}</p>`;
+
+    scen.parts.forEach((part, pi) => {
+      const subq = document.createElement('div');
+      subq.className = 'subq';
+      const badgeClass = 'badge-' + part.type;
+      subq.innerHTML = `
+        <p class="subq-prompt"><span class="type-badge ${badgeClass}">${TYPE_LABEL[part.type]}</span>${part.prompt}</p>
+        <div class="opt-list"></div>
+        <p class="hint">Not quite — look again at what was deliberately made different vs. what was held the same.</p>
+        <div class="feedback"></div>
+      `;
+      const optList = subq.querySelector('.opt-list');
+      let solved = false;
+      part.options.forEach((optText, oi) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.textContent = optText;
+        btn.addEventListener('click', () => {
+          if (solved) return;
+          if (oi === part.correct) {
+            solved = true;
+            btn.classList.add('correct');
+            optList.querySelectorAll('.opt-btn').forEach(b => { if (b!==btn) { b.disabled=true; b.classList.add('dim'); } });
+            btn.disabled = true;
+            const fb = subq.querySelector('.feedback');
+            fb.textContent = '✅ ' + part.explain;
+            fb.classList.add('show','good');
+            subq.querySelector('.hint').classList.remove('show');
+            totalScore++;
+            questionsCompleted++;
+            updateScoreBar();
+            checkFinale();
+          } else {
+            btn.classList.add('wrong');
+            btn.disabled = true;
+            subq.querySelector('.hint').classList.add('show');
+          }
+        });
+        optList.appendChild(btn);
+      });
+      card.appendChild(subq);
+    });
+    container.appendChild(card);
+  });
+}
+
+function checkFinale(){
+  if (questionsCompleted === TOTAL_QUESTIONS) {
+    document.getElementById('finalScore').textContent = `${totalScore} / ${TOTAL_QUESTIONS}`;
+    const finale = document.getElementById('finale');
+    finale.classList.add('show');
+    finale.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
+buildQuiz();
+updateScoreBar();
+</script>
+
+</body>
+</html>
