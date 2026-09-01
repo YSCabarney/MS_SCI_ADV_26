@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variable Detective: Physical Science Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2A3A;
+    --paper:#F5F6F3;
+    --paper-line:#DEE2E1;
+    --steel:#3D6B8C;
+    --steel-dark:#274A61;
+    --amber:#D9822B;
+    --amber-dark:#95591A;
+    --teal:#1E8C82;
+    --teal-dark:#146059;
+    --gold:#C9A227;
+    --gold-dark:#8C6F16;
+    --data:#6C5B9E;
+    --data-dark:#463A6B;
+    --think:#46586B;
+    --think-dark:#2E3A47;
+    --cream:#FDFDFB;
+    --red:#B23A32;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image: repeating-linear-gradient(rgba(61,107,140,0.06) 0px, rgba(61,107,140,0.06) 1px, transparent 1px, transparent 26px);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:740px;margin:0 auto;padding:0 24px 80px;}
+
+  header.hero{
+    background:var(--ink);
+    background-image: repeating-linear-gradient(rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 26px);
+    color:var(--cream);
+    padding:48px 24px 40px;
+  }
+  .hero-inner{max-width:740px;margin:0 auto;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#9FC1D9;letter-spacing:.03em;margin:0 0 16px;text-transform:uppercase;}
+  h1.title{font-family:'Oswald',sans-serif;font-weight:600;font-size:38px;line-height:1.14;margin:0 0 14px;max-width:17ch;text-transform:uppercase;}
+  .hero p.lede{font-size:16.5px;max-width:56ch;color:#D6DEE4;margin:0;}
+
+  .scorebar{
+    position:sticky;top:0;z-index:5;
+    background:var(--cream);
+    border-bottom:2px solid var(--paper-line);
+    padding:12px 24px;
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13.5px;
+  }
+  .scorebar .sb-inner{max-width:740px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;}
+  .score-track{flex:1;height:9px;background:var(--paper-line);border-radius:6px;margin:0 16px;overflow:hidden;}
+  .score-fill{height:100%;background:var(--steel);width:0%;transition:width .3s ease;}
+  #scoreLabel{white-space:nowrap;color:var(--steel-dark);}
+
+  section{padding:18px 0 8px;}
+
+  .quickref{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px;}
+  .qr-chip{flex:1 1 130px;background:var(--cream);border-radius:8px;padding:11px 13px;border-top:5px solid var(--amber);font-size:12.5px;}
+  .qr-chip.dv{border-top-color:var(--teal);}
+  .qr-chip.cv{border-top-color:var(--gold);}
+  .qr-chip.data{border-top-color:var(--data);}
+  .qr-chip.think{border-top-color:var(--think);}
+  .qr-chip b{display:block;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;margin-bottom:2px;text-transform:uppercase;}
+
+  .q-card{
+    background:#fff;border:1px solid var(--paper-line);border-radius:10px;
+    padding:20px 22px 22px;margin:20px 0;
+  }
+  .scenario-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--steel-dark);text-transform:uppercase;margin:0 0 6px;}
+  .scenario-text{font-size:15.5px;margin:0 0 18px;background:var(--paper);border-radius:8px;padding:14px 16px;}
+  .scenario-img{width:100%;max-width:300px;display:block;border-radius:8px;border:1px solid var(--paper-line);margin:0 0 14px;background:#fff;}
+  .scenario-img.svg-img{padding:14px;object-fit:contain;max-height:180px;}
+  .img-cap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6b7885;margin:-10px 0 16px;}
+
+  .subq{margin-bottom:18px;}
+  .subq:last-child{margin-bottom:0;}
+  .subq-prompt{
+    font-family:'Inter',sans-serif;font-weight:700;font-size:15.5px;
+    margin:0 0 10px;
+    display:flex;align-items:flex-start;gap:8px;
+  }
+  .type-badge{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;
+    padding:3px 9px;border-radius:4px;color:#fff;text-transform:uppercase;
+    white-space:nowrap;margin-top:2px;
+  }
+  .badge-iv{background:var(--amber);}
+  .badge-dv{background:var(--teal);}
+  .badge-cv{background:var(--gold);}
+  .badge-data{background:var(--data);}
+  .badge-think{background:var(--think);}
+
+  .opt-list{display:flex;flex-direction:column;gap:8px;}
+  .opt-btn{
+    text-align:left;
+    font-family:'Inter',sans-serif;font-size:14.5px;
+    padding:11px 14px;border-radius:6px;
+    border:2px solid var(--paper-line);
+    background:var(--paper);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .opt-btn:hover:not(:disabled){border-color:var(--steel);}
+  .opt-btn:disabled{cursor:default;}
+  .opt-btn.correct{background:#E1EDE5;border-color:var(--teal);color:var(--teal-dark);font-weight:700;}
+  .opt-btn.wrong{background:#F8E3E1;border-color:var(--red);color:var(--red);}
+  .opt-btn.dim{opacity:0.4;}
+
+  .feedback{
+    margin-top:10px;font-size:13.5px;
+    padding:10px 14px;border-radius:6px;
+    display:none;
+  }
+  .feedback.show{display:block;}
+  .feedback.good{background:#E1EDE5;color:var(--teal-dark);}
+
+  .hint{font-size:13px;color:var(--amber-dark);margin-top:8px;display:none;}
+  .hint.show{display:block;}
+
+  .lab-band{
+    background:var(--steel-dark);color:var(--cream);
+    margin:0 -24px;padding:38px 24px;
+  }
+  .lab-band .wrap-in{max-width:692px;margin:0 auto;}
+  .lab-band .eyebrow{color:#9FC1D9;}
+  .lab-band h2{color:var(--cream);font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:24px;margin:0 0 12px;}
+  .lab-band p{color:#D6DEE4;font-size:15px;margin:0 0 10px;}
+
+  .finale{
+    display:none;
+    background:var(--ink);color:var(--cream);
+    border-radius:12px;padding:32px 28px;margin:26px 0 10px;text-align:center;
+  }
+  .finale.show{display:block;}
+  .finale h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:24px;margin:0 0 10px;text-transform:uppercase;}
+  .finale p{color:#D6DEE4;font-size:15px;margin:0;}
+  .finale .big{font-family:'Oswald',sans-serif;font-size:40px;margin:8px 0;}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--steel-dark);text-transform:uppercase;letter-spacing:.02em;margin:0 0 8px;}
+
+  footer{padding:24px 24px 50px;}
+  footer p{color:#5b6472;font-size:13.5px;max-width:740px;margin:0 auto;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="tag">Physical Science · Experimental Design</p>
+    <h1 class="title">Variable Detective: Physical Science Edition</h1>
+    <p class="lede">Six investigations, including the Ramp Speed Investigation your class runs this week. Some of these are straightforward. At least one has a real design flaw hiding in it. Read carefully before you answer.</p>
+  </div>
+</header>
+
+<div class="scorebar">
+  <div class="sb-inner">
+    <span id="scoreLabel">Score: 0 / 16</span>
+    <div class="score-track"><div class="score-fill" id="scoreFill"></div></div>
+    <span id="scoreEmoji">🔎</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section id="quickref">
+  <div class="quickref">
+    <div class="qr-chip"><b>Independent</b>What's deliberately changed</div>
+    <div class="qr-chip dv"><b>Dependent</b>What gets measured</div>
+    <div class="qr-chip cv"><b>Control</b>What's held constant</div>
+    <div class="qr-chip data"><b>Data</b>Exact measurements needed</div>
+    <div class="qr-chip think"><b>Critical Thinking</b>Evaluate the design itself</div>
+  </div>
+</section>
+
+<section id="quiz1"></section>
+
+</div>
+
+<div class="lab-band">
+  <div class="wrap-in">
+    <p class="eyebrow">Your Actual Lab</p>
+    <h2>The Ramp Speed Investigation</h2>
+    <p>You're running this one for real later this week. Before you do, look closely at how it's set up — including one detail worth debating with your lab group.</p>
+  </div>
+</div>
+
+<div class="wrap">
+<section id="quiz2"></section>
+
+<div class="finale" id="finale">
+  <h2>Lab-Ready</h2>
+  <div class="big" id="finalScore">16 / 16</div>
+  <p>You've sorted variables, caught a flawed design, and picked apart your own lab's setup. You're ready for Trial 1.</p>
+</div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Physical Science — Experimental Design &amp; Variables · Ramp Speed Investigation prep</p>
+  </div>
+</footer>
+
+<script>
+const DATA_GENERAL = [
+  {
+    scenario: "A student wants to know if the length of a pendulum's string affects how long it takes to complete one full swing. She tests three string lengths — 20 cm, 40 cm, and 60 cm — releasing the pendulum from the same angle each time, with the same weight on the end, and timing 10 full swings before dividing by 10 to find the time per swing.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Simple_pendulum.jpg",
+    imageAlt: "A simple pendulum with a bob on a string",
+    imageCap: "String length is the variable under test — everything else about the setup stays fixed.",
+    parts: [
+      {type:'iv', prompt:"What is the independent variable?",
+        options:["The time per swing", "The string length", "The release angle"], correct:1,
+        explain:"String length (20, 40, 60 cm) is the one condition deliberately varied across the three tests."},
+      {type:'dv', prompt:"What is the dependent variable?",
+        options:["The string length", "The weight on the end", "Time per swing"], correct:2,
+        explain:"Time per swing is the outcome being measured — what string length might be affecting."},
+      {type:'cv', prompt:"Which of these is a control variable in this setup?",
+        options:["The release angle and weight", "The string length", "The time per swing"], correct:0,
+        explain:"Release angle and weight are held identical across all three lengths, so they can't explain any difference in swing time."}
+    ]
+  },
+  {
+    scenario: "A student rolls the same marble down ramps set at three different angles — 15°, 30°, and 45° — always releasing it from the same starting height on the ramp, and measures how far the marble rolls once it reaches the flat floor.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/7/74/Balls_of_glass.jpg",
+    imageAlt: "Glass marbles",
+    imageCap: "Ramp angle is the one thing changing — same marble, same starting height, every time.",
+    parts: [
+      {type:'dv', prompt:"What is the dependent variable?",
+        options:["The ramp angle", "Distance the marble rolls on the floor", "The starting height on the ramp"], correct:1,
+        explain:"Rolling distance is the measured outcome — what the ramp angle might be affecting."},
+      {type:'cv', prompt:"What's being controlled here?",
+        options:["The ramp angle", "Starting height on the ramp, and the marble itself", "Distance the marble rolls"], correct:1,
+        explain:"Same marble, same starting height — held constant so angle is the only real difference between trials."},
+      {type:'iv', prompt:"What is the independent variable?",
+        options:["Distance the marble rolls", "The starting height on the ramp", "The ramp angle"], correct:2,
+        explain:"Ramp angle (15°, 30°, 45°) is the one thing deliberately changed between the three trials."}
+    ]
+  },
+  {
+    scenario: "A student wraps three identical cups of hot water in different materials — aluminum foil, cotton cloth, and no wrapping at all — then measures the water's temperature every 5 minutes for 30 minutes to see which insulation keeps the water hottest the longest.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/2/22/CelsiusKelvinThermometer.jpg",
+    imageAlt: "A thermometer used to measure temperature",
+    imageCap: "The same thermometer, read at the same 5-minute intervals, on each of the three cups.",
+    parts: [
+      {type:'iv', prompt:"What is the independent variable?",
+        options:["The water temperature", "The type of insulation", "The time elapsed"], correct:1,
+        explain:"Insulation type (foil, cotton, none) is the condition deliberately varied between the three cups."},
+      {type:'cv', prompt:"Which of these should be a control variable?",
+        options:["The type of insulation", "Starting water temperature and amount of water", "The final temperature reading"], correct:1,
+        explain:"If the cups didn't start at the same temperature with the same amount of water, insulation wouldn't be a fair comparison."},
+      {type:'dv', prompt:"What is the dependent variable?",
+        options:["Water temperature over time", "The type of insulation", "The type of cup"], correct:0,
+        explain:"Temperature over time is what's being tracked to see which insulation performs best."}
+    ]
+  },
+  {
+    scenario: "A student wants to test whether ramp angle affects how far a marble rolls. For the low-angle trial, he uses a glass marble on a smooth wooden ramp. For the high-angle trial, he switches to a heavier steel ball bearing on a rougher plastic ramp, because that's what was available in the supply closet.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/2/2d/Ball_bearing.jpg",
+    imageAlt: "A steel ball bearing",
+    imageCap: "The steel ball bearing swapped in for the high-angle trial — along with a different ramp.",
+    parts: [
+      {type:'iv', prompt:"What was this student trying to test (his intended independent variable)?",
+        options:["The type of ball used", "The ramp angle", "The ramp material"], correct:1,
+        explain:"His stated goal was testing ramp angle — that was supposed to be the only thing that changed."},
+      {type:'dv', prompt:"What was he planning to measure?",
+        options:["How far the ball rolls", "The type of ball", "The ramp surface"], correct:0,
+        explain:"Rolling distance is the outcome he intended to compare across angles."},
+      {type:'think', prompt:"What's actually wrong with how he ran this experiment?",
+        options:["He didn't run enough trials at each angle", "He changed the ball material AND the ramp surface at the same time as the angle, so multiple variables changed at once", "45° and 15° aren't different enough to matter"], correct:1,
+        explain:"This is a confounded experiment: three things changed between his two trials (angle, ball material, ramp surface), so if the results differ, there's no way to know which change actually caused it. A fair test changes only the independent variable."}
+    ]
+  }
+];
+
+const DATA_LAB = [
+  {
+    scenario: "From your Ramp Speed Investigation handout — Testable question: \"How fast does a ball bearing travel down a ramp built to a consistent height?\" Independent variable (as written): trial number. Dependent variable: the ball bearing's speed, calculated from distance and time. The ramp height stays the same as specified by your teacher for all 3 trials.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/2/2d/Ball_bearing.jpg",
+    imageAlt: "A steel ball bearing",
+    imageCap: "The actual ball bearing you'll release down the ramp this week.",
+    parts: [
+      {type:'think', prompt:"The handout labels \"trial number\" as the independent variable. Is that accurate for this investigation?",
+        options:[
+          "Yes — trial number is exactly what changes between rows in the data table.",
+          "Not quite — the ramp setup itself isn't actually changed between trials. This investigation repeats one fixed condition to measure it more reliably, which is a different structure than a classic \"does X affect Y\" comparison experiment.",
+          "No — distance should be the independent variable instead."
+        ], correct:1,
+        explain:"A true independent variable is a condition deliberately varied to compare its effect (like ramp angle in the earlier example). Here, ramp height is held constant on purpose across all 3 trials — nothing is actually being compared. This lab is really a reliability study: repeating one measurement to get a trustworthy average. That's genuinely valuable science, just a different kind of investigation than a comparative experiment. Worth raising with your teacher as an interesting distinction, not a mistake to be corrected."},
+      {type:'cv', prompt:"Based on the procedure, which of these matters most to hold constant across all 3 trials?",
+        options:["The color of the ball bearing", "Ramp height and release method (no push)", "What time of day the trial happens"], correct:1,
+        explain:"Ramp height and a consistent hands-off release directly affect the ball's speed. Color and time of day have no physical connection to how fast it rolls."},
+      {type:'data', prompt:"Trial 1 measures 2.4 m of distance in 1.2 s. Using speed = distance ÷ time, what's the speed?",
+        options:["0.5 m/s", "2.88 m/s", "2.0 m/s"], correct:2,
+        explain:"2.4 m ÷ 1.2 s = 2.0 m/s — the exact same formula from your Speed & Velocity unit, just applied to this lab's own data."},
+      {type:'think', prompt:"The procedure has you run 3 trials and average the results instead of running the ball just once. What's the best reason for that?",
+        options:["It fills more rows in the data table", "A single trial could be thrown off by small errors — reaction time starting or stopping the stopwatch, a slightly uneven release — so averaging multiple trials gives a more reliable result", "The teacher requires exactly 3 numbers for every lab"], correct:1,
+        explain:"Human reaction time alone can shift a stopwatch reading by a few tenths of a second — enough to matter for a short ramp roll. Averaging multiple trials smooths out that kind of random error."}
+    ]
+  }
+];
+
+const TYPE_LABEL = {iv:'Independent', dv:'Dependent', cv:'Control', data:'Data', think:'Critical Thinking'};
+let totalScore = 0;
+const TOTAL_QUESTIONS = DATA_GENERAL.reduce((n,s)=>n+s.parts.length,0) + DATA_LAB.reduce((n,s)=>n+s.parts.length,0);
+let questionsCompleted = 0;
+
+function updateScoreBar(){
+  document.getElementById('scoreLabel').textContent = `Score: ${totalScore} / ${TOTAL_QUESTIONS}`;
+  document.getElementById('scoreFill').style.width = (totalScore/TOTAL_QUESTIONS*100) + '%';
+  const emoji = document.getElementById('scoreEmoji');
+  if (questionsCompleted === TOTAL_QUESTIONS) emoji.textContent = '🏆';
+  else if (totalScore > questionsCompleted*0.6) emoji.textContent = '🔥';
+  else emoji.textContent = '🔎';
+}
+
+function renderScenarios(dataArr, containerId, startIndex, totalScenarios){
+  const container = document.getElementById(containerId);
+  dataArr.forEach((scen, si) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    const isSvg = scen.image && scen.image.toLowerCase().endsWith('.svg');
+    const imgHtml = scen.image ? `
+      <img class="scenario-img${isSvg ? ' svg-img' : ''}" src="${scen.image}" alt="${scen.imageAlt||''}">
+      ${scen.imageCap ? `<p class="img-cap">${scen.imageCap}</p>` : ''}` : '';
+    card.innerHTML = `<p class="scenario-num">Investigation ${startIndex+si+1} of ${totalScenarios}</p>
+      ${imgHtml}
+      <p class="scenario-text">${scen.scenario}</p>`;
+
+    scen.parts.forEach((part) => {
+      const subq = document.createElement('div');
+      subq.className = 'subq';
+      const badgeClass = 'badge-' + part.type;
+      subq.innerHTML = `
+        <p class="subq-prompt"><span class="type-badge ${badgeClass}">${TYPE_LABEL[part.type]}</span>${part.prompt}</p>
+        <div class="opt-list"></div>
+        <p class="hint">Not quite — reread the setup and think about what was actually varied, measured, or held constant.</p>
+        <div class="feedback"></div>
+      `;
+      const optList = subq.querySelector('.opt-list');
+      let solved = false;
+      part.options.forEach((optText, oi) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.textContent = optText;
+        btn.addEventListener('click', () => {
+          if (solved) return;
+          if (oi === part.correct) {
+            solved = true;
+            btn.classList.add('correct');
+            optList.querySelectorAll('.opt-btn').forEach(b => { if (b!==btn) { b.disabled=true; b.classList.add('dim'); } });
+            btn.disabled = true;
+            const fb = subq.querySelector('.feedback');
+            fb.textContent = '✅ ' + part.explain;
+            fb.classList.add('show','good');
+            subq.querySelector('.hint').classList.remove('show');
+            totalScore++;
+            questionsCompleted++;
+            updateScoreBar();
+            checkFinale();
+          } else {
+            btn.classList.add('wrong');
+            btn.disabled = true;
+            subq.querySelector('.hint').classList.add('show');
+          }
+        });
+        optList.appendChild(btn);
+      });
+      card.appendChild(subq);
+    });
+    container.appendChild(card);
+  });
+}
+
+function checkFinale(){
+  if (questionsCompleted === TOTAL_QUESTIONS) {
+    document.getElementById('finalScore').textContent = `${totalScore} / ${TOTAL_QUESTIONS}`;
+    const finale = document.getElementById('finale');
+    finale.classList.add('show');
+    finale.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
+const TOTAL_SCENARIOS = DATA_GENERAL.length + DATA_LAB.length;
+renderScenarios(DATA_GENERAL, 'quiz1', 0, TOTAL_SCENARIOS);
+renderScenarios(DATA_LAB, 'quiz2', DATA_GENERAL.length, TOTAL_SCENARIOS);
+updateScoreBar();
+</script>
+
+</body>
+</html>
