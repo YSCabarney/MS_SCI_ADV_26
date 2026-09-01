@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case File: Do Phone Bans Actually Work?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#22331F;
+    --paper:#FBFAF2;
+    --paper-line:#E6E3D2;
+    --leaf:#3F8C4C;
+    --leaf-dark:#2C6338;
+    --coral:#EE7B45;
+    --coral-dark:#B95323;
+    --sky:#2C93A8;
+    --sky-dark:#1C6577;
+    --sun:#E3A526;
+    --sun-dark:#96701A;
+    --cream:#FFFDF6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image: radial-gradient(circle, rgba(63,140,76,0.10) 1.6px, transparent 1.6px);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Nunito',sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:740px;margin:0 auto;padding:0 24px 80px;}
+
+  header.hero{
+    background:var(--leaf-dark);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.09) 1.6px, transparent 1.6px);
+    background-size: 22px 22px;
+    color:var(--cream);
+    padding:44px 24px 38px;
+  }
+  .hero-inner{max-width:740px;margin:0 auto;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#BFE3C4;letter-spacing:.02em;margin:0 0 14px;text-transform:uppercase;}
+  h1.title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:36px;line-height:1.12;margin:0 0 12px;max-width:16ch;}
+  .hero p.lede{font-size:16px;max-width:54ch;color:#E3F1E1;margin:0 0 8px;}
+  .meta-row{display:flex;gap:24px;flex-wrap:wrap;margin-top:20px;}
+  .meta-item{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#BFE3C4;}
+  .meta-item b{display:block;font-size:18px;color:var(--cream);font-family:'Baloo 2',sans-serif;font-weight:700;}
+
+  section{padding:36px 0;border-bottom:1px solid var(--paper-line);}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--leaf-dark);margin:0 0 8px;text-transform:uppercase;letter-spacing:.02em;}
+  h2{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:25px;margin:0 0 14px;max-width:22ch;}
+  h3{font-family:'Baloo 2',sans-serif;font-weight:600;font-size:17px;margin:20px 0 8px;}
+  p{max-width:64ch;margin:0 0 14px;font-size:15.5px;}
+  strong{color:var(--ink);}
+
+  .band{background:var(--leaf-dark);color:var(--cream);margin:0 -24px;padding:34px 24px;}
+  .band .wrap-in{max-width:692px;margin:0 auto;}
+  .band h2{color:var(--cream);}
+  .band .eyebrow{color:#BFE3C4;}
+  .band p{color:#E3F1E1;}
+
+  .case-box{background:var(--cream);border-radius:10px;padding:18px 22px;margin:16px 0;font-size:15.5px;}
+
+  .role-row{display:flex;flex-direction:column;gap:14px;margin:20px 0;}
+  .role-card{background:var(--cream);border-radius:12px;padding:18px 20px;border-top:6px solid var(--coral);}
+  .role-card.data{border-top-color:var(--sky);}
+  .role-card.fair{border-top-color:var(--sun);}
+  .role-card .rt{font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--coral-dark);margin:0 0 4px;}
+  .role-card.data .rt{color:var(--sky-dark);}
+  .role-card.fair .rt{color:var(--sun-dark);}
+  .role-card h3{margin:0 0 8px;font-size:19px;}
+  .role-card p{font-size:14.5px;margin-bottom:8px;}
+  .role-card .job{font-size:13.5px;background:#fff;border-radius:6px;padding:8px 12px;margin-top:8px;}
+  .role-card .job b{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:#5b6472;display:block;margin-bottom:2px;}
+
+  details{background:var(--cream);border-radius:8px;padding:14px 18px;margin:14px 0;}
+  summary{cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif;color:var(--leaf-dark);}
+  details p{margin-top:10px;margin-bottom:0;}
+
+  ul{padding-left:20px;}
+  li{margin-bottom:7px;max-width:60ch;}
+
+  footer{padding:30px 24px 56px;}
+  footer p{color:#5b6472;font-size:13.5px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="tag">Life Science · Case File</p>
+    <h1 class="title">Do Phone Bans Actually Work?</h1>
+    <p class="lede">Schools everywhere are banning phones this year — maybe yours too. But does banning them actually make school better? Today, you're the investigators who decide.</p>
+    <div class="meta-row">
+      <div class="meta-item"><b>10 min</b>with your team</div>
+      <div class="meta-item"><b>3</b>investigators, 3 jobs</div>
+      <div class="meta-item"><b>No materials</b>needed</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section id="why">
+  <p class="eyebrow">The big question</p>
+  <h2>A real debate happening in schools right now</h2>
+  <p>As of 2026, most U.S. states now require schools to restrict cell phones during the day — some for the whole day, "bell to bell." Supporters say it will help students focus, feel better, and get along more. But here's the twist: real researchers who've actually studied it are split. One major 2025 study of over 1,200 students found <strong>no real difference</strong> in mental health, grades, or well-being between schools with strict bans and schools without one.</p>
+  <p>So which is it? Your team is about to investigate a mini version of this exact question — and uncover why it's a much trickier thing to test than it sounds.</p>
+</section>
+
+<div class="band">
+  <div class="wrap-in">
+    <p class="eyebrow">The case</p>
+    <h2>Two schools, one big question</h2>
+  </div>
+</div>
+
+<section id="case">
+  <div class="case-box">
+    <p><strong>Mountain View Middle School</strong> banned phones completely this year — bell to bell, no exceptions. <strong>Lakeside Middle School</strong>, across town, still lets students use phones at lunch. At the end of the year, researchers compare the two schools' average test scores and student happiness surveys to see which school did better.</p>
+  </div>
+  <p>Before you jump to an answer, remember that real scientists don't just guess and move on — they follow a process to make sure their thinking actually holds up. You and your team are going to work through that same process for this exact case, one step at a time, with your teacher guiding you along the way.</p>
+  <p>Read the case together with your team, then each investigator works their job below.</p>
+</section>
+
+<section id="roles">
+  <p class="eyebrow">Your roles</p>
+  <h2>Three investigators, three jobs</h2>
+
+  <div class="role-row">
+    <div class="role-card">
+      <p class="rt">Investigator 1</p>
+      <h3>The Change Spotter</h3>
+      <p>Your job: figure out the ONE big thing that's actually different between what Mountain View and Lakeside are doing.</p>
+      <div class="job"><b>Report out</b>What is the one thing being compared between the two schools?</div>
+    </div>
+    <div class="role-card data">
+      <p class="rt">Investigator 2</p>
+      <h3>The Data Detective</h3>
+      <p>Your job: figure out what's actually being <strong>measured</strong> to decide which school "did better."</p>
+      <div class="job"><b>Report out</b>What two pieces of data are the researchers collecting? Which one do you think is easier to measure fairly, and why?</div>
+    </div>
+    <div class="role-card fair">
+      <p class="rt">Investigator 3</p>
+      <h3>The Fairness Checker</h3>
+      <p>Your job: think about everything <strong>else</strong> that's different between two entirely different schools — not just the phone policy.</p>
+      <div class="job"><b>Report out</b>Name at least two other differences between Mountain View and Lakeside that have nothing to do with phones, but could still affect test scores or happiness.</div>
+    </div>
+  </div>
+</section>
+
+<section id="reveal">
+  <p class="eyebrow">Before you wrap up</p>
+  <h2>One more question for your team</h2>
+  <p>Mountain View and Lakeside aren't identical schools with one single difference — they're two completely different places. Talk it over with your team: if Mountain View ends up with higher test scores or happier students, can you be sure it's really because of the phone ban? Why or why not?</p>
+</section>
+
+<section id="bridge">
+  <p class="eyebrow">Coming up</p>
+  <h2>You already did the hard part</h2>
+  <p>What your team just did — hunting for what changed, what was measured, and what else could be messing things up — is exactly what scientists do every time they design an experiment. Today, you'll learn the official science vocabulary for each of those three jobs your team just did.</p>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Life Science — Case File Investigation · 7th Grade</p>
+  </div>
+</footer>
+
+</body>
+</html>
