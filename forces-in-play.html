@@ -1,0 +1,602 @@
+<title>Forces in Play</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#EFF2EF;
+  --surface:#FFFFFF;
+  --surface-2:#E4EAE6;
+  --ink:#132420;
+  --ink-soft:#4C5D58;
+  --accent:#DD5A22;
+  --accent-ink:#7A2C0C;
+  --accent-soft:#F7DECB;
+  --track:#1B6E5F;
+  --track-soft:#DCEEE8;
+  --line:#CBD3CD;
+  --shadow: 0 1px 0 rgba(19,36,32,0.06);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1C18;
+    --surface:#16281F;
+    --surface-2:#1C3128;
+    --ink:#EAF1EC;
+    --ink-soft:#A6BDB2;
+    --accent:#FF8C52;
+    --accent-ink:#FFD7BA;
+    --accent-soft:#33241A;
+    --track:#57C2AA;
+    --track-soft:#173A31;
+    --line:#2B4038;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1C18;
+  --surface:#16281F;
+  --surface-2:#1C3128;
+  --ink:#EAF1EC;
+  --ink-soft:#A6BDB2;
+  --accent:#FF8C52;
+  --accent-ink:#FFD7BA;
+  --accent-soft:#33241A;
+  --track:#57C2AA;
+  --track-soft:#173A31;
+  --line:#2B4038;
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Karla',ui-sans-serif,system-ui,sans-serif;
+  padding:0 20px 64px;
+}
+h1,h2,h3,.display{
+  font-family:'Big Shoulders Display',ui-sans-serif,system-ui,sans-serif;
+  text-wrap:balance;
+}
+.wrap{max-width:760px;margin:0 auto;}
+
+/* ---------- masthead ---------- */
+.masthead{
+  padding-top:40px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:12px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--track);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.eyebrow::before{
+  content:"";
+  width:22px;height:2px;
+  background:var(--track);
+  display:inline-block;
+}
+.masthead h1{
+  font-size:clamp(40px,9vw,64px);
+  font-weight:800;
+  line-height:0.95;
+  margin:0;
+  letter-spacing:-0.01em;
+}
+.masthead .sub{
+  color:var(--ink-soft);
+  font-size:17px;
+  max-width:52ch;
+  margin:0;
+}
+.ramp-mark{
+  position:absolute;
+  right:20px;
+  top:34px;
+  width:96px;
+  height:96px;
+  opacity:0.9;
+}
+
+/* ---------- intro ---------- */
+.intro{
+  padding:28px 0 8px;
+  font-size:16px;
+  line-height:1.65;
+  color:var(--ink);
+  max-width:64ch;
+}
+.intro strong{color:var(--accent-ink);}
+.roadmap{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:18px 0 8px;
+}
+.roadmap span{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:12px;
+  color:var(--ink-soft);
+  background:var(--surface-2);
+  border-radius:999px;
+  padding:6px 12px;
+}
+
+/* ---------- steps ---------- */
+.step{
+  padding:44px 0;
+  border-top:1px solid var(--line);
+}
+.step-head{
+  display:flex;
+  align-items:baseline;
+  gap:16px;
+  margin-bottom:18px;
+}
+.step-num{
+  font-family:'Big Shoulders Display';
+  font-weight:800;
+  font-size:56px;
+  line-height:1;
+  color:var(--track-soft);
+  -webkit-text-stroke:2px var(--track);
+  color:transparent;
+}
+.step-title{
+  font-size:26px;
+  font-weight:800;
+  margin:0;
+}
+.step-title small{
+  display:block;
+  font-family:'Karla';
+  font-weight:400;
+  font-size:14px;
+  color:var(--ink-soft);
+  letter-spacing:0;
+  text-transform:none;
+  margin-top:2px;
+}
+
+/* ---------- podcast card ---------- */
+.pod-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.pod-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.pod-show{
+  font-family:'IBM Plex Mono';
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--track);
+}
+.pod-title{
+  font-family:'Big Shoulders Display';
+  font-weight:800;
+  font-size:28px;
+  line-height:1.05;
+  margin:4px 0 0;
+}
+.pod-time{
+  font-family:'IBM Plex Mono';
+  font-size:13px;
+  color:var(--ink-soft);
+  white-space:nowrap;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:6px 10px;
+}
+.pod-meta{
+  font-size:14px;
+  color:var(--ink-soft);
+}
+.pod-desc{
+  font-size:15px;
+  line-height:1.6;
+}
+.pod-link{
+  align-self:flex-start;
+  font-family:'IBM Plex Mono';
+  font-size:14px;
+  color:var(--surface);
+  background:var(--accent);
+  text-decoration:none;
+  padding:11px 18px;
+  border-radius:9px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.pod-link:hover{filter:brightness(1.06);}
+.pod-url{
+  font-family:'IBM Plex Mono';
+  font-size:12.5px;
+  color:var(--ink-soft);
+  word-break:break-all;
+}
+
+.glossary{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px 20px;
+  background:var(--track-soft);
+  border-radius:12px;
+  padding:16px 18px;
+}
+.glossary h4{
+  grid-column:1/-1;
+  margin:0 0 2px;
+  font-family:'IBM Plex Mono';
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--track);
+}
+.glossary dt{
+  font-weight:700;
+  font-size:14px;
+}
+.glossary dd{
+  margin:2px 0 0;
+  font-size:13.5px;
+  color:var(--ink-soft);
+  line-height:1.45;
+}
+
+.listen-note{
+  font-size:14px;
+  color:var(--ink-soft);
+  line-height:1.6;
+}
+
+/* ---------- questions ---------- */
+.qcard{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  margin-bottom:18px;
+}
+.qcard:last-child{margin-bottom:0;}
+.qlabel{
+  font-family:'IBM Plex Mono';
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:8px;
+}
+.qtext{
+  font-size:17px;
+  line-height:1.55;
+  margin:0 0 14px;
+  font-weight:500;
+}
+.qhints{
+  background:var(--surface-2);
+  border-radius:10px;
+  padding:12px 14px;
+  font-size:13.5px;
+  color:var(--ink-soft);
+  line-height:1.6;
+  margin-bottom:14px;
+}
+.qhints strong{color:var(--ink);}
+textarea.notes{
+  width:100%;
+  min-height:84px;
+  resize:vertical;
+  font:14px/1.5 'Karla',sans-serif;
+  background:var(--bg);
+  border:1px dashed var(--line);
+  border-radius:8px;
+  padding:10px 12px;
+  color:var(--ink);
+}
+textarea.notes::placeholder{color:var(--ink-soft);}
+textarea.notes:focus{outline:none;border-color:var(--accent);border-style:solid;}
+
+/* ---------- record step ---------- */
+.record-lead{
+  font-size:15.5px;
+  line-height:1.65;
+  margin-bottom:18px;
+}
+.record-lead strong{color:var(--accent-ink);}
+.who-box{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:22px;
+}
+.who-box span{
+  font-family:'IBM Plex Mono';
+  font-size:12.5px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:7px 13px;
+  color:var(--ink-soft);
+}
+.who-box span.not{
+  border-color:var(--accent);
+  color:var(--accent-ink);
+  text-decoration:line-through;
+  text-decoration-color:var(--accent);
+}
+
+.checklist{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+.checklist h4{
+  margin:0 0 14px;
+  font-family:'IBM Plex Mono';
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--track);
+}
+.check-item{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:10px 0;
+  border-top:1px solid var(--line);
+}
+.check-item:first-of-type{border-top:none;}
+.check-item input[type="checkbox"]{
+  appearance:none;
+  width:20px;height:20px;
+  min-width:20px;
+  border:2px solid var(--track);
+  border-radius:5px;
+  margin-top:1px;
+  display:grid;
+  place-content:center;
+  cursor:pointer;
+  background:var(--surface);
+}
+.check-item input[type="checkbox"]::before{
+  content:"";
+  width:11px;height:11px;
+  transform:scale(0);
+  transition:transform .12s ease;
+  box-shadow:inset 1em 1em var(--track);
+  clip-path:polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 45% 62%);
+}
+.check-item input[type="checkbox"]:checked::before{transform:scale(1);}
+.check-item label{
+  font-size:14.5px;
+  line-height:1.55;
+  cursor:pointer;
+}
+.check-item label b{font-weight:700;}
+
+.submit-note{
+  margin-top:22px;
+  font-size:14px;
+  color:var(--ink-soft);
+  background:var(--accent-soft);
+  border-radius:10px;
+  padding:14px 16px;
+  line-height:1.6;
+}
+.submit-note b{color:var(--accent-ink);}
+
+footer{
+  border-top:1px solid var(--line);
+  margin-top:40px;
+  padding-top:24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.print-btn{
+  font-family:'IBM Plex Mono';
+  font-size:13px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:10px 16px;
+  border-radius:9px;
+  cursor:pointer;
+}
+.print-btn:hover{border-color:var(--track);color:var(--track);}
+.footnote{font-size:12.5px;color:var(--ink-soft);}
+
+@media (max-width:520px){
+  .glossary{grid-template-columns:1fr;}
+  .ramp-mark{display:none;}
+}
+
+@media print{
+  body{background:#fff;color:#111;padding:0 12px;}
+  .print-btn{display:none;}
+  textarea.notes{border-style:solid;}
+  .pod-link{border:1px solid #111;}
+}
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Science 8 · Speed &amp; Forces Unit</div>
+    <h1>Forces in Play</h1>
+    <p class="sub">A podcast‑and‑lab interview: explain what you learned about variables, gravity, and friction to someone who wasn't in the room.</p>
+    <div class="roadmap">
+      <span>01 Listen — 13 min</span>
+      <span>02 Think &amp; Answer — 20 min</span>
+      <span>03 Record — 5–8 min</span>
+    </div>
+  </header>
+
+  <p class="intro">
+    You just ran the <strong>ramp speed lab</strong> — changing the height and angle of a ramp and measuring how that changed an object's speed. Sports scientists ask the exact same kind of question about real athletes: what happens to speed, distance, or power when you change one thing on purpose? Before you record anything, listen to a short science podcast about the physics behind elite athletes, then use it — alongside your own lab data — to answer three questions out loud, interview‑style, to someone outside this class.
+  </p>
+
+  <!-- STEP 01 -->
+  <section class="step">
+    <div class="step-head">
+      <span class="step-num">01</span>
+      <h2 class="step-title">Listen<small>NPR Short Wave, 13 minutes</small></h2>
+    </div>
+
+    <div class="pod-card">
+      <div class="pod-top">
+        <div>
+          <div class="pod-show">NPR · Short Wave</div>
+          <h3 class="pod-title">The Physics of the Winter Olympics</h3>
+        </div>
+        <span class="pod-time">⏱ 13 min · aired Feb 10, 2026</span>
+      </div>
+      <div class="pod-meta">Host Regina G. Barber talks with physicist Amy Pope (Clemson University) about the friction, lift, and energy behind ski jumping, skimo, and more.</div>
+      <p class="pod-desc">Watching a ski jumper fly through the air raises an obvious question: how do they do that? The answer is physics — the same forces (gravity, friction, energy transfer) that you controlled in your ramp lab, at Olympic scale.</p>
+      <a class="pod-link" href="https://www.npr.org/2026/02/10/nx-s1-5698461/2026-winter-olympics-science-physics-ski" target="_blank" rel="noopener">▶ Listen to the episode</a>
+      <div class="pod-url">https://www.npr.org/2026/02/10/nx-s1-5698461/2026-winter-olympics-science-physics-ski</div>
+    </div>
+
+    <div class="glossary">
+      <h4>Quick reference — new words, plain definitions</h4>
+      <dt>Independent variable</dt>
+      <dd>The one thing you deliberately change on purpose. In your lab: ramp height or angle.</dd>
+      <dt>Dependent variable</dt>
+      <dd>The thing you measure because it responds to that change. In your lab: speed.</dd>
+      <dt>Gravity</dt>
+      <dd>The constant downward pull on every object — it's what gives a ramp (or a ski jump) something to speed up into.</dd>
+      <dt>Friction</dt>
+      <dd>A force between two surfaces in contact that resists motion and slows things down.</dd>
+    </div>
+
+    <p class="listen-note" style="margin-top:16px;">Listen with headphones if you can. Every time you hear <em>friction</em>, <em>gravity</em>, <em>energy</em>, or a scientist describing a <em>test</em>, pause and jot one word about it — you'll want that note for Step 02.</p>
+  </section>
+
+  <!-- STEP 02 -->
+  <section class="step">
+    <div class="step-head">
+      <span class="step-num">02</span>
+      <h2 class="step-title">Think &amp; answer<small>plan your answers before you record</small></h2>
+    </div>
+
+    <div class="qcard">
+      <div class="qlabel">Question 1 · Variables &amp; testing</div>
+      <p class="qtext">In your ramp lab, you changed the height or angle on purpose and measured how it changed speed. In the podcast, scientists study athletes the same way. Pick one example from the episode and explain: what was being changed, what was being measured, and how is that the same kind of test you ran with your ramp?</p>
+      <div class="qhints"><strong>Try to include:</strong> the words "independent variable" and "dependent variable," one specific example from the podcast (a sport, athlete, or piece of gear), and one specific number or observation from your own lab data.</div>
+      <textarea class="notes" placeholder="Jot bullet points here — you don't need full sentences yet."></textarea>
+    </div>
+
+    <div class="qcard">
+      <div class="qlabel">Question 2 · Gravity &amp; friction</div>
+      <p class="qtext">Gravity pulls everything down; friction pushes back against motion. Using your own lab data as evidence, explain how a steeper angle or greater height changed your object's speed. Then connect it to gravity or friction at work in the podcast — and to something you notice about speed, jumping, or striking a ball in your own sport.</p>
+      <div class="qhints"><strong>Try to include:</strong> at least one real number from your data table, the words "gravity" and "friction" used correctly, and one connection to volleyball or soccer.</div>
+      <textarea class="notes" placeholder="Jot bullet points here — you don't need full sentences yet."></textarea>
+    </div>
+
+    <div class="qcard">
+      <div class="qlabel">Question 3 · Why testing matters</div>
+      <p class="qtext">Scientists — and athletes — don't just guess and stop. They test, collect data, then test again to get better. Why did it matter that your lab tested more than one height or angle instead of just one? Use a specific idea from the podcast to explain why testing and analyzing data matters for athletes, not just scientists — and how you could use that same thinking to improve in your own sport.</p>
+      <div class="qhints"><strong>Try to include:</strong> a reason more than one trial makes data more trustworthy, one idea from the podcast, and one concrete way you could "test and adjust" in practice or training.</div>
+      <textarea class="notes" placeholder="Jot bullet points here — you don't need full sentences yet."></textarea>
+    </div>
+  </section>
+
+  <!-- STEP 03 -->
+  <section class="step">
+    <div class="step-head">
+      <span class="step-num">03</span>
+      <h2 class="step-title">Record the interview<small>video or audio — your choice</small></h2>
+    </div>
+
+    <p class="record-lead">This is <strong>interview style</strong>, not a speech. Sit down with one real person and have them ask you the three questions from Step 02, one at a time. You answer like you're explaining it to a friend — because you are.</p>
+
+    <div class="who-box">
+      <span>✓ a parent or guardian</span>
+      <span>✓ a sibling</span>
+      <span>✓ a friend outside this class</span>
+      <span class="not">✕ a classmate from this science class</span>
+    </div>
+
+    <div class="checklist">
+      <h4>Before you hit record, plan for:</h4>
+      <div class="check-item">
+        <input type="checkbox" id="c1"><label for="c1">Quick intro — say your name and who's interviewing you.</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c2"><label for="c2">Name the podcast episode you listened to: <b>"The Physics of the Winter Olympics," NPR Short Wave.</b></label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c3"><label for="c3">Your interviewer asks all <b>three questions</b>, one at a time, in their own voice.</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c4"><label for="c4">You answer each one <b>in your own words</b> — it's fine to glance at your notes, but don't read them word‑for‑word.</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c5"><label for="c5">You correctly use and briefly explain: <b>independent variable, dependent variable, gravity,</b> and <b>friction</b> — at least once each, anywhere across your three answers.</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c6"><label for="c6">At least one answer connects to <b>your own sport</b> (volleyball or soccer).</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c7"><label for="c7">Total recording is roughly <b>5–8 minutes</b>, saved as a single video or audio file.</label>
+      </div>
+    </div>
+
+    <div class="submit-note">
+      <b>Submitting:</b> save your file as <code>LastName_FirstName_ForcesInPlay</code> and turn it in the way your teacher tells you in class. This recording is just for your teacher to watch and grade — it does not need to be shared or posted anywhere else.
+    </div>
+  </section>
+
+  <footer>
+    <button class="print-btn" onclick="window.print()">Print this worksheet</button>
+    <span class="footnote">Forces in Play · Science 8 · Speed &amp; Forces Unit</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var ids=['c1','c2','c3','c4','c5','c6','c7'];
+  var key='forces-in-play-checklist';
+  try{
+    var saved=JSON.parse(localStorage.getItem(key)||'{}');
+    ids.forEach(function(id){
+      var el=document.getElementById(id);
+      if(!el)return;
+      if(saved[id])el.checked=true;
+      el.addEventListener('change',function(){
+        try{
+          var s=JSON.parse(localStorage.getItem(key)||'{}');
+          s[id]=el.checked;
+          localStorage.setItem(key,JSON.stringify(s));
+        }catch(e){}
+      });
+    });
+  }catch(e){}
+})();
+</script>
