@@ -1,0 +1,343 @@
+<title>Motion Detectives</title>
+<style>
+  :root{
+    --paper:#FAF5EC;
+    --card:#FFFFFF;
+    --ink:#221F2B;
+    --ink-soft:#5B5568;
+    --track-red:#D8432B;
+    --track-red-soft:#F6DAD2;
+    --field-teal:#146B72;
+    --field-teal-soft:#D9ECEA;
+    --gold:#B9791E;
+    --gold-soft:#F5E6C8;
+    --purple:#6E4C9E;
+    --purple-soft:#E7DEF3;
+    --line:#E3D9C6;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Karla',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4;
+      --track-red:#FF7A5C; --track-red-soft:#3A241F;
+      --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+      --gold:#F2B75A; --gold-soft:#3A2E14;
+      --purple:#B79CE0; --purple-soft:#2E2740;
+      --line:#3A3444;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4;
+    --track-red:#FF7A5C; --track-red-soft:#3A241F;
+    --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+    --gold:#F2B75A; --gold-soft:#3A2E14;
+    --purple:#B79CE0; --purple-soft:#2E2740;
+    --line:#3A3444;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);margin:0;padding-inline:16px;line-height:1.55;}
+  .wrap{max-width:820px;margin:0 auto;padding-block:32px 80px;}
+
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:26px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--track-red);display:flex;gap:10px;align-items:center;}
+  .eyebrow::before{content:"●";font-size:9px;}
+  h1.title{font-family:var(--display);font-weight:600;font-size:clamp(2rem,6vw,2.9rem);margin:8px 0 6px;text-wrap:balance;}
+  .subtitle{color:var(--ink-soft);max-width:60ch;}
+  .badgebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .badge{font-family:var(--mono);font-size:11.5px;background:var(--card);border:1px solid var(--line);padding:6px 11px;border-radius:999px;}
+
+  h2.sect{font-family:var(--display);font-size:1.5rem;margin:0 0 12px;}
+  section{margin-bottom:38px;}
+
+  .briefing{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ink-soft);border-radius:10px;padding:20px 22px;}
+  .briefing p{margin:0 0 10px;}
+  .briefing p:last-child{margin:0;}
+
+  .timeline{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);}
+  .tstep{display:flex;gap:14px;padding:13px 16px;border-bottom:1px solid var(--line);align-items:flex-start;}
+  .tstep:last-child{border-bottom:none;}
+  .tstep .time{font-family:var(--mono);font-size:12px;color:var(--track-red);min-width:78px;white-space:nowrap;padding-top:2px;}
+  .tstep .what b{display:block;font-size:0.98rem;margin-bottom:2px;}
+  .tstep .what span{color:var(--ink-soft);font-size:0.92rem;}
+
+  .timerbox{background:var(--ink);color:var(--paper);border-radius:12px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:16px;}
+  .timerbox .label{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);}
+  .timerbox .clock{font-family:var(--mono);font-size:2.1rem;font-variant-numeric:tabular-nums;}
+  .timerbox button{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;background:var(--gold);color:#221F2B;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;}
+  .timerbox button:active{transform:translateY(1px);}
+
+  .findyours{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media (max-width:640px){.findyours{grid-template-columns:1fr;}}
+  .findyours a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .findyours a b{display:block;font-family:var(--mono);font-size:11px;color:var(--track-red);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
+  .findyours a span{font-size:0.92rem;color:var(--ink-soft);}
+
+  .room{border:2px solid var(--ink);border-radius:14px;padding:22px 22px 24px;margin-bottom:28px;background:var(--card);}
+  .room-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .room-num{font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--paper);padding:4px 10px;border-radius:6px;}
+  .room-head h3{font-family:var(--display);font-size:1.35rem;margin:0;}
+  .room-sub{color:var(--ink-soft);font-size:0.93rem;margin:0 0 18px;}
+
+  .roles{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media (max-width:640px){.roles{grid-template-columns:1fr;}}
+  .role{border-radius:10px;padding:16px 17px;}
+  .role.detective{background:var(--field-teal-soft);border:1px solid color-mix(in srgb, var(--field-teal) 35%, transparent);}
+  .role.plotter{background:var(--purple-soft);border:1px solid color-mix(in srgb, var(--purple) 35%, transparent);}
+  .role .rlabel{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;display:block;}
+  .role.detective .rlabel{color:var(--field-teal);}
+  .role.plotter .rlabel{color:var(--purple);}
+  .role h4{font-family:var(--display);font-size:1.1rem;margin:0 0 10px;}
+  .role p{margin:0 0 10px;font-size:0.93rem;}
+  .role ol{margin:0 0 10px;padding-left:20px;font-size:0.93rem;}
+  .role li{margin-bottom:6px;}
+
+  table.data{width:100%;border-collapse:collapse;margin:10px 0;font-family:var(--mono);font-size:0.85rem;}
+  table.data th,table.data td{border:1px solid var(--line);padding:6px 8px;text-align:center;}
+  table.data th{background:var(--card);}
+
+  .grid-svg{background:var(--card);border:1px dashed var(--ink-soft);border-radius:8px;padding:10px;margin:8px 0;}
+
+  .verdict{margin-top:16px;background:var(--gold-soft);border:1px solid color-mix(in srgb, var(--gold) 40%, transparent);border-radius:10px;padding:15px 17px;}
+  .verdict .vlabel{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;display:block;}
+  .verdict ol{margin:0;padding-left:20px;}
+  .verdict li{margin-bottom:6px;}
+
+  .reveal{background:var(--ink);color:var(--paper);border-radius:14px;padding:26px 24px;text-align:center;}
+  .reveal h2{font-family:var(--display);font-size:1.6rem;margin:0 0 10px;}
+  .reveal p{margin:0 auto;max-width:52ch;color:#D8D2C4;}
+  .reveal .stamp{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--gold);text-transform:uppercase;margin-top:16px;}
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">Motion Investigation Bureau — Opening Case</div>
+    <h1 class="title">Motion Detectives</h1>
+    <p class="subtitle">A 15-minute warm-up mission. You will NOT be given any science vocabulary today — your job is to notice patterns in how three "Movers" travel, and give those patterns your own nicknames. The real vocabulary gets revealed at the very end.</p>
+    <div class="badgebar">
+      <span class="badge">⏱ 15 minutes</span>
+      <span class="badge">👥 6 detectives · 3 breakout rooms</span>
+      <span class="badge">🎯 No vocab needed yet</span>
+    </div>
+  </header>
+
+  <section id="briefing">
+    <h2 class="sect">Mission Briefing</h2>
+    <div class="briefing">
+      <p><b>The case:</b> Three "Movers" were caught on the record — an elevator, a sprinting animal, and a runner on a loop track. Headquarters recorded exactly where each Mover was located every few seconds, but nobody has explained <i>why</i> they moved the way they did. That's where you come in.</p>
+      <p>Each breakout room gets ONE Mover and TWO detective jobs. You and your partner each hold half the evidence — you'll need to talk to each other to crack the case. Nobody in your room has the same job, and no room has the same Mover.</p>
+      <p>When we're back together, each room reports its findings in under 90 seconds. Then Headquarters (your teacher) reveals the real scientific names for what you discovered — in your Motion Files notes.</p>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <h2 class="sect">Mission Timeline</h2>
+    <div class="timeline">
+      <div class="tstep"><span class="time">0:00–1:00</span><div class="what"><b>Briefing (main room)</b><span>Read your role card, confirm your Mover and your partner.</span></div></div>
+      <div class="tstep"><span class="time">1:00–9:00</span><div class="what"><b>Investigate (breakout rooms)</b><span>8 minutes to work the evidence and reach a Case Verdict.</span></div></div>
+      <div class="tstep"><span class="time">9:00–13:00</span><div class="what"><b>Report back (main room)</b><span>Each room presents its Mover's nickname &amp; pattern — 90 seconds max.</span></div></div>
+      <div class="tstep"><span class="time">13:00–15:00</span><div class="what"><b>The Big Reveal</b><span>Headquarters unveils the real vocabulary — open Motion Files.</span></div></div>
+    </div>
+
+    <div class="timerbox">
+      <div>
+        <div class="label">Investigation Clock</div>
+        <div class="clock" id="clockDisplay">08:00</div>
+      </div>
+      <button id="timerBtn" onclick="toggleTimer()">Start 8-Minute Timer</button>
+    </div>
+  </section>
+
+  <section id="findyours">
+    <h2 class="sect">Find Your Card</h2>
+    <div class="findyours">
+      <a href="#room1"><b>Room 1 · Mover A</b><span>Detective 1 — Data / Detective 2 — Plotter</span></a>
+      <a href="#room2"><b>Room 2 · Mover B</b><span>Detective 3 — Data / Detective 4 — Plotter</span></a>
+      <a href="#room3"><b>Room 3 · Mover C</b><span>Detective 5 — Data / Detective 6 — Plotter</span></a>
+    </div>
+  </section>
+
+  <!-- ROOM 1 -->
+  <section id="room1">
+    <div class="room">
+      <div class="room-head"><span class="room-num">ROOM 1</span><h3>Mover A — "The Elevator"</h3></div>
+      <p class="room-sub">Evidence: position of the elevator car, recorded every second for 4 seconds.</p>
+      <div class="roles">
+        <div class="role detective">
+          <span class="rlabel">Detective 1 · Data Detective</span>
+          <h4>Your Job: Call Out the Clues</h4>
+          <p>Read this table out loud to your partner, one row at a time, slowly enough for her to plot each point.</p>
+          <table class="data">
+            <tr><th>Time (s)</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+            <tr><th>Position (m)</th><td>0</td><td>3</td><td>6</td><td>9</td><td>12</td></tr>
+          </table>
+          <p><b>Then figure out:</b> how many meters does the elevator move during EACH one-second interval? Is that amount the same every time, or does it change?</p>
+        </div>
+        <div class="role plotter">
+          <span class="rlabel">Detective 2 · Pattern Plotter</span>
+          <h4>Your Job: Plot &amp; Describe</h4>
+          <p>As your partner calls out each point, mark it on this grid (on paper, a whiteboard, or by describing dot positions out loud). Connect the dots in order.</p>
+          <div class="grid-svg">
+            <svg viewBox="0 0 200 140" role="img" aria-label="Blank grid, 4 columns by 4 rows, for plotting points">
+              <g stroke="var(--line)" stroke-width="1">
+                <line x1="20" y1="10" x2="20" y2="120"/><line x1="65" y1="10" x2="65" y2="120"/>
+                <line x1="110" y1="10" x2="110" y2="120"/><line x1="155" y1="10" x2="155" y2="120"/><line x1="195" y1="10" x2="195" y2="120"/>
+                <line x1="20" y1="10" x2="195" y2="10"/><line x1="20" y1="40" x2="195" y2="40"/>
+                <line x1="20" y1="70" x2="195" y2="70"/><line x1="20" y1="100" x2="195" y2="100"/><line x1="20" y1="120" x2="195" y2="120"/>
+              </g>
+              <line x1="20" y1="120" x2="20" y2="5" stroke="var(--ink-soft)" stroke-width="1.5"/>
+              <line x1="15" y1="120" x2="195" y2="120" stroke="var(--ink-soft)" stroke-width="1.5"/>
+              <text x="4" y="16" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-soft)">m</text>
+              <text x="170" y="135" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-soft)">sec</text>
+            </svg>
+          </div>
+          <p><b>Then describe:</b> what shape did your line make? Straight? Curved? Did it speed up, or stay steady?</p>
+        </div>
+      </div>
+      <div class="verdict">
+        <span class="vlabel">Case Verdict — Answer Together</span>
+        <ol>
+          <li>Did Mover A speed up, slow down, stay steady, or return to where it started?</li>
+          <li>Invent a nickname for this movement pattern (don't use real science words — make one up!).</li>
+          <li>Bonus: name one real-life "mover" that behaves exactly like this.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROOM 2 -->
+  <section id="room2">
+    <div class="room">
+      <div class="room-head"><span class="room-num">ROOM 2</span><h3>Mover B — "The Cheetah Sprint"</h3></div>
+      <p class="room-sub">Evidence: position of a sprinting cheetah, recorded every second for 4 seconds.</p>
+      <div class="roles">
+        <div class="role detective">
+          <span class="rlabel">Detective 3 · Data Detective</span>
+          <h4>Your Job: Call Out the Clues</h4>
+          <p>Read this table out loud to your partner, one row at a time, slowly enough for her to plot each point.</p>
+          <table class="data">
+            <tr><th>Time (s)</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+            <tr><th>Position (m)</th><td>0</td><td>1</td><td>4</td><td>9</td><td>16</td></tr>
+          </table>
+          <p><b>Then figure out:</b> how many meters does the cheetah cover during EACH one-second interval (0→1, 1→2, 2→3, 3→4)? Is that amount the same every time, or does it change?</p>
+        </div>
+        <div class="role plotter">
+          <span class="rlabel">Detective 4 · Pattern Plotter</span>
+          <h4>Your Job: Plot &amp; Describe</h4>
+          <p>As your partner calls out each point, mark it on this grid (on paper, a whiteboard, or by describing dot positions out loud). Connect the dots in order.</p>
+          <div class="grid-svg">
+            <svg viewBox="0 0 200 140" role="img" aria-label="Blank grid, 4 columns by 4 rows, for plotting points">
+              <g stroke="var(--line)" stroke-width="1">
+                <line x1="20" y1="10" x2="20" y2="120"/><line x1="65" y1="10" x2="65" y2="120"/>
+                <line x1="110" y1="10" x2="110" y2="120"/><line x1="155" y1="10" x2="155" y2="120"/><line x1="195" y1="10" x2="195" y2="120"/>
+                <line x1="20" y1="10" x2="195" y2="10"/><line x1="20" y1="40" x2="195" y2="40"/>
+                <line x1="20" y1="70" x2="195" y2="70"/><line x1="20" y1="100" x2="195" y2="100"/><line x1="20" y1="120" x2="195" y2="120"/>
+              </g>
+              <line x1="20" y1="120" x2="20" y2="5" stroke="var(--ink-soft)" stroke-width="1.5"/>
+              <line x1="15" y1="120" x2="195" y2="120" stroke="var(--ink-soft)" stroke-width="1.5"/>
+              <text x="4" y="16" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-soft)">m</text>
+              <text x="170" y="135" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-soft)">sec</text>
+            </svg>
+          </div>
+          <p><b>Then describe:</b> what shape did your line make? Straight? Curved? Did it speed up, or stay steady?</p>
+        </div>
+      </div>
+      <div class="verdict">
+        <span class="vlabel">Case Verdict — Answer Together</span>
+        <ol>
+          <li>Did Mover B speed up, slow down, stay steady, or return to where it started?</li>
+          <li>Invent a nickname for this movement pattern (don't use real science words — make one up!).</li>
+          <li>Bonus: name one real-life "mover" that behaves exactly like this.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROOM 3 -->
+  <section id="room3">
+    <div class="room">
+      <div class="room-head"><span class="room-num">ROOM 3</span><h3>Mover C — "The Track Loop"</h3></div>
+      <p class="room-sub">Evidence: a runner's distance-from-start along a 200 m loop track, recorded every 15 seconds.</p>
+      <div class="roles">
+        <div class="role detective">
+          <span class="rlabel">Detective 5 · Data Detective</span>
+          <h4>Your Job: Call Out the Clues</h4>
+          <p>Read this table out loud to your partner, one row at a time, slowly enough for her to plot each point. (Note: the loop is 200 m around, so 200 m from start = back at the starting line!)</p>
+          <table class="data">
+            <tr><th>Time (s)</th><td>0</td><td>15</td><td>30</td><td>45</td><td>60</td></tr>
+            <tr><th>Position (m)</th><td>0</td><td>50</td><td>100</td><td>150</td><td>200</td></tr>
+          </table>
+          <p><b>Then figure out:</b> how far did the runner actually travel in total by t = 60s? And how far from the STARTING LINE is she standing at t = 60s?</p>
+        </div>
+        <div class="role plotter">
+          <span class="rlabel">Detective 6 · Pattern Plotter</span>
+          <h4>Your Job: Plot &amp; Describe</h4>
+          <p>As your partner calls out each point, mark it on this grid (on paper, a whiteboard, or by describing dot positions out loud). Connect the dots in order.</p>
+          <div class="grid-svg">
+            <svg viewBox="0 0 200 140" role="img" aria-label="Blank grid, 4 columns by 4 rows, for plotting points">
+              <g stroke="var(--line)" stroke-width="1">
+                <line x1="20" y1="10" x2="20" y2="120"/><line x1="65" y1="10" x2="65" y2="120"/>
+                <line x1="110" y1="10" x2="110" y2="120"/><line x1="155" y1="10" x2="155" y2="120"/><line x1="195" y1="10" x2="195" y2="120"/>
+                <line x1="20" y1="10" x2="195" y2="10"/><line x1="20" y1="40" x2="195" y2="40"/>
+                <line x1="20" y1="70" x2="195" y2="70"/><line x1="20" y1="100" x2="195" y2="100"/><line x1="20" y1="120" x2="195" y2="120"/>
+              </g>
+              <line x1="20" y1="120" x2="20" y2="5" stroke="var(--ink-soft)" stroke-width="1.5"/>
+              <line x1="15" y1="120" x2="195" y2="120" stroke="var(--ink-soft)" stroke-width="1.5"/>
+              <text x="4" y="16" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-soft)">m</text>
+              <text x="170" y="135" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-soft)">sec</text>
+            </svg>
+          </div>
+          <p><b>Then describe:</b> what shape did your line make? Where does it end up compared to where it started?</p>
+        </div>
+      </div>
+      <div class="verdict">
+        <span class="vlabel">Case Verdict — Answer Together</span>
+        <ol>
+          <li>Did Mover C end up far from the start, or back at the start? How can "total distance covered" and "distance from start" give two different answers?</li>
+          <li>Invent a nickname for this movement pattern (don't use real science words — make one up!).</li>
+          <li>Bonus: name one real-life "mover" that behaves exactly like this.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="reveal">
+    <div class="reveal">
+      <h2>The Big Reveal Is Coming</h2>
+      <p>Every pattern your room just nicknamed already has a real scientific name — and you're about to learn all of them in <b>The Motion Files</b>. Keep your nicknames handy; we'll match them to the real vocabulary together.</p>
+      <div class="stamp">— End of opening case —</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  var total = 8*60, remaining = total, running = false, id = null;
+  var display = document.getElementById('clockDisplay');
+  var btn = document.getElementById('timerBtn');
+  function render(){
+    var m = Math.floor(remaining/60), s = remaining%60;
+    display.textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  }
+  function tick(){
+    if(remaining>0){ remaining--; render(); }
+    else { clearInterval(id); running=false; btn.textContent='Restart 8-Minute Timer'; }
+  }
+  window.toggleTimer = function(){
+    if(!running){
+      if(remaining<=0){ remaining = total; }
+      running = true; btn.textContent='Pause Timer';
+      id = setInterval(tick, 1000);
+    } else {
+      running = false; clearInterval(id); btn.textContent='Resume Timer';
+    }
+  };
+  render();
+})();
+</script>

@@ -1,0 +1,239 @@
+<title>Motion Evidence Cards</title>
+<style>
+  :root{
+    --paper:#FAF5EC; --card:#FFFFFF; --ink:#221F2B; --ink-soft:#5B5568;
+    --track-red:#D8432B; --track-red-soft:#F6DAD2;
+    --field-teal:#146B72; --field-teal-soft:#D9ECEA;
+    --gold:#B9791E; --gold-soft:#F5E6C8;
+    --line:#E3D9C6;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Karla',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4;
+      --track-red:#FF7A5C; --track-red-soft:#3A241F;
+      --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+      --gold:#F2B75A; --gold-soft:#3A2E14;
+      --line:#3A3444;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4;
+    --track-red:#FF7A5C; --track-red-soft:#3A241F;
+    --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+    --gold:#F2B75A; --gold-soft:#3A2E14;
+    --line:#3A3444;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);margin:0;padding-inline:16px;line-height:1.55;}
+  .wrap{max-width:820px;margin:0 auto;padding-block:32px 80px;}
+
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:26px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--track-red);display:flex;gap:10px;align-items:center;}
+  .eyebrow::before{content:"●";font-size:9px;}
+  h1.title{font-family:var(--display);font-weight:600;font-size:clamp(2rem,6vw,2.9rem);margin:8px 0 6px;text-wrap:balance;}
+  .subtitle{color:var(--ink-soft);max-width:62ch;}
+  .badgebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .badge{font-family:var(--mono);font-size:11.5px;background:var(--card);border:1px solid var(--line);padding:6px 11px;border-radius:999px;}
+
+  h2.sect{font-family:var(--display);font-size:1.5rem;margin:0 0 14px;}
+  section{margin-bottom:40px;}
+
+  .howto{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--track-red);border-radius:10px;padding:20px 22px;}
+  .howto ol{margin:0;padding-left:20px;}
+  .howto li{margin-bottom:10px;}
+  .howto li:last-child{margin-bottom:0;}
+  .materials{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);}
+
+  .diagram{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;margin:20px 0;}
+  .minicard{width:130px;height:84px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-align:center;padding:8px;position:relative;}
+  .minicard b{display:block;font-family:var(--display);font-size:1rem;color:var(--ink);}
+  .plus, .arrow{font-family:var(--mono);font-size:20px;color:var(--ink-soft);}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;}
+  .legend span{font-family:var(--mono);font-size:11.5px;display:flex;align-items:center;gap:6px;}
+  .swatch{width:12px;height:12px;border-radius:3px;display:inline-block;}
+  .swatch.core{background:var(--track-red);}
+  .swatch.bonus{background:var(--gold);}
+
+  .termgrid{display:grid;grid-template-columns:1fr;gap:14px;}
+
+  .termcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
+  .termcard .tophalf{padding:14px 18px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .termcard.core .tophalf{border-bottom:1px dashed var(--track-red);}
+  .termcard.bonus .tophalf{border-bottom:1px dashed var(--gold);}
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;}
+  .termcard.core .tag{background:var(--track-red-soft);color:var(--track-red);}
+  .termcard.bonus .tag{background:var(--gold-soft);color:var(--gold);}
+  .termcard h3{font-family:var(--display);font-size:1.25rem;margin:0;}
+  .faces{display:grid;grid-template-columns:1fr 1fr;}
+  @media (max-width:560px){.faces{grid-template-columns:1fr;}}
+  .face{padding:14px 18px;}
+  .face.front{background:var(--paper);border-right:1px dashed var(--line);}
+  @media (max-width:560px){.face.front{border-right:none;border-bottom:1px dashed var(--line);}}
+  .face .flabel{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:6px;}
+  .face.front .word{font-family:var(--display);font-size:1.4rem;}
+  .face p{margin:0;font-size:0.92rem;color:var(--ink-soft);}
+
+  .studytips{background:var(--field-teal-soft);border:1px solid color-mix(in srgb, var(--field-teal) 35%, transparent);border-radius:10px;padding:18px 20px;}
+  .studytips h3{font-family:var(--display);font-size:1.1rem;margin:0 0 10px;color:var(--field-teal);}
+  .studytips ul{margin:0;padding-left:20px;}
+  .studytips li{margin-bottom:6px;}
+
+  .due{background:var(--ink);color:var(--paper);border-radius:12px;padding:18px 22px;text-align:center;font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;}
+  .due b{color:var(--gold);}
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">Motion Investigation Bureau — Take-Home Assignment</div>
+    <h1 class="title">Motion Evidence Cards</h1>
+    <p class="subtitle">Homework: build a Word Wall for your workspace at school using double-sided index cards — one vocabulary word per card, built from today's Motion Files.</p>
+    <div class="badgebar">
+      <span class="badge">📇 17 terms</span>
+      <span class="badge">🧩 12 core + 5 bonus</span>
+      <span class="badge">🧵 Post on your wall</span>
+    </div>
+  </header>
+
+  <section id="howto">
+    <h2 class="sect">How to Build a Card</h2>
+    <div class="howto">
+      <ol>
+        <li>Grab <b>two</b> blank index cards for every vocabulary word.</li>
+        <li>On <b>Card 1</b>, write just the vocabulary word — big, bold, easy to read from across the room. This is the <b>FRONT</b>.</li>
+        <li>On <b>Card 2</b>, write the definition <b>in your own words</b> (not copied straight from the notes) — this is the <b>BACK</b>.</li>
+        <li>Glue or tape the two cards together <b>back-to-back</b> (blank sides facing each other), so the word shows when you look at one side, and the definition shows when you flip it over.</li>
+        <li>Post your finished cards on the wall of your workspace at school — that's your Word Wall!</li>
+      </ol>
+      <div class="materials">MATERIALS: 34 index cards (2 per word × 17 words) · glue stick or tape · markers · optional: string/tape for hanging</div>
+    </div>
+
+    <div class="diagram">
+      <div class="minicard"><b>velocity</b>Card 1 — FRONT</div>
+      <span class="plus">+</span>
+      <div class="minicard"><b>speed with direction</b>Card 2 — BACK</div>
+      <span class="arrow">→</span>
+      <div class="minicard" style="background:var(--track-red-soft);border-color:var(--track-red);"><b>one card, glued back-to-back</b>ready to post</div>
+    </div>
+  </section>
+
+  <section id="terms">
+    <h2 class="sect">Your 17 Terms</h2>
+    <div class="legend">
+      <span><span class="swatch core"></span> Core — everyone makes these 12</span>
+      <span><span class="swatch bonus"></span> Bonus — challenge yourself with these 5</span>
+    </div>
+
+    <div class="termgrid">
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Position</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Position</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>Where an object is located, compared to a reference point.</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Reference Point</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Reference Point</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>A fixed spot used to measure where something is or how far it has moved.</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Distance</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Distance</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>The total length of the path traveled — direction doesn't matter, and it's never negative.</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Displacement</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Displacement</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>The straight-line change from an object's starting position to its ending position, including direction.</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Speed</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Speed</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>How fast something moves: distance ÷ time. Has size only, no direction (a scalar).</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Velocity</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Velocity</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>How fast something moves AND which way: displacement ÷ time. Has size and direction (a vector).</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Scalar</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Scalar</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>A quantity with size only, no direction. Example: speed, distance.</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Vector</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Vector</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>A quantity with both size and direction. Example: velocity, displacement.</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Acceleration</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Acceleration</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>The rate velocity changes over time — speeding up, slowing down, or turning. Units: m/s².</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Deceleration</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Deceleration</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>A common word for negative acceleration — when something is slowing down.</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Position-Time Graph</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Position-Time Graph</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>A graph with time on the x-axis and position on the y-axis, used to picture motion.</p></div>
+      </div></div>
+
+      <div class="termcard core"><div class="tophalf"><span class="tag">Core</span><h3>Slope</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Slope</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>The steepness of a line on a graph. On a position-time graph, slope = speed or velocity.</p></div>
+      </div></div>
+
+      <div class="termcard bonus"><div class="tophalf"><span class="tag">Bonus</span><h3>Constant Velocity</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Constant Velocity</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>Moving the same speed in the same direction the whole time — a straight, evenly-spaced line on a graph.</p></div>
+      </div></div>
+
+      <div class="termcard bonus"><div class="tophalf"><span class="tag">Bonus</span><h3>Independent Variable</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Independent Variable</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>The variable a scientist changes on purpose. In motion, it's usually time.</p></div>
+      </div></div>
+
+      <div class="termcard bonus"><div class="tophalf"><span class="tag">Bonus</span><h3>Dependent Variable</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">Dependent Variable</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>The variable that changes in response to the independent variable. In motion, it's usually position.</p></div>
+      </div></div>
+
+      <div class="termcard bonus"><div class="tophalf"><span class="tag">Bonus</span><h3>m/s</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">m/s</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>Meters per second — the scientific (SI) unit for speed and velocity.</p></div>
+      </div></div>
+
+      <div class="termcard bonus"><div class="tophalf"><span class="tag">Bonus</span><h3>m/s²</h3></div><div class="faces">
+        <div class="face front"><span class="flabel">Front of card</span><div class="word">m/s²</div></div>
+        <div class="face"><span class="flabel">Back of card</span><p>Meters per second squared — the unit for acceleration.</p></div>
+      </div></div>
+
+    </div>
+  </section>
+
+  <section id="studytips">
+    <h2 class="sect">Using Your Word Wall</h2>
+    <div class="studytips">
+      <h3>Once your cards are posted...</h3>
+      <ul>
+        <li>Cover the definition side and try to say it from memory — check yourself by flipping the card.</li>
+        <li>Pick one card a day and use the word correctly in a sentence about sports, school, or everyday life.</li>
+        <li>Quiz a partner over Zoom: hold up a card and see if she can define it before you flip it.</li>
+        <li>Sort your cards into pairs that go together (like Speed / Velocity or Scalar / Vector) and explain why they're connected.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="due">Due at our <b>next session</b> — bring your Word Wall photo or have it posted for a quick group show-and-tell.</div>
+
+</div>

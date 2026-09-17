@@ -1,0 +1,597 @@
+<title>The Motion Files</title>
+<style>
+  :root{
+    --paper:#FAF5EC;
+    --card:#FFFFFF;
+    --ink:#221F2B;
+    --ink-soft:#5B5568;
+    --track-red:#D8432B;
+    --track-red-soft:#F6DAD2;
+    --field-teal:#146B72;
+    --field-teal-soft:#D9ECEA;
+    --gold:#B9791E;
+    --gold-soft:#F5E6C8;
+    --line:#E3D9C6;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Karla',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17151C;
+      --card:#201C29;
+      --ink:#F3EEE3;
+      --ink-soft:#C7C0B4;
+      --track-red:#FF7A5C;
+      --track-red-soft:#3A241F;
+      --field-teal:#5AD1D9;
+      --field-teal-soft:#1B3436;
+      --gold:#F2B75A;
+      --gold-soft:#3A2E14;
+      --line:#3A3444;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17151C;
+    --card:#201C29;
+    --ink:#F3EEE3;
+    --ink-soft:#C7C0B4;
+    --track-red:#FF7A5C;
+    --track-red-soft:#3A241F;
+    --field-teal:#5AD1D9;
+    --field-teal-soft:#1B3436;
+    --gold:#F2B75A;
+    --gold-soft:#3A2E14;
+    --line:#3A3444;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    margin:0;
+    padding-inline:16px;
+    line-height:1.55;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding-block:36px 80px;}
+
+  header.top{
+    border-bottom:3px solid var(--ink);
+    padding-bottom:22px;
+    margin-bottom:28px;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--track-red);
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .eyebrow::before{content:"●";font-size:9px;}
+  h1.title{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(2.1rem,6vw,3.1rem);
+    margin:8px 0 6px;
+    text-wrap:balance;
+  }
+  .subtitle{
+    color:var(--ink-soft);
+    font-size:1rem;
+    max-width:56ch;
+  }
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 22px;
+    margin-top:16px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .meta-row b{color:var(--ink);font-weight:600;}
+
+  nav.index{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:36px;
+  }
+  nav.index a{
+    font-family:var(--mono);
+    font-size:12px;
+    text-decoration:none;
+    color:var(--ink);
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:7px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  nav.index a:hover{border-color:var(--track-red);color:var(--track-red);}
+
+  section.intro{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:4px solid var(--ink-soft);
+    border-radius:10px;
+    padding:20px 22px;
+    margin-bottom:40px;
+  }
+  section.intro h2{
+    font-family:var(--display);
+    font-size:1.15rem;
+    margin:0 0 8px;
+  }
+  section.intro p{margin:0 0 10px;color:var(--ink-soft);}
+  section.intro p:last-child{margin-bottom:0;}
+
+  .case{margin-bottom:52px;}
+  .case-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:10px;
+    margin-bottom:20px;
+  }
+  .case-num{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--track-red);
+    background:var(--track-red-soft);
+    padding:4px 10px;
+    border-radius:6px;
+    white-space:nowrap;
+  }
+  .case-head h2{
+    font-family:var(--display);
+    font-size:1.7rem;
+    margin:0;
+    text-wrap:balance;
+  }
+
+  .case p{margin:0 0 14px;}
+  .case ul, .case ol{margin:0 0 16px;padding-left:22px;}
+  .case li{margin-bottom:6px;}
+
+  .term{color:var(--track-red);font-weight:700;}
+
+  .definebox{
+    background:var(--field-teal-soft);
+    border:1px solid color-mix(in srgb, var(--field-teal) 35%, transparent);
+    border-radius:10px;
+    padding:16px 18px;
+    margin:16px 0;
+  }
+  .definebox .label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--field-teal);
+    margin-bottom:6px;
+    display:block;
+  }
+  .definebox strong{color:var(--ink);}
+  .formula{
+    font-family:var(--mono);
+    background:var(--card);
+    border:1px dashed var(--field-teal);
+    border-radius:8px;
+    padding:10px 14px;
+    margin:10px 0;
+    font-size:0.95rem;
+    display:inline-block;
+  }
+
+  table.compare{
+    width:100%;
+    border-collapse:collapse;
+    margin:16px 0;
+    font-size:0.94rem;
+  }
+  table.compare th, table.compare td{
+    border:1px solid var(--line);
+    padding:10px 12px;
+    text-align:left;
+    vertical-align:top;
+  }
+  table.compare th{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    background:var(--card);
+  }
+  table.compare td.hl{background:var(--track-red-soft);}
+  .tblwrap{overflow-x:auto;}
+
+  figure.chart{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px 6px;
+    margin:18px 0;
+  }
+  figure.chart figcaption{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-top:8px;
+    text-align:center;
+  }
+  svg{max-width:100%;height:auto;display:block;margin:0 auto;}
+
+  .practice{
+    background:var(--card);
+    border:1px solid var(--field-teal);
+    border-radius:10px;
+    padding:16px 18px;
+    margin:18px 0;
+  }
+  .practice .ptitle{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--field-teal);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .practice .ptitle::before{content:"🔎";font-size:13px;}
+  .practice p.q{font-weight:600;margin:0 0 8px;}
+  .practice ol.opts{margin:0 0 10px;padding-left:20px;}
+  .practice details{margin-top:6px;}
+  .practice summary{
+    cursor:pointer;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--field-teal);
+    width:fit-content;
+  }
+  .practice .answer{
+    margin-top:8px;
+    padding-top:8px;
+    border-top:1px dashed var(--line);
+    color:var(--ink-soft);
+  }
+
+  .field-report{
+    background:var(--gold-soft);
+    border:1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+    border-radius:10px;
+    padding:16px 18px;
+    margin:14px 0;
+  }
+  .field-report .ftitle{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:6px;
+    display:block;
+  }
+  .field-report p{margin:0;}
+
+  .grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  @media (max-width:560px){.grid2{grid-template-columns:1fr;}}
+
+  .closer{
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:12px;
+    padding:24px 24px;
+    margin-top:8px;
+  }
+  .closer h2{
+    font-family:var(--display);
+    font-size:1.4rem;
+    margin:0 0 10px;
+  }
+  .closer ul{margin:0;padding-left:20px;}
+  .closer li{margin-bottom:6px;}
+  .closer .stamp{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-top:18px;
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">Motion Investigation Bureau — Physical Science</div>
+    <h1 class="title">The Motion Files</h1>
+    <p class="subtitle">Five case files on how scientists describe movement — from position-time graphs to speed, velocity, and acceleration. Bring your detective brain: you already know how to spot variables. Now you're using that skill on motion itself.</p>
+    <div class="meta-row">
+      <span><b>Unit:</b> Motion &amp; Forces</span>
+      <span><b>Prereq:</b> Scientific Method, Variables</span>
+      <span><b>Case Agents:</b> your name here</span>
+    </div>
+  </header>
+
+  <nav class="index">
+    <a href="#intro">Briefing</a>
+    <a href="#case1">Case 01 · Position-Time Graphs</a>
+    <a href="#case2">Case 02 · Speed vs. Velocity</a>
+    <a href="#case3">Case 03 · Units</a>
+    <a href="#case4">Case 04 · Acceleration</a>
+    <a href="#case5">Field Reports</a>
+    <a href="#closed">Case Closed</a>
+  </nav>
+
+  <section class="intro" id="intro">
+    <h2>Before We Open This File</h2>
+    <p>In your last unit, you learned that scientists test ideas by controlling variables — keeping some things the same while changing one thing on purpose (the <b>independent variable</b>) and measuring what happens as a result (the <b>dependent variable</b>).</p>
+    <p>Motion is just another thing scientists investigate the exact same way. When we study how something moves, <b>time</b> is almost always the independent variable — it ticks forward no matter what. <b>Position</b> (and later, velocity) is the dependent variable — it changes in response to time passing. Every graph and formula in this file is really just: "as time changes, what happens to position?"</p>
+  </section>
+
+  <!-- CASE 1 -->
+  <section class="case" id="case1">
+    <div class="case-head">
+      <span class="case-num">CASE 01</span>
+      <h2>Position-Time Graphs</h2>
+    </div>
+
+    <p>To describe motion, scientists first need a <span class="term">reference point</span> — a fixed spot to measure everything from. Your <span class="term">position</span> is simply your location compared to that reference point.</p>
+
+    <div class="definebox">
+      <span class="label">Reading the Graph</span>
+      A <strong>position-time graph</strong> plots <b>time</b> on the x-axis and <b>position</b> on the y-axis. The steepness of the line — its <b>slope</b> — tells you how fast the position is changing. A steeper line means faster motion. A flat line means the object isn't moving at all.
+    </div>
+
+    <figure class="chart">
+      <svg viewBox="0 0 420 260" role="img" aria-label="Position time graph showing a straight line rising from 0 meters at 0 seconds to 12 meters at 4 seconds">
+        <line x1="55" y1="20" x2="55" y2="220" stroke="var(--ink-soft)" stroke-width="1.5"/>
+        <line x1="55" y1="220" x2="390" y2="220" stroke="var(--ink-soft)" stroke-width="1.5"/>
+        <g font-family="IBM Plex Mono" font-size="11" fill="var(--ink-soft)">
+          <text x="30" y="224">0</text>
+          <text x="24" y="174">3</text>
+          <text x="24" y="124">6</text>
+          <text x="24" y="74">9</text>
+          <text x="18" y="28">12</text>
+          <text x="52" y="238">0</text>
+          <text x="132" y="238">1</text>
+          <text x="212" y="238">2</text>
+          <text x="292" y="238">3</text>
+          <text x="372" y="238">4</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="1">
+          <line x1="55" y1="170" x2="390" y2="170"/>
+          <line x1="55" y1="120" x2="390" y2="120"/>
+          <line x1="55" y1="70" x2="390" y2="70"/>
+          <line x1="55" y1="20" x2="390" y2="20"/>
+          <line x1="135" y1="20" x2="135" y2="220"/>
+          <line x1="215" y1="20" x2="215" y2="220"/>
+          <line x1="295" y1="20" x2="295" y2="220"/>
+          <line x1="375" y1="20" x2="375" y2="220"/>
+        </g>
+        <polyline points="55,220 135,170 215,120 295,70 375,20" fill="none" stroke="var(--track-red)" stroke-width="3"/>
+        <g fill="var(--track-red)">
+          <circle cx="55" cy="220" r="4"/>
+          <circle cx="135" cy="170" r="4"/>
+          <circle cx="215" cy="120" r="4"/>
+          <circle cx="295" cy="70" r="4"/>
+          <circle cx="375" cy="20" r="4"/>
+        </g>
+        <text x="200" y="252" font-family="Karla" font-size="12" fill="var(--ink-soft)">Time (seconds)</text>
+        <text x="-140" y="16" font-family="Karla" font-size="12" fill="var(--ink-soft)" transform="rotate(-90)">Position (meters)</text>
+      </svg>
+      <figcaption>A hiker's position over 4 seconds — a straight, evenly-rising line means steady motion.</figcaption>
+    </figure>
+
+    <div class="practice">
+      <span class="ptitle">Evidence Check</span>
+      <p class="q">1. Using the graph above, what is the hiker's position at t = 2 s?</p>
+      <details><summary>Reveal Answer</summary><div class="answer">6 meters — read straight up from t = 2 on the x-axis to the line, then across to the y-axis.</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">2. What is the slope of this line, and what does that number actually represent?</p>
+      <details><summary>Reveal Answer</summary><div class="answer">Slope = rise ÷ run = 12 m ÷ 4 s = 3 m/s. On a position-time graph, the slope <i>is</i> the object's speed — so the hiker is moving at 3 meters every second.</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">3. A different graph shows a hiker's line going perfectly flat (horizontal) from t = 10 min to t = 15 min. What's happening during that time?</p>
+      <details><summary>Reveal Answer</summary><div class="answer">The hiker has stopped. Position isn't changing even though time is still passing — a flat line always means zero speed.</div></details>
+    </div>
+  </section>
+
+  <!-- CASE 2 -->
+  <section class="case" id="case2">
+    <div class="case-head">
+      <span class="case-num">CASE 02</span>
+      <h2>Speed vs. Velocity</h2>
+    </div>
+
+    <p>These two words get used interchangeably in everyday life — but to a scientist, they are not the same thing. This is the heart of today's file.</p>
+
+    <div class="grid2">
+      <div class="definebox">
+        <span class="label">Speed</span>
+        <strong>How fast</strong> something is moving. Speed only cares about <b>distance</b> — the total path length traveled — divided by time. It has no direction and is never negative.
+        <div class="formula">speed = distance ÷ time</div>
+      </div>
+      <div class="definebox">
+        <span class="label">Velocity</span>
+        <strong>How fast, and which way.</strong> Velocity uses <b>displacement</b> — the straight-line change from start to finish, including direction — divided by time.
+        <div class="formula">velocity = displacement ÷ time</div>
+      </div>
+    </div>
+
+    <p>Speed is a <span class="term">scalar</span> — magnitude (size) only. Velocity is a <span class="term">vector</span> — magnitude <i>and</i> direction. That one difference — direction — changes everything about how the two are calculated.</p>
+
+    <div class="tblwrap">
+      <table class="compare">
+        <tr><th></th><th>Speed</th><th>Velocity</th></tr>
+        <tr><td><b>Similar</b></td><td colspan="2">Both measure "how fast." Both are calculated by dividing something by time. Both use the same units (m/s, km/h, mph).</td></tr>
+        <tr><td><b>Uses</b></td><td>Distance (total path)</td><td>Displacement (straight-line, with direction)</td></tr>
+        <tr><td><b>Type</b></td><td>Scalar — magnitude only</td><td>Vector — magnitude + direction</td></tr>
+        <tr><td><b>Can it be negative?</b></td><td>Never</td><td class="hl">Yes — sign shows direction</td></tr>
+      </table>
+    </div>
+
+    <div class="field-report">
+      <span class="ftitle">Real-World Case: The 400m Lap</span>
+      <p>A runner sprints one full lap of a 400 m track in 80 seconds and ends up back exactly where she started. Her <b>distance</b> traveled is 400 m, so her average speed is 400 ÷ 80 = <b>5 m/s</b>. But her <b>displacement</b> — the straight-line distance between her start and end point — is <b>0 m</b>, because she finished where she began. That makes her average velocity <b>0 m/s</b>, even though she was sprinting the entire time. Speed and velocity told two completely different stories about the same run.</p>
+    </div>
+
+    <div class="practice">
+      <span class="ptitle">Evidence Check</span>
+      <p class="q">1. True or False: Velocity can be zero even if an object was moving fast the whole time. Explain your answer.</p>
+      <details><summary>Reveal Answer</summary><div class="answer">True. Velocity depends on displacement (start-to-finish), not on how much ground was actually covered. If an object ends up back at its starting point, average velocity is 0 — regardless of speed.</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">2. A cyclist bikes 15 km east in 30 minutes, then turns around and bikes 15 km west back to the start in the next 30 minutes. Find: total distance, total displacement, average speed, and average velocity (1 hour total).</p>
+      <details><summary>Reveal Answer</summary><div class="answer">Distance = 30 km. Displacement = 0 km. Average speed = 30 km ÷ 1 h = 30 km/h. Average velocity = 0 km ÷ 1 h = 0 km/h.</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">3. A soccer player dribbles 20 m downfield in 5 s (call this the positive direction), then dribbles 20 m back toward her own goal in the next 5 s. What is her velocity during each 5-second stretch?</p>
+      <details><summary>Reveal Answer</summary><div class="answer">First stretch: +4 m/s (downfield). Second stretch: −4 m/s (the negative sign shows she reversed direction). Same speed both times (4 m/s), but opposite velocities.</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">4. Reflect: Describe a moment from your own life when your speed and your velocity would have been different from each other.</p>
+      <details><summary>Reveal Answer</summary><div class="answer">No single right answer — any situation where you returned to a starting point works: pacing during a warm-up, running suicides in practice, walking laps around your kitchen, riding an elevator up and back down.</div></details>
+    </div>
+  </section>
+
+  <!-- CASE 3 -->
+  <section class="case" id="case3">
+    <div class="case-head">
+      <span class="case-num">CASE 03</span>
+      <h2>Units of Measurement</h2>
+    </div>
+
+    <p>Speed and velocity are measured in a distance unit over a time unit. Which exact units you use depends on <i>who you're talking to</i>.</p>
+
+    <div class="tblwrap">
+      <table class="compare">
+        <tr><th>Unit</th><th>Where it's standard</th><th>When to use it</th></tr>
+        <tr><td class="hl">m/s <span style="font-family:var(--mono);font-size:11px;color:var(--ink-soft)">(meters/second)</span></td><td>Science &amp; scientific research, worldwide</td><td>Lab reports, formulas, physics class — it's the SI unit, so it plays nicely with every other metric measurement.</td></tr>
+        <tr><td>km/h</td><td>Most countries outside the U.S.</td><td>Everyday speeds — road signs, weather/wind reports, car speedometers.</td></tr>
+        <tr><td>mph</td><td>United States, everyday use</td><td>U.S. road signs, car speedometers, weather reports.</td></tr>
+      </table>
+    </div>
+
+    <div class="field-report">
+      <span class="ftitle">Fun Fact / Conversion</span>
+      <p>1 m/s ≈ 2.24 mph ≈ 3.6 km/h. Usain Bolt's recorded top speed during his 100 m world record run was about 12.4 m/s — roughly <b>27.8 mph</b>. Scientists reported it in m/s first because that's the international standard for sports science and research.</p>
+    </div>
+
+    <div class="practice">
+      <span class="ptitle">Evidence Check</span>
+      <p class="q">1. Which unit would a physicist most likely use in a lab report: m/s, mph, or km/h? Why?</p>
+      <details><summary>Reveal Answer</summary><div class="answer">m/s — it's the SI (scientific) unit, so it stays consistent with every other measurement (meters, seconds, kilograms) used in a calculation.</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">2. A U.S. highway sign reads "Speed Limit 45." What unit is implied, and how do you know?</p>
+      <details><summary>Reveal Answer</summary><div class="answer">Miles per hour (mph) — that's the everyday unit used on U.S. roads and car speedometers.</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">3. A cheetah sprints at about 30 m/s in a short burst. Using 1 m/s ≈ 2.24 mph, is that faster or slower than a car traveling 60 mph?</p>
+      <details><summary>Reveal Answer</summary><div class="answer">30 × 2.24 ≈ 67 mph — the cheetah's sprint is faster than a car going 60 mph.</div></details>
+    </div>
+  </section>
+
+  <!-- CASE 4 -->
+  <section class="case" id="case4">
+    <div class="case-head">
+      <span class="case-num">CASE 04</span>
+      <h2>Acceleration</h2>
+    </div>
+
+    <div class="definebox">
+      <span class="label">Definition</span>
+      <strong>Acceleration</strong> is the rate at which <i>velocity</i> changes over time — speeding up, slowing down, or changing direction all count.
+      <div class="formula">acceleration = (final velocity − initial velocity) ÷ time</div>
+      Measured in meters per second, per second — written <b>m/s²</b>.
+    </div>
+
+    <ul>
+      <li><b>Positive acceleration</b> — speeding up (in the positive direction).</li>
+      <li><b>Negative acceleration (deceleration)</b> — slowing down.</li>
+      <li><b>Constant velocity</b> — zero acceleration, even if the object is moving fast, as long as speed and direction never change.</li>
+    </ul>
+
+    <div class="field-report">
+      <span class="ftitle">Worked Example — Off the Blocks</span>
+      <p>A sprinter starts from rest (0 m/s) and reaches 8 m/s just 2 seconds after the starting gun. a = (8 − 0) ÷ 2 = <b>4 m/s²</b>. Now imagine a cyclist braking from 10 m/s down to 2 m/s over 4 seconds: a = (2 − 10) ÷ 4 = <b>−2 m/s²</b> — the negative sign shows she's slowing down.</p>
+    </div>
+
+    <div class="practice">
+      <span class="ptitle">Evidence Check</span>
+      <p class="q">1. A soccer player accelerates from 1 m/s to 5 m/s in 2 seconds while sprinting for a loose ball. What is her acceleration?</p>
+      <details><summary>Reveal Answer</summary><div class="answer">(5 − 1) ÷ 2 = 2 m/s².</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">2. A skateboarder rolling at 6 m/s comes to a complete stop in 3 seconds. Calculate the acceleration, and explain what the sign means.</p>
+      <details><summary>Reveal Answer</summary><div class="answer">(0 − 6) ÷ 3 = −2 m/s². The negative sign means she's decelerating (slowing down), not speeding up in a negative direction.</div></details>
+    </div>
+    <div class="practice">
+      <p class="q">3. Can an object accelerate without getting faster? Give an example.</p>
+      <details><summary>Reveal Answer</summary><div class="answer">Yes — acceleration means any change in velocity, and velocity includes direction. A runner rounding a curve on a track at a constant speed is still accelerating, because her direction keeps changing.</div></details>
+    </div>
+  </section>
+
+  <!-- CASE 5 -->
+  <section class="case" id="case5">
+    <div class="case-head">
+      <span class="case-num">FIELD REPORTS</span>
+      <h2>Why This Matters — Right Now</h2>
+    </div>
+    <p>Speed, velocity, and acceleration aren't just vocabulary words — they're the exact numbers that athletic trainers, physical therapists, and biomechanists use every day to keep athletes performing and safe.</p>
+
+    <div class="field-report">
+      <span class="ftitle">Wearable GPS Trackers</span>
+      <p>Many college and professional soccer, basketball, and football teams have athletes wear small GPS trackers between their shoulder blades during practice. The devices record real-time speed, distance covered, and acceleration "loads," so athletic trainers can spot fatigue or overtraining before it turns into an injury.</p>
+    </div>
+    <div class="field-report">
+      <span class="ftitle">Sprint-Start Biomechanics</span>
+      <p>Track coaches film sprinters leaving the starting blocks frame by frame — essentially building a position-time graph out of video — to calculate acceleration and fine-tune technique for a faster start.</p>
+    </div>
+    <div class="field-report">
+      <span class="ftitle">Impact Sensors</span>
+      <p>Some football helmets and mouthguards contain sensors that measure acceleration (g-forces) during hits, giving athletic trainers data to help track and manage head-impact exposure.</p>
+    </div>
+    <div class="field-report">
+      <span class="ftitle">Motion-Capture Recovery Tracking</span>
+      <p>Physical therapists and biomechanists use motion-capture cameras to measure an injured athlete's velocity and acceleration during exercises like a jump or a cutting movement — comparing the numbers over time to decide when it's safe to return to play.</p>
+    </div>
+
+    <div class="practice">
+      <span class="ptitle">Field Reflection</span>
+      <p class="q">If you were an athletic trainer, which of these four tools would you want on your team first, and why?</p>
+      <details><summary>Discuss / think it through</summary><div class="answer">There's no single right answer — connect the tool to the kind of injury or performance problem you think it solves best.</div></details>
+    </div>
+  </section>
+
+  <!-- CLOSER -->
+  <section class="closer" id="closed">
+    <h2>Case Closed — Key Takeaways</h2>
+    <ul>
+      <li>Position-time graphs show location over time; the <b>slope</b> of the line equals speed.</li>
+      <li><b>Speed</b> = distance ÷ time (scalar, never negative). <b>Velocity</b> = displacement ÷ time (vector, direction matters).</li>
+      <li>Use <b>m/s</b> in science contexts; <b>mph</b> or <b>km/h</b> in everyday life.</li>
+      <li><b>Acceleration</b> = change in velocity ÷ time, measured in m/s² — includes speeding up, slowing down, or turning.</li>
+      <li>These exact numbers are how athletic trainers and biomechanists protect and improve real athletes today.</li>
+    </ul>
+    <div class="stamp">— File closed. Proceed to the Motion Detectives vocabulary set. —</div>
+  </section>
+
+</div>
