@@ -1,0 +1,200 @@
+<title>Cell Vocab Word Wall</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#faf7f0; --surface:#ffffff; --surface-2:#f1ece0; --ink:#1c2138; --ink-soft:#454b6b;
+    --muted:#767c99; --line:#e4ddc9; --accent:#ef6c2c; --accent-soft:#ffe4d1; --teal:#127a67;
+    --teal-soft:#d9f0e7; --gold:#c98a1f; --gold-soft:#f7e6c2; --card:#fffdf7; --shadow:0 1px 2px rgba(28,33,56,.06),0 8px 20px -14px rgba(28,33,56,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+      --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+      --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --card:#20243a; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+    --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+    --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --card:#20243a; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'Work Sans',system-ui,sans-serif; margin:0; padding-inline:18px; padding-block:26px;}
+  .wrap{max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:28px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; text-wrap:balance; margin:0;}
+  p{line-height:1.6; color:var(--ink-soft); margin:0;}
+
+  .masthead{background:linear-gradient(135deg,var(--ink) 0%,#2a2f52 100%); border-radius:18px; padding:24px; color:#f4f1ff; box-shadow:var(--shadow);}
+  .masthead .tag{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; margin-bottom:12px;}
+  .masthead h1{font-size:clamp(26px,6vw,34px); color:#fff; font-weight:700; line-height:1.1;}
+  .masthead p{color:#d7d9f2; margin-top:8px; font-size:14.5px;}
+  .meta-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .meta-chip{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:7px 11px; color:#e9e9ff;}
+
+  .callout{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow);}
+  .steps{counter-reset:step; display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .steps li{counter-increment:step; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px 10px 46px; position:relative; font-size:14px; color:var(--ink-soft); box-shadow:var(--shadow);}
+  .steps li::before{content:counter(step); position:absolute; left:12px; top:50%; transform:translateY(-50%); font-family:'IBM Plex Mono',monospace; font-weight:600; width:22px; height:22px; border-radius:50%; background:var(--surface-2); color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:12.5px;}
+  .steps li b{color:var(--ink);}
+  .steps li .mat{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted);}
+
+  .section-head{border-bottom:2px solid var(--line); padding-bottom:8px;}
+  .section-head h2{font-size:20px; font-weight:700;}
+
+  .deck{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:18px;}
+  .cardset{display:flex; flex-direction:column; gap:6px;}
+  .num{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); padding-left:2px;}
+  .flip{position:relative; display:flex; gap:8px;}
+  .indexcard{flex:1; background:var(--card); border:1px solid var(--line); border-radius:6px; box-shadow:var(--shadow); min-height:118px; padding:12px; position:relative; display:flex; flex-direction:column; justify-content:center;}
+  .indexcard::before{content:''; position:absolute; top:26px; left:0; right:0; height:1px; background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 12px); opacity:.6;}
+  .indexcard::after{content:''; position:absolute; top:0; bottom:0; left:26px; width:1px; background:var(--accent-soft); opacity:.7;}
+  .front .word{font-family:'Fraunces',serif; font-weight:700; font-size:17px; color:var(--ink); position:relative; z-index:1; padding-left:6px;}
+  .front .part{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; margin-top:4px; padding-left:6px;}
+  .back{background:var(--teal-soft); border-color:var(--teal);}
+  .back::after{display:none;} .back::before{display:none;}
+  .back .def{font-size:12.5px; color:var(--ink); line-height:1.5;}
+  .cardlabel{text-align:center; font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em;}
+
+  .footer-note{text-align:center; color:var(--muted); font-size:12.5px; padding-top:6px; border-top:1px solid var(--line);}
+
+  @media (max-width:480px){
+    .flip{flex-direction:column;}
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <span class="tag">🗂️ Homework &middot; Word Wall Cards</span>
+    <h1>Cell Vocab Word Wall</h1>
+    <p>Turn tonight's vocabulary into an index-card word wall for your practice space at school — front side is the word, back side is the definition.</p>
+    <div class="meta-row">
+      <span class="meta-chip">12 terms</span>
+      <span class="meta-chip">Due next practice/class</span>
+      <span class="meta-chip">Post on your word wall</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>What you're making:</strong> For each vocabulary word below, glue or tape two index cards together back-to-back. Write the <strong>word</strong> on the front card and the <strong>definition</strong> (in your own words) on the back card. Once they're done, post them on the wall of your word space at school so your whole team can study them.</p>
+  </div>
+
+  <section>
+    <div class="section-head"><h2>What You'll Need</h2></div>
+    <ol class="steps">
+      <li><span class="mat">Materials:</span> 24 index cards (2 per word), glue stick or tape, markers/pens, optional colored pencils for a small doodle.</li>
+      <li><b>Step 1:</b> Write the vocab word big and bold on the front card.</li>
+      <li><b>Step 2:</b> Write the definition <em>in your own words</em> on the back card — don't just copy it exactly.</li>
+      <li><b>Step 3:</b> Glue the two cards back-to-back so the word and definition line up on one card.</li>
+      <li><b>Step 4:</b> Optional: add a tiny sketch or your own real-world example to help it stick in your memory.</li>
+      <li><b>Step 5:</b> Post all 12 finished cards on your word wall space.</li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Your 12 Words</h2></div>
+    <p>Each pair below previews exactly what your front and back cards should look like.</p>
+
+    <div class="deck">
+
+      <div class="cardset">
+        <span class="num">01</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Cell</span><span class="part">Core Term</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">The smallest basic unit of structure and function in a living thing.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">02</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Cell Theory</span><span class="part">Core Term</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">The idea that all living things are made of cells, the cell is the basic unit of life, and all cells come from pre-existing cells.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">03</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Organelle</span><span class="part">Core Term</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">A tiny structure inside a cell that performs a specific job, like an organ does for the body.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">04</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Nucleus</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">The organelle that holds the cell's DNA and controls the cell's activities.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">05</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Cell Membrane</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">The flexible outer boundary that controls what enters and exits the cell.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">06</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Cytoplasm</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">The jelly-like fluid that fills a cell and holds the organelles in place.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">07</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Mitochondria</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">The organelle that breaks down nutrients to release energy for the cell; the "powerhouse of the cell."</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">08</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Ribosome</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">A small organelle that builds proteins for the cell.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">09</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Endoplasmic Reticulum</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">A network of pathways that moves proteins and materials around inside the cell.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">10</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Golgi Apparatus</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">The organelle that packages and ships proteins to where they're needed.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">11</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Vacuole</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">A storage sac inside a cell that holds water, nutrients, or waste.</span></div>
+        </div>
+      </div>
+
+      <div class="cardset">
+        <span class="num">12</span>
+        <div class="flip">
+          <div class="indexcard front"><span class="cardlabel">Front</span><span class="word">Lysosome</span><span class="part">Organelle</span></div>
+          <div class="indexcard back"><span class="cardlabel">Back</span><span class="def">The organelle that breaks down waste and worn-out parts inside the cell.</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="footer-note">Bring your finished word wall cards to your next class or practice. 🏐</div>
+</div>
