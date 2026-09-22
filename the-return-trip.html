@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>The Return Trip</title>
 <style>
   :root{
@@ -55,7 +56,7 @@
   body{background:var(--paper);color:var(--ink);font-family:var(--body);margin:0;padding-inline:16px;line-height:1.5;}
   .wrap{max-width:920px;margin:0 auto;padding-block:32px 72px;}
 
-  header.top{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:24px;}
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:20px;}
   .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--track);display:flex;gap:9px;align-items:center;}
   .eyebrow::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--track);}
   h1.title{font-family:var(--display);font-weight:600;font-size:clamp(2rem,5.6vw,2.9rem);margin:8px 0 6px;text-wrap:balance;}
@@ -63,27 +64,54 @@
   .meta-row{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);}
   .meta-row b{color:var(--ink);font-weight:600;}
 
-  details.howto{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ink-soft);border-radius:10px;padding:16px 20px;margin-bottom:28px;}
+  .bigq{background:var(--track-soft);border:1px solid color-mix(in srgb, var(--track) 35%, transparent);border-radius:10px;padding:16px 20px;margin-bottom:20px;}
+  .bigq .qlabel{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--track);margin-bottom:6px;font-weight:600;}
+  .bigq p{margin:0;font-family:var(--display);font-size:1.15rem;font-weight:600;}
+
+  details.howto{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ink-soft);border-radius:10px;padding:16px 20px;margin-bottom:20px;}
   details.howto summary{font-family:var(--display);font-size:1.05rem;cursor:pointer;font-weight:600;}
   details.howto ol{margin:12px 0 4px;padding-left:20px;color:var(--ink-soft);}
   details.howto li{margin-bottom:6px;}
+
+  details.refcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin-bottom:24px;}
+  details.refcard summary{font-family:var(--display);font-size:1.05rem;cursor:pointer;font-weight:600;}
+  .refgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+  @media (max-width:600px){.refgrid{grid-template-columns:1fr;}}
+  .refgrid div{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:0.88rem;color:var(--ink-soft);}
+  .refgrid b{color:var(--ink);}
+  .refgrid .rformula{display:block;font-family:var(--mono);font-size:11.5px;margin-top:4px;color:var(--ink);}
 
   .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
   .tab{font-family:var(--mono);font-size:12px;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);padding:9px 14px;border-radius:999px;cursor:pointer;}
   .tab[aria-pressed="true"]{border-color:var(--track);color:var(--track);background:var(--track-soft);font-weight:600;}
 
-  .brief{background:var(--velocity-soft);border:1px solid color-mix(in srgb, var(--velocity) 35%, transparent);border-radius:10px;padding:18px 20px;margin-bottom:24px;}
+  .brief{background:var(--velocity-soft);border:1px solid color-mix(in srgb, var(--velocity) 35%, transparent);border-radius:10px;padding:18px 20px;margin-bottom:20px;}
   .brief .case-num{font-family:var(--mono);font-size:12px;color:var(--velocity);background:var(--card);padding:3px 9px;border-radius:6px;display:inline-block;margin-bottom:8px;}
-  .brief h2{font-family:var(--display);font-size:1.3rem;margin:2px 0 8px;}
-  .brief p.target{margin:0 0 12px;font-weight:600;}
-  .brief label.predict{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
-  .brief textarea{width:100%;min-height:52px;font-family:var(--body);font-size:0.94rem;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--card);color:var(--ink);resize:vertical;}
+  .brief h2{font-family:var(--display);font-size:1.3rem;margin:2px 0 10px;}
+  .brief p.why{margin:0 0 16px;font-style:italic;color:var(--ink-soft);}
+  .brief p.goal-label{margin:0 0 8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);}
+  .brief ol.steps{margin:0 0 18px;padding-left:20px;}
+  .brief ol.steps li{margin-bottom:7px;}
+
+  .predict-wrap{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;}
+  .predict-wrap p.predictq{margin:0 0 10px;font-weight:600;}
+  .radio-row{display:flex;flex-direction:column;gap:8px;font-size:0.92rem;}
+  .radio-row label{display:flex;gap:9px;align-items:flex-start;cursor:pointer;color:var(--ink-soft);}
+  .radio-row input{margin-top:3px;accent-color:var(--velocity);flex-shrink:0;}
+  .predict-note{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin:8px 0 0;}
+
+  .warmup{background:var(--speed-soft);border:1px solid color-mix(in srgb, var(--speed) 40%, transparent);border-radius:10px;padding:18px 20px;margin-bottom:22px;}
+  .warmup h3{font-family:var(--display);font-size:1.05rem;margin:0 0 4px;}
+  .warmup .wsub{margin:0 0 12px;color:var(--ink-soft);font-size:0.9rem;}
+  .warmup ol{margin:0;padding-left:20px;}
+  .warmup li{margin-bottom:9px;}
 
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:8px;}
   @media (max-width:760px){.grid2{grid-template-columns:1fr;}}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
-  .card h3{font-family:var(--display);font-size:1.05rem;margin:0 0 14px;}
+  .card h3{font-family:var(--display);font-size:1.05rem;margin:0 0 6px;}
+  .card-sub{color:var(--ink-soft);font-size:0.85rem;margin:0 0 14px;}
 
   .leg{border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin-bottom:12px;}
   .leg-head{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
@@ -105,13 +133,15 @@
   svg.viz{width:100%;height:auto;display:block;background:var(--paper);border:1px solid var(--line);border-radius:8px;}
   .viz-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px;}
   .viz-label:first-child{margin-top:0;}
+  .legend-cap{font-family:var(--mono);font-size:10px;color:var(--ink-soft);margin:6px 0 0;line-height:1.5;}
 
-  .stats-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 18px;}
+  .stats-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 4px;}
   .stats-row h3{font-family:var(--display);font-size:1.05rem;margin:0;}
   .pill{font-family:var(--mono);font-size:12px;font-weight:600;padding:6px 13px;border-radius:999px;background:var(--speed-soft);color:var(--speed);display:flex;align-items:center;gap:7px;}
   .pill::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--speed);}
   .pill.solved{background:var(--good-soft);color:var(--good);}
   .pill.solved::before{background:var(--good);}
+  .pill-caption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin:0 0 18px;}
 
   .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
   @media (max-width:640px){.tiles{grid-template-columns:1fr 1fr;}}
@@ -124,7 +154,8 @@
 
   .casenote{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:16px;}
   .casenote label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
-  .casenote textarea{width:100%;min-height:70px;font-family:var(--body);font-size:0.94rem;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--paper);color:var(--ink);resize:vertical;}
+  .casenote p.hint-line{margin:0 0 10px;color:var(--ink-soft);font-size:0.85rem;}
+  .casenote textarea{width:100%;min-height:100px;font-family:var(--body);font-size:0.94rem;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--paper);color:var(--ink);resize:vertical;}
 
   .stretch{background:var(--speed-soft);border:1px solid color-mix(in srgb, var(--speed) 40%, transparent);border-radius:10px;padding:14px 16px;margin-bottom:14px;}
   .stretch .slabel{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--speed);display:block;margin-bottom:6px;}
@@ -157,7 +188,7 @@
   <header class="top">
     <div class="eyebrow">Motion Investigation Bureau — Case 06 · Partner Lab</div>
     <h1 class="title">The Return Trip</h1>
-    <p class="subtitle">Strap a GPS tracker onto a runner. You and your partner control her speed on each leg of a route — then read the tracker's own numbers to find out whether "how fast" and "how fast, which way" ever agree.</p>
+    <p class="subtitle">Strap a GPS tracker onto a runner. You and your partner control her speed on each leg of a route — then read the tracker's own numbers to figure out today's mystery.</p>
     <div class="meta-row">
       <span><b>Partners:</b> 2 per breakout room</span>
       <span><b>Time:</b> 15–20 min</span>
@@ -165,14 +196,32 @@
     </div>
   </header>
 
+  <div class="bigq">
+    <span class="qlabel">The Big Question</span>
+    <p>Can a runner be moving — fast, the entire time — and still have an average velocity of zero? You're about to build a route and let the GPS tracker settle it.</p>
+  </div>
+
   <details class="howto" open>
-    <summary>How This Case Works</summary>
+    <summary>Your Path Through This Activity (7 steps)</summary>
     <ol>
-      <li>Both partners look at the same mission tab below — read the target out loud to each other.</li>
-      <li>Write your <b>prediction</b> before touching any sliders. Guessing wrong is fine; that's the point.</li>
-      <li>Drag the Leg 1–3 sliders to design a route. The tracker updates live — watch the pill flip to <b>Mission Solved</b>.</li>
-      <li>Hit <b>Run Simulation</b> to watch it play out, then write your Case Note together. One partner types; both talk it through.</li>
+      <li>Read the Big Question above — that's what this whole activity is trying to answer.</li>
+      <li>Skim the Quick Reference below if the vocabulary feels rusty.</li>
+      <li>Click your assigned Mission tab and read <b>Why It Matters</b>, then make your prediction.</li>
+      <li>Scroll to the "Try This First" warm-up right above the sliders — do it with your partner before anything else.</li>
+      <li>Read <b>Your Goal</b> for your mission, then experiment with the sliders until the pill says <b>Mission Solved</b>.</li>
+      <li>Click <b>Run Simulation</b> to watch it play out, then write your Case Note together. One partner types; both talk it through.</li>
+      <li>If you finish early, try the Stretch Challenge. Then get ready to share out back in the main room.</li>
     </ol>
+  </details>
+
+  <details class="refcard" open>
+    <summary>Quick Reference — Distance, Displacement, Speed, Velocity</summary>
+    <div class="refgrid">
+      <div><b>Distance</b> — the total ground actually covered. Always positive, never zero unless nothing moved.<span class="rformula">distance = Σ |v × t|</span></div>
+      <div><b>Displacement</b> — the straight-line change from start to finish. Can be positive, negative, or zero.<span class="rformula">displacement = Σ (v × t)</span></div>
+      <div><b>Average Speed</b> — how fast overall, no direction. Never negative.<span class="rformula">speed = distance ÷ time</span></div>
+      <div><b>Average Velocity</b> — how fast overall, <i>with</i> direction. Can be negative.<span class="rformula">velocity = displacement ÷ time</span></div>
+    </div>
   </details>
 
   <div class="tabs" role="tablist" aria-label="Choose your mission">
@@ -181,19 +230,87 @@
     <button class="tab" id="tabbtn2" aria-pressed="false">Mission 3 · Read the Flatline</button>
   </div>
 
-  <div class="brief">
-    <span class="case-num" id="missionTag">MISSION 1</span>
-    <h2 id="missionName">The Loop Home</h2>
-    <p class="target" id="missionTarget"></p>
-    <label class="predict" id="predictLabel"></label>
-    <textarea id="predict0" placeholder="Our prediction..."></textarea>
-    <textarea id="predict1" placeholder="Our prediction..." hidden></textarea>
-    <textarea id="predict2" placeholder="Our prediction..." hidden></textarea>
+  <div class="brief byMission" data-mission="0">
+    <span class="case-num">MISSION 1</span>
+    <h2>The Loop Home</h2>
+    <p class="why">Why it matters: track coaches run "there-and-back" drills constantly — suicides, shuttle runs, warm-up loops. The GPS tracker's numbers are how a coach knows an athlete really worked hard, even when she ends up back where she started.</p>
+    <div class="predict-wrap">
+      <p class="predictq">Before you touch a slider: if the runner ends up back at the start flag, what do you predict for her <b>average velocity</b>?</p>
+      <div class="radio-row">
+        <label><input type="radio" name="predict0"> Positive — same as her average speed</label>
+        <label><input type="radio" name="predict0"> Zero</label>
+        <label><input type="radio" name="predict0"> Negative</label>
+        <label><input type="radio" name="predict0"> Not sure yet</label>
+      </div>
+      <p class="predict-note">No wrong answers here — you're about to test it for real.</p>
+    </div>
+    <p class="goal-label">Your Goal</p>
+    <ol class="steps">
+      <li>Design a route (2 or 3 legs) that ends within <b>1 meter</b> of the start flag.</li>
+      <li>Make sure the tracker still records at least <b>20 meters</b> of total distance — a tiny wiggle back and forth won't count.</li>
+      <li>When the pill below flips to <b>Mission Solved</b>, click Run to watch the replay, then write your Case Note.</li>
+    </ol>
+  </div>
+
+  <div class="brief byMission" data-mission="1" hidden>
+    <span class="case-num">MISSION 2</span>
+    <h2>Straight Shot</h2>
+    <p class="why">Why it matters: not every drill is a loop. Sprint tests and point-A-to-point-B splits are pure one-direction motion, and coaches want to know exactly when speed and velocity are basically telling the same story.</p>
+    <div class="predict-wrap">
+      <p class="predictq">What do you predict has to stay true about the runner's <b>direction</b> for her average speed and average velocity to (almost) match?</p>
+      <div class="radio-row">
+        <label><input type="radio" name="predict1"> She has to stop and rest sometimes</label>
+        <label><input type="radio" name="predict1"> She can never turn around and go backward</label>
+        <label><input type="radio" name="predict1"> She has to move at exactly the same speed the whole time</label>
+        <label><input type="radio" name="predict1"> Not sure yet</label>
+      </div>
+      <p class="predict-note">No wrong answers here — you're about to test it for real.</p>
+    </div>
+    <p class="goal-label">Your Goal</p>
+    <ol class="steps">
+      <li>Use <b>two or more</b> legs, but never let the runner reverse direction (don't mix a positive leg with a negative one).</li>
+      <li>Get the tracker to record at least <b>15 meters</b> of distance this way.</li>
+      <li>When the pill below flips to <b>Mission Solved</b>, click Run, then compare the Avg. Speed and Avg. Velocity tiles — how close are they?</li>
+    </ol>
+  </div>
+
+  <div class="brief byMission" data-mission="2" hidden>
+    <span class="case-num">MISSION 3</span>
+    <h2>Read the Flatline</h2>
+    <p class="why">Why it matters: physical therapists watch position-time graphs exactly like this one to see the precise moment an athlete rested during a drill versus when she was actually moving.</p>
+    <div class="predict-wrap">
+      <p class="predictq">What do you predict the "resting" leg (velocity = 0) will look like on the position-time graph?</p>
+      <div class="radio-row">
+        <label><input type="radio" name="predict2"> A flat, horizontal line</label>
+        <label><input type="radio" name="predict2"> A line going straight up</label>
+        <label><input type="radio" name="predict2"> A line going straight down</label>
+        <label><input type="radio" name="predict2"> Not sure yet</label>
+      </div>
+      <p class="predict-note">No wrong answers here — you're about to test it for real.</p>
+    </div>
+    <p class="goal-label">Your Goal</p>
+    <ol class="steps">
+      <li>Set <b>Leg 1</b> to a positive velocity (heading out).</li>
+      <li>Set <b>Leg 2's</b> velocity to exactly 0, with a duration of at least 2 seconds (resting).</li>
+      <li>Set <b>Leg 3</b> to a negative velocity (heading back), landing within 2 meters of the start.</li>
+      <li>When the pill below flips to <b>Mission Solved</b>, click Run and study the flat middle section of the graph.</li>
+    </ol>
+  </div>
+
+  <div class="warmup">
+    <h3>Try This First (with your partner — don't skip this)</h3>
+    <p class="wsub">Before you change anything, the tracker below is already mid-route. Look at it together.</p>
+    <ol>
+      <li>Find the <b>Position–time graph</b> in the "Live Readout" panel below. Does the line ever slope <i>downward</i>? What does a downward slope mean about which way the runner is moving?</li>
+      <li>Find the <b>Distance</b> and <b>Displacement</b> tiles further down the page. Is one number bigger than the other? Talk through why that might be, using today's vocabulary.</li>
+      <li>Now actually try it: drag <b>Leg 2's velocity</b> slider all the way to <b>-8</b> and watch the Displacement tile. Does the runner end up closer to home, or farther away? Then drag it back wherever you'd like — you can't break anything.</li>
+    </ol>
   </div>
 
   <div class="grid2">
     <div class="card">
       <h3>GPS Tracker Controls</h3>
+      <p class="card-sub">A "leg" is one stretch of the route at a steady velocity — like one interval in a track workout. Positive = toward the finish. Negative = back toward the start. Zero = resting.</p>
 
       <div class="leg">
         <div class="leg-head"><span><b>Leg 1</b></span><span id="dir0">forward</span></div>
@@ -250,9 +367,11 @@
       <h3>Live Readout</h3>
       <div class="viz-label">Track — runner's position</div>
       <svg class="viz" id="trackSvg" viewBox="0 0 480 90"></svg>
+      <p class="legend-cap">The flag marks the start (0 m). The shaded band shows every meter she's covered. The dot is where she is right now.</p>
       <div class="readout" id="readout">t = 0.0 s&nbsp;&nbsp;&nbsp;pos = 0.0 m</div>
       <div class="viz-label">Position–time graph</div>
       <svg class="viz" id="graphSvg" viewBox="0 0 480 260"></svg>
+      <p class="legend-cap">Each dot marks the end of one leg. Line sloping up = moving forward. Sloping down = moving backward. Flat = resting.</p>
     </div>
   </div>
 
@@ -260,6 +379,7 @@
     <h3>Tracker Readout</h3>
     <div class="pill" id="missionPill">Mission Open</div>
   </div>
+  <p class="pill-caption">Keep adjusting the sliders — the pill flips the instant your route matches "Your Goal" above.</p>
 
   <div class="tiles">
     <div class="tile"><div class="tlabel">Distance</div><div class="tval" id="statDistance">—</div><div class="tformula">Σ |v · t|</div></div>
@@ -268,27 +388,40 @@
     <div class="tile velocity"><div class="tlabel">Avg. Velocity</div><div class="tval" id="statVelocity">—</div><div class="tformula">displacement ÷ time</div></div>
   </div>
 
-  <div class="casenote">
+  <div class="casenote byMission" data-mission="0">
     <label>Case Note — Mission 1</label>
-    <textarea id="note0" placeholder="Explain what happened, using the words distance, displacement, speed, and velocity..."></textarea>
+    <p class="hint-line">Finish these sentences together — replace each blank with your own words.</p>
+    <textarea id="note0">Our distance and displacement were different numbers because ___.
+
+Even though our average speed was a real, positive number, our average velocity ended up close to zero because ___.</textarea>
   </div>
-  <div class="casenote" hidden>
+  <div class="casenote byMission" data-mission="1" hidden>
     <label>Case Note — Mission 2</label>
-    <textarea id="note1" placeholder="Explain what happened, using the words distance, displacement, speed, and velocity..."></textarea>
+    <p class="hint-line">Finish these sentences together — replace each blank with your own words.</p>
+    <textarea id="note1">Our average speed and average velocity came out almost the same number because ___.
+
+This tells us that during the whole route, the runner ___.</textarea>
   </div>
-  <div class="casenote" hidden>
+  <div class="casenote byMission" data-mission="2" hidden>
     <label>Case Note — Mission 3</label>
-    <textarea id="note2" placeholder="Explain what happened, using the words distance, displacement, speed, and velocity..."></textarea>
+    <p class="hint-line">Finish these sentences together — replace each blank with your own words.</p>
+    <textarea id="note2">On our graph, the flat part in the middle shows ___.
+
+Right before the flat part the line sloped ___, and right after it the line sloped ___, which tells us the runner's direction ___.</textarea>
   </div>
 
   <div class="stretch">
     <span class="slabel">Stretch Challenge (if you finish early)</span>
-    <p id="stretchText"></p>
+    <p class="byMission" data-mission="0">Could you hit an average velocity of exactly 0 m/s using only ONE leg (not two or three)? Try it, then explain why it does or doesn't work.</p>
+    <p class="byMission" data-mission="1" hidden>Two different partner teams could solve Mission 2 with totally different slider numbers. What do ALL working solutions have in common, no matter the numbers?</p>
+    <p class="byMission" data-mission="2" hidden>Compare the slope right before the rest to the slope right after it. What changed, and what does that tell you about the runner's direction?</p>
   </div>
 
   <details class="hint">
     <summary>Stuck? Reveal a Detective's Hint</summary>
-    <div id="hintText"></div>
+    <div class="byMission" data-mission="0">Try: Leg 1 velocity 5, duration 4 (that sends her +20 m). Leg 2 velocity -5, duration 4 (that's -20 m). Run it — how close to the flag did she land, and what's the total distance?</div>
+    <div class="byMission" data-mission="1" hidden>What happens to distance vs. displacement the instant the runner reverses direction, even for one leg? Try keeping Leg 1 and Leg 2 both positive, but different speeds, and see what the tiles do.</div>
+    <div class="byMission" data-mission="2" hidden>Set Leg 2's velocity slider to exactly 0 — but give Leg 2 a duration of 2 seconds or more. Then set Leg 1 positive and Leg 3 negative so she lands back near the flag.</div>
   </details>
 
   <div class="debrief">
@@ -312,7 +445,7 @@
           <li>Room B → Mission 2 (Straight Shot)</li>
           <li>Room C → Mission 3 (Read the Flatline)</li>
         </ul>
-        <p><b>Suggested timing (15–20 min):</b> 1 min read mission · 2 min predict · 8–10 min experiment + run · 3–4 min case note + stretch · 1–2 min prep to share.</p>
+        <p><b>Suggested timing (15–20 min):</b> 1 min orient (Big Question + their mission's Why/predict) · 2 min "Try This First" warm-up · 7–8 min experiment + run · 3–4 min case note · 1–2 min stretch/prep to share.</p>
         <p>All three debrief questions above are the same across rooms — question 3 is designed to make every group revise Case 01's slope claim once direction is in play.</p>
       </div>
     </details>
@@ -322,31 +455,10 @@
 
 <script>
 (function(){
-  const missions = [
-    {
-      tag:"MISSION 1", name:"The Loop Home",
-      target:"Bring the runner back within 1 m of the start flag — but rack up at least 20 m of total distance on the odometer.",
-      predict:"Before you touch a slider: if a runner ends up back where she started, what do you predict her average velocity will be? Why?",
-      stretch:"Could you hit an average velocity of exactly 0 m/s using only ONE leg (not two or three)? Try it, then explain why it does or doesn't work.",
-      hint:"Try one leg with a positive velocity and another with a negative velocity — they don't need the same speed, just the same v×t size, with opposite signs.",
-      check:(legs,s)=> Math.abs(s.displacement)<=1 && s.distance>=20
-    },
-    {
-      tag:"MISSION 2", name:"Straight Shot",
-      target:"Get the average speed number and the average velocity number to (almost) match — using more than one leg to do it.",
-      predict:"Predict: what has to stay true about the runner's direction for speed and velocity to basically agree?",
-      stretch:"Two different partner teams could solve Mission 2 with totally different slider numbers. What do ALL working solutions have in common, no matter the numbers?",
-      hint:"What happens to distance vs. displacement the instant the runner reverses direction, even for one leg?",
-      check:(legs,s)=> s.distance>=15 && legs.filter(l=>l.t>0).length>=2 && s.sameSign
-    },
-    {
-      tag:"MISSION 3", name:"Read the Flatline",
-      target:"Build the 3-leg route in order: head out (Leg 1, positive), rest with velocity 0 for at least 2 seconds (Leg 2), then head back near the start (Leg 3, negative).",
-      predict:"Predict: on a position-time graph, what will the 'resting' leg look like?",
-      stretch:"Compare the slope right before the rest to the slope right after it. What changed, and what does that tell you about the runner's direction?",
-      hint:"Set Leg 2's velocity slider to exactly 0 — but give Leg 2 a duration of 2 seconds or more.",
-      check:(legs,s)=> legs[0].t>0 && legs[0].v>0 && legs[1].t>=2 && legs[1].v===0 && legs[2].t>0 && legs[2].v<0 && Math.abs(s.displacement)<=2
-    }
+  const missionChecks = [
+    (legs,s)=> Math.abs(s.displacement)<=1 && s.distance>=20,
+    (legs,s)=> s.distance>=15 && legs.filter(l=>l.t>0).length>=2 && s.sameSign,
+    (legs,s)=> legs[0].t>0 && legs[0].v>0 && legs[1].t>=2 && legs[1].v===0 && legs[2].t>0 && legs[2].v<0 && Math.abs(s.displacement)<=2
   ];
 
   let currentMission = 0;
@@ -361,16 +473,12 @@
   const dirLabels = [0,1,2].map(i=>$('dir'+i));
   const contribEls = [0,1,2].map(i=>$('contrib'+i));
   const tabBtns = [0,1,2].map(i=>$('tabbtn'+i));
-  const noteBoxes = [0,1,2].map(i=>$('note'+i));
-  const predictBoxes = [0,1,2].map(i=>$('predict'+i));
-  const casenoteWraps = noteBoxes.map(el=>el.closest('.casenote'));
 
-  const missionTag = $('missionTag'), missionName = $('missionName'), missionTarget = $('missionTarget'),
-        predictLabel = $('predictLabel'), stretchText = $('stretchText'), hintText = $('hintText'),
-        missionPill = $('missionPill'), runBtn = $('runBtn'), resetBtn = $('resetBtn'), readoutEl = $('readout');
+  const missionPill = $('missionPill'), runBtn = $('runBtn'), resetBtn = $('resetBtn'), readoutEl = $('readout');
   const statDistance = $('statDistance'), statDisplacement = $('statDisplacement'),
         statSpeed = $('statSpeed'), statVelocity = $('statVelocity');
   const trackSvg = $('trackSvg'), graphSvg = $('graphSvg');
+  const byMissionEls = Array.from(document.querySelectorAll('.byMission'));
 
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -483,8 +591,7 @@
   }
 
   function updateMissionPill(s){
-    const m = missions[currentMission];
-    const solved = m.check(legs, s);
+    const solved = missionChecks[currentMission](legs, s);
     missionPill.textContent = solved ? 'Mission Solved' : 'Mission Open';
     missionPill.classList.toggle('solved', solved);
   }
@@ -503,17 +610,7 @@
   function selectMission(i){
     currentMission = i;
     tabBtns.forEach((b,idx)=>b.setAttribute('aria-pressed', idx===i ? 'true':'false'));
-    const m = missions[i];
-    missionTag.textContent = m.tag;
-    missionName.textContent = m.name;
-    missionTarget.textContent = m.target;
-    predictLabel.textContent = 'Your Prediction (write before you touch the sliders) — '+m.predict;
-    stretchText.textContent = m.stretch;
-    hintText.textContent = m.hint;
-    predictBoxes.forEach((el,idx)=> el.hidden = idx!==i );
-    casenoteWraps.forEach((el,idx)=> el.hidden = idx!==i );
-    const noteLabel = casenoteWraps[i].querySelector('label');
-    noteLabel.textContent = 'Case Note — '+m.tag;
+    byMissionEls.forEach(el=>{ el.hidden = Number(el.dataset.mission)!==i; });
     recompute();
   }
 
