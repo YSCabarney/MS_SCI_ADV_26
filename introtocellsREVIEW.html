@@ -1,0 +1,456 @@
+<title>Scouting Report</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#faf7f0; --surface:#ffffff; --surface-2:#f1ece0; --ink:#1c2138; --ink-soft:#454b6b;
+    --muted:#767c99; --line:#e4ddc9; --accent:#ef6c2c; --accent-soft:#ffe4d1; --teal:#127a67;
+    --teal-soft:#d9f0e7; --gold:#c98a1f; --gold-soft:#f7e6c2; --red:#c23b3b; --red-soft:#fbe3e0; --shadow:0 1px 2px rgba(28,33,56,.06),0 8px 20px -14px rgba(28,33,56,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+      --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+      --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --red:#ff8377; --red-soft:#3a1f1c; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+    --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+    --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --red:#ff8377; --red-soft:#3a1f1c; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'Work Sans',system-ui,sans-serif; margin:0; padding-inline:18px; padding-block:24px;}
+  .wrap{max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:24px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; text-wrap:balance; margin:0;}
+  p{line-height:1.6; color:var(--ink-soft); margin:0;}
+  button{font-family:'Work Sans',sans-serif;}
+
+  .masthead{background:linear-gradient(135deg,var(--ink) 0%,#2a2f52 100%); border-radius:18px; padding:24px; color:#f4f1ff; box-shadow:var(--shadow);}
+  .masthead .tag{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; margin-bottom:12px;}
+  .masthead h1{font-size:clamp(25px,6vw,33px); color:#fff; font-weight:700; line-height:1.1;}
+  .masthead p{color:#d7d9f2; margin-top:8px; font-size:14.5px;}
+  .meta-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .meta-chip{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:7px 11px; color:#e9e9ff;}
+
+  .timer-bar{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 18px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; position:sticky; top:env(safe-area-inset-top,0px); z-index:5;}
+  .timer-left{display:flex; align-items:center; gap:12px;}
+  .timer-num{font-family:'IBM Plex Mono',monospace; font-size:28px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--accent); min-width:76px;}
+  .timer-label{font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-family:'IBM Plex Mono',monospace;}
+  .timer-controls{display:flex; gap:8px;}
+  .tbtn{border:none; border-radius:9px; padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer;}
+  .tbtn.primary{background:var(--accent); color:#fff;}
+  .tbtn.ghost{background:var(--surface-2); color:var(--ink);}
+  .tbtn:active{transform:translateY(1px);}
+
+  section{display:flex; flex-direction:column; gap:12px;}
+  .section-head h2{font-size:20px; font-weight:700;}
+
+  .roles{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px;}
+  .role{border-radius:14px; padding:16px; box-shadow:var(--shadow); border:1px solid var(--line); display:flex; flex-direction:column; gap:6px;}
+  .role.a{background:var(--accent-soft); border-color:var(--accent);}
+  .role.b{background:var(--teal-soft); border-color:var(--teal);}
+  .role.c{background:var(--gold-soft); border-color:var(--gold);}
+  .role .rn{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em; font-weight:600;}
+  .role.a .rn{color:var(--accent);} .role.b .rn{color:var(--teal);} .role.c .rn{color:var(--gold);}
+  .role h3{font-size:17px;}
+  .role p{font-size:13.5px;}
+
+  .steps{counter-reset:step; display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .steps li{counter-increment:step; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px 10px 46px; position:relative; font-size:14px; color:var(--ink-soft); box-shadow:var(--shadow);}
+  .steps li::before{content:counter(step); position:absolute; left:12px; top:50%; transform:translateY(-50%); font-family:'IBM Plex Mono',monospace; font-weight:600; width:22px; height:22px; border-radius:50%; background:var(--surface-2); color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:12.5px;}
+  .steps li b{color:var(--ink);}
+  .steps .mm{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); display:block; margin-top:2px;}
+
+  .round{border-radius:16px; padding:18px; box-shadow:var(--shadow); border:1px solid var(--line); display:flex; flex-direction:column; gap:14px; background:var(--surface);}
+  .round-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .round-pill{font-family:'IBM Plex Mono',monospace; font-size:11.5px; padding:5px 10px; border-radius:999px; font-weight:600;}
+  .round-pill.a{background:var(--accent-soft); color:var(--accent);}
+  .round-pill.b{background:var(--teal-soft); color:var(--teal);}
+  .round-pill.c{background:var(--gold-soft); color:var(--gold);}
+  .round-head h2{font-size:19px;}
+  .round-intro{font-size:14px;}
+
+  .qcard{background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:10px;}
+  .qcard .qnum{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted);}
+  .qcard .qtext{font-size:14.5px; font-weight:600; color:var(--ink);}
+  .opts{display:flex; flex-direction:column; gap:7px;}
+  .opt{background:var(--surface); border:1.5px solid var(--line); border-radius:9px; padding:9px 12px; font-size:13.5px; color:var(--ink-soft); text-align:left; cursor:pointer;}
+  .opt:hover{border-color:var(--accent);}
+  .opt.correct{background:var(--teal-soft); border-color:var(--teal); color:var(--ink); font-weight:600;}
+  .opt.wrong{background:var(--red-soft); border-color:var(--red); color:var(--ink);}
+  .opt.disabled{cursor:default; pointer-events:none;}
+  .explain{display:none; font-size:13px; color:var(--ink-soft); background:var(--surface); border-left:3px solid var(--teal); border-radius:6px; padding:8px 12px;}
+  .explain.show{display:block;}
+
+  .tf-row{display:flex; gap:10px;}
+  .tf-btn{flex:1; border:1.5px solid var(--line); background:var(--surface); border-radius:9px; padding:10px; font-size:13.5px; font-weight:700; cursor:pointer; color:var(--ink-soft);}
+  .tf-btn.correct{background:var(--teal-soft); border-color:var(--teal); color:var(--ink);}
+  .tf-btn.wrong{background:var(--red-soft); border-color:var(--red); color:var(--ink);}
+  .tf-btn.disabled{cursor:default; pointer-events:none;}
+
+  .footer-note{text-align:center; color:var(--muted); font-size:12.5px; padding-top:6px; border-top:1px solid var(--line);}
+
+  @media (max-width:420px){
+    .timer-num{font-size:22px;}
+  }
+
+  .micon{width:22px; height:22px; flex-shrink:0; vertical-align:-6px; margin-right:7px;}
+  .qtext-row{display:flex; align-items:center;}
+  .opt-inner{display:flex; align-items:center;}
+</style>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-nucleus" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="34" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="4"/>
+      <circle cx="42" cy="54" r="10" fill="var(--gold)"/>
+    </symbol>
+    <symbol id="ic-membrane" viewBox="0 0 100 100">
+      <path d="M50 12c16 0 22 10 30 16 8 6 10 16 6 24 4 8 2 18-6 24-8 6-14 16-30 16s-22-10-30-16c-8-6-10-16-6-24-4-8-2-18 6-24 8-6 14-16 30-16z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="4"/>
+    </symbol>
+    <symbol id="ic-cytoplasm" viewBox="0 0 100 100">
+      <rect x="10" y="10" width="80" height="80" rx="20" fill="var(--surface-2)" stroke="var(--line)" stroke-width="4"/>
+      <circle cx="30" cy="30" r="5" fill="var(--teal)"/><circle cx="66" cy="24" r="6" fill="var(--gold)"/><circle cx="60" cy="60" r="5" fill="var(--accent)"/>
+    </symbol>
+    <symbol id="ic-mitochondria" viewBox="0 0 100 100">
+      <path d="M50 14c22 0 36 16 36 36S72 86 50 86 14 70 14 50 28 14 50 14z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="4"/>
+      <path d="M28 42c6-6 8 8 14 2s8 8 14 2 8 8 14 2" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M28 60c6-6 8 8 14 2s8 8 14 2 8 8 14 2" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="ic-ribosome" viewBox="0 0 100 100">
+      <ellipse cx="42" cy="60" rx="26" ry="20" fill="var(--gold)"/>
+      <ellipse cx="58" cy="34" rx="18" ry="15" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="4"/>
+    </symbol>
+    <symbol id="ic-er" viewBox="0 0 100 100">
+      <path d="M12 30c10-10 16 8 26-2s16 8 26-2 16 8 24-2" fill="none" stroke="var(--teal)" stroke-width="6" stroke-linecap="round"/>
+      <path d="M12 58c10-10 16 8 26-2s16 8 26-2 16 8 24-2" fill="none" stroke="var(--teal)" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="20" cy="30" r="3" fill="var(--gold)"/><circle cx="56" cy="30" r="3" fill="var(--gold)"/>
+    </symbol>
+    <symbol id="ic-golgi" viewBox="0 0 100 100">
+      <path d="M16 28c14-8 54-8 68 0" fill="none" stroke="var(--teal)" stroke-width="7" stroke-linecap="round"/>
+      <path d="M20 46c12-7 48-7 60 0" fill="none" stroke="var(--teal)" stroke-width="7" stroke-linecap="round"/>
+      <path d="M24 64c10-6 42-6 52 0" fill="none" stroke="var(--teal)" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="82" cy="34" r="5" fill="var(--gold)"/>
+    </symbol>
+    <symbol id="ic-vacuole" viewBox="0 0 100 100">
+      <rect x="14" y="14" width="72" height="72" rx="16" fill="var(--surface)" stroke="var(--gold)" stroke-width="5"/>
+      <rect x="26" y="26" width="48" height="48" rx="8" fill="var(--gold-soft)"/>
+    </symbol>
+    <symbol id="ic-lysosome" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="32" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="4"/>
+      <circle cx="40" cy="42" r="5" fill="var(--gold)"/><circle cx="60" cy="48" r="6" fill="var(--gold)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <span class="tag">🏐 Follow-Up Activity &middot; 10–15 Minutes</span>
+    <h1>Scouting Report: Know Your Roster</h1>
+    <p>You've met the vocab and the organelles once already — now let's see what actually stuck, game-show style. Every question is multiple choice or true/false, so this is low-pressure. Work it out together out loud before anyone clicks.</p>
+    <div class="meta-row">
+      <span class="meta-chip">⏱ 10–15 min</span>
+      <span class="meta-chip">👥 3 players, virtual</span>
+      <span class="meta-chip">🎮 3 rounds</span>
+    </div>
+  </div>
+
+  <div class="timer-bar">
+    <div class="timer-left">
+      <div>
+        <div class="timer-num" id="timerNum">14:00</div>
+        <div class="timer-label">Activity Clock</div>
+      </div>
+    </div>
+    <div class="timer-controls">
+      <button class="tbtn primary" id="startBtn">Start</button>
+      <button class="tbtn ghost" id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head"><h2>Your Jobs Today</h2></div>
+    <p>Each of you leads one round. Everyone plays every round together — you're just the one driving the clicks and the pace for yours.</p>
+    <div class="roles">
+      <div class="role a">
+        <span class="rn">Player 1</span>
+        <h3>📇 Vault Keeper</h3>
+        <p>Leads Round 1. Reads each word and its three possible definitions out loud, then clicks the team's answer.</p>
+      </div>
+      <div class="role b">
+        <span class="rn">Player 2</span>
+        <h3>🏐 Position Scout</h3>
+        <p>Leads Round 2. Reads each volleyball role out loud with its three organelle choices, then clicks the team's answer.</p>
+      </div>
+      <div class="role c">
+        <span class="rn">Player 3</span>
+        <h3>🕵️ Fact Checker</h3>
+        <p>Leads Round 3. Reads each claim out loud — team calls "Confirmed!" or "Busted!" — then clicks to check it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>How It Runs</h2></div>
+    <ol class="steps">
+      <li><span class="mm">~1 min</span><b>Huddle up.</b> Claim your round above and start the Activity Clock.</li>
+      <li><span class="mm">~4 min</span><b>Round 1: Vocab Vault.</b></li>
+      <li><span class="mm">~4 min</span><b>Round 2: Position Match.</b></li>
+      <li><span class="mm">~4 min</span><b>Round 3: Coach's Claim.</b></li>
+      <li><span class="mm">~1-2 min</span><b>Final huddle.</b> Celebrate and preview homework.</li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="round">
+      <div class="round-head"><span class="round-pill a">Round 1 &middot; Led by Vault Keeper</span><h2>Vocab Vault</h2></div>
+      <p class="round-intro">Read the word and all three choices out loud. Team picks one, Vault Keeper clicks it.</p>
+
+      <div class="qcard">
+        <span class="qnum">Word 1</span>
+        <span class="qtext">Cell</span>
+        <div class="opts">
+          <button class="opt" data-correct="true" onclick="answer(this)">The smallest living unit of a living thing</button>
+          <button class="opt" onclick="answer(this)">A type of organelle found only in plants</button>
+          <button class="opt" onclick="answer(this)">The scientist who discovered DNA</button>
+        </div>
+        <div class="explain">✅ A cell is the smallest basic unit of structure and function in a living thing.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Word 2</span>
+        <span class="qtext">Cell Theory</span>
+        <div class="opts">
+          <button class="opt" onclick="answer(this)">A guess about how many organelles exist</button>
+          <button class="opt" data-correct="true" onclick="answer(this)">The idea that all living things are made of cells, cells are the basic unit of life, and cells come from other cells</button>
+          <button class="opt" onclick="answer(this)">A rule that only applies to animal cells</button>
+        </div>
+        <div class="explain">✅ Three parts, built by five scientists over 190 years.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Word 3</span>
+        <span class="qtext">Organelle</span>
+        <div class="opts">
+          <button class="opt" data-correct="true" onclick="answer(this)">A tiny structure inside a cell that does one specific job</button>
+          <button class="opt" onclick="answer(this)">The outer boundary of a cell</button>
+          <button class="opt" onclick="answer(this)">Another word for a whole cell</button>
+        </div>
+        <div class="explain">✅ Organelles are the "positions" working inside a single cell.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Word 4</span>
+        <span class="qtext qtext-row"><svg class="micon"><use href="#ic-golgi"/></svg>Golgi Apparatus</span>
+        <div class="opts">
+          <button class="opt" onclick="answer(this)">Stores water and waste</button>
+          <button class="opt" data-correct="true" onclick="answer(this)">Packages and ships proteins to where they're needed</button>
+          <button class="opt" onclick="answer(this)">Produces energy for the cell</button>
+        </div>
+        <div class="explain">✅ Think "equipment manager" — packs and ships the gear.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Word 5</span>
+        <span class="qtext qtext-row"><svg class="micon"><use href="#ic-lysosome"/></svg>Lysosome</span>
+        <div class="opts">
+          <button class="opt" data-correct="true" onclick="answer(this)">Breaks down waste and worn-out cell parts</button>
+          <button class="opt" onclick="answer(this)">Holds the cell's DNA</button>
+          <button class="opt" onclick="answer(this)">Builds proteins</button>
+        </div>
+        <div class="explain">✅ The clean-up crew that sweeps the gym after practice.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Word 6</span>
+        <span class="qtext qtext-row"><svg class="micon"><use href="#ic-vacuole"/></svg>Vacuole</span>
+        <div class="opts">
+          <button class="opt" data-correct="true" onclick="answer(this)">A storage sac for water, nutrients, or waste</button>
+          <button class="opt" onclick="answer(this)">The pathway system that moves materials around</button>
+          <button class="opt" onclick="answer(this)">The cell's control center</button>
+        </div>
+        <div class="explain">✅ Basically the equipment closet.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="round">
+      <div class="round-head"><span class="round-pill b">Round 2 &middot; Led by Position Scout</span><h2>Position Match</h2></div>
+      <p class="round-intro">Read the volleyball role out loud with its three organelle choices. Team picks one, Position Scout clicks it.</p>
+
+      <div class="qcard">
+        <span class="qnum">Role 1</span>
+        <span class="qtext">Head Coach — calls every play and holds the playbook</span>
+        <div class="opts">
+          <button class="opt" data-correct="true" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-nucleus"/></svg>Nucleus</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-vacuole"/></svg>Vacuole</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-ribosome"/></svg>Ribosome</span></button>
+        </div>
+        <div class="explain">✅ The nucleus holds the DNA and controls the cell.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Role 2</span>
+        <span class="qtext">Gatekeeper — decides what's allowed on and off the court</span>
+        <div class="opts">
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-cytoplasm"/></svg>Cytoplasm</span></button>
+          <button class="opt" data-correct="true" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-membrane"/></svg>Cell Membrane</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-golgi"/></svg>Golgi Apparatus</span></button>
+        </div>
+        <div class="explain">✅ The membrane controls what enters and exits.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Role 3</span>
+        <span class="qtext">The Court — the space every play actually happens in</span>
+        <div class="opts">
+          <button class="opt" data-correct="true" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-cytoplasm"/></svg>Cytoplasm</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-nucleus"/></svg>Nucleus</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-lysosome"/></svg>Lysosome</span></button>
+        </div>
+        <div class="explain">✅ The jelly-like fluid that fills the cell.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Role 4</span>
+        <span class="qtext">Conditioning Coach — fuels the whole team with energy</span>
+        <div class="opts">
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-ribosome"/></svg>Ribosome</span></button>
+          <button class="opt" data-correct="true" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-mitochondria"/></svg>Mitochondria</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-er"/></svg>Endoplasmic Reticulum</span></button>
+        </div>
+        <div class="explain">✅ The "powerhouse of the cell."</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Role 5</span>
+        <span class="qtext">Playmakers — actually build and run the play</span>
+        <div class="opts">
+          <button class="opt" data-correct="true" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-ribosome"/></svg>Ribosomes</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-golgi"/></svg>Golgi Apparatus</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-membrane"/></svg>Cell Membrane</span></button>
+        </div>
+        <div class="explain">✅ Ribosomes build proteins — the molecules that do the work.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Role 6</span>
+        <span class="qtext">Hallways — the pathway system connecting everything</span>
+        <div class="opts">
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-vacuole"/></svg>Vacuole</span></button>
+          <button class="opt" data-correct="true" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-er"/></svg>Endoplasmic Reticulum</span></button>
+          <button class="opt" onclick="answer(this)"><span class="opt-inner"><svg class="micon"><use href="#ic-mitochondria"/></svg>Mitochondria</span></button>
+        </div>
+        <div class="explain">✅ Moves materials from place to place inside the cell.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="round">
+      <div class="round-head"><span class="round-pill c">Round 3 &middot; Led by Fact Checker</span><h2>Coach's Claim</h2></div>
+      <p class="round-intro">Read each claim out loud. Team calls "Confirmed!" (true) or "Busted!" (false) before Fact Checker clicks an answer.</p>
+
+      <div class="qcard">
+        <span class="qnum">Claim 1</span>
+        <span class="qtext">All living things are made of at least one cell.</span>
+        <div class="tf-row">
+          <button class="tf-btn" data-correct="true" onclick="tfAnswer(this)">Confirmed (True)</button>
+          <button class="tf-btn" onclick="tfAnswer(this)">Busted (False)</button>
+        </div>
+        <div class="explain">✅ Confirmed — postulate #1 of cell theory.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Claim 2</span>
+        <span class="qtext">If the conditions are right, a brand-new cell can appear out of nowhere with no parent cell.</span>
+        <div class="tf-row">
+          <button class="tf-btn" onclick="tfAnswer(this)">Confirmed (True)</button>
+          <button class="tf-btn" data-correct="true" onclick="tfAnswer(this)">Busted (False)</button>
+        </div>
+        <div class="explain">❌ Busted — Virchow's rule: all cells come from pre-existing cells.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Claim 3</span>
+        <span class="qtext">A mature red blood cell has a nucleus, just like almost every other cell in your body.</span>
+        <div class="tf-row">
+          <button class="tf-btn" onclick="tfAnswer(this)">Confirmed (True)</button>
+          <button class="tf-btn" data-correct="true" onclick="tfAnswer(this)">Busted (False)</button>
+        </div>
+        <div class="explain">❌ Busted — mature red blood cells lose their nucleus to carry more oxygen.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Claim 4</span>
+        <span class="qtext">Scientists are still discovering brand-new organelles today.</span>
+        <div class="tf-row">
+          <button class="tf-btn" data-correct="true" onclick="tfAnswer(this)">Confirmed (True)</button>
+          <button class="tf-btn" onclick="tfAnswer(this)">Busted (False)</button>
+        </div>
+        <div class="explain">✅ Confirmed — the "hemifusome" was identified in 2024–2025.</div>
+      </div>
+
+      <div class="qcard">
+        <span class="qnum">Claim 5</span>
+        <span class="qtext">The mitochondria's job is to package and ship proteins out of the cell.</span>
+        <div class="tf-row">
+          <button class="tf-btn" onclick="tfAnswer(this)">Confirmed (True)</button>
+          <button class="tf-btn" data-correct="true" onclick="tfAnswer(this)">Busted (False)</button>
+        </div>
+        <div class="explain">❌ Busted — that's the Golgi apparatus's job. Mitochondria make energy.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">Nice scouting, squad. Your homework — Cell Scouts: Real World Report — is up next. 🏐</div>
+</div>
+
+<script>
+  function answer(btn){
+    var opts = btn.parentElement.querySelectorAll('.opt');
+    opts.forEach(function(o){
+      o.classList.add('disabled');
+      if(o.dataset.correct === 'true'){ o.classList.add('correct'); }
+    });
+    if(btn.dataset.correct !== 'true'){ btn.classList.add('wrong'); }
+    btn.parentElement.parentElement.querySelector('.explain').classList.add('show');
+  }
+  function tfAnswer(btn){
+    var opts = btn.parentElement.querySelectorAll('.tf-btn');
+    opts.forEach(function(o){
+      o.classList.add('disabled');
+      if(o.dataset.correct === 'true'){ o.classList.add('correct'); }
+    });
+    if(btn.dataset.correct !== 'true'){ btn.classList.add('wrong'); }
+    btn.parentElement.parentElement.querySelector('.explain').classList.add('show');
+  }
+
+  var totalSeconds = 14*60, remaining = totalSeconds, running = false, tick = null;
+  var timerNum = document.getElementById('timerNum');
+  var startBtn = document.getElementById('startBtn');
+  var resetBtn = document.getElementById('resetBtn');
+  function render(){
+    var m = Math.floor(remaining/60), s = remaining%60;
+    timerNum.textContent = m + ':' + (s<10?'0':'') + s;
+  }
+  function startPause(){
+    if(running){
+      clearInterval(tick); running = false; startBtn.textContent = 'Start';
+    } else {
+      running = true; startBtn.textContent = 'Pause';
+      tick = setInterval(function(){
+        remaining--;
+        if(remaining <= 0){ remaining = 0; clearInterval(tick); running = false; startBtn.textContent = 'Start'; }
+        render();
+      },1000);
+    }
+  }
+  startBtn.addEventListener('click', startPause);
+  resetBtn.addEventListener('click', function(){
+    clearInterval(tick); running = false; remaining = totalSeconds; startBtn.textContent = 'Start'; render();
+  });
+  render();
+</script>

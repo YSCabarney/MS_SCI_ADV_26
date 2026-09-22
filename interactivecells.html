@@ -1,0 +1,416 @@
+<title>Interactive Cell Diagram</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#faf7f0; --surface:#ffffff; --surface-2:#f1ece0; --ink:#1c2138; --ink-soft:#454b6b;
+    --muted:#767c99; --line:#e4ddc9; --accent:#ef6c2c; --accent-soft:#ffe4d1; --teal:#127a67;
+    --teal-soft:#d9f0e7; --gold:#c98a1f; --gold-soft:#f7e6c2; --red:#c23b3b; --red-soft:#fbe3e0; --shadow:0 1px 2px rgba(28,33,56,.06),0 8px 20px -14px rgba(28,33,56,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+      --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+      --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --red:#ff8377; --red-soft:#3a1f1c; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+    --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+    --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --red:#ff8377; --red-soft:#3a1f1c; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'Work Sans',system-ui,sans-serif; margin:0; padding-inline:18px; padding-block:24px;}
+  .wrap{max-width:820px; margin:0 auto; display:flex; flex-direction:column; gap:22px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; text-wrap:balance; margin:0;}
+  p{line-height:1.6; color:var(--ink-soft); margin:0;}
+  button{font-family:'Work Sans',sans-serif;}
+
+  .masthead{background:linear-gradient(135deg,var(--ink) 0%,#2a2f52 100%); border-radius:18px; padding:24px; color:#f4f1ff; box-shadow:var(--shadow);}
+  .masthead .tag{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; margin-bottom:12px;}
+  .masthead h1{font-size:clamp(25px,6vw,33px); color:#fff; font-weight:700; line-height:1.1;}
+  .masthead p{color:#d7d9f2; margin-top:8px; font-size:14.5px;}
+  .meta-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .meta-chip{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:7px 11px; color:#e9e9ff;}
+
+  .controls{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; position:sticky; top:env(safe-area-inset-top,0px); z-index:5;}
+  .tabgroup{display:flex; gap:6px; background:var(--surface-2); padding:4px; border-radius:10px;}
+  .tabbtn{border:none; background:transparent; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; color:var(--ink-soft);}
+  .tabbtn.active{background:var(--surface); color:var(--ink); box-shadow:var(--shadow);}
+  .modegroup{display:flex; gap:8px; align-items:center;}
+  .modebtn{border:1.5px solid var(--line); background:var(--surface); padding:8px 14px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; color:var(--ink-soft);}
+  .modebtn.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .resetbtn{border:none; background:var(--surface-2); color:var(--ink); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:600; cursor:pointer;}
+
+  .quiz-bar{display:none; background:var(--gold-soft); border:1px solid var(--gold); border-radius:12px; padding:12px 16px; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .quiz-bar.show{display:flex;}
+  .quiz-target{font-size:14.5px; color:var(--ink);}
+  .quiz-target b{font-family:'Fraunces',serif; font-size:17px; color:var(--gold);}
+  .quiz-score{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft); background:var(--surface); padding:6px 12px; border-radius:999px;}
+  .quiz-msg{font-size:13px; font-weight:700;}
+  .quiz-msg.correct{color:var(--teal);}
+  .quiz-msg.wrong{color:var(--red);}
+
+  .diagram-shell{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:14px; overflow:hidden;}
+  .cellstage{position:relative; width:100%;}
+  .cellstage svg{width:100%; height:auto; display:block;}
+  .hotspot{cursor:pointer;}
+  .hitarea{fill:transparent; pointer-events:all;}
+  .hitarea-stroke{fill:none; stroke:transparent; pointer-events:stroke;}
+  .selring{fill:none; stroke:transparent; stroke-width:4; transition:stroke .15s, stroke-width .15s;}
+  .hotspot:hover .selring{stroke:var(--muted);}
+  .hotspot.selected .selring{stroke:var(--accent); stroke-width:5; filter:drop-shadow(0 0 3px var(--accent));}
+  .hotspot.flash-correct .selring{stroke:var(--teal); stroke-width:6;}
+  .hotspot.flash-wrong .selring{stroke:var(--red); stroke-width:6;}
+  .cellname{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); text-align:center; padding-top:4px;}
+
+  .info-panel{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:var(--shadow); min-height:110px; display:flex; flex-direction:column; gap:8px;}
+  .info-panel .ph{font-size:13.5px; color:var(--muted); text-align:center; margin:auto;}
+  .info-panel h3{font-size:19px;}
+  .info-panel .func{font-size:14px; color:var(--ink-soft);}
+  .info-panel .shape{font-size:13.5px; color:var(--ink); background:var(--gold-soft); border-radius:8px; padding:9px 12px;}
+  .info-panel .shape b{color:var(--gold);}
+
+  .legend{display:flex; flex-wrap:wrap; gap:8px;}
+  .legend-chip{font-family:'IBM Plex Mono',monospace; font-size:12px; background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:7px 13px; cursor:pointer; color:var(--ink-soft);}
+  .legend-chip.selected{background:var(--accent-soft); border-color:var(--accent); color:var(--accent); font-weight:700;}
+  .legend-chip.done{background:var(--teal-soft); border-color:var(--teal); color:var(--teal);}
+
+  .footer-note{text-align:center; color:var(--muted); font-size:12.5px; padding-top:6px; border-top:1px solid var(--line);}
+
+  @media (max-width:520px){
+    .controls{flex-direction:column; align-items:stretch;}
+    .modegroup{justify-content:center;}
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <span class="tag">🏐 Study Tool &middot; Interactive Diagram</span>
+    <h1>Explore &amp; Identify: Plant vs. Animal Cells</h1>
+    <p>Click any organelle to see its job and why its shape fits that job. Then switch to Quiz Mode and see if you can find each one yourself — in both an animal cell and a plant cell.</p>
+    <div class="meta-row">
+      <span class="meta-chip">🐾 Animal Cell</span>
+      <span class="meta-chip">🌿 Plant Cell</span>
+      <span class="meta-chip">🔎 Explore Mode</span>
+      <span class="meta-chip">🎯 Quiz Mode</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="tabgroup">
+      <button class="tabbtn active" id="tabAnimal" onclick="setCellType('animal')">🐾 Animal Cell</button>
+      <button class="tabbtn" id="tabPlant" onclick="setCellType('plant')">🌿 Plant Cell</button>
+    </div>
+    <div class="modegroup">
+      <button class="modebtn active" id="modeExplore" onclick="setMode('explore')">🔎 Explore</button>
+      <button class="modebtn" id="modeQuiz" onclick="setMode('quiz')">🎯 Quiz</button>
+      <button class="resetbtn" onclick="resetCurrent()">Reset</button>
+    </div>
+  </div>
+
+  <div class="quiz-bar" id="quizBar">
+    <div class="quiz-target">Find the: <b id="quizTargetName">—</b></div>
+    <div class="quiz-msg" id="quizMsg"></div>
+    <div class="quiz-score" id="quizScore">Score: 0/0</div>
+  </div>
+
+  <div class="diagram-shell">
+    <div class="cellstage" id="stage"></div>
+    <div class="cellname" id="cellname">Animal Cell</div>
+  </div>
+
+  <div class="info-panel" id="infoPanel">
+    <span class="ph">Click any organelle in the diagram above to learn about it.</span>
+  </div>
+
+  <p class="legend-label" id="legendLabel" style="font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);">Or click a name below:</p>
+  <div class="legend" id="legend"></div>
+
+  <div class="footer-note">Play together: take turns being the one who clicks — everyone calls out the guess first. 🏐</div>
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+var DATA = {
+  animal: [
+    {id:'nucleus', name:'Nucleus', func:"Contains the cell's DNA and controls almost everything the cell does.", shape:"Its round shape with small pores keeps the DNA sealed and protected, while still letting instructions pass in and out."},
+    {id:'membrane', name:'Cell Membrane', func:"A flexible outer boundary that controls what enters and exits the cell.", shape:"Its thin, flexible double layer can bend and stretch, letting it control traffic while adapting to the cell's shape."},
+    {id:'cytoplasm', name:'Cytoplasm', func:"The jelly-like fluid that fills the cell and holds the organelles in place.", shape:"It has no fixed shape at all — being a fluid is exactly what lets it fill every gap around the organelles."},
+    {id:'mito1', name:'Mitochondria', func:'Breaks down nutrients to release usable energy (ATP) for the cell.', shape:"Its inner membrane is folded into ridges (cristae) — more folds mean more surface area for making energy."},
+    {id:'ribo1', name:'Ribosomes', func:'Build proteins, the molecules that do most of the actual work in a cell.', shape:"They're tiny and round, so thousands can be packed into the cytoplasm without taking up much room."},
+    {id:'er', name:'Endoplasmic Reticulum', func:'A network of pathways that moves proteins and materials around inside the cell.', shape:"Its folded, maze-like shape packs huge surface area into a small space for building and moving material."},
+    {id:'golgi', name:'Golgi Apparatus', func:"Packages, labels, and ships proteins to wherever they're needed.", shape:"Its stacked, flattened layers let a protein move through one sac at a time, like an assembly line."},
+    {id:'vacuole1', name:'Vacuole', func:'A small storage sac for water, nutrients, or waste.', shape:"Animal cells keep several small vacuoles instead of one giant one — small and mobile, easy to move where needed."},
+    {id:'lyso', name:'Lysosome', func:'Contains enzymes that break down waste and worn-out cell parts.', shape:"It's small and round so it can travel anywhere in the cell and merge directly with waste material."}
+  ],
+  plant: [
+    {id:'nucleus', name:'Nucleus', func:"Contains the cell's DNA and controls almost everything the cell does.", shape:"Its round shape with small pores keeps the DNA sealed and protected, while still letting instructions pass in and out."},
+    {id:'wall', name:'Cell Wall', func:'A rigid layer outside the cell membrane that gives the cell a fixed shape and protection.', shape:"Its stiff, rectangular structure lets plant cells stack like bricks to hold the whole plant upright."},
+    {id:'membrane', name:'Cell Membrane', func:"A flexible boundary just inside the cell wall that controls what enters and exits the cell.", shape:"Its thin, flexible double layer still controls traffic in and out, even with the rigid wall surrounding it."},
+    {id:'cytoplasm', name:'Cytoplasm', func:"The jelly-like fluid that fills the space around the organelles.", shape:"It forms a thin band around the giant vacuole — filling whatever space is left, since it has no fixed shape."},
+    {id:'mito2', name:'Mitochondria', func:'Breaks down nutrients to release usable energy (ATP) for the cell.', shape:"Its inner membrane is folded into ridges (cristae) — more folds mean more surface area for making energy."},
+    {id:'ribo2', name:'Ribosomes', func:'Build proteins, the molecules that do most of the actual work in a cell.', shape:"They're tiny and round, so thousands can be packed into the cytoplasm without taking up much room."},
+    {id:'er2', name:'Endoplasmic Reticulum', func:'A network of pathways that moves proteins and materials around inside the cell.', shape:"Its folded, maze-like shape packs huge surface area into a small space for building and moving material."},
+    {id:'golgi2', name:'Golgi Apparatus', func:"Packages, labels, and ships proteins to wherever they're needed.", shape:"Its stacked, flattened layers let a protein move through one sac at a time, like an assembly line."},
+    {id:'centralvac', name:'Large Central Vacuole', func:'One giant, permanent vacuole that fills most of the plant cell.', shape:"Because it's so large, it fills with water and pushes outward against the cell wall — that pressure keeps stems and leaves stiff."},
+    {id:'chloro', name:'Chloroplast', func:'Captures sunlight and uses it to make sugar (food) through photosynthesis.', shape:"Its flattened, layered shape (like a tiny stack of pancakes) packs in as much light-catching surface as possible."}
+  ]
+};
+
+/* ---------- STATE ---------- */
+var state = { cellType:'animal', mode:'explore', selected:null, quizQueue:[], quizIndex:0, quizScore:0, quizTotal:0, doneIds:{} };
+
+/* ---------- SVG BUILDERS ---------- */
+function svgOpen(){ return '<svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg">'; }
+function hotspot(id, visual, cx, cy, r){
+  return '<g class="hotspot" data-id="'+id+'">' + visual +
+    '<circle class="selring" cx="'+cx+'" cy="'+cy+'" r="'+(r-3)+'"/>' +
+    '<circle class="hitarea" cx="'+cx+'" cy="'+cy+'" r="'+r+'"/></g>';
+}
+
+function animalSVG(){
+  var s = svgOpen();
+  // cytoplasm background (blob) — also the cytoplasm hotspot
+  var blob = '<path class="hl bloboutline" d="M150,58 C230,16 380,20 452,66 C524,98 562,180 542,262 C524,342 440,392 338,402 C238,412 118,390 78,320 C36,248 48,148 100,98 C116,78 132,68 150,58 Z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>';
+  s += hotspot('cytoplasm', blob, 300, 230, 230);
+  // membrane (the outline stroke, thicker invisible hit path)
+  var memD = "M150,58 C230,16 380,20 452,66 C524,98 562,180 542,262 C524,342 440,392 338,402 C238,412 118,390 78,320 C36,248 48,148 100,98 C116,78 132,68 150,58 Z";
+  var memVis = '<path class="hl" d="'+memD+'" fill="none" stroke="var(--accent)" stroke-width="5"/>';
+  s += '<g class="hotspot" data-id="membrane">' + memVis +
+    '<path class="selring" d="'+memD+'" stroke-width="5"/>' +
+    '<path class="hitarea-stroke" d="'+memD+'" stroke-width="26"/></g>';
+  // nucleus
+  var nucVis = '<circle class="hl" cx="225" cy="175" r="55" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="3"/><circle cx="208" cy="190" r="16" fill="var(--gold)"/>';
+  s += hotspot('nucleus', nucVis, 225, 175, 58);
+  // mitochondria x1 (main labeled)
+  var m1 = '<g class="hl" transform="translate(392,118) rotate(15)"><ellipse cx="0" cy="0" rx="34" ry="20" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="3"/><path d="M-20,-6c5,-6 6,6 11,0s6,6 11,0" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/><path d="M-20,6c5,-6 6,6 11,0s6,6 11,0" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/></g>';
+  s += hotspot('mito1', m1, 392, 118, 40);
+  // extra unlabeled mitochondria (decorative, same id so clickable too)
+  var m2 = '<g class="hl" transform="translate(430,255) rotate(-20)"><ellipse cx="0" cy="0" rx="30" ry="18" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="3"/><path d="M-18,-5c4,-5 5,5 10,0s5,5 10,0" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/></g>';
+  s += hotspot('mito1', m2, 430, 255, 36);
+  // ribosomes cluster 1 (labeled)
+  var r1 = '<g class="hl" transform="translate(180,105)"><circle cx="0" cy="0" r="6" fill="var(--gold)"/><circle cx="10" cy="7" r="5" fill="var(--gold)"/><circle cx="-8" cy="9" r="4" fill="var(--gold)"/></g>';
+  s += hotspot('ribo1', r1, 180, 105, 28);
+  var r2 = '<g class="hl" transform="translate(260,355)"><circle cx="0" cy="0" r="6" fill="var(--gold)"/><circle cx="10" cy="6" r="5" fill="var(--gold)"/></g>';
+  s += hotspot('ribo1', r2, 260, 355, 26);
+  var r3 = '<g class="hl" transform="translate(120,240)"><circle cx="0" cy="0" r="5" fill="var(--gold)"/><circle cx="8" cy="6" r="4" fill="var(--gold)"/></g>';
+  s += hotspot('ribo1', r3, 120, 240, 24);
+  // ER
+  var erVis = '<g class="hl" transform="translate(300,140)"><path d="M0,10c10,-10 16,8 26,-2s16,8 26,-2" fill="none" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/><path d="M-4,32c10,-10 16,8 26,-2s16,8 26,-2" fill="none" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/><circle cx="4" cy="6" r="2.4" fill="var(--gold)"/><circle cx="22" cy="4" r="2.4" fill="var(--gold)"/><circle cx="40" cy="6" r="2.4" fill="var(--gold)"/></g>';
+  s += hotspot('er', erVis, 340, 160, 46);
+  // Golgi
+  var golgiVis = '<g class="hl" transform="translate(150,300)"><path d="M0,0c10,-6 34,-6 44,0" fill="none" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/><path d="M4,12c9,-5 28,-5 37,0" fill="none" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/><path d="M8,24c7,-4 22,-4 30,0" fill="none" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="4" r="3" fill="var(--gold)"/></g>';
+  s += hotspot('golgi', golgiVis, 172, 312, 40);
+  // vacuoles small x2
+  var v1 = '<circle class="hl" cx="470" cy="300" r="22" fill="var(--surface)" stroke="var(--gold)" stroke-width="3"/><rect x="458" y="288" width="24" height="24" rx="5" fill="var(--gold-soft)"/>';
+  s += hotspot('vacuole1', v1, 470, 300, 30);
+  var v2 = '<circle class="hl" cx="130" cy="355" r="17" fill="var(--surface)" stroke="var(--gold)" stroke-width="3"/><rect x="121" y="346" width="18" height="18" rx="4" fill="var(--gold-soft)"/>';
+  s += hotspot('vacuole1', v2, 130, 355, 26);
+  // lysosome x2
+  var l1 = '<circle class="hl" cx="345" cy="80" r="15" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="2.5"/><circle cx="340" cy="76" r="2.5" fill="var(--gold)"/><circle cx="350" cy="84" r="2" fill="var(--gold)"/>';
+  s += hotspot('lyso', l1, 345, 80, 26);
+  var l2 = '<circle class="hl" cx="500" cy="175" r="13" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="2.5"/><circle cx="497" cy="172" r="2" fill="var(--gold)"/>';
+  s += hotspot('lyso', l2, 500, 175, 24);
+  s += '</svg>';
+  return s;
+}
+
+function plantSVG(){
+  var s = svgOpen();
+  // cell wall (outer thick rect) hotspot = stroke-only along outer edge
+  s += '<g class="hotspot" data-id="wall"><rect class="hl" x="34" y="28" width="532" height="364" fill="none" stroke="var(--teal)" stroke-width="9"/>' +
+    '<rect class="selring" x="34" y="28" width="532" height="364" stroke-width="9"/>' +
+    '<rect class="hitarea-stroke" x="34" y="28" width="532" height="364" stroke-width="30"/></g>';
+  // membrane inner rect
+  s += '<g class="hotspot" data-id="membrane"><rect class="hl" x="52" y="46" width="496" height="328" rx="6" fill="none" stroke="var(--accent)" stroke-width="4"/>' +
+    '<rect class="selring" x="52" y="46" width="496" height="328" rx="6" stroke-width="4"/>' +
+    '<rect class="hitarea-stroke" x="52" y="46" width="496" height="328" rx="6" stroke-width="24"/></g>';
+  // cytoplasm background fill (between membrane and vacuole) — big rect behind vacuole
+  s += '<g class="hotspot" data-id="cytoplasm"><rect class="hl" x="58" y="52" width="484" height="316" rx="4" fill="var(--surface-2)"/>' +
+    '<rect class="selring" x="58" y="52" width="484" height="316" rx="4"/>' +
+    '<rect class="hitarea" x="58" y="52" width="484" height="316"/></g>';
+  // large central vacuole (drawn after cytoplasm so it sits on top and intercepts clicks in its area)
+  s += '<g class="hotspot" data-id="centralvac"><rect class="hl" x="150" y="90" width="300" height="230" rx="38" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="3"/>' +
+    '<rect class="selring" x="150" y="90" width="300" height="230" rx="38"/>' +
+    '<rect class="hitarea" x="150" y="90" width="300" height="230" rx="38"/></g>';
+  // nucleus (corner, on top of vacuole edge)
+  var nucVis = '<circle class="hl" cx="110" cy="330" r="46" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="3"/><circle cx="96" cy="342" r="13" fill="var(--gold)"/>';
+  s += hotspot('nucleus', nucVis, 110, 330, 50);
+  // chloroplasts x4
+  function chloro(cx,cy,rot){
+    return '<g class="hl" transform="translate('+cx+','+cy+') rotate('+rot+')"><ellipse cx="0" cy="0" rx="26" ry="16" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="2.5"/><line x1="-16" y1="-5" x2="16" y2="-5" stroke="var(--teal)" stroke-width="2"/><line x1="-17" y1="0" x2="17" y2="0" stroke="var(--teal)" stroke-width="2"/><line x1="-16" y1="5" x2="16" y2="5" stroke="var(--teal)" stroke-width="2"/></g>';
+  }
+  s += hotspot('chloro', chloro(95,100,-10), 95, 100, 34);
+  s += hotspot('chloro', chloro(500,95,15), 500, 95, 34);
+  s += hotspot('chloro', chloro(505,335,-15), 505, 335, 34);
+  s += hotspot('chloro', chloro(90,215,8), 90, 215, 34);
+  // mitochondria x2
+  var m1 = '<g class="hl" transform="translate(500,215) rotate(10)"><ellipse cx="0" cy="0" rx="26" ry="16" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2.5"/><path d="M-15,-4c4,-5 5,5 9,0s5,5 9,0" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></g>';
+  s += hotspot('mito2', m1, 500, 215, 32);
+  var m2 = '<g class="hl" transform="translate(95,300) rotate(-8)"><ellipse cx="0" cy="0" rx="24" ry="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2.5"/><path d="M-14,-4c4,-4 5,4 8,0s5,4 8,0" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></g>';
+  s += hotspot('mito2', m2, 95, 300, 30);
+  // ER near nucleus
+  var erVis = '<g class="hl" transform="translate(70,60)"><path d="M0,8c7,-8 11,6 18,-2s11,6 18,-2" fill="none" stroke="var(--teal)" stroke-width="3.5" stroke-linecap="round"/><circle cx="4" cy="4" r="2" fill="var(--gold)"/><circle cx="18" cy="2" r="2" fill="var(--gold)"/></g>';
+  s += hotspot('er2', erVis, 100, 68, 36);
+  // golgi near nucleus
+  var golgiVis = '<g class="hl" transform="translate(180,355)"><path d="M0,0c8,-5 26,-5 34,0" fill="none" stroke="var(--teal)" stroke-width="3.5" stroke-linecap="round"/><path d="M3,9c7,-4 21,-4 28,0" fill="none" stroke="var(--teal)" stroke-width="3.5" stroke-linecap="round"/><circle cx="38" cy="2" r="2.4" fill="var(--gold)"/></g>';
+  s += hotspot('golgi2', golgiVis, 200, 362, 34);
+  // ribosomes x2
+  var r1 = '<g class="hl" transform="translate(65,160)"><circle cx="0" cy="0" r="5" fill="var(--gold)"/><circle cx="8" cy="5" r="4" fill="var(--gold)"/></g>';
+  s += hotspot('ribo2', r1, 65, 160, 24);
+  var r2 = '<g class="hl" transform="translate(430,60)"><circle cx="0" cy="0" r="5" fill="var(--gold)"/><circle cx="8" cy="5" r="4" fill="var(--gold)"/></g>';
+  s += hotspot('ribo2', r2, 430, 60, 24);
+  s += '</svg>';
+  return s;
+}
+
+/* ---------- RENDER ---------- */
+var stageEl = document.getElementById('stage');
+var legendEl = document.getElementById('legend');
+var infoPanel = document.getElementById('infoPanel');
+var cellnameEl = document.getElementById('cellname');
+
+function currentData(){ return DATA[state.cellType]; }
+function uniqueEntries(){
+  var seen = {}, out = [];
+  currentData().forEach(function(d){ if(!seen[d.id]){ seen[d.id]=true; out.push(d); } });
+  return out;
+}
+
+function renderStage(){
+  stageEl.innerHTML = state.cellType === 'animal' ? animalSVG() : plantSVG();
+  cellnameEl.textContent = state.cellType === 'animal' ? 'Animal Cell' : 'Plant Cell';
+  stageEl.querySelectorAll('.hotspot').forEach(function(el){
+    el.addEventListener('click', function(){ handleClick(el.dataset.id); });
+  });
+  applySelectionVisuals();
+}
+
+function renderLegend(){
+  legendEl.innerHTML = '';
+  uniqueEntries().forEach(function(d){
+    var chip = document.createElement('button');
+    chip.className = 'legend-chip';
+    chip.textContent = d.name;
+    chip.dataset.id = d.id;
+    chip.addEventListener('click', function(){ handleClick(d.id); });
+    legendEl.appendChild(chip);
+  });
+  applySelectionVisuals();
+}
+
+function applySelectionVisuals(){
+  document.querySelectorAll('.hotspot').forEach(function(el){
+    el.classList.toggle('selected', state.selected === el.dataset.id);
+  });
+  document.querySelectorAll('.legend-chip').forEach(function(el){
+    el.classList.toggle('selected', state.selected === el.dataset.id);
+    el.classList.toggle('done', !!state.doneIds[el.dataset.id]);
+  });
+}
+
+function showInfo(id){
+  var entry = currentData().find(function(d){ return d.id === id; });
+  if(!entry){ return; }
+  infoPanel.innerHTML = '<h3>' + entry.name + '</h3>' +
+    '<p class="func">' + entry.func + '</p>' +
+    '<p class="shape"><b>Shape matters:</b> ' + entry.shape + '</p>';
+}
+
+/* ---------- INTERACTION ---------- */
+function handleClick(id){
+  if(state.mode === 'explore'){
+    state.selected = id;
+    state.doneIds[id] = true;
+    showInfo(id);
+    applySelectionVisuals();
+  } else {
+    quizAttempt(id);
+  }
+}
+
+function setCellType(type){
+  state.cellType = type;
+  state.selected = null;
+  document.getElementById('tabAnimal').classList.toggle('active', type==='animal');
+  document.getElementById('tabPlant').classList.toggle('active', type==='plant');
+  infoPanel.innerHTML = '<span class="ph">Click any organelle in the diagram above to learn about it.</span>';
+  renderStage();
+  renderLegend();
+  if(state.mode === 'quiz'){ startQuiz(); }
+}
+
+function setMode(mode){
+  state.mode = mode;
+  document.getElementById('modeExplore').classList.toggle('active', mode==='explore');
+  document.getElementById('modeQuiz').classList.toggle('active', mode==='quiz');
+  document.getElementById('quizBar').classList.toggle('show', mode==='quiz');
+  document.getElementById('legend').style.display = mode==='quiz' ? 'none' : 'flex';
+  document.getElementById('legendLabel').style.display = mode==='quiz' ? 'none' : 'block';
+  if(mode === 'quiz'){ startQuiz(); }
+  else { infoPanel.innerHTML = state.selected ? infoPanel.innerHTML : '<span class="ph">Click any organelle in the diagram above to learn about it.</span>'; }
+}
+
+function shuffle(arr){
+  var a = arr.slice();
+  for(var i=a.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+
+function startQuiz(){
+  state.quizQueue = shuffle(uniqueEntries().map(function(d){ return d.id; }));
+  state.quizIndex = 0;
+  state.quizScore = 0;
+  state.quizTotal = 0;
+  state.selected = null;
+  document.getElementById('quizMsg').textContent = '';
+  infoPanel.innerHTML = '<span class="ph">Quiz Mode: click the organelle named above, right on the diagram.</span>';
+  updateQuizPrompt();
+  applySelectionVisuals();
+}
+
+function updateQuizPrompt(){
+  if(state.quizIndex >= state.quizQueue.length){
+    document.getElementById('quizTargetName').textContent = '🎉 Round complete!';
+    document.getElementById('quizScore').textContent = 'Final score: ' + state.quizScore + '/' + state.quizTotal;
+    return;
+  }
+  var id = state.quizQueue[state.quizIndex];
+  var entry = currentData().find(function(d){ return d.id === id; });
+  document.getElementById('quizTargetName').textContent = entry.name;
+  document.getElementById('quizScore').textContent = 'Score: ' + state.quizScore + '/' + state.quizTotal;
+}
+
+function quizAttempt(id){
+  if(state.quizIndex >= state.quizQueue.length){ return; }
+  var targetId = state.quizQueue[state.quizIndex];
+  var msg = document.getElementById('quizMsg');
+  var clickedEls = document.querySelectorAll('.hotspot[data-id="'+id+'"]');
+  if(id === targetId){
+    state.quizScore++; state.quizTotal++;
+    state.doneIds[id] = true;
+    msg.textContent = '✅ Correct!'; msg.className = 'quiz-msg correct';
+    clickedEls.forEach(function(el){ el.classList.add('flash-correct'); setTimeout(function(){ el.classList.remove('flash-correct'); }, 500); });
+    state.quizIndex++;
+    setTimeout(function(){ msg.textContent=''; updateQuizPrompt(); applySelectionVisuals(); }, 550);
+  } else {
+    state.quizTotal++;
+    msg.textContent = '❌ Try again!'; msg.className = 'quiz-msg wrong';
+    clickedEls.forEach(function(el){ el.classList.add('flash-wrong'); setTimeout(function(){ el.classList.remove('flash-wrong'); }, 500); });
+    document.getElementById('quizScore').textContent = 'Score: ' + state.quizScore + '/' + state.quizTotal;
+    setTimeout(function(){ msg.textContent=''; }, 700);
+  }
+}
+
+function resetCurrent(){
+  state.selected = null;
+  state.doneIds = {};
+  infoPanel.innerHTML = '<span class="ph">Click any organelle in the diagram above to learn about it.</span>';
+  if(state.mode === 'quiz'){ startQuiz(); } else { applySelectionVisuals(); }
+}
+
+/* ---------- INIT ---------- */
+renderStage();
+renderLegend();
+</script>
