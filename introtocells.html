@@ -28,7 +28,6 @@
 
   /* MASTHEAD */
   .masthead{background:var(--ink); background:linear-gradient(135deg,var(--ink) 0%,#2a2f52 100%); border-radius:18px; padding:28px 26px; color:#f4f1ff; box-shadow:var(--shadow); position:relative; overflow:hidden;}
-  :root[data-theme="light"] .masthead, :root:not([data-theme="dark"]):not(.force) .masthead {}
   .masthead .tag{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; margin-bottom:14px;}
   .masthead h1{font-size:clamp(28px,5vw,38px); color:#fff; font-weight:700; line-height:1.08;}
   .masthead .sub{color:#d7d9f2; margin-top:10px; font-size:15px; max-width:52ch;}
@@ -71,9 +70,13 @@
   /* ORGANELLE CARDS */
   .card-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px;}
   .oc{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;}
+  .oc-top{display:flex; gap:12px; align-items:flex-start;}
+  .oc-icon{width:56px; height:56px; flex-shrink:0; background:var(--surface-2); border-radius:10px; padding:6px;}
   .oc .pos{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); font-weight:600;}
   .oc h3{font-size:17px; font-weight:700; margin:0;}
   .oc .func{font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+  .oc .shape{font-size:13px; color:var(--ink); background:var(--gold-soft); border-radius:8px; padding:8px 10px; line-height:1.5;}
+  .oc .shape b{color:var(--gold);}
   .oc .analogy{font-size:13.5px; background:var(--teal-soft); color:var(--ink); border-radius:8px; padding:8px 10px; line-height:1.5;}
   .oc .analogy b{color:var(--teal);}
   .oc .fact{font-size:12.5px; color:var(--muted); font-style:italic;}
@@ -95,10 +98,71 @@
 
   .footer-note{text-align:center; color:var(--muted); font-size:12.5px; padding-top:10px; border-top:1px solid var(--line);}
 
+  .see-more{display:inline-flex; align-items:center; gap:8px; align-self:flex-start; background:var(--ink); color:#fff; text-decoration:none; font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600; padding:10px 16px; border-radius:999px; box-shadow:var(--shadow);}
+
   @media (max-width:480px){
     .oc{min-width:0;}
   }
 </style>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-nucleus" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="34" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="3"/>
+      <circle cx="42" cy="54" r="10" fill="var(--gold)"/>
+      <circle cx="50" cy="16" r="2.6" fill="var(--teal)"/><circle cx="74" cy="26" r="2.6" fill="var(--teal)"/><circle cx="84" cy="50" r="2.6" fill="var(--teal)"/><circle cx="74" cy="74" r="2.6" fill="var(--teal)"/><circle cx="50" cy="84" r="2.6" fill="var(--teal)"/><circle cx="26" cy="74" r="2.6" fill="var(--teal)"/><circle cx="16" cy="50" r="2.6" fill="var(--teal)"/><circle cx="26" cy="26" r="2.6" fill="var(--teal)"/>
+    </symbol>
+    <symbol id="ic-membrane" viewBox="0 0 100 100">
+      <path d="M50 12c16 0 22 10 30 16 8 6 10 16 6 24 4 8 2 18-6 24-8 6-14 16-30 16s-22-10-30-16c-8-6-10-16-6-24-4-8-2-18 6-24 8-6 14-16 30-16z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="3"/>
+      <circle cx="50" cy="12" r="3" fill="var(--accent)"/><circle cx="80" cy="28" r="3" fill="var(--accent)"/><circle cx="86" cy="52" r="3" fill="var(--accent)"/><circle cx="80" cy="76" r="3" fill="var(--accent)"/><circle cx="50" cy="88" r="3" fill="var(--accent)"/><circle cx="20" cy="76" r="3" fill="var(--accent)"/><circle cx="14" cy="52" r="3" fill="var(--accent)"/><circle cx="20" cy="28" r="3" fill="var(--accent)"/>
+    </symbol>
+    <symbol id="ic-cytoplasm" viewBox="0 0 100 100">
+      <rect x="10" y="10" width="80" height="80" rx="20" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
+      <circle cx="30" cy="30" r="4" fill="var(--teal)"/><circle cx="66" cy="24" r="5" fill="var(--gold)"/><circle cx="76" cy="58" r="4" fill="var(--accent)"/><circle cx="34" cy="66" r="6" fill="var(--teal)"/><circle cx="56" cy="50" r="3" fill="var(--gold)"/><circle cx="24" cy="50" r="3" fill="var(--accent)"/>
+    </symbol>
+    <symbol id="ic-mitochondria" viewBox="0 0 100 100">
+      <path d="M50 14c22 0 36 16 36 36S72 86 50 86 14 70 14 50 28 14 50 14z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="3"/>
+      <path d="M28 38c6-6 8 8 14 2s8 8 14 2 8 8 14 2" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M28 54c6-6 8 8 14 2s8 8 14 2 8 8 14 2" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M28 70c6-6 8 8 14 2s8 8 14 2" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="ic-ribosome" viewBox="0 0 100 100">
+      <ellipse cx="42" cy="60" rx="26" ry="20" fill="var(--gold)"/>
+      <ellipse cx="58" cy="34" rx="18" ry="15" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="3"/>
+    </symbol>
+    <symbol id="ic-er" viewBox="0 0 100 100">
+      <path d="M12 24c10-10 16 8 26-2s16 8 26-2 16 8 24-2" fill="none" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/>
+      <path d="M12 46c10-10 16 8 26-2s16 8 26-2 16 8 24-2" fill="none" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/>
+      <path d="M12 68c10-10 16 8 26-2s16 8 26-2 16 8 24-2" fill="none" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="20" cy="24" r="2.4" fill="var(--gold)"/><circle cx="38" cy="20" r="2.4" fill="var(--gold)"/><circle cx="56" cy="24" r="2.4" fill="var(--gold)"/><circle cx="74" cy="20" r="2.4" fill="var(--gold)"/>
+    </symbol>
+    <symbol id="ic-golgi" viewBox="0 0 100 100">
+      <path d="M16 24c14-8 54-8 68 0" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M20 40c12-7 48-7 60 0" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M24 56c10-6 42-6 52 0" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M28 72c8-5 36-5 44 0" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="82" cy="30" r="4" fill="var(--gold)"/><circle cx="76" cy="62" r="4" fill="var(--gold)"/>
+    </symbol>
+    <symbol id="ic-vacuole" viewBox="0 0 100 100">
+      <rect x="14" y="14" width="72" height="72" rx="16" fill="var(--surface)" stroke="var(--gold)" stroke-width="4"/>
+      <rect x="26" y="26" width="48" height="48" rx="8" fill="var(--gold-soft)"/>
+    </symbol>
+    <symbol id="ic-lysosome" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="32" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="3"/>
+      <circle cx="40" cy="42" r="4" fill="var(--gold)"/><circle cx="60" cy="46" r="5" fill="var(--gold)"/><circle cx="48" cy="62" r="4" fill="var(--gold)"/><circle cx="64" cy="64" r="3" fill="var(--gold)"/>
+    </symbol>
+    <symbol id="ic-wall" viewBox="0 0 100 100">
+      <rect x="10" y="10" width="80" height="80" fill="none" stroke="var(--teal)" stroke-width="8"/>
+      <rect x="22" y="22" width="56" height="56" fill="var(--teal-soft)"/>
+    </symbol>
+    <symbol id="ic-chloroplast" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="50" rx="38" ry="26" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="3"/>
+      <line x1="18" y1="38" x2="82" y2="38" stroke="var(--teal)" stroke-width="3"/>
+      <line x1="16" y1="50" x2="84" y2="50" stroke="var(--teal)" stroke-width="3"/>
+      <line x1="18" y1="62" x2="82" y2="62" stroke="var(--teal)" stroke-width="3"/>
+    </symbol>
+  </defs>
+</svg>
 
 <div class="wrap">
 
@@ -174,76 +238,77 @@
   <section id="organelles">
     <div class="section-head"><span class="section-num">03</span><h2>Every Team Needs Positions</h2></div>
     <p>A cell isn't just one blob doing everything — it's more like a <strong>volleyball team</strong>. Inside every cell are tiny working structures called <strong>organelles</strong> ("little organs"), and just like players on a roster, each one has a specific job that keeps the whole team — the cell — running. Here's the starting lineup:</p>
+    <p><strong>One more thing to notice as you go:</strong> the shape and size of each organelle below is never random. Every fold, every curve, every stack exists because that exact shape helps the organelle do its job better — the same way a libero's low stance and a hitter's vertical jump are shaped by exactly what their position needs them to do.</p>
 
     <div class="card-grid">
       <div class="oc">
-        <span class="pos">Head Coach</span>
-        <h3>Nucleus</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-nucleus"/></svg><div><span class="pos">Head Coach</span><h3>Nucleus</h3></div></div>
         <p class="func">Contains the cell's DNA and controls almost everything the cell does.</p>
+        <p class="shape"><b>Shape matters:</b> Its round shape with small pores keeps the DNA sealed and protected, while still letting specific instructions pass in and out.</p>
         <p class="analogy"><b>On the team:</b> The coach who holds the playbook, calls the plays, and directs every other position on the court.</p>
         <p class="fact">Fun fact: mature red blood cells are one of the only human cells with no nucleus — see the Real Teams section below!</p>
       </div>
 
       <div class="oc">
-        <span class="pos">Gatekeeper</span>
-        <h3>Cell Membrane</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-membrane"/></svg><div><span class="pos">Gatekeeper</span><h3>Cell Membrane</h3></div></div>
         <p class="func">A flexible outer boundary that controls what enters and exits the cell.</p>
+        <p class="shape"><b>Shape matters:</b> Its thin, flexible double layer can bend, stretch, and fold — allowing it to control traffic in and out while still adapting to the cell's shape.</p>
         <p class="analogy"><b>On the team:</b> The check-in table at the gym doors — it decides who's allowed on the court and what gear can come in or out.</p>
         <p class="fact">It's "selectively permeable" — picky about what it lets through, not a solid wall.</p>
       </div>
 
       <div class="oc">
-        <span class="pos">The Court</span>
-        <h3>Cytoplasm</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-cytoplasm"/></svg><div><span class="pos">The Court</span><h3>Cytoplasm</h3></div></div>
         <p class="func">The jelly-like fluid that fills the cell and holds all the organelles in place.</p>
+        <p class="shape"><b>Shape matters:</b> It has no fixed shape of its own — being a fluid is exactly what lets it fill every gap and hold organelles wherever they're needed.</p>
         <p class="analogy"><b>On the team:</b> The gym floor itself — the space where every play actually happens.</p>
         <p class="fact">Most of a cell's chemical reactions happen right in the cytoplasm.</p>
       </div>
 
       <div class="oc">
-        <span class="pos">Conditioning Coach</span>
-        <h3>Mitochondria</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-mitochondria"/></svg><div><span class="pos">Conditioning Coach</span><h3>Mitochondria</h3></div></div>
         <p class="func">Breaks down nutrients to release usable energy (ATP) for the cell — the "powerhouse of the cell."</p>
+        <p class="shape"><b>Shape matters:</b> Its inner membrane is folded into ridges called <em>cristae</em>. More folds mean more surface area — and more surface area means more energy made in the same small space.</p>
         <p class="analogy"><b>On the team:</b> The strength &amp; conditioning coach who fuels every player so they have the energy to hit, dig, and jump.</p>
         <p class="fact">Muscle cells — the ones athletes rely on most — are packed with extra mitochondria.</p>
       </div>
 
       <div class="oc">
-        <span class="pos">Playmakers</span>
-        <h3>Ribosomes</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-ribosome"/></svg><div><span class="pos">Playmakers</span><h3>Ribosomes</h3></div></div>
         <p class="func">Build proteins, the molecules that do most of the actual work in a cell.</p>
+        <p class="shape"><b>Shape matters:</b> They're tiny and round, so thousands of them can be packed into the cytoplasm — or ride along the ER — without taking up much room at all.</p>
         <p class="analogy"><b>On the team:</b> The players actually running each play and making things happen on the court.</p>
         <p class="fact">Some ribosomes float free in the cytoplasm; others are attached to the ER, like starters vs. bench players.</p>
       </div>
 
       <div class="oc">
-        <span class="pos">Hallways</span>
-        <h3>Endoplasmic Reticulum</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-er"/></svg><div><span class="pos">Hallways</span><h3>Endoplasmic Reticulum</h3></div></div>
         <p class="func">A network of pathways that moves proteins and other materials around inside the cell.</p>
+        <p class="shape"><b>Shape matters:</b> Its folded, maze-like shape packs a huge amount of surface area into a small space — more surface means more room to build and move material at once.</p>
         <p class="analogy"><b>On the team:</b> The hallways connecting the locker room, gym, and equipment room — the routes everything travels through.</p>
         <p class="fact">"Rough" ER is covered in ribosomes (building materials in transit); "smooth" ER has none.</p>
       </div>
 
       <div class="oc">
-        <span class="pos">Equipment Manager</span>
-        <h3>Golgi Apparatus</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-golgi"/></svg><div><span class="pos">Equipment Manager</span><h3>Golgi Apparatus</h3></div></div>
         <p class="func">Packages, labels, and ships proteins to wherever they're needed, inside or outside the cell.</p>
+        <p class="shape"><b>Shape matters:</b> Its stacked, flattened layers let a protein move through one sac at a time, getting finished a little more at each stage — an assembly line built right into its shape.</p>
         <p class="analogy"><b>On the team:</b> The equipment manager packing team gear into bags and shipping them to the right place for game day.</p>
         <p class="fact">Think of it as the cell's post office.</p>
       </div>
 
       <div class="oc">
-        <span class="pos">Storage Closet</span>
-        <h3>Vacuole</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-vacuole"/></svg><div><span class="pos">Storage Closet</span><h3>Vacuole</h3></div></div>
         <p class="func">A storage sac for water, nutrients, and waste.</p>
+        <p class="shape"><b>Shape matters:</b> It's simple and roomy on purpose — a plain sac shape maximizes how much it can hold, which is the whole point of storage.</p>
         <p class="analogy"><b>On the team:</b> The equipment closet storing water bottles, spare balls, and extra jerseys.</p>
         <p class="fact">Plant cells have one giant vacuole; animal cells have several small ones.</p>
       </div>
 
       <div class="oc">
-        <span class="pos">Clean-Up Crew</span>
-        <h3>Lysosome</h3>
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-lysosome"/></svg><div><span class="pos">Clean-Up Crew</span><h3>Lysosome</h3></div></div>
         <p class="func">Contains enzymes that break down waste and worn-out cell parts.</p>
+        <p class="shape"><b>Shape matters:</b> It's small and round so it can travel anywhere in the cell and merge directly with whatever waste needs cleaning up.</p>
         <p class="analogy"><b>On the team:</b> The crew that sweeps the gym and clears out broken equipment after practice.</p>
         <p class="fact">Found mainly in animal cells.</p>
       </div>
@@ -258,10 +323,41 @@
       <summary><span class="whistle">Timeout 4</span><span class="qtext">Explain the relationship between the endoplasmic reticulum and the Golgi apparatus using a "shipping" analogy.</span></summary>
       <div class="answer"><p>The ER is like the hallway/loading dock where proteins are built and start moving. The Golgi apparatus is like the shipping department — it receives what the ER sends over, packages it, labels it, and ships it to its final destination in or out of the cell.</p></div>
     </details>
+
+    <details class="timeout">
+      <summary><span class="whistle">Timeout 5</span><span class="qtext">Pick any two organelles above. For each one, explain in your own words how its shape actually helps it do its job — not just what its job is.</span></summary>
+      <div class="answer"><p>Any reasonable pairing works here — for example, the mitochondria's folded inner membrane creates more surface area for making energy, and the nucleus's round, pored shape protects the DNA while still allowing controlled traffic in and out. The goal is connecting <em>shape</em> to <em>function</em>, not just restating the function.</p></div>
+    </details>
+  </section>
+
+  <section id="plantanimal">
+    <div class="section-head"><span class="section-num">04</span><h2>Two Different Rosters: Plant vs. Animal Cells</h2></div>
+    <p>Not every team runs the exact same lineup. Animal cells (like yours) and plant cells share most of the same organelles above, but plant cells carry <strong>three extra pieces of equipment</strong> that change their shape and give them different jobs:</p>
+    <div class="card-grid">
+      <div class="oc">
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-wall"/></svg><div><span class="pos">The Stadium Walls</span><h3>Cell Wall</h3></div></div>
+        <p class="func">A rigid layer outside the cell membrane that gives the cell a fixed, boxy shape and extra protection.</p>
+        <p class="shape"><b>Shape matters:</b> Its stiff, rectangular structure is what lets plant cells stack together like bricks to hold a whole plant upright — something a flexible animal cell membrane alone can't do.</p>
+        <p class="fact">Found in plant cells only — it's also why plant cells always look boxy under a microscope while animal cells look round and irregular.</p>
+      </div>
+      <div class="oc">
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-chloroplast"/></svg><div><span class="pos">The Fuel Station</span><h3>Chloroplast</h3></div></div>
+        <p class="func">Captures sunlight and uses it to make sugar (food) for the plant through photosynthesis.</p>
+        <p class="shape"><b>Shape matters:</b> Its flattened, layered shape (like a tiny stack of pancakes) packs in as much light-catching surface as possible in a small space.</p>
+        <p class="fact">Found in plant cells only — animal cells have no way to make their own food from sunlight, so they don't have this organelle at all.</p>
+      </div>
+      <div class="oc">
+        <div class="oc-top"><svg class="oc-icon"><use href="#ic-vacuole"/></svg><div><span class="pos">The Mega Storage Closet</span><h3>Large Central Vacuole</h3></div></div>
+        <p class="func">One giant, permanent vacuole that can take up most of the interior of a plant cell.</p>
+        <p class="shape"><b>Shape matters:</b> Because it's so large, it can fill with water and push outward against the cell wall — that pressure is literally what keeps stems and leaves stiff instead of wilting.</p>
+        <p class="fact">Animal cells have several small vacuoles instead of one giant one — that's why a wilted plant and a healthy one look so different.</p>
+      </div>
+    </div>
+    <a class="see-more" href="interactivecells.html">🔎 Try the interactive plant &amp; animal cell diagram →</a>
   </section>
 
   <section id="realworld">
-    <div class="section-head"><span class="section-num">04</span><h2>Real Teams, Real Cells</h2></div>
+    <div class="section-head"><span class="section-num">05</span><h2>Real Teams, Real Cells</h2></div>
     <p>Cell structure isn't just a diagram in a textbook — it explains real things happening in your own body right now.</p>
     <div class="example-grid">
       <div class="ex"><span class="emoji">🩸</span><div><h3>Red blood cells ditch their nucleus</h3><p>Mature red blood cells lose their nucleus as they develop — the trade-off is they can't divide anymore, but it frees up extra space to carry more oxygen-grabbing hemoglobin.</p></div></div>
@@ -272,18 +368,18 @@
     </div>
 
     <details class="timeout">
-      <summary><span class="whistle">Timeout 5</span><span class="qtext">Why don't mature red blood cells have a nucleus, and what's the trade-off?</span></summary>
+      <summary><span class="whistle">Timeout 6</span><span class="qtext">Why don't mature red blood cells have a nucleus, and what's the trade-off?</span></summary>
       <div class="answer"><p>Losing the nucleus makes room for more hemoglobin, so the cell can carry more oxygen. The trade-off is that without a nucleus (and its DNA), the cell can no longer divide or repair itself — it eventually wears out and is replaced.</p></div>
     </details>
 
     <details class="timeout">
-      <summary><span class="whistle">Timeout 6 &middot; Variables Check</span><span class="qtext">A scientist wants to test whether more sunlight makes plant cells produce more chloroplasts. Identify the independent and dependent variable.</span></summary>
+      <summary><span class="whistle">Timeout 7 &middot; Variables Check</span><span class="qtext">A scientist wants to test whether more sunlight makes plant cells produce more chloroplasts. Identify the independent and dependent variable.</span></summary>
       <div class="answer"><p><strong>Independent variable</strong> (what's changed on purpose): amount of sunlight. <strong>Dependent variable</strong> (what's measured/responds): number of chloroplasts produced. This is the same variable-identification skill from your last unit — it applies just as much to cell biology as anything else!</p></div>
     </details>
   </section>
 
   <section id="news">
-    <div class="section-head"><span class="section-num">05</span><h2>Breaking News: The Game Isn't Over</h2></div>
+    <div class="section-head"><span class="section-num">06</span><h2>Breaking News: The Game Isn't Over</h2></div>
     <p>Cell theory was "finished" in 1855 — but that doesn't mean scientists know everything about cells. New tools keep revealing new plays.</p>
     <div class="news">
       <div class="news-card">
@@ -305,16 +401,16 @@
     </div>
 
     <details class="timeout">
-      <summary><span class="whistle">Timeout 7</span><span class="qtext">Why does the discovery of the hemifusome show that cell theory is still being explored today, even though the theory itself was completed in 1855?</span></summary>
+      <summary><span class="whistle">Timeout 8</span><span class="qtext">Why does the discovery of the hemifusome show that cell theory is still being explored today, even though the theory itself was completed in 1855?</span></summary>
       <div class="answer"><p>Cell theory (that all living things are made of cells, cells are the basic unit of life, and cells come from other cells) is still considered true and hasn't changed. But <em>how</em> cells work and what's inside them is still being discovered — better tools like cryo-electron imaging let scientists see structures that were invisible before. Science keeps building on itself, the same way this discovery builds on Hooke's original 1665 observation.</p></div>
     </details>
 
     <details class="timeout">
-      <summary><span class="whistle">Timeout 8</span><span class="qtext">If you were designing an experiment to study the hemifusome, what might your independent and dependent variables be?</span></summary>
+      <summary><span class="whistle">Timeout 9</span><span class="qtext">If you were designing an experiment to study the hemifusome, what might your independent and dependent variables be?</span></summary>
       <div class="answer"><p>Answers will vary — this is a discussion question! Example: independent variable = presence/absence of the hemifusome in a cell (or a chemical that blocks it from forming); dependent variable = how well the cell recycles/disposes of waste material. Any reasonable, testable pair is correct.</p></div>
     </details>
   </section>
 
-  <div class="footer-note">Up next: Draft Day activity, then your vocabulary word wall homework. 🏐</div>
+  <div class="footer-note">Up next: try the interactive cell diagram, then Draft Day activity and your vocabulary word wall homework. 🏐</div>
 
 </div>
