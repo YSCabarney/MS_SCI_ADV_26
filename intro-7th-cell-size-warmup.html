@@ -1,0 +1,229 @@
+<meta charset="utf-8">
+<title>Cell Size Warm-Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lab-style.css">
+<style>
+  .rank{list-style:none;padding:0;margin:12px 0;}
+  .rank li{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+  .rank .pos{font-family:var(--mono);font-size:12px;color:var(--ink-soft);width:24px;}
+  .rank .nm{flex:1;font-weight:700;}
+  .rank .sz{font-family:var(--mono);font-size:13px;color:var(--teal);min-width:110px;text-align:right;}
+  .rank button{font-family:var(--mono);font-size:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:6px;width:36px;height:34px;cursor:pointer;}
+  .rank li.ok{border-color:var(--good);background:var(--good-soft);}
+  .rank li.no{border-color:var(--warn);background:var(--warn-soft);}
+  .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;}
+  .btn{font-family:var(--body);font-weight:700;font-size:14px;padding:10px 16px;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line);}
+  .bars{margin:14px 0;}
+  .bar{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:.88rem;}
+  .bar .lab{width:190px;flex-shrink:0;}
+  .bar .track{flex:1;background:var(--line);height:16px;border-radius:8px;position:relative;}
+  .bar .fill{background:var(--teal);height:16px;border-radius:8px;}
+  .bar .val{width:90px;text-align:right;font-family:var(--mono);font-size:12px;}
+  @media(max-width:600px){.bar .lab{width:120px;}}
+  .slidewrap{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0;}
+  .slidewrap input[type=range]{width:100%;accent-color:var(--teal);}
+  .big{font-family:var(--display);font-size:1.4rem;font-weight:600;}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">7th Grade Life Science · 12-minute warm-up before the Scale Lab</div>
+  <h1 class="title">Cell Size Warm-Up</h1>
+  <p class="lead">How small is small? In this quick activity you will predict the sizes of cell parts, see how surprising the real numbers are, and use scale to make the tiny things human-sized. This is the thinking you will use in your lab prep.</p>
+  <div class="meta-row"><span><b>Time:</b> 10–15 min</span><span><b>How:</b> whole class on video, answers in chat</span></div>
+</header>
+
+<section class="part" id="s1">
+  <div class="part-head"><span class="part-tag">STEP 1</span><h2>Line them up</h2><span class="part-time">≈ 3 min</span></div>
+  <p><b>Predict:</b> put these seven things in order from <b>smallest (top)</b> to <b>largest (bottom)</b>. Use the arrows to move them. Then click <b>Check my order</b>.</p>
+  <ol class="rank" id="rank"></ol>
+  <div class="btnrow">
+    <button class="btn" id="check">Check my order</button>
+    <button class="btn ghost" id="reset">Start over</button>
+  </div>
+  <div id="result" hidden>
+    <div class="callout key"><span class="ctitle">Score</span><p id="score"></p></div>
+    <p><b>Sizes on a log scale</b> (each step to the right is 10 times bigger):</p>
+    <div class="bars" id="bars"></div>
+    <div class="callout tip"><span class="ctitle">Notice</span>
+      <p>A grain of salt is about <b id="ratio">25,000</b> times wider than a ribosome. A plant cell (about 100 µm) is only <b>1/5</b> the width of a grain of salt.</p>
+      <p><b>Talk about it:</b> Which one surprised you most? Why is it hard to picture sizes this small?</p>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="s2">
+  <div class="part-head"><span class="part-tag">STEP 2</span><h2>Scale it up</h2><span class="part-time">≈ 5 min</span></div>
+  <p>Scientists use <b>scale</b> to make tiny things easy to picture. Imagine blowing up a <b>plant cell (100 µm wide)</b> until it is as wide as the size you pick below. Everything inside grows by the same scale.</p>
+  <div class="formula">scale = model size ÷ real size</div>
+
+  <div class="slidewrap">
+    <label for="w"><b>Model cell width:</b> <span class="big" id="wOut">5 m</span> &nbsp; <span class="mono" id="scaleOut">scale = 50,000×</span></label>
+    <input type="range" id="w" min="-2" max="2" step="any" value="0.69897">
+    <div class="presets">
+      <button class="btn ghost" data-w="0.1">Notebook (10 cm)</button>
+      <button class="btn ghost" data-w="1">Desk (1 m)</button>
+      <button class="btn ghost" data-w="5">Classroom (5 m)</button>
+      <button class="btn ghost" data-w="25">Gym (25 m)</button>
+      <button class="btn ghost" data-w="100">Football field (100 m)</button>
+    </div>
+  </div>
+
+  <div class="tblwrap"><table class="data" id="orgTable">
+    <tr><th>Cell part</th><th>Shape</th><th>Job</th><th>Real size</th><th>Size in the model</th><th>About as big as…</th></tr>
+  </table></div>
+
+  <div class="callout tip"><span class="ctitle">Talk about it</span>
+    <ul>
+      <li>Which part is the size of a <b>beach ball</b>? Which is the size of a <b>grain of sand</b>?</li>
+      <li>A cell has <b>one</b> nucleus but <b>thousands</b> of ribosomes. How could each part's <b>size</b> and <b>job</b> explain that?</li>
+      <li>Why is the chloroplast a <b>flat disc</b> and the mitochondrion a <b>folded bean</b>? (Hint: think surface area.)</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="s3">
+  <div class="part-head"><span class="part-tag">STEP 3</span><h2>Now you try it (in chat)</h2><span class="part-time">≈ 2 min</span></div>
+  <p>A textbook draws a plant cell <b>10 cm</b> wide. The real cell is <b>100 µm</b> wide. (Remember: 1 cm = 10,000 µm.)</p>
+  <ol>
+    <li>What is the <b>scale</b> of the drawing?</li>
+    <li>At that scale, how many <b>mm</b> wide would you draw a <b>1 µm mitochondrion</b>?</li>
+  </ol>
+  <details class="more"><summary>Check the answers</summary>
+    <p>10 cm = 100,000 µm. Scale = 100,000 ÷ 100 = <b>1,000×</b>.</p>
+    <p>1 µm × 1,000 = 1,000 µm = <b>1 mm</b>.</p>
+  </details>
+</section>
+
+<section class="part" id="s4">
+  <div class="part-head"><span class="part-tag">STEP 4</span><h2>Your lab prep starts now</h2><span class="part-time">≈ 2 min</span></div>
+  <p>You just did the three big ideas of the lab: <b>compare sizes</b>, use <b>scale</b>, and connect each cell part's <b>size, shape, and job</b>. In the lab you will measure real objects with a digital microscope and ask:</p>
+  <div class="qbanner" style="margin:12px 0"><span class="qlabel">Our testable question</span><p>Does the real size we calculate for a tiny feature stay the same when we change the microscope's magnification?</p></div>
+  <p><b>In your Prep Assignment you will:</b></p>
+  <ul>
+    <li>Research sizes (the "size ladder") and build an <b>organelle fact sheet</b> (job, shape, size).</li>
+    <li>Practice unit conversions and scale problems like the ones you just did.</li>
+    <li>Plan your variables, hypothesis, and objects.</li>
+  </ul>
+  <div class="btnrow">
+    <a class="dl" href="https://docs.google.com/document/d/1JU_4Ks7GY_NPiPxS93dhkP1tFt7wTdurjnYuzRX6i1w/copy" target="_blank" rel="noopener">Make your copy of the Prep Assignment</a>
+    <a class="dl ghost" href="lab-7th-scale-lab.html" target="_blank" rel="noopener">Open the Scale Lab page</a>
+  </div>
+  <div class="callout done"><span class="ctitle">Exit ticket (type in chat)</span><p>Finish this sentence: "One thing about cell sizes that surprised me is ___, and one question I have before the lab is ___."</p></div>
+</section>
+
+<details class="more">
+  <summary>For the teacher: 12-minute plan and answers</summary>
+  <ol>
+    <li><b>0:00–0:03 Line them up.</b> Screen-share this page. Have students call out or type an order in chat. Move cards for them, click <b>Check my order</b>, and discuss the surprises.</li>
+    <li><b>0:03–0:08 Scale it up.</b> Start at 5 m (classroom). Click through the presets. Ask the three talk questions. Point out that the <b>one nucleus vs. thousands of ribosomes</b> idea links size to job, and that flat shapes (chloroplast) and folded shapes (mitochondrion) give more surface for their jobs.</li>
+    <li><b>0:08–0:10 Now you try it.</b> Students answer in chat. Correct order of sizes: ribosome, mitochondrion, bacterium, red blood cell, plant cell, hair, salt grain (accept hair and plant cell swapped).</li>
+    <li><b>0:10–0:12 Bridge.</b> Show the testable question, the prep assignment, and the exit ticket. Remind them the lab uses ideas from today.</li>
+  </ol>
+  <p>Sizes are typical approximate values: hair 70 µm, salt 500 µm, red blood cell 7.5 µm, plant cell 100 µm, mitochondrion 1 µm, ribosome 0.02 µm, bacterium 2 µm, nucleus 10 µm, chloroplast 5 µm, lysosome 0.5 µm, cell wall thickness 0.2 µm.</p>
+</details>
+
+</div>
+
+<script>
+(function(){
+  const items = [
+    {n:'Width of a human hair', um:70},
+    {n:'A grain of table salt', um:500},
+    {n:'A red blood cell', um:7.5},
+    {n:'A plant cell', um:100},
+    {n:'A mitochondrion', um:1},
+    {n:'A ribosome', um:0.02},
+    {n:'A bacterium (E. coli)', um:2},
+  ];
+  const start = [3,5,1,4,0,6,2];
+  let order = start.slice();
+  let checked = false;
+  const rankEl = document.getElementById('rank');
+  function fmtUm(u){ return u>=1000 ? (u/1000)+' mm' : (u>=1 ? u+' µm' : u+' µm'); }
+  function drawRank(){
+    rankEl.innerHTML='';
+    const correct = items.map((_,i)=>i).sort((a,b)=>items[a].um-items[b].um);
+    order.forEach((idx,pos)=>{
+      const li=document.createElement('li');
+      if(checked){ li.className = (correct[pos]===idx)?'ok':'no'; }
+      li.innerHTML='<span class="pos">'+(pos+1)+'</span><span class="nm">'+items[idx].n+'</span>'+(checked?'<span class="sz">'+fmtUm(items[idx].um)+'</span>':'')+
+        '<button aria-label="Move up" data-d="-1" data-p="'+pos+'">▲</button><button aria-label="Move down" data-d="1" data-p="'+pos+'">▼</button>';
+      rankEl.appendChild(li);
+    });
+  }
+  rankEl.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    const p=+b.dataset.p, d=+b.dataset.d, q=p+d;
+    if(q<0||q>=order.length) return;
+    [order[p],order[q]]=[order[q],order[p]];
+    checked=false; document.getElementById('result').hidden=true;
+    drawRank();
+  });
+  document.getElementById('check').addEventListener('click',()=>{
+    checked=true; drawRank();
+    const correct = items.map((_,i)=>i).sort((a,b)=>items[a].um-items[b].um);
+    let n=0; order.forEach((idx,pos)=>{ if(correct[pos]===idx) n++; });
+    document.getElementById('score').textContent = n+' of 7 are in the right place.'+(n===7?' Perfect!':' The green ones are correct. Sizes are shown on each card.');
+    const bars=document.getElementById('bars'); bars.innerHTML='';
+    correct.forEach(i=>{
+      const pct=(Math.log10(items[i].um)-Math.log10(0.01))/5*100;
+      const d=document.createElement('div'); d.className='bar';
+      d.innerHTML='<span class="lab">'+items[i].n+'</span><span class="track"><span class="fill" style="display:block;width:'+Math.max(2,pct)+'%"></span></span><span class="val">'+fmtUm(items[i].um)+'</span>';
+      bars.appendChild(d);
+    });
+    document.getElementById('result').hidden=false;
+  });
+  document.getElementById('reset').addEventListener('click',()=>{
+    order = start.slice(); checked=false; document.getElementById('result').hidden=true; drawRank();
+  });
+  drawRank();
+
+  // ---- scale slider
+  const parts = [
+    {n:'Cell wall (thickness)', shape:'stiff box-like frame', job:'protects and supports', um:0.2},
+    {n:'Nucleus', shape:'round, with pores', job:'holds the DNA', um:10},
+    {n:'Chloroplast', shape:'flat oval disc', job:'photosynthesis', um:5},
+    {n:'Mitochondrion', shape:'bean with folded inside', job:'releases energy', um:1},
+    {n:'Lysosome', shape:'small round sac', job:'breaks down waste', um:0.5},
+    {n:'Ribosome', shape:'tiny bumps', job:'builds proteins', um:0.02},
+  ];
+  const objs = [
+    ['a speck of dust',0.0001],['a human hair (width)',0.00007],['a grain of sand',0.001],['a pinhead',0.002],['a peppercorn',0.005],['a pea',0.008],
+    ['a pencil (width)',0.007],['a quarter',0.024],['a golf ball',0.043],['a tennis ball',0.067],['a softball',0.097],['a dinner plate',0.26],
+    ['a basketball',0.24],['a beach ball',0.5],['an exercise ball',0.65],['a door (height)',2],['a small classroom',5],['a basketball court',28],['a football field',91],['a school bus (length)',12]
+  ];
+  function nearest(m){
+    let best=null,bd=1e9;
+    objs.forEach(o=>{ const d=Math.abs(Math.log10(o[1])-Math.log10(m)); if(d<bd){bd=d;best=o;} });
+    return bd<0.45 ? best[0] : '';
+  }
+  function fmtM(m){
+    if(m>=1) return (Math.round(m*10)/10)+' m';
+    if(m>=0.01) return (Math.round(m*1000)/10)+' cm';
+    if(m>=0.001) return (Math.round(m*10000)/10)+' mm';
+    return (Math.round(m*1e6*10)/10)+' µm';
+  }
+  const tbl=document.getElementById('orgTable');
+  const w=document.getElementById('w');
+  function drawTable(){
+    const W=Math.pow(10,+w.value);              // meters
+    const scale=W*1e6/100;                       // W in µm ÷ 100 µm
+    document.getElementById('wOut').textContent=fmtM(W);
+    document.getElementById('scaleOut').textContent='scale = '+Math.round(scale).toLocaleString()+'×';
+    while(tbl.rows.length>1) tbl.deleteRow(1);
+    parts.forEach(p=>{
+      const model=p.um*1e-6*scale;
+      const r=tbl.insertRow();
+      r.innerHTML='<td><b>'+p.n+'</b></td><td>'+p.shape+'</td><td>'+p.job+'</td><td class="mono">'+p.um+' µm</td><td class="mono"><b>'+fmtM(model)+'</b></td><td>'+nearest(model)+'</td>';
+    });
+  }
+  w.addEventListener('input',drawTable);
+  document.querySelectorAll('.presets button').forEach(b=>b.addEventListener('click',()=>{ w.value=Math.log10(+b.dataset.w); drawTable(); }));
+  drawTable();
+})();
+</script>
