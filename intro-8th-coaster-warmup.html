@@ -55,7 +55,18 @@
 
 <section class="part" id="s2">
   <div class="part-head"><span class="part-tag">STEP 2</span><h2>The loop calculator</h2><span class="part-time">≈ 4 min</span></div>
-  <p>Imagine a ball going around a loop. The ball enters at a tape mark at the bottom and leaves at a second tape mark beside it. Try changing the numbers.</p>
+  <p>Imagine a ball going around a loop. The ball enters at a tape mark at the bottom and leaves at a second tape mark beside it. Change the sliders and watch the loop change.</p>
+
+  <figure class="figure" style="margin-top:8px">
+    <svg id="loopSvg" viewBox="0 0 640 335" role="img" aria-label="Animated side view of a ball rolling along a track, around a vertical loop, and out again. Two tape marks at the bottom show where the timer starts and stops.">
+      <rect width="640" height="335" rx="6" fill="var(--paper)"/>
+      <g id="loopStatic"></g>
+      <circle id="ball" r="8" cx="40" cy="262" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>
+      <text id="loopTimer" x="620" y="28" text-anchor="end" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">loop time: 0.00 s</text>
+    </svg>
+    <figcaption>Side view. Animation is in slow motion (3 times slower than real life). The gold dashed line is the <b>distance</b> the ball travels. The teal arrow is the <b>displacement</b> from the entrance mark to the exit mark.</figcaption>
+    <div class="btnrow" style="justify-content:center"><button class="btn ghost" id="replay">Replay</button></div>
+  </figure>
 
   <div class="calc">
     <div class="row"><label for="D">Loop diameter</label><input type="range" id="D" min="10" max="40" step="1" value="22"><output id="Dout">22 cm</output></div>
@@ -156,7 +167,54 @@
       ? 'The ball travels <b>'+d.toFixed(2)+' m</b> but ends exactly where it started, so its <b>displacement is 0</b> and its average velocity is <b>0 m/s</b>, even though its average speed is <b>'+sp.toFixed(2)+' m/s</b>.'
       : 'Average speed is about <b>'+(sp/ve).toFixed(0)+' times</b> the average velocity for this loop.';
   }
-  [D,T,O].forEach(el=>el.addEventListener('input',calc)); calc();
+  [D,T,O].forEach(el=>el.addEventListener('input',()=>{ calc(); buildLoop(); })); calc();
+
+  // ---- animated loop picture
+  const staticG=document.getElementById('loopStatic'), ball=document.getElementById('ball'), timerT=document.getElementById('loopTimer');
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SLOW=3, PPC=5, Y0=262, CX=320, XS=40, XE=600;
+  let g=null, t0=performance.now();
+  function loopPt(th){
+    return { x: CX + g.r*Math.sin(th) + g.gp*(th/(2*Math.PI)-0.5), y: Y0 - g.r*(1-Math.cos(th)) };
+  }
+  function buildLoop(){
+    const d=+D.value, gap=+O.value, tt=+T.value;
+    const r=d*PPC/2, gp=gap*PPC;
+    g={r:r, gp:gp, x1:CX-gp/2, x2:CX+gp/2, tA:0.9, tB:tt*SLOW, tC:0.9, pause:0.9, T:tt};
+    g.total=g.tA+g.tB+g.tC+g.pause;
+    let pts=[]; for(let i=0;i<=120;i++){ const q=loopPt(2*Math.PI*i/120); pts.push(q.x.toFixed(1)+','+q.y.toFixed(1)); }
+    const poly=pts.join(' ');
+    const lab = gap===0 ? 'displacement = 0 (same spot)' : 'displacement = '+gap+' cm';
+    staticG.innerHTML =
+      '<line x1="'+XS+'" y1="'+(Y0+9)+'" x2="'+XE+'" y2="'+(Y0+9)+'" stroke="var(--ink-soft)" stroke-width="5" stroke-linecap="round"/>'+
+      '<polyline points="'+poly+'" fill="none" stroke="var(--ink-soft)" stroke-width="5" stroke-linejoin="round"/>'+
+      '<polyline points="'+poly+'" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="6 5"/>'+
+      '<rect x="'+(g.x1-2)+'" y="'+(Y0-6)+'" width="4" height="30" fill="var(--gold)"/>'+
+      '<rect x="'+(g.x2-2)+'" y="'+(Y0-6)+'" width="4" height="30" fill="var(--gold)"/>'+
+      '<text x="'+(g.x1-8)+'" y="'+(Y0+42)+'" text-anchor="end" font-family="Karla" font-size="12" font-weight="700" fill="var(--ink)">entrance mark (start timer)</text>'+
+      '<text x="'+(g.x2+8)+'" y="'+(Y0+42)+'" text-anchor="start" font-family="Karla" font-size="12" font-weight="700" fill="var(--ink)">exit mark (stop timer)</text>'+
+      (gap>0 ? '<line x1="'+g.x1+'" y1="'+(Y0+22)+'" x2="'+g.x2+'" y2="'+(Y0+22)+'" stroke="var(--teal)" stroke-width="4"/><path d="M'+g.x2+' '+(Y0+22)+' l-8 -5 v10 z" fill="var(--teal)"/>' : '')+
+      '<text x="'+CX+'" y="'+(Y0+64)+'" text-anchor="middle" font-family="Karla" font-size="13" font-weight="700" fill="var(--teal)">'+lab+'</text>'+
+      '<text x="'+CX+'" y="'+(Y0-2*g.r-14)+'" text-anchor="middle" font-family="Karla" font-size="13" font-weight="700" fill="var(--gold)">distance = path around the loop ('+(Math.PI*d/100).toFixed(2)+' m)</text>'+
+      '<text x="'+(CX-g.r-14)+'" y="'+(Y0-g.r)+'" text-anchor="end" font-family="IBM Plex Mono" font-size="12" fill="var(--ink-soft)">diameter '+d+' cm</text>';
+    t0=performance.now();
+    if(reduce){ ball.setAttribute('cx',g.x1); ball.setAttribute('cy',Y0); timerT.textContent='loop time: '+tt.toFixed(2)+' s'; }
+  }
+  function tick(now){
+    if(g && !reduce){
+      const u=((now-t0)/1000)%g.total;
+      let x,y,lt;
+      if(u<g.tA){ const f=u/g.tA; x=XS+(g.x1-XS)*f; y=Y0; lt=0; }
+      else if(u<g.tA+g.tB){ const f=(u-g.tA)/g.tB; const q=loopPt(2*Math.PI*f); x=q.x; y=q.y; lt=(u-g.tA)/SLOW; }
+      else if(u<g.tA+g.tB+g.tC){ const f=(u-g.tA-g.tB)/g.tC; x=g.x2+(XE-g.x2)*f; y=Y0; lt=g.T; }
+      else { x=XE; y=Y0; lt=g.T; }
+      ball.setAttribute('cx',x.toFixed(1)); ball.setAttribute('cy',y.toFixed(1));
+      timerT.textContent='loop time: '+lt.toFixed(2)+' s';
+    }
+    requestAnimationFrame(tick);
+  }
+  document.getElementById('replay').addEventListener('click',()=>{ t0=performance.now(); });
+  buildLoop(); requestAnimationFrame(tick);
 
   // ---- graph predictions
   const svgs = {
