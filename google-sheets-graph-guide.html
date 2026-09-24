@@ -1,0 +1,255 @@
+<meta charset="utf-8">
+<title>Graphing in Google Sheets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lab-style.css">
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Motion Investigation Bureau · Lab Skills Guide</div>
+  <h1 class="title">Graphing in Google Sheets</h1>
+  <p class="lead">Step-by-step help for making a table, doing math with formulas, and turning your data into a graph. Both the 7th grade Scale Lab and the 8th grade Roller Coaster Lab use these steps.</p>
+  <div class="meta-row">
+    <span><b>Time:</b> 15–20 min to learn</span>
+    <span><b>You need:</b> a Chromebook and your school Google account</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <a href="#a">A · Set up</a>
+  <a href="#b">B · Formulas</a>
+  <a href="#c">C · Make a chart</a>
+  <a href="#d">D · Fix up your chart</a>
+  <a href="#e">E · Put it in your report</a>
+  <a href="#f">F · Checklist</a>
+</nav>
+
+<div class="callout key">
+  <span class="ctitle">Which chart do I make?</span>
+  <p><b>7th grade (Scale Lab):</b> a <b>column chart</b> that compares things in categories (like salt, hair, and paper towel). Use the <b>Example 1</b> data.</p>
+  <p><b>8th grade (Roller Coaster Lab):</b> a <b>scatter chart with a trendline</b> that shows how one number changes when another number changes (release height vs. speed). Use the <b>Example 2</b> data.</p>
+  <p>The steps are almost the same. Only the chart type changes.</p>
+</div>
+
+<div class="callout tip">
+  <span class="ctitle">The one graphing rule to remember</span>
+  <p>The <b>independent variable</b> (the thing you change on purpose) goes on the <b>x-axis</b> (across the bottom).<br>The <b>dependent variable</b> (the thing you measure) goes on the <b>y-axis</b> (up the side).</p>
+</div>
+
+<!-- PART A -->
+<section class="part" id="a">
+  <div class="part-head"><span class="part-tag">PART A</span><h2>Set up your spreadsheet</h2><span class="part-time">≈ 3 min</span></div>
+
+  <ol class="steps">
+    <li><p>Open Google Drive. Click <b>+ New</b>, then <b>Google Sheets</b>, then <b>Blank spreadsheet</b>. (You can also go to <span class="kbd">sheets.google.com</span> and click the big <b>+</b>.)</p></li>
+    <li><p>Click the words <b>Untitled spreadsheet</b> at the top left and give it a name, like <b>Scale Lab Data – Team Name</b>. Press <span class="kbd">Enter</span>.</p></li>
+    <li><p><b>Type your column headings in Row 1.</b> Put <b>one variable in each column</b> and include its <b>units</b> in parentheses.</p>
+       <ul><li>Good: <b>Release height (cm)</b>, <b>Average speed (m/s)</b></li><li>Not good: <b>Data</b>, <b>Numbers</b>, <b>Stuff</b></li></ul></li>
+    <li><p><b>Type your data underneath</b>, one row per measurement. Type <b>only the number</b> in each data cell (no units, no words). Do not leave blank rows or columns in the middle of your data.</p></li>
+    <li><p><b>Share it with your team.</b> Click the green <b>Share</b> button (top right), type your teammates' school emails, choose <b>Editor</b>, and click <b>Send</b>.</p></li>
+  </ol>
+
+  <figure class="figure">
+    <svg viewBox="0 0 700 250" role="img" aria-label="A spreadsheet with column headings in row 1 and data below.">
+      <rect x="0" y="0" width="700" height="250" rx="6" fill="var(--paper)"/>
+      <text x="16" y="22" font-family="Karla" font-size="13" fill="var(--ink)" font-weight="700">Scale Lab Data – Team Name</text>
+      <!-- column letters -->
+      <g font-family="IBM Plex Mono" font-size="12" fill="var(--ink-soft)" text-anchor="middle">
+        <rect x="40" y="36" width="170" height="24" fill="var(--line)"/><text x="125" y="53">A</text>
+        <rect x="210" y="36" width="170" height="24" fill="var(--line)" stroke="var(--paper)"/><text x="295" y="53">B</text>
+        <rect x="380" y="36" width="170" height="24" fill="var(--line)" stroke="var(--paper)"/><text x="465" y="53">C</text>
+      </g>
+      <g font-family="IBM Plex Mono" font-size="12" fill="var(--ink-soft)" text-anchor="middle">
+        <rect x="10" y="60" width="30" height="30" fill="var(--line)"/><text x="25" y="80">1</text>
+        <rect x="10" y="90" width="30" height="30" fill="var(--line)"/><text x="25" y="110">2</text>
+        <rect x="10" y="120" width="30" height="30" fill="var(--line)"/><text x="25" y="140">3</text>
+        <rect x="10" y="150" width="30" height="30" fill="var(--line)"/><text x="25" y="170">4</text>
+        <rect x="10" y="180" width="30" height="30" fill="var(--line)"/><text x="25" y="200">5</text>
+      </g>
+      <g stroke="var(--line)" fill="var(--card)">
+        <rect x="40" y="60" width="170" height="30"/><rect x="210" y="60" width="170" height="30"/><rect x="380" y="60" width="170" height="30"/>
+        <rect x="40" y="90" width="170" height="30"/><rect x="210" y="90" width="170" height="30"/><rect x="380" y="90" width="170" height="30"/>
+        <rect x="40" y="120" width="170" height="30"/><rect x="210" y="120" width="170" height="30"/><rect x="380" y="120" width="170" height="30"/>
+        <rect x="40" y="150" width="170" height="30"/><rect x="210" y="150" width="170" height="30"/><rect x="380" y="150" width="170" height="30"/>
+        <rect x="40" y="180" width="170" height="30"/><rect x="210" y="180" width="170" height="30"/><rect x="380" y="180" width="170" height="30"/>
+      </g>
+      <g font-family="Karla" font-size="13" fill="var(--ink)">
+        <text x="50" y="80" font-weight="700">Object</text><text x="220" y="80" font-weight="700">Low setting (µm)</text><text x="390" y="80" font-weight="700">High setting (µm)</text>
+        <text x="50" y="110">Table salt</text><text x="220" y="110">520</text><text x="390" y="110">480</text>
+        <text x="50" y="140">Human hair</text><text x="220" y="140">68</text><text x="390" y="140">72</text>
+        <text x="50" y="170">Paper towel</text><text x="220" y="170">25</text><text x="390" y="170">22</text>
+        <text x="50" y="200">Onion skin</text><text x="220" y="200">210</text><text x="390" y="200">195</text>
+      </g>
+      <rect x="40" y="60" width="510" height="30" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+      <text x="565" y="80" font-family="Karla" font-size="12" fill="var(--accent)" font-weight="700">← Row 1 = headings</text>
+      <text x="565" y="150" font-family="Karla" font-size="12" fill="var(--accent)" font-weight="700">← Numbers only</text>
+    </svg>
+    <figcaption>Example 1 (for the 7th grade lab). Practice numbers only — not real results.</figcaption>
+  </figure>
+
+  <div class="callout tip">
+    <span class="ctitle">Try it now</span>
+    <p><b>7th grade:</b> type the Example 1 table above into a new sheet.<br><b>8th grade:</b> type this Example 2 table into a new sheet (these are practice numbers, not real results):</p>
+    <div class="tblwrap"><table class="data" style="max-width:420px">
+      <tr><th>Release height (cm)</th><th>Average speed (m/s)</th></tr>
+      <tr><td class="mono">20</td><td class="mono">1.3</td></tr>
+      <tr><td class="mono">30</td><td class="mono">1.6</td></tr>
+      <tr><td class="mono">40</td><td class="mono">1.9</td></tr>
+      <tr><td class="mono">50</td><td class="mono">2.1</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- PART B -->
+<section class="part" id="b">
+  <div class="part-head"><span class="part-tag">PART B</span><h2>Let the spreadsheet do the math (formulas)</h2><span class="part-time">≈ 4 min</span></div>
+
+  <p>A <span class="term">formula</span> is a math instruction. It always <b>starts with an equals sign (=)</b>. Instead of typing numbers, you click on the cells you want to use, so the answer updates by itself if you fix a number.</p>
+
+  <ol class="steps">
+    <li><p>Click an empty cell where you want the answer. Type <span class="kbd">=</span></p></li>
+    <li><p>Type the math using cell names. A cell's name is its column letter and row number (the cell in column <b>B</b>, row <b>2</b> is <b>B2</b>).</p>
+       <ul>
+         <li>Divide: <span class="kbd">=E2/D2</span></li>
+         <li>Multiply: <span class="kbd">=H2*1000</span></li>
+         <li>Average of several cells: <span class="kbd">=AVERAGE(G2:I2)</span> (the colon means "from G2 to I2")</li>
+         <li>Percent difference between two numbers: <span class="kbd">=ABS(B2-C2)/AVERAGE(B2,C2)*100</span></li>
+       </ul></li>
+    <li><p>Press <span class="kbd">Enter</span>. The answer appears.</p></li>
+    <li><p><b>Copy the formula down the column:</b> click the cell with your formula. A small blue square appears in its bottom-right corner. <b>Double-click that square</b> (or drag it down) to fill the rest of the column.</p></li>
+  </ol>
+
+  <div class="callout key">
+    <span class="ctitle">If you see an error</span>
+    <ul>
+      <li><b>#DIV/0!</b> means you divided by an empty cell or by zero. Fill in the number you divided by.</li>
+      <li><b>#NAME?</b> means Sheets does not understand a word. Check for typos (<span class="kbd">AVERAGE</span>, not "AVERGE").</li>
+      <li>A number that looks like text and will not add up? Make sure you did <b>not</b> type units (like "cm") inside the cell.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PART C -->
+<section class="part" id="c">
+  <div class="part-head"><span class="part-tag">PART C</span><h2>Make the chart</h2><span class="part-time">≈ 5 min</span></div>
+
+  <ol class="steps">
+    <li><p><b>Highlight your data.</b> Click the top-left cell of your table (the first heading) and drag to the bottom-right cell. <b>Include the heading row.</b></p>
+        <ul><li><b>Scatter chart:</b> highlight just the two columns you want (x-column first, y-column second).</li>
+            <li><b>Column chart:</b> highlight the object names and the columns you want to compare.</li></ul></li>
+    <li><p>Click <b>Insert</b> in the menu bar, then click <b>Chart</b>. A chart appears and a <b>Chart editor</b> opens on the right side of your screen.</p></li>
+    <li><p>In the Chart editor, make sure the <b>Setup</b> tab is selected. Click the <b>Chart type</b> drop-down and choose:</p>
+        <ul><li>7th grade: <b>Column chart</b></li><li>8th grade: <b>Scatter chart</b></li></ul></li>
+    <li><p>Check the <b>Data range</b> box shows the cells you highlighted. Check that <b>X-axis</b> is your independent variable (for the 8th grade lab: release height). If the chart looks wrong, try the checkbox <b>Use row 1 as headers</b>, or the <b>Switch rows / columns</b> checkbox.</p></li>
+  </ol>
+
+  <div class="grid2">
+    <figure class="figure" style="margin:0">
+      <svg viewBox="0 0 320 210" role="img" aria-label="The Insert menu with Chart highlighted.">
+        <rect width="320" height="210" rx="6" fill="var(--paper)"/>
+        <g font-family="Karla" font-size="12" fill="var(--ink)">
+          <text x="14" y="24">File</text><text x="52" y="24">Edit</text><text x="90" y="24">View</text>
+          <rect x="126" y="9" width="46" height="21" rx="4" fill="var(--teal-soft)" stroke="var(--teal)"/>
+          <text x="134" y="24" font-weight="700">Insert</text>
+          <text x="184" y="24">Format</text><text x="238" y="24">Data</text>
+        </g>
+        <rect x="126" y="34" width="150" height="150" rx="6" fill="var(--card)" stroke="var(--line)"/>
+        <g font-family="Karla" font-size="12" fill="var(--ink-soft)">
+          <text x="138" y="56">Cells</text><text x="138" y="80">Rows</text><text x="138" y="104">Columns</text>
+        </g>
+        <rect x="130" y="112" width="142" height="24" rx="4" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="138" y="129" font-family="Karla" font-size="13" fill="var(--accent)" font-weight="700">Chart</text>
+        <g font-family="Karla" font-size="12" fill="var(--ink-soft)"><text x="138" y="156">Image</text><text x="138" y="178">Drawing</text></g>
+      </svg>
+      <figcaption>Insert → Chart</figcaption>
+    </figure>
+    <figure class="figure" style="margin:0">
+      <svg viewBox="0 0 320 210" role="img" aria-label="The Chart editor Setup tab with Chart type set to Scatter chart.">
+        <rect width="320" height="210" rx="6" fill="var(--paper)"/>
+        <rect x="20" y="8" width="280" height="194" rx="8" fill="var(--card)" stroke="var(--line)"/>
+        <text x="34" y="30" font-family="Karla" font-size="13" font-weight="700" fill="var(--ink)">Chart editor</text>
+        <rect x="34" y="40" width="120" height="26" fill="var(--teal-soft)" stroke="var(--teal)"/>
+        <text x="72" y="58" font-family="Karla" font-size="12" font-weight="700" fill="var(--teal)">Setup</text>
+        <rect x="154" y="40" width="130" height="26" fill="none" stroke="var(--line)"/>
+        <text x="186" y="58" font-family="Karla" font-size="12" fill="var(--ink-soft)">Customize</text>
+        <text x="34" y="92" font-family="IBM Plex Mono" font-size="10" fill="var(--ink-soft)">CHART TYPE</text>
+        <rect x="34" y="98" width="250" height="28" rx="4" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="44" y="117" font-family="Karla" font-size="13" fill="var(--ink)">Scatter chart  ▾</text>
+        <text x="34" y="150" font-family="IBM Plex Mono" font-size="10" fill="var(--ink-soft)">DATA RANGE</text>
+        <rect x="34" y="156" width="250" height="26" rx="4" fill="var(--paper)" stroke="var(--line)"/>
+        <text x="44" y="174" font-family="Karla" font-size="12" fill="var(--ink)">A1:B5</text>
+      </svg>
+      <figcaption>Setup tab → Chart type</figcaption>
+    </figure>
+  </div>
+  <p class="answer-note" style="margin-top:8px">These drawings are illustrations. Your screen may look a little different because Google updates Sheets often, but the words (Insert, Chart, Setup, Customize) will be the same.</p>
+</section>
+
+<!-- PART D -->
+<section class="part" id="d">
+  <div class="part-head"><span class="part-tag">PART D</span><h2>Fix up your chart so anyone can read it</h2><span class="part-time">≈ 5 min</span></div>
+
+  <ol class="steps">
+    <li><p>In the Chart editor, click the <b>Customize</b> tab.</p></li>
+    <li><p>Click <b>Chart &amp; axis titles</b> to open it. Use the drop-down under it to pick <b>Chart title</b>. Click the box below and type a title that says what the graph shows.</p>
+       <ul><li>Good title: <b>Release Height vs. Speed at the Bottom of the Drop</b></li><li>Not good title: <b>Graph 1</b></li></ul></li>
+    <li><p>Use the same drop-down to pick <b>Horizontal axis title</b> and type your independent variable <b>with units</b> (example: <b>Release height (cm)</b>).</p></li>
+    <li><p>Pick <b>Vertical axis title</b> and type your dependent variable <b>with units</b> (example: <b>Average speed (m/s)</b>).</p></li>
+    <li><p><b>Scatter chart only — add a trendline.</b> In Customize, click <b>Series</b> to open it, then check the box <b>Trendline</b>. Under the trendline, set <b>Label</b> to <b>Use Equation</b> and check <b>Show R²</b> if you want. The trendline is the "best fit" line through your dots. Do not connect the dots with a zig-zag line.</p></li>
+    <li><p><b>Column chart only:</b> under <b>Legend</b>, make sure the legend is showing so a reader can tell which color is the Low setting and which is the High setting.</p></li>
+    <li><p>Drag the chart's corners to make it bigger so it is easy to read.</p></li>
+  </ol>
+
+  <figure class="figure small">
+    <svg viewBox="0 0 440 300" role="img" aria-label="Example scatter chart of release height versus average speed with an upward trendline.">
+      <rect width="440" height="300" rx="6" fill="var(--card)"/>
+      <text x="220" y="26" text-anchor="middle" font-family="Karla" font-size="14" font-weight="700" fill="var(--ink)">Release Height vs. Speed at the Bottom</text>
+      <g stroke="var(--line)"><line x1="60" y1="50" x2="410" y2="50"/><line x1="60" y1="100" x2="410" y2="100"/><line x1="60" y1="150" x2="410" y2="150"/><line x1="60" y1="200" x2="410" y2="200"/></g>
+      <line x1="60" y1="50" x2="60" y2="250" stroke="var(--ink-soft)" stroke-width="1.5"/>
+      <line x1="60" y1="250" x2="410" y2="250" stroke="var(--ink-soft)" stroke-width="1.5"/>
+      <g font-family="IBM Plex Mono" font-size="10" fill="var(--ink-soft)" text-anchor="end">
+        <text x="54" y="254">0.0</text><text x="54" y="204">0.5</text><text x="54" y="154">1.0</text><text x="54" y="104">1.5</text><text x="54" y="54">2.0</text>
+      </g>
+      <g font-family="IBM Plex Mono" font-size="10" fill="var(--ink-soft)" text-anchor="middle">
+        <text x="60" y="266">0</text><text x="148" y="266">20</text><text x="235" y="266">40</text><text x="323" y="266">60</text>
+      </g>
+      <line x1="110" y1="170" x2="370" y2="66" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 4"/>
+      <g fill="var(--teal)"><circle cx="134" cy="150" r="5"/><circle cx="191" cy="122" r="5"/><circle cx="247" cy="92" r="5"/><circle cx="303" cy="72" r="5"/></g>
+      <text x="235" y="290" text-anchor="middle" font-family="Karla" font-size="12" fill="var(--ink-soft)">Release height (cm)</text>
+      <text transform="translate(16 150) rotate(-90)" text-anchor="middle" font-family="Karla" font-size="12" fill="var(--ink-soft)">Average speed (m/s)</text>
+      <text x="330" y="60" font-family="Karla" font-size="11" fill="var(--accent)">trendline</text>
+    </svg>
+    <figcaption>What a finished scatter chart with a trendline looks like (practice data).</figcaption>
+  </figure>
+</section>
+
+<!-- PART E -->
+<section class="part" id="e">
+  <div class="part-head"><span class="part-tag">PART E</span><h2>Put your graph in your lab report</h2><span class="part-time">≈ 2 min</span></div>
+  <ol class="steps">
+    <li><p>Click once on your chart. Click the <b>three dots (⋮)</b> that appear in its top-right corner.</p></li>
+    <li><p>Choose <b>Copy chart</b>.</p></li>
+    <li><p>Open your lab report in Google Docs. Click where the graph should go and press <span class="kbd">Ctrl</span> + <span class="kbd">V</span>.</p></li>
+    <li><p>A box asks how to paste the chart. Choose <b>Paste unlinked</b> so your final graph will not change by accident.</p></li>
+    <li><p><b>Backup plan:</b> click the three dots (⋮), choose <b>Download</b> or <b>Save image</b>, then in Docs use <b>Insert → Image → Upload from computer</b>.</p></li>
+    <li><p>Under your graph, type a <b>caption</b>: a sentence that says what the graph shows.</p></li>
+  </ol>
+</section>
+
+<!-- PART F -->
+<section class="part" id="f">
+  <div class="part-head"><span class="part-tag">PART F</span><h2>Graph checklist</h2></div>
+  <p>Before you turn in your report, check every box.</p>
+  <ul class="checklist">
+    <li><input type="checkbox" id="c1"><label for="c1">My graph has a <b>title</b> that describes what it shows.</label></li>
+    <li><input type="checkbox" id="c2"><label for="c2">My <b>independent variable</b> is on the <b>x-axis</b> and my <b>dependent variable</b> is on the <b>y-axis</b>.</label></li>
+    <li><input type="checkbox" id="c3"><label for="c3">Both axes have <b>labels with units</b>.</label></li>
+    <li><input type="checkbox" id="c4"><label for="c4">The graph is <b>big enough to read</b>, and the numbers on the axes make sense.</label></li>
+    <li><input type="checkbox" id="c5"><label for="c5">(Scatter chart) I added a <b>trendline</b> and did not connect the dots.</label></li>
+    <li><input type="checkbox" id="c6"><label for="c6">(Column chart) The <b>legend</b> is showing.</label></li>
+    <li><input type="checkbox" id="c7"><label for="c7">I pasted it into my report and wrote a <b>caption</b>.</label></li>
+  </ul>
+</section>
+
+</div>
