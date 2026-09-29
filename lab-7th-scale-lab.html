@@ -1,588 +1,386 @@
-<meta charset="utf-8">
-<title>The Scale Lab</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="lab-style.css">
+<title>Tiny Feature, True Size</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#faf7f0; --surface:#ffffff; --surface-2:#f1ece0; --ink:#1c2138; --ink-soft:#454b6b;
+    --muted:#767c99; --line:#e4ddc9; --accent:#ef6c2c; --accent-soft:#ffe4d1; --teal:#127a67;
+    --teal-soft:#d9f0e7; --gold:#c98a1f; --gold-soft:#f7e6c2; --red:#c23b3b; --red-soft:#fbe3e0; --shadow:0 1px 2px rgba(28,33,56,.06),0 8px 20px -14px rgba(28,33,56,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+      --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+      --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --red:#ff8377; --red-soft:#3a1f1c; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+    --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+    --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --red:#ff8377; --red-soft:#3a1f1c; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'Work Sans',system-ui,sans-serif; margin:0; padding-inline:18px; padding-block:26px;}
+  .wrap{max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:30px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; text-wrap:balance; margin:0;}
+  p{line-height:1.62; color:var(--ink-soft); margin:0;}
+
+  .masthead{background:linear-gradient(135deg,var(--ink) 0%,#2a2f52 100%); border-radius:18px; padding:26px; color:#f4f1ff; box-shadow:var(--shadow);}
+  .masthead .tag{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; margin-bottom:12px;}
+  .masthead h1{font-size:clamp(26px,6vw,36px); color:#fff; font-weight:700; line-height:1.1;}
+  .masthead p{color:#d7d9f2; margin-top:8px; font-size:14.5px;}
+  .meta-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .meta-chip{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:7px 11px; color:#e9e9ff;}
+
+  .toc{display:flex; flex-wrap:wrap; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow);}
+  .toc a{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-soft); text-decoration:none; background:var(--surface-2); padding:6px 11px; border-radius:999px;}
+  .toc a:hover{color:var(--accent);}
+
+  section{display:flex; flex-direction:column; gap:14px; scroll-margin-top:14px;}
+  .section-head{display:flex; align-items:baseline; gap:10px; border-bottom:2px solid var(--line); padding-bottom:10px;}
+  .section-head h2{font-size:22px; font-weight:700;}
+  .section-num{font-family:'IBM Plex Mono',monospace; color:var(--muted); font-size:13px;}
+
+  .callout{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--teal); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow);}
+  .callout p{color:var(--ink-soft);}
+
+  .tip{background:var(--gold-soft); border:1px dashed var(--gold); border-radius:12px; padding:14px 16px; display:flex; gap:10px; align-items:flex-start;}
+  .tip .em{font-size:18px; flex-shrink:0;}
+  .tip p{font-size:13.5px; color:var(--ink); line-height:1.5;}
+  .tip b{color:var(--gold);}
+
+  .question-box{background:var(--surface-2); border-left:4px solid var(--teal); border-radius:10px; padding:14px 18px;}
+  .question-box p{font-style:italic; font-weight:600; color:var(--ink); font-size:16px;}
+
+  .diagram-card{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow);}
+  .diagram-card svg{width:100%; height:auto; display:block;}
+  .diagram-cap{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); text-align:center; margin-top:8px;}
+
+  .steps{counter-reset:step; display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .steps li{counter-increment:step; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px 10px 46px; position:relative; font-size:14px; color:var(--ink-soft); box-shadow:var(--shadow); line-height:1.55;}
+  .steps li::before{content:counter(step); position:absolute; left:12px; top:14px; font-family:'IBM Plex Mono',monospace; font-weight:600; width:22px; height:22px; border-radius:50%; background:var(--surface-2); color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:12.5px;}
+  .steps li b{color:var(--ink);}
+
+  .mat-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:8px;}
+  .mat-item{display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:9px 12px; font-size:13px; color:var(--ink-soft); box-shadow:var(--shadow);}
+  .mat-item .em{font-size:16px;}
+
+  .safety{background:var(--red-soft); border:1px solid var(--red); border-radius:14px; padding:16px 18px; display:flex; flex-direction:column; gap:10px;}
+  .safety .stitle{display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.1em; font-weight:700; color:var(--red);}
+  .safety ul{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:6px;}
+  .safety li{font-size:13.5px; color:var(--ink); line-height:1.5;}
+
+  .checklist{display:flex; flex-direction:column; gap:8px;}
+  .citem{display:flex; align-items:flex-start; gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:13.5px; color:var(--ink-soft); box-shadow:var(--shadow);}
+  .citem .box{width:18px; height:18px; border-radius:5px; border:2px solid var(--line); flex-shrink:0; margin-top:1px;}
+
+  table.data-tbl{width:100%; border-collapse:collapse; font-size:12.5px; background:var(--surface); border-radius:10px; overflow:hidden; box-shadow:var(--shadow);}
+  table.data-tbl th{background:var(--ink); color:#fff; padding:9px 10px; text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;}
+  table.data-tbl td{padding:9px 10px; border-bottom:1px solid var(--line); color:var(--ink-soft);}
+  table.data-tbl tr:last-child td{border-bottom:none;}
+  .tbl-wrap{overflow-x:auto;}
+  .example-tag{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); background:var(--teal-soft); padding:3px 9px; border-radius:999px; display:inline-block; margin-bottom:8px;}
+
+  details.hint{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:0; overflow:hidden;}
+  details.hint summary{cursor:pointer; padding:10px 14px; font-size:13px; font-weight:600; color:var(--teal); list-style:none;}
+  details.hint summary::-webkit-details-marker{display:none;}
+  details.hint .a{padding:0 14px 12px 14px; font-size:13px; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:10px;}
+
+  .qlist{counter-reset:q; display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .qlist li{counter-increment:q; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px 10px 42px; position:relative; font-size:13.5px; color:var(--ink); box-shadow:var(--shadow); line-height:1.5;}
+  .qlist li::before{content:"Q"counter(q); position:absolute; left:10px; top:10px; font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:10.5px; color:var(--gold); background:var(--gold-soft); padding:2px 6px; border-radius:6px;}
+
+  .doclink{display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,var(--teal) 0%,#0b5245 100%); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow);}
+  .doclink .em{font-size:24px;}
+  .doclink p{color:#eafff9; font-size:13.5px;}
+  .doclink b{color:#fff; font-size:15px; display:block;}
+
+  .gloss{display:grid; grid-template-columns:1fr; gap:6px;}
+  .gloss-row{display:grid; grid-template-columns:140px 1fr; gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:9px 12px; font-size:12.5px; box-shadow:var(--shadow);}
+  .gloss-row b{color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  .gloss-row span{color:var(--ink-soft);}
+
+  .footer-note{text-align:center; color:var(--muted); font-size:12.5px; padding-top:10px; border-top:1px solid var(--line);}
+
+  @media (max-width:520px){
+    .gloss-row{grid-template-columns:1fr;}
+  }
+</style>
 
 <div class="wrap">
 
-<header class="top">
-  <div class="eyebrow">7th Grade Life Science · Team Lab (groups of 3)</div>
-  <h1 class="title">The Scale Lab</h1>
-  <p class="lead">You will use a digital microscope to measure the tiny features of everyday objects, figure out their real sizes, and use what you learn to picture how small the parts of a cell really are.</p>
-  <div class="meta-row">
-    <span><b>Microscope set-up:</b> 20–30 min (first time only)</span>
-    <span><b>Lab (Parts 2–4):</b> 30–60 min</span>
-    <span><b>Report:</b> finish after the lab</span>
-  </div>
-</header>
-
-<div class="qbanner">
-  <span class="qlabel">Our Testable Question</span>
-  <p>Does the real size we calculate for a tiny feature stay the same when we change the microscope's magnification?</p>
-  <p class="sub">If the answer is yes, then <b>scale</b> works, and we can use scale to estimate the size of things that are too small to see, like the parts inside a cell. You will also observe the <b>shapes</b> of your objects, make educated guesses about <i>why</i> they are built that way, and then use scale to connect what you measured to the <b>size, shape, and job of cell parts (organelles)</b>.</p>
-</div>
-
-<nav class="toc">
-  <a href="#start">Start Here</a>
-  <a href="#p0">Part 0 · Set up microscope</a>
-  <a href="#p1">Part 1 · The scale method</a>
-  <a href="#p2">Part 2 · Collect data</a>
-  <a href="#p3">Part 3 · Shapes</a>
-  <a href="#p4">Part 4 · Graph</a>
-  <a href="#p5">Part 5 · Cell scale</a>
-  <a href="#p6">Part 6 · Finish</a>
-  <a href="#gloss">Glossary</a>
-</nav>
-
-<!-- START HERE -->
-<section class="part" id="start">
-  <div class="part-head"><span class="part-tag">START HERE</span><h2>Read this first</h2></div>
-
-  <h3>What you will hand in</h3>
-  <ol>
-    <li><b>Lab Prep Assignment</b> (finish this <i>before</i> you start the lab).</li>
-    <li><b>Lab Report</b> (your team fills it in as you work; it ends with 10 discussion questions).</li>
-    <li>Your team's <b>Google Sheet</b> with your data and graph.</li>
-  </ol>
-  <p>Your teacher will give you the Prep Assignment and the Lab Report files. Upload them to Google Drive, open them in <b>Google Docs</b>, and share your team's copy with all three teammates as <b>Editors</b>.</p>
-
-  <h3>How the time is planned</h3>
-  <div class="tblwrap"><table class="data">
-    <tr><th>What</th><th>Time</th><th>Where</th></tr>
-    <tr><td>Set up your microscope and learn the controls</td><td class="mono">20–30 min</td><td>Parts 0–1</td></tr>
-    <tr><td><b>The lab:</b> measure 3 objects at 2 magnifications, observe shapes, make your graph</td><td class="mono">30–60 min</td><td>Parts 2–4</td></tr>
-    <tr><td>Cell scale and organelle calculations, conclusion, and discussion questions</td><td class="mono">after the lab</td><td>Parts 5–6</td></tr>
-  </table></div>
-
-  <h3>How a virtual team works together</h3>
-  <p>Each teammate works at home with their own microscope and follows the same steps. Stay in a video call or group chat while you work so you can help each other.</p>
-  <ul>
-    <li>Each teammate <b>chooses a different set of 3 objects</b> (see Part 2). Your team ends up with about <b>9 objects</b>.</li>
-    <li>The whole team uses <b>one shared Google Sheet</b>. Every teammate makes their own tab named with their first name, plus one <b>Team Summary</b> tab.</li>
-    <li><b>Only one microscope in your team?</b> The person with the microscope shares their screen on the video call. The other teammates tell them which objects to try and do the measuring math with them.</li>
-  </ul>
-  <div class="grid3">
-    <div class="card"><h4>Project Manager</h4><p>Keeps the team on time, reads each step out loud, and makes sure everyone follows the safety rules.</p></div>
-    <div class="card"><h4>Data Manager</h4><p>Owns the shared Google Sheet. Checks that numbers are typed correctly and that units are in the headings.</p></div>
-    <div class="card"><h4>Report Writer</h4><p>Owns the Lab Report in Google Docs and makes sure every teammate's work gets included.</p></div>
-  </div>
-  <p class="answer-note" style="margin-top:8px">Everyone measures and everyone helps write. Roles just decide who keeps things organized. Switch roles for the next lab.</p>
-
-  <h3>Materials</h3>
-  <div class="grid2">
-    <div class="card"><h4>From your teacher</h4><ul>
-      <li>Digital microscope with its stand and cables</li>
-      <li>Tape measure (use the <b>millimeter / centimeter</b> side)</li>
-      <li>Index cards (for a white background) — or plain white paper</li>
-    </ul></div>
-    <div class="card"><h4>From home (ask an adult first)</h4><ul>
-      <li>Chromebook</li>
-      <li>3 objects to look at (Part 2 has the list)</li>
-      <li>White paper</li>
-      <li>Pencil and scrap paper</li>
-      <li>Optional: tweezers, small cup</li>
-    </ul></div>
+  <div class="masthead">
+    <span class="tag">🔬 Lab &middot; Scientific Method &middot; Handheld Microscope</span>
+    <h1>Tiny Feature, True Size</h1>
+    <p>A scale lab: you'll pick a food, find one tiny feature on it, and test whether the real size you calculate for that feature stays the same no matter how much you zoom in.</p>
+    <div class="meta-row">
+      <span class="meta-chip">🔬 Handheld WiFi microscope</span>
+      <span class="meta-chip">🍞 Your choice of food (solid or gooey)</span>
+      <span class="meta-chip">⏱ ~40–50 min total</span>
+      <span class="meta-chip">📄 Answers go in your Google Doc</span>
+    </div>
   </div>
 
-  <div class="callout safety">
-    <span class="ctitle">Safety rules — everyone follows these</span>
-    <ul>
-      <li>Ask a parent or guardian before you use any household item.</li>
-      <li>Never look straight into the microscope's LED light or shine it at anyone's face.</li>
-      <li>Do <b>not</b> taste or smell your objects. Wash your hands when you finish.</li>
-      <li>Skip any object you are allergic to (like some plants or foods).</li>
-      <li>Do not use knives, glass, or anything sharp. Tear or peel things with your fingers or tweezers.</li>
-      <li>Keep drinks and liquids away from the microscope and your Chromebook.</li>
-      <li>The lens is delicate. Do not touch it or press it against anything hard. Do not pull on the cable.</li>
-    </ul>
+  <div class="toc">
+    <a href="#howto">How to Use Your Microscope</a>
+    <a href="#question">Testable Question</a>
+    <a href="#procedure">Procedure</a>
+    <a href="#data">Data</a>
+    <a href="#analysis">Analysis</a>
+    <a href="#glossary">Glossary</a>
   </div>
-</section>
 
-<!-- PART 0 -->
-<section class="part" id="p0">
-  <div class="part-head"><span class="part-tag">PART 0</span><h2>Set up your microscope</h2><span class="part-time">≈ 20–30 min · first time only</span></div>
-  <p>Your microscope is brand new, so take your time. Work with your teammates on your call. If a step does not work, use the <b>Troubleshooting table</b> at the end of this part.</p>
+  <div class="doclink">
+    <span class="em">📄</span>
+    <div><b>Your answers go in your Google Doc, not here.</b><p>This page is your instructions, diagrams, and hints. Open your copy of <i>Tiny Feature, True Size</i> in Google Docs to record your background research, hypothesis, variables, data, and analysis as you work.</p></div>
+  </div>
 
-  <h3>Step 0A · Unbox and find the parts</h3>
-  <ol class="steps">
-    <li><p>Open the box carefully. Take out the <b>microscope</b>, the <b>stand</b>, the <b>cable(s) and adapter(s)</b>, and the <b>paper manual</b>. Keep the manual and box.</p>
-       <p>Your box may also have extras (a case, a small ruler, a second cable). Set extras aside. If you are not sure what something is, ask your teacher.</p></li>
-    <li><p>Compare your microscope to the drawing below. The names on your parts may be in different places, but every microscope like this has the same main parts.</p></li>
-  </ol>
+  <section id="howto">
+    <div class="section-head"><span class="section-num">Before You Start</span><h2>How to Use Your Microscope</h2></div>
+    <p>Your microscope is a small handheld WiFi digital microscope — not a lab microscope on a stand. It connects wirelessly to an app on a phone or tablet, and it only focuses clearly when it's held very close to whatever you're looking at.</p>
 
-  <figure class="figure small">
-    <svg viewBox="0 0 520 350" role="img" aria-label="A handheld digital microscope clipped onto a stand, with parts labeled: cable, power button, focus wheel, LED brightness wheel, lens and LED ring, stand pole, base.">
-      <rect width="520" height="350" rx="6" fill="var(--card)"/>
-      <!-- base -->
-      <rect x="60" y="300" width="220" height="20" rx="6" fill="var(--ink-soft)"/>
-      <rect x="95" y="292" width="150" height="9" rx="3" fill="var(--paper)" stroke="var(--line)"/>
-      <!-- pole -->
-      <rect x="120" y="50" width="14" height="250" fill="var(--ink-soft)"/>
-      <!-- arm + holder -->
-      <rect x="134" y="118" width="60" height="12" fill="var(--ink-soft)"/>
-      <rect x="188" y="98" width="46" height="52" rx="8" fill="var(--line)" stroke="var(--ink-soft)" stroke-width="2"/>
-      <!-- body -->
-      <rect x="196" y="50" width="30" height="205" rx="12" fill="var(--ink)"/>
-      <rect x="199" y="255" width="24" height="18" fill="var(--ink-soft)"/>
-      <rect x="203" y="273" width="16" height="10" fill="var(--teal)"/>
-      <!-- focus wheel -->
-      <rect x="226" y="72" width="12" height="36" rx="3" fill="var(--gold)"/>
-      <!-- LED wheel -->
-      <rect x="226" y="206" width="12" height="28" rx="3" fill="var(--accent)"/>
-      <!-- power button -->
-      <circle cx="211" cy="66" r="5" fill="var(--good)"/>
-      <!-- cable -->
-      <path d="M211 50 C211 20 260 22 300 20" fill="none" stroke="var(--ink)" stroke-width="4"/>
-      <!-- labels -->
-      <g font-family="Karla" font-size="13" fill="var(--ink)">
-        <line x1="300" y1="20" x2="330" y2="20" stroke="var(--ink-soft)"/><text x="336" y="24">Cable (to your Chromebook)</text>
-        <line x1="216" y1="66" x2="330" y2="58" stroke="var(--ink-soft)"/><text x="336" y="62">Power button</text>
-        <line x1="238" y1="90" x2="330" y2="96" stroke="var(--ink-soft)"/><text x="336" y="100">Focus wheel (makes it sharp)</text>
-        <line x1="236" y1="170" x2="330" y2="150" stroke="var(--ink-soft)"/><text x="336" y="154">Body (slides in the holder)</text>
-        <line x1="238" y1="220" x2="330" y2="212" stroke="var(--ink-soft)"/><text x="336" y="216">LED brightness wheel</text>
-        <line x1="219" y1="279" x2="330" y2="270" stroke="var(--ink-soft)"/><text x="336" y="274">Lens + LED lights (points down)</text>
-        <line x1="127" y1="200" x2="40" y2="200" stroke="var(--ink-soft)"/><text x="10" y="196">Stand pole</text>
-        <line x1="170" y1="310" x2="300" y2="322" stroke="var(--ink-soft)"/><text x="306" y="326">Base (put white paper here)</text>
-      </g>
-    </svg>
-    <figcaption>A generic drawing, not your exact model. Yours may look a little different.</figcaption>
-  </figure>
+    <div class="diagram-card">
+      <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- body -->
+        <rect x="230" y="30" width="70" height="150" rx="22" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="3"/>
+        <!-- grip texture lines -->
+        <line x1="245" y1="70" x2="285" y2="70" stroke="var(--line)" stroke-width="3"/>
+        <line x1="245" y1="85" x2="285" y2="85" stroke="var(--line)" stroke-width="3"/>
+        <line x1="245" y1="100" x2="285" y2="100" stroke="var(--line)" stroke-width="3"/>
+        <!-- lens tip -->
+        <rect x="245" y="180" width="40" height="34" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
+        <circle cx="265" cy="222" r="26" fill="var(--ink)"/>
+        <circle cx="265" cy="222" r="15" fill="#20243a"/>
+        <!-- LED ring dots -->
+        <circle cx="265" cy="198" r="3.2" fill="var(--gold)"/>
+        <circle cx="284" cy="207" r="3.2" fill="var(--gold)"/>
+        <circle cx="291" cy="222" r="3.2" fill="var(--gold)"/>
+        <circle cx="284" cy="237" r="3.2" fill="var(--gold)"/>
+        <circle cx="265" cy="246" r="3.2" fill="var(--gold)"/>
+        <circle cx="246" cy="237" r="3.2" fill="var(--gold)"/>
+        <circle cx="239" cy="222" r="3.2" fill="var(--gold)"/>
+        <circle cx="246" cy="207" r="3.2" fill="var(--gold)"/>
+        <!-- power button -->
+        <circle cx="230" cy="55" r="8" fill="var(--accent)"/>
+        <!-- capture button -->
+        <rect x="292" y="85" width="14" height="20" rx="4" fill="var(--teal)"/>
+        <!-- usb port -->
+        <rect x="248" y="20" width="24" height="10" rx="2" fill="none" stroke="var(--ink)" stroke-width="2.5"/>
+        <!-- wifi waves -->
+        <path d="M300 55 q14 -14 28 0" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M300 65 q22 -22 44 0" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+        <!-- labels -->
+        <line x1="248" y1="20" x2="150" y2="20" stroke="var(--muted)" stroke-width="1.5"/>
+        <text x="30" y="24" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink-soft)">USB-C charging / PC port</text>
 
-  <h3>Step 0B · Put the microscope on the stand</h3>
-  <ol class="steps">
-    <li><p>Place the stand on a <b>flat, steady table</b>. Put a sheet of <b>white paper</b> on the base.</p></li>
-    <li><p>Slide the microscope body into the round holder on the stand. The <b>lens must point down</b> at the base. Tighten the small knob or screw on the holder (if there is one) so the microscope stays in place but can still slide up and down when you loosen it.</p></li>
-    <li><p>Press and hold the <b>power button</b> for 2–3 seconds. The LED lights should turn on. If nothing happens, plug the cable into your Chromebook (Step 0C) and try again.</p></li>
-  </ol>
+        <line x1="230" y1="55" x2="140" y2="55" stroke="var(--muted)" stroke-width="1.5"/>
+        <text x="30" y="59" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink-soft)">Power button (long-press)</text>
 
-  <h3>Step 0C · Connect it to your Chromebook</h3>
-  <p>Your microscope is a wireless microscope, but it also works like a <b>webcam</b> when you plug it into a computer with the cable. On a Chromebook, this is the easiest way. Start with <b>Plan A</b>.</p>
+        <line x1="345" y1="60" x2="440" y2="60" stroke="var(--muted)" stroke-width="1.5"/>
+        <text x="445" y="64" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink-soft)">WiFi signal to your app</text>
 
-  <figure class="figure">
-    <svg viewBox="0 0 700 150" role="img" aria-label="Flow: microscope, cable, Chromebook, Camera app.">
-      <rect width="700" height="150" rx="6" fill="var(--paper)"/>
-      <g font-family="Karla" font-size="14" fill="var(--ink)" text-anchor="middle">
-        <rect x="20" y="40" width="140" height="70" rx="10" fill="var(--card)" stroke="var(--ink)" stroke-width="2"/><text x="90" y="70" font-weight="700">Microscope</text><text x="90" y="92" font-size="12" fill="var(--ink-soft)">power on</text>
-        <rect x="270" y="40" width="140" height="70" rx="10" fill="var(--card)" stroke="var(--ink)" stroke-width="2"/><text x="340" y="70" font-weight="700">Chromebook</text><text x="340" y="92" font-size="12" fill="var(--ink-soft)">USB port</text>
-        <rect x="520" y="40" width="160" height="70" rx="10" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="2"/><text x="600" y="70" font-weight="700">Camera app</text><text x="600" y="92" font-size="12" fill="var(--ink-soft)">switch to microscope</text>
-      </g>
-      <path d="M160 75 H270" stroke="var(--ink)" stroke-width="3" fill="none" stroke-dasharray="2 0"/>
-      <text x="215" y="66" font-family="Karla" font-size="12" text-anchor="middle" fill="var(--ink-soft)">cable</text>
-      <path d="M410 75 H520" stroke="var(--ink)" stroke-width="3" fill="none"/>
-      <path d="M512 68 L522 75 L512 82" stroke="var(--ink)" stroke-width="3" fill="none"/>
-      <path d="M262 68 L272 75 L262 82" stroke="var(--ink)" stroke-width="3" fill="none"/>
-    </svg>
-    <figcaption>Plan A: microscope → cable → Chromebook → Camera app</figcaption>
-  </figure>
+        <line x1="306" y1="95" x2="400" y2="95" stroke="var(--muted)" stroke-width="1.5"/>
+        <text x="405" y="99" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink-soft)">Capture button (snaps a photo)</text>
 
-  <div class="callout key">
-    <span class="ctitle">Plan A — USB cable + the Camera app (try this first)</span>
-    <ol>
-      <li>Plug the <b>cable</b> into the microscope, and plug the other end into a <b>USB port</b> on your Chromebook. If the plug does not fit, use the small <b>adapter</b> that came in the box.</li>
-      <li>Make sure the microscope is on (LED lights glowing).</li>
-      <li>Click the <b>circle (Launcher)</b> in the bottom-left corner of your screen. Type <b>Camera</b> and open the <b>Camera</b> app.</li>
-      <li>You will probably see <b>your own face</b> first. That is your Chromebook's built-in camera. Look for the <b>Switch camera</b> button (two curved arrows) or click the <b>Settings gear</b> in the Camera app, and choose the microscope. It may be named something like <b>GENERAL-UVC</b> or <b>USB Camera</b>.</li>
-      <li>You should now see a bright close-up of whatever is under the lens. Move your hand under it to test.</li>
+        <line x1="291" y1="222" x2="400" y2="222" stroke="var(--muted)" stroke-width="1.5"/>
+        <text x="405" y="218" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink-soft)">Lens</text>
+        <text x="405" y="234" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink-soft)">8 LED ring lights</text>
+
+        <line x1="239" y1="230" x2="150" y2="270" stroke="var(--muted)" stroke-width="1.5"/>
+        <text x="30" y="278" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink-soft)">Focal range: 3–60mm from</text>
+        <text x="30" y="292" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink-soft)">your object (very close!)</text>
+
+        <!-- optional stand, off to the side -->
+        <g transform="translate(500,150)">
+          <rect x="-8" y="60" width="80" height="8" rx="3" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+          <rect x="20" y="-10" width="8" height="72" rx="3" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+          <rect x="10" y="-22" width="28" height="18" rx="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+          <text x="-8" y="90" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--muted)">Optional stand</text>
+          <text x="-8" y="103" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--muted)">(steadier shots)</text>
+        </g>
+      </svg>
+      <div class="diagram-cap">Your exact microscope — button positions may vary slightly from this drawing, but every part shown here is on your model.</div>
+    </div>
+
+    <ol class="steps">
+      <li><b>Charge it.</b> Plug the USB-C port into a charger or computer until it's full before lab day.</li>
+      <li><b>Install the app.</b> On the phone or tablet you'll use, install the free <b>"Max-See"</b> app from your app store — do this ahead of time, not during the lab.</li>
+      <li><b>Power on.</b> Long-press the power button until the LED ring lights turn on.</li>
+      <li><b>Connect the WiFi.</b> On your phone/tablet, open WiFi settings and connect directly to the microscope's own signal (something like "Max-see"). This is <b>not</b> your home WiFi — the microscope broadcasts its own signal.</li>
+      <li><b>Open the app.</b> Open Max-See. You should see a live close-up video feed — that's your microscope's camera.</li>
+      <li><b>Get in range.</b> This microscope only focuses clearly when the lens is about <b>3–60 millimeters</b> from your object — roughly a fingertip's width to a couple inches. Too close or too far and everything blurs.</li>
     </ol>
-  </div>
 
-  <details class="more">
-    <summary>Plan B — Use Google Meet to see the microscope (if the Camera app does not find it)</summary>
-    <ol>
-      <li>With the microscope plugged in, open <b>Google Meet</b> in Chrome.</li>
-      <li>Click the <b>Settings (gear)</b> icon, then <b>Video</b>.</li>
-      <li>Under <b>Camera</b>, pick the microscope from the list. You should see the preview.</li>
-      <li>You can share this with your team by joining a call and choosing the microscope as your camera.</li>
+    <div class="tip"><span class="em">💡</span><p><b>Pro tip:</b> Rest your elbow flat on the table while holding the microscope, or use the included stand — even small hand shake looks huge at this range.</p></div>
+
+    <div class="tbl-wrap">
+      <table class="data-tbl">
+        <tr><th>Problem</th><th>Try this</th></tr>
+        <tr><td>App won't find the microscope's WiFi signal</td><td>Turn the microscope off and back on. Make sure your phone's WiFi is on and searching for new networks.</td></tr>
+        <tr><td>Image is blurry no matter what</td><td>You're likely outside the 3–60mm range. Slowly move closer or farther until it snaps into focus.</td></tr>
+        <tr><td>Image is too dark or washed out</td><td>Adjust the brightness setting in the app, or change the angle of your object slightly.</td></tr>
+        <tr><td>App keeps disconnecting</td><td>Move your phone closer to the microscope — WiFi range is short. Restart the app if needed.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="section-head"><span class="section-num">Objective</span><h2>Why This Lab Matters</h2></div>
+    <div class="callout"><p>You've learned that scientists calculate the true size of things they discover, no matter how much they've had to zoom in to see them. Today you'll design and run your own controlled experiment to test whether that's actually true for your own microscope — using nothing but a piece of food and a plain millimeter ruler.</p></div>
+  </section>
+
+  <section id="background">
+    <div class="section-head"><span class="section-num">Step 1</span><h2>Background Research</h2></div>
+    <p>Before you touch the microscope, research and write <b>one paragraph (4–6 sentences)</b> in your Google Doc that covers:</p>
+    <div class="checklist">
+      <div class="citem"><span class="box"></span>A definition of <b>magnification</b>, in your own words.</div>
+      <div class="citem"><span class="box"></span>Why scientists need a reference object of known size (like a ruler) to find the TRUE size of something viewed through a magnifying tool.</div>
+      <div class="citem"><span class="box"></span>One real-world example of why knowing an object's actual size — not just how big it looks — matters in science.</div>
+    </div>
+  </section>
+
+  <section id="question">
+    <div class="section-head"><span class="section-num">Step 2</span><h2>Testable Question</h2></div>
+    <div class="question-box"><p>"Does the real size we calculate for a tiny feature stay the same when we change the microscope's magnification?"</p></div>
+  </section>
+
+  <section id="hypothesis">
+    <div class="section-head"><span class="section-num">Step 3</span><h2>Hypothesis</h2></div>
+    <p>In your Google Doc, write your hypothesis as an <b>If …, then …, because …</b> sentence:</p>
+    <div class="callout"><p><i>"If I change the microscope's magnification, then the calculated real size of my tiny feature will ______, because ______."</i></p></div>
+    <details class="hint"><summary>💡 Need a hint?</summary><div class="a">Think about what magnification actually does — does it change how big something <i>looks</i>, or how big it actually <i>is</i>?</div></details>
+  </section>
+
+  <section id="variables">
+    <div class="section-head"><span class="section-num">Step 4</span><h2>Variables</h2></div>
+    <p>In your Google Doc, identify the independent variable, dependent variable, and at least three controlled variables for this exact experiment.</p>
+    <details class="hint"><summary>💡 Hint: Independent Variable</summary><div class="a">This is the one thing you're going to change on purpose, on purpose, between your three trials — think about what changes on your microscope's app.</div></details>
+    <details class="hint"><summary>💡 Hint: Dependent Variable</summary><div class="a">This is the number you calculate and record every trial — the thing you're watching to see if it changes.</div></details>
+    <details class="hint"><summary>💡 Hint: Controlled Variables</summary><div class="a">What has to stay exactly the same across all three trials for this to be a fair test? Think about the object, the feature, the ruler, and the lighting.</div></details>
+  </section>
+
+  <section id="materials">
+    <div class="section-head"><span class="section-num">Step 5</span><h2>Materials</h2></div>
+    <div class="mat-grid">
+      <div class="mat-item"><span class="em">🔬</span>Your microscope, charged</div>
+      <div class="mat-item"><span class="em">📱</span>Phone/tablet with the Max-See app</div>
+      <div class="mat-item"><span class="em">🍞</span>One food, solid or gooey (not liquid)</div>
+      <div class="mat-item"><span class="em">📏</span>A small millimeter ruler</div>
+      <div class="mat-item"><span class="em">🍽️</span>A plate or napkin</div>
+      <div class="mat-item"><span class="em">📄</span>Your Google Doc</div>
+    </div>
+  </section>
+
+  <section id="safety">
+    <div class="section-head"><span class="section-num">Step 6</span><h2>Safety First</h2></div>
+    <div class="safety">
+      <div class="stitle">⚠️ Everyone follows these</div>
+      <ul>
+        <li>Wash your hands before and after this lab.</li>
+        <li>Do not eat any food that has touched the microscope, the ruler, or been sitting out during the lab.</li>
+        <li>Keep the microscope — an electronic device — away from wet or gooey food; don't let food touch the lens.</li>
+        <li>Handle the ruler carefully.</li>
+        <li>Dispose of your food specimen in the trash when you're finished — don't leave it out.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="procedure">
+    <div class="section-head"><span class="section-num">Step 7</span><h2>Procedure</h2></div>
+
+    <div class="diagram-card">
+      <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="500" height="200" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="2"/>
+        <!-- food blob -->
+        <ellipse cx="190" cy="120" rx="60" ry="42" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="3"/>
+        <circle cx="175" cy="112" r="4" fill="var(--accent)"/>
+        <text x="163" y="135" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--ink)">tiny feature</text>
+        <!-- ruler -->
+        <rect x="260" y="100" width="220" height="26" rx="3" fill="#fff" stroke="var(--ink)" stroke-width="2"/>
+        <g stroke="var(--ink)" stroke-width="1.5">
+          <line x1="275" y1="100" x2="275" y2="112"/><line x1="295" y1="100" x2="295" y2="112"/><line x1="315" y1="100" x2="315" y2="112"/>
+          <line x1="335" y1="100" x2="335" y2="112"/><line x1="355" y1="100" x2="355" y2="112"/><line x1="375" y1="100" x2="375" y2="112"/>
+          <line x1="395" y1="100" x2="395" y2="112"/><line x1="415" y1="100" x2="415" y2="112"/><line x1="435" y1="100" x2="435" y2="112"/>
+          <line x1="455" y1="100" x2="455" y2="112"/>
+        </g>
+        <text x="360" y="140" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--ink-soft)" text-anchor="middle">mm ruler, touching your food</text>
+        <!-- scope hovering -->
+        <g transform="translate(210,20)">
+          <rect x="0" y="0" width="34" height="60" rx="12" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
+          <circle cx="17" cy="66" r="11" fill="var(--ink)"/>
+        </g>
+        <line x1="227" y1="80" x2="227" y2="96" stroke="var(--gold)" stroke-width="2" stroke-dasharray="3 3"/>
+        <text x="245" y="55" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--ink-soft)">scope, 3–60mm above</text>
+        <text x="20" y="200" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--muted)">Top-down view: food and ruler touching on a plate, scope hovering above</text>
+      </svg>
+      <div class="diagram-cap">Correct setup — food and ruler must both appear in the same photo, every time.</div>
+    </div>
+
+    <ol class="steps">
+      <li>Choose a food that is solid or gooey — not a liquid. Check with an adult before using it.</li>
+      <li>Place a small piece of your food on a plate or napkin.</li>
+      <li>Look closely at your food and pick <b>ONE</b> tiny feature that interests you — a seed, an air bubble, a bump, a fiber, a grain, a crystal, a pore, etc.</li>
+      <li>Place your millimeter ruler directly against your tiny feature so both will appear in the same shot.</li>
+      <li>Hold the lens over your food and ruler at a <b>LOW</b> zoom setting until the image is sharp. Take a photo.</li>
+      <li>Without moving your food or ruler, zoom in to a <b>MEDIUM</b> setting on the same tiny feature. Refocus if needed. Take a photo.</li>
+      <li>Zoom in further to a <b>HIGH</b> setting on the same tiny feature. Refocus if needed. Take a photo.</li>
+      <li>For each of your 3 photos, count how many millimeter marks on the ruler your tiny feature spans. Record that number as your measured size in your data table.</li>
     </ol>
-  </details>
-  <details class="more">
-    <summary>Plan C — Use a phone or tablet (only if Plans A and B fail)</summary>
-    <ol>
-      <li>Turn on the microscope. It makes its own Wi-Fi network. The <b>network name</b> and <b>app name</b> are in the paper manual (for example, a network named <b>Max-see</b>).</li>
-      <li>On the phone or tablet, open Wi-Fi settings and join the microscope's network. No password is usually needed.</li>
-      <li>Open the app named in the manual. Your phone will not have internet while it is connected to the microscope.</li>
-      <li>Do the lab from the phone's screen, measuring the phone's screen with your ruler instead.</li>
+
+    <div class="tip"><span class="em">💡</span><p><b>Pro tip:</b> Pick a feature with clear, sharp edges — a fuzzy or see-through edge is much harder to measure accurately, and that makes your data noisier.</p></div>
+    <div class="tip"><span class="em">💡</span><p><b>Pro tip:</b> Don't nudge the food or the ruler between shots. If either one moves, that trial isn't a fair comparison anymore.</p></div>
+  </section>
+
+  <section id="data">
+    <div class="section-head"><span class="section-num">Step 8</span><h2>Data</h2></div>
+    <p>Record your 3 trials in the data table in your Google Doc. Here's what good data looks like:</p>
+    <div class="tbl-wrap">
+      <span class="example-tag">Example only — not real data</span>
+      <table class="data-tbl">
+        <tr><th>Trial</th><th>Zoom Level</th><th>Measured Size (mm)</th><th>Notes</th></tr>
+        <tr><td>1</td><td>Low</td><td>3.5 mm</td><td>Whole feature visible, slightly fuzzy edge</td></tr>
+        <tr><td>2</td><td>Medium</td><td>3.5 mm</td><td>Sharper, easier to count marks</td></tr>
+        <tr><td>3</td><td>High</td><td>4 mm</td><td>Very zoomed in, slight blur at edges made this one tricky</td></tr>
+      </table>
+    </div>
+    <div class="tip"><span class="em">💡</span><p><b>What to expect:</b> Your three measurements probably won't be perfectly identical — and that's normal and worth writing about, not something to "fix." Small differences are real data about how hard it is to measure accurately at high zoom.</p></div>
+  </section>
+
+  <section id="analysis">
+    <div class="section-head"><span class="section-num">Step 9</span><h2>Analysis Questions</h2></div>
+    <p>Answer these in complete sentences in your Google Doc:</p>
+    <ol class="qlist">
+      <li>Look at your three measurements. Did the size you calculated for your tiny feature stay about the same across all three zoom levels, or did it change? Use your data table as evidence.</li>
+      <li>If your measurements were not exactly identical, what real, specific reasons might explain the small differences?</li>
+      <li>Why does keeping the ruler in the very same photo as your tiny feature let you calculate its true size, no matter what zoom level you use?</li>
+      <li>Was your hypothesis supported by your data? Explain using your actual results.</li>
+      <li>How does this connect to what real scientists have to do any time they use a microscope — even a very powerful one — to measure something they've discovered?</li>
     </ol>
-  </details>
+  </section>
 
-  <h3>Step 0D · Learn the controls</h3>
-  <ol class="steps">
-    <li><p><b>Brightness:</b> turn the <b>LED brightness wheel</b> until the image is bright but not washed out. For this lab, once you choose a brightness, <b>keep it the same</b> for every photo (it is one of your controlled variables).</p></li>
-    <li><p><b>Sharp image (focus):</b> put a piece of paper with printed words under the lens. Slowly turn the <b>focus wheel</b> until the letters look crisp. <i>Note: some microscopes have zoom buttons on the body. They usually do not work when the microscope is plugged into a computer. That is normal.</i></p></li>
-    <li><p><b>How much you see:</b> loosen the holder knob and slide the microscope <b>up</b> to see a wider area (smaller things), or <b>down</b> to zoom in closer. Tighten the knob again. Sliding the microscope up or down is how you will change the magnification in this lab.</p></li>
-    <li><p><b>Take a photo:</b> click the round <b>shutter button</b> in the Camera app. A small picture (thumbnail) appears in the corner. Click it to open the photo. Make the photo fill your screen. This is how you will measure.</p>
-       <p class="answer-note">If you cannot find your photos later, open the <b>Files</b> app and check <b>Downloads</b> or a <b>Camera</b> folder.</p></li>
-  </ol>
+  <section id="conclusion">
+    <div class="section-head"><span class="section-num">Step 10</span><h2>Conclusion</h2></div>
+    <p>In one paragraph in your Google Doc: restate the testable question in your own words, state what your data showed, explain whether your hypothesis was supported, and mention at least one real source of error in your measurements.</p>
+  </section>
 
-  <div class="callout done">
-    <span class="ctitle">Practice check ✓</span>
-    <p>You are ready to move on when you can do all four:</p>
-    <ul class="checklist">
-      <li><input type="checkbox" id="pc1"><label for="pc1">I can see the tiny lines of my tape measure's millimeter side on my screen.</label></li>
-      <li><input type="checkbox" id="pc2"><label for="pc2">I can make the image sharp with the focus wheel.</label></li>
-      <li><input type="checkbox" id="pc3"><label for="pc3">I can change how bright it is with the LED wheel.</label></li>
-      <li><input type="checkbox" id="pc4"><label for="pc4">I can take a photo and open it full-screen.</label></li>
-    </ul>
+  <div class="doclink">
+    <span class="em">✅</span>
+    <div><b>Submit your completed Google Doc through Canvas by the due date.</b><p>That single document — background research, hypothesis, variables, data table, analysis, and conclusion — is your whole submission.</p></div>
   </div>
 
-  <h3>Troubleshooting</h3>
-  <div class="tblwrap"><table class="data">
-    <tr><th>Problem</th><th>Try this</th></tr>
-    <tr><td>The Camera app only shows my face</td><td>Click <b>Switch camera</b> or the <b>Settings gear</b> and pick the microscope. Unplug the microscope, plug it back in, and reopen the Camera app.</td></tr>
-    <tr><td>The Chromebook does not see the microscope at all</td><td>Try a different USB port. Try the adapter. Turn the microscope off and on. Restart the Chromebook. Then try Plan B.</td></tr>
-    <tr><td>The image is blurry</td><td>Slowly turn the focus wheel. Keep the microscope steady. Make sure the lens is not touching the object.</td></tr>
-    <tr><td>The image is too bright (white glare) or too dark</td><td>Turn the LED brightness wheel. Shiny objects (like a phone screen) cause glare; try a different angle or matte object.</td></tr>
-    <tr><td>The microscope shakes when I touch it</td><td>Tighten the holder knob. Put the stand on a solid table. Let go of the stand before taking a photo.</td></tr>
-    <tr><td>Nothing works</td><td>Take a picture with another device of what you see. Email your teacher with the picture and a short description. Meanwhile, do the Prep Assignment or the Part 5 questions.</td></tr>
-  </table></div>
-</section>
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">Reference</span><h2>Glossary</h2></div>
+    <div class="gloss">
+      <div class="gloss-row"><b>Magnification</b><span>How much bigger something looks in an image compared to real life.</span></div>
+      <div class="gloss-row"><b>Real size</b><span>An object's actual size, no matter how big or small it looks under magnification.</span></div>
+      <div class="gloss-row"><b>Feature</b><span>A small part of an object you choose to measure — like one seed or one bubble.</span></div>
+      <div class="gloss-row"><b>Millimeter (mm)</b><span>One thousandth of a meter — about the thickness of a credit card's edge.</span></div>
+      <div class="gloss-row"><b>Micrometer (µm)</b><span>One thousandth of a millimeter. 1 mm = 1,000 µm.</span></div>
+      <div class="gloss-row"><b>Independent variable</b><span>What you change on purpose.</span></div>
+      <div class="gloss-row"><b>Dependent variable</b><span>What you measure to see the effect.</span></div>
+      <div class="gloss-row"><b>Controlled variable</b><span>Something you keep the same so the test is fair.</span></div>
+      <div class="gloss-row"><b>Resolution</b><span>How much real, sharp detail an image actually shows — different from how big it looks.</span></div>
+    </div>
+  </section>
 
-<!-- PART 1 -->
-<section class="part" id="p1">
-  <div class="part-head"><span class="part-tag">PART 1</span><h2>The scale method: a ruler in every photo</h2><span class="part-time">≈ 5–10 min</span></div>
-
-  <p>To find how big something really is, we need to know how much the microscope <b>magnifies</b>. That changes when you move the microscope up or down, so we <b>measure it every time</b> by putting a ruler in the same photo as the object.</p>
-
-  <div class="callout key">
-    <span class="ctitle">Big idea: scale</span>
-    <p><b>Scale</b> tells you how much bigger something looks in an image than it is in real life.</p>
-    <div class="formula">scale = size in the image ÷ real size</div>
-    <p>A scale of <b>20×</b> means everything in the image looks 20 times bigger than it really is.</p>
-  </div>
-
-  <h3>How it works</h3>
-  <ol class="steps">
-    <li><p>Put your object and the <b>millimeter side of your tape measure</b> flat on the paper, side by side. Take a photo that shows both.</p></li>
-    <li><p><b>Calibrate:</b> pick two marks on the photo's ruler that are far apart (for example, 5 mm apart). <b>Real distance = 5 mm.</b> Now hold your own ruler against your screen and measure how far apart those same two marks are on the screen. That is the <b>on-screen distance</b>.</p></li>
-    <li><p><b>Find the scale:</b> scale = on-screen distance ÷ real distance.</p></li>
-    <li><p><b>Measure your feature</b> (like the width of one crystal) on the screen. Then <b>real size = on-screen size ÷ scale</b>.</p></li>
-    <li><p><b>Change units:</b> 1 mm = 1,000 µm (micrometers). Real size in µm = real size in mm × 1,000.</p></li>
-  </ol>
-
-  <figure class="figure">
-    <svg viewBox="0 0 700 342" role="img" aria-label="A screen showing a photo of salt crystals above a ruler. A bracket marks 5 millimeters on the photo ruler, and a second bracket below the screen shows measuring that distance with a real ruler.">
-      <rect width="700" height="330" rx="6" fill="var(--paper)"/>
-      <rect x="20" y="10" width="660" height="250" rx="10" fill="var(--ink)"/>
-      <rect x="36" y="24" width="628" height="222" fill="#dfe3e6"/>
-      <!-- crystals -->
-      <g transform="translate(0 -16)"><g fill="#f8fafb" stroke="#9aa4ab" stroke-width="1.5">
-        <rect x="230" y="80" width="40" height="40" transform="rotate(12 250 100)"/>
-        <rect x="330" y="60" width="34" height="34" transform="rotate(-8 347 77)"/>
-        <rect x="400" y="100" width="44" height="44" transform="rotate(20 422 122)"/>
-        <rect x="300" y="120" width="30" height="30" transform="rotate(5 315 135)"/>
-      </g></g>
-      <!-- ruler -->
-      <rect x="36" y="180" width="628" height="66" fill="#f3e9b0"/>
-      <g stroke="#3a3520" stroke-width="2">
-        <line x1="66" y1="180" x2="66" y2="212"/><line x1="126" y1="180" x2="126" y2="212"/><line x1="186" y1="180" x2="186" y2="212"/>
-        <line x1="246" y1="180" x2="246" y2="212"/><line x1="306" y1="180" x2="306" y2="212"/><line x1="366" y1="180" x2="366" y2="212"/>
-        <line x1="426" y1="180" x2="426" y2="212"/><line x1="486" y1="180" x2="486" y2="212"/><line x1="546" y1="180" x2="546" y2="212"/><line x1="606" y1="180" x2="606" y2="212"/>
-      </g>
-      <g font-family="IBM Plex Mono" font-size="14" fill="#3a3520" text-anchor="middle">
-        <text x="66" y="234">0</text><text x="126" y="234">1</text><text x="186" y="234">2</text><text x="246" y="234">3</text><text x="306" y="234">4</text>
-        <text x="366" y="234">5</text><text x="426" y="234">6</text><text x="486" y="234">7</text><text x="546" y="234">8</text><text x="606" y="234">9</text>
-      </g>
-      <!-- bracket 5mm from tick 2 to 7 -->
-      <path d="M186 170 V160 H486 V170" stroke="var(--accent)" stroke-width="3" fill="none"/>
-      <text x="336" y="152" text-anchor="middle" font-family="Karla" font-size="15" font-weight="700" fill="var(--accent)">Real distance: 5 mm (marks 2 to 7)</text>
-      <!-- crystal bracket -->
-      <g transform="translate(0 -8)"><path d="M230 62 H270" stroke="var(--teal)" stroke-width="3"/>
-      <text x="250" y="52" text-anchor="middle" font-family="Karla" font-size="13" font-weight="700" fill="var(--teal)">feature</text></g>
-      <!-- real ruler below -->
-      <rect x="120" y="280" width="460" height="30" rx="3" fill="var(--card)" stroke="var(--ink)" stroke-width="2"/>
-      <g stroke="var(--ink)"><line x1="120" y1="280" x2="120" y2="296"/><line x1="580" y1="280" x2="580" y2="296"/></g>
-      <path d="M120 316 H580" stroke="var(--accent)" stroke-width="3"/>
-      <text x="350" y="328" text-anchor="middle" font-family="Karla" font-size="13" font-weight="700" fill="var(--accent)">Hold YOUR ruler to the screen: measure the same 2 marks (example: 100 mm)</text>
-      <text x="350" y="300" text-anchor="middle" font-family="Karla" font-size="12" fill="var(--ink-soft)">your ruler</text>
-    </svg>
-    <figcaption>Example only, not to scale. On your screen, the sizes will be different.</figcaption>
-  </figure>
-
-  <div class="callout key">
-    <span class="ctitle">Worked example</span>
-    <ul>
-      <li>The two ruler marks are <b>5 mm</b> apart in real life. On my screen they are <b>100 mm</b> apart.</li>
-      <li>Scale = 100 ÷ 5 = <b>20×</b>.</li>
-      <li>One salt crystal measures <b>12 mm</b> on my screen.</li>
-      <li>Real size = 12 ÷ 20 = <b>0.6 mm</b>.</li>
-      <li>In micrometers: 0.6 × 1,000 = <b>600 µm</b>.</li>
-    </ul>
-  </div>
-
-  <h3>Practice (do these before you touch the microscope again)</h3>
-  <ol>
-    <li>Two marks 4 mm apart on the photo ruler measure 120 mm on your screen. What is the scale?
-      <details class="more"><summary>Check my answer</summary>120 ÷ 4 = <b>30×</b></details></li>
-    <li>At that scale, a thread measures 6 mm on your screen. What is its real width in mm? In µm?
-      <details class="more"><summary>Check my answer</summary>6 ÷ 30 = <b>0.2 mm</b> = <b>200 µm</b></details></li>
-    <li>Change 0.045 mm into micrometers.
-      <details class="more"><summary>Check my answer</summary>0.045 × 1,000 = <b>45 µm</b></details></li>
-  </ol>
-</section>
-
-<!-- PART 2 -->
-<section class="part" id="p2">
-  <div class="part-head"><span class="part-tag">PART 2</span><h2>Collect your data</h2><span class="part-time">≈ 25–40 min</span></div>
-
-  <div class="callout key">
-    <span class="ctitle">Your variables</span>
-    <ul>
-      <li><b>Independent variable:</b> the magnification setting (Low or High).</li>
-      <li><b>Dependent variable:</b> the real size we calculate for a feature (in µm).</li>
-      <li><b>Controlled variables (keep these the same):</b> the same object and the same feature, the same ruler, the same LED brightness, the same white background, and the same way of measuring on the screen.</li>
-    </ul>
-  </div>
-
-  <h3>Step 2A · Choose 3 objects — one from each group</h3>
-  <p>Each teammate chooses <b>different</b> objects from their teammates when possible. Every object must be <b>dry, small, flat-ish, and safe</b> (see the safety rules). Tell your team which ones you picked.</p>
-  <div class="tblwrap"><table class="data">
-    <tr><th>Group</th><th>Pick ONE (or ask your teacher about your own idea)</th><th>A feature you could measure</th></tr>
-    <tr><td><b>A · Living or once-living</b></td><td>Onion skin (peel a thin, see-through layer from the inside of an onion layer) · a strand of your own hair · a small leaf · a feather · a cotton ball fiber</td><td>Width of one onion cell · width of the hair · width of a leaf vein · width of a feather barb · width of one cotton fiber</td></tr>
-    <tr><td><b>B · Human-made</b></td><td>Paper towel or tissue · a piece of cloth · newspaper or magazine print · a sponge</td><td>Width of one fiber or thread · width of one printed dot · width of one hole</td></tr>
-    <tr><td><b>C · Crystals and grains</b></td><td>Table salt · sugar · sand · baking soda</td><td>Width of one crystal or grain</td></tr>
-  </table></div>
-  <div class="callout tip">
-    <span class="ctitle">Sanity check</span>
-    <p>Most of the features you measure will be between about <b>10 µm and 1,000 µm</b> (0.01 mm to 1 mm). If your answer is much bigger or much smaller than that, re-check your measuring and your math.</p>
-  </div>
-
-  <h3>Step 2B · Set up your team spreadsheet</h3>
-  <p>Open your team's Google Sheet. Make a tab with your first name. Use <b>Row 1 for headings</b> and type them exactly like this. Need help with Google Sheets? Open the <a href="google-sheets-graph-guide.html" target="_blank" rel="noopener">Google Sheets Graphing Guide</a> in a new tab.</p>
-
-  <div class="tblwrap"><table class="data">
-    <tr><th>Col</th><th>Heading (Row 1)</th><th>What you type</th><th>Formula (rows 2 and down)</th></tr>
-    <tr><td class="mono">A</td><td>Object</td><td>name of the object</td><td>—</td></tr>
-    <tr><td class="mono">B</td><td>Feature measured</td><td>what you measured (example: crystal width)</td><td>—</td></tr>
-    <tr><td class="mono">C</td><td>Setting</td><td>Low or High</td><td>—</td></tr>
-    <tr><td class="mono">D</td><td>Ruler distance, real (mm)</td><td>example: 5</td><td>—</td></tr>
-    <tr><td class="mono">E</td><td>Same distance on screen (mm)</td><td>measure with your ruler</td><td>—</td></tr>
-    <tr><td class="mono">F</td><td>Scale (×)</td><td>(the spreadsheet does this)</td><td class="mono">=E2/D2</td></tr>
-    <tr><td class="mono">G</td><td>Feature 1 on screen (mm)</td><td>measure feature #1</td><td>—</td></tr>
-    <tr><td class="mono">H</td><td>Feature 2 on screen (mm)</td><td>measure feature #2</td><td>—</td></tr>
-    <tr><td class="mono">I</td><td>Feature 3 on screen (mm)</td><td>measure feature #3</td><td>—</td></tr>
-    <tr><td class="mono">J</td><td>Average on screen (mm)</td><td>(the spreadsheet does this)</td><td class="mono">=AVERAGE(G2:I2)</td></tr>
-    <tr><td class="mono">K</td><td>Real size (mm)</td><td>(the spreadsheet does this)</td><td class="mono">=J2/F2</td></tr>
-    <tr><td class="mono">L</td><td>Real size (µm)</td><td>(the spreadsheet does this)</td><td class="mono">=K2*1000</td></tr>
-  </table></div>
-  <p>Copy each formula down the column (double-click the small blue square in the corner of the cell). You will use <b>6 rows</b>: each object gets one <b>Low</b> row and one <b>High</b> row, one after the other.</p>
-
-  <h3>Step 2C · Photograph and measure each object (repeat for all 3)</h3>
-  <ol class="steps">
-    <li><p><b>Set up.</b> Put a clean white sheet of paper on the base. Lay your object and the <b>millimeter side of your tape measure</b> flat on the paper, touching side by side. Set your LED brightness and <b>do not change it again</b>.</p></li>
-    <li><p><b>LOW setting.</b> Slide the microscope <b>up</b> until you can see about <b>8 to 12 millimeter marks</b> on the ruler. Turn the focus wheel until the object and the ruler marks are sharp. Take a photo. Type in your sheet: object, feature, and <b>Low</b>.</p></li>
-    <li><p><b>HIGH setting.</b> Slide the microscope <b>down</b> until you can see only about <b>2 to 4 millimeter marks</b>. Focus again. Take a photo. Type it in as <b>High</b>.</p>
-       <p class="answer-note">The feature you chose must still be in the picture and sharp. If it is not, move the object.</p></li>
-    <li><p><b>Open your Low photo full-screen.</b> Pick two ruler marks that are far apart (5 mm is a good choice). Type <b>5</b> in column D. Hold your ruler against the screen and measure the distance between those two marks. Type it in column E.</p></li>
-    <li><p><b>Measure your feature 3 times</b> on the screen (three different crystals, cells, or fibers in the same photo). Type them in columns G, H, and I. The spreadsheet finds the average.</p></li>
-    <li><p><b>Repeat steps 4–5 for the High photo.</b> Use the ruler marks in <i>that</i> photo. The scale will be a different number.</p></li>
-    <li><p><b>Reality check.</b> Look at column L. The Low and High real sizes for the same feature should be <b>close to each other</b> (within about 25%). If they are far apart, re-measure. Common mistakes: measuring different features, mixing up inches and millimeters, or forgetting to use the ruler marks from the <b>same photo</b>.</p></li>
-  </ol>
-
-  <div class="callout tip">
-    <span class="ctitle">Measuring tips</span>
-    <ul>
-      <li>Measure to the nearest <b>half millimeter</b> on your screen. Line the ruler's edge up carefully with the left edge of your feature.</li>
-      <li>Keep your eye straight above the screen so the ruler does not look shifted.</li>
-      <li>Your photos may look different sizes on the screen from one photo to the next. That is fine. Each photo has its own ruler, so each photo has its own scale.</li>
-      <li>Paste at least <b>one Low photo for each object</b> into your Lab Report (Insert → Image → Upload from computer).</li>
-    </ul>
-  </div>
-
-  <h3>Step 2D · Build your Summary table</h3>
-  <p>On <b>your own tab</b>, to the right of your data, make a small summary table starting in <b>column N</b>. Type the headings in Row 1, then type these formulas. (Object 1 uses data rows 2 and 3, object 2 uses rows 4 and 5, and object 3 uses rows 6 and 7.)</p>
-  <div class="tblwrap"><table class="data">
-    <tr><th>Cell</th><th>Heading (Row 1)</th><th>Object 1 (row 2)</th><th>Object 2 (row 3)</th><th>Object 3 (row 4)</th></tr>
-    <tr><td class="mono">N</td><td>Object</td><td class="mono">=A2</td><td class="mono">=A4</td><td class="mono">=A6</td></tr>
-    <tr><td class="mono">O</td><td>Low setting real size (µm)</td><td class="mono">=L2</td><td class="mono">=L4</td><td class="mono">=L6</td></tr>
-    <tr><td class="mono">P</td><td>High setting real size (µm)</td><td class="mono">=L3</td><td class="mono">=L5</td><td class="mono">=L7</td></tr>
-    <tr><td class="mono">Q</td><td>% difference</td><td class="mono">=ABS(O2-P2)/AVERAGE(O2,P2)*100</td><td class="mono">=ABS(O3-P3)/AVERAGE(O3,P3)*100</td><td class="mono">=ABS(O4-P4)/AVERAGE(O4,P4)*100</td></tr>
-  </table></div>
-  <p>Then make a <b>Team Summary</b> tab. Each teammate copies their summary table (columns N to Q, rows 2–4), and pastes it into the Team Summary tab using <b>right-click → Paste special → Values only</b>. Stack everyone's rows in one table with the same four headings in Row 1. This gives your team about 9 objects to graph.</p>
-</section>
-
-<!-- PART 3 -->
-<section class="part" id="p3">
-  <div class="part-head"><span class="part-tag">PART 3</span><h2>Observe shapes and structure</h2><span class="part-time">≈ 10–15 min</span></div>
-  <p>You are also a scientist who asks, <b>"Why is it built that way?"</b> Use your photos (and look again under the microscope) to make observations. Record them in the <b>Shape &amp; Structure table</b> in your Lab Report.</p>
-
-  <ol class="steps">
-    <li><p><b>Describe the shapes.</b> Circles? Rectangles? Cubes? Tubes? Threads crossing each other? Overlapping scales? Is a shape <b>repeated</b> over and over?</p></li>
-    <li><p><b>Notice the size and pattern.</b> Are all the pieces about the same size, or do they vary? Are they packed tightly or spread out?</p></li>
-    <li><p><b>Make an educated guess.</b> What job might that shape do? Use the clue bank below. There is no single right answer. You must explain your reasoning.</p></li>
-    <li><p><b>Connect it to a cell.</b> Use the <b>Cell Connection table</b> below (and the Organelle Data Card in Part 5). Which cell part or cell type has a similar <b>shape</b> or does a similar <b>job</b>? How does the <b>size</b> you measured compare with that cell part's size?</p></li>
-  </ol>
-
-  <div class="tblwrap"><table class="data">
-    <tr><th>If you see…</th><th>It might…</th></tr>
-    <tr><td>Long, thin tubes or fibers</td><td>carry liquids, add strength, or trap and absorb water</td></tr>
-    <tr><td>Boxes or rectangles stacked tightly</td><td>fill space with no gaps, hold a firm shape, support weight</td></tr>
-    <tr><td>Overlapping flat scales or plates</td><td>protect, shed water, or lock together</td></tr>
-    <tr><td>Threads crossing over and under</td><td>be strong but flexible</td></tr>
-    <tr><td>Flat, straight sides and sharp corners (like cubes)</td><td>show how particles pack in a regular pattern</td></tr>
-    <tr><td>Lots of tiny holes</td><td>let air, water, or light pass through, or hold liquid</td></tr>
-  </table></div>
-  <h3>Cell connection table</h3>
-  <p>Objects and cells solve the same kinds of problems. Use these ideas to link what you see to <b>organelles and cells</b>.</p>
-  <div class="tblwrap"><table class="data">
-    <tr><th>If your object has…</th><th>A cell part or cell type with a similar shape or job</th><th>Why the shape helps</th></tr>
-    <tr><td>Rectangular boxes stacked in rows (onion skin)</td><td><b>Plant cells and their cell walls</b></td><td>A stiff, box-like wall lets cells pack with no gaps and hold a plant up.</td></tr>
-    <tr><td>Long, thin fibers or threads (paper towel, cotton, hair)</td><td><b>Endoplasmic reticulum tubes</b>, muscle cells, nerve cell branches</td><td>Long thin shapes carry things a long way or add strength.</td></tr>
-    <tr><td>Flat plates or overlapping scales</td><td><b>Chloroplast discs</b> (stacks of flat pancakes), red blood cells, the stack of flat sacs in the <b>Golgi apparatus</b></td><td>Flat shapes give a lot of surface for catching light or moving materials.</td></tr>
-    <tr><td>Tiny holes or a sponge-like pattern</td><td><b>Pores in the nucleus and cell membrane</b>, the large <b>vacuole</b> that holds water</td><td>Holes and sacs let materials pass through or be stored.</td></tr>
-    <tr><td>Small, rounded or bean-like grains</td><td><b>Mitochondria</b>, lysosomes, ribosomes</td><td>Small shapes fit in large numbers all around the cell.</td></tr>
-    <tr><td>Cubes with flat faces and sharp corners (salt, sugar)</td><td>None. Crystals are <b>not cells</b>: their shape comes from particles stacking in a repeating pattern.</td><td>Use this to explain how living cells differ from non-living materials.</td></tr>
-  </table></div>
-</section>
-
-<!-- PART 4 -->
-<section class="part" id="p4">
-  <div class="part-head"><span class="part-tag">PART 4</span><h2>Graph your data</h2><span class="part-time">≈ 10–15 min</span></div>
-  <p>Your team makes <b>one column chart</b> that compares the <b>Low</b> and <b>High</b> real sizes for every object.</p>
-  <a class="dl" href="google-sheets-graph-guide.html" target="_blank" rel="noopener">Open the Graphing Guide (Example 1)</a>
-  <ol class="steps">
-    <li><p>Make sure your Team Summary table has these columns: <b>Object</b>, <b>Low setting real size (µm)</b>, <b>High setting real size (µm)</b>. (You do not need to include the % difference column in the chart.)</p></li>
-    <li><p>Highlight the Object, Low, and High columns, including the headings. Click <b>Insert → Chart</b>.</p></li>
-    <li><p>In the Chart editor, choose <b>Column chart</b>. You should see <b>two colored columns for each object</b>.</p></li>
-    <li><p>Under <b>Customize</b>, add a <b>chart title</b> (example: <i>Calculated Real Size of Features at Low and High Magnification</i>), a <b>horizontal axis title</b> (<i>Object</i>), and a <b>vertical axis title</b> (<i>Real size (µm)</i>). Make sure the <b>legend</b> is on.</p></li>
-    <li><p>Copy the chart and paste it (unlinked) into your Lab Report. Write a caption that says what the chart shows.</p></li>
-  </ol>
-  <div class="callout tip">
-    <span class="ctitle">How to read your chart</span>
-    <p>If scale really works, the <b>two columns for each object should be almost the same height</b>. That would be evidence for your hypothesis. If some are very different, think about why (see the discussion questions).</p>
-  </div>
-</section>
-
-<!-- PART 5 -->
-<section class="part" id="p5">
-  <div class="part-head"><span class="part-tag">PART 5</span><h2>Cell scale: size, shape, and function of organelles</h2><span class="part-time">≈ 25–30 min · no microscope needed</span></div>
-
-  <p>You cannot see inside a cell with this microscope, but you <b>can</b> use scale to picture cell parts. In this part you will connect three ideas for each organelle: <b>how big it is</b>, <b>what shape it has</b>, and <b>what job it does</b>. Sizes are typical, approximate values, and they change a little from source to source.</p>
-
-  <h3>Organelle Data Card</h3>
-  <div class="tblwrap"><table class="data">
-    <tr><th>Cell part</th><th>Found in</th><th>Shape</th><th>Job (function)</th><th>Typical real size</th></tr>
-    <tr><td><b>Cell wall</b></td><td>plant cells</td><td>stiff, box-like frame outside the membrane</td><td>protects the cell, holds its shape, supports the plant</td><td class="mono">thickness ≈ 0.2 µm</td></tr>
-    <tr><td><b>Cell membrane</b></td><td>all cells</td><td>very thin, flexible skin</td><td>controls what enters and leaves</td><td class="mono">thickness ≈ 0.01 µm</td></tr>
-    <tr><td><b>Nucleus</b></td><td>all cells with a nucleus</td><td>round or oval, with pores</td><td>holds the DNA and controls the cell</td><td class="mono">≈ 10 µm across</td></tr>
-    <tr><td><b>Chloroplast</b></td><td>plant cells</td><td>flat oval disc with stacks of pancakes inside</td><td>captures light and makes sugar (photosynthesis)</td><td class="mono">≈ 5 µm long</td></tr>
-    <tr><td><b>Mitochondrion</b></td><td>plant and animal cells</td><td>small bean or rod with a folded inner membrane</td><td>releases usable energy from food (cellular respiration)</td><td class="mono">≈ 1 µm long</td></tr>
-    <tr><td><b>Large central vacuole</b></td><td>plant cells (animal cells have only small ones)</td><td>big fluid-filled sac</td><td>stores water and nutrients and keeps the cell firm</td><td class="mono">≈ 80 µm across</td></tr>
-    <tr><td><b>Golgi apparatus</b></td><td>plant and animal cells</td><td>stack of flat sacs</td><td>packages and ships proteins</td><td class="mono">≈ 1 µm</td></tr>
-    <tr><td><b>Lysosome</b></td><td>mostly animal cells</td><td>small round sac</td><td>breaks down waste and worn-out parts</td><td class="mono">≈ 0.5 µm</td></tr>
-    <tr><td><b>Ribosome</b></td><td>all cells</td><td>tiny round bumps (free or on the ER)</td><td>builds proteins</td><td class="mono">≈ 0.02 µm</td></tr>
-    <tr><td><b>Endoplasmic reticulum (ER)</b></td><td>all cells with a nucleus</td><td>folded sheets and tubes that spread through the cell</td><td>makes and moves proteins and fats</td><td class="mono">tubes ≈ 0.05 µm wide; the network spans the cell</td></tr>
-  </table></div>
-  <p class="answer-note">Whole cells: a typical plant cell is about <b>100 µm</b> wide and a typical animal cheek cell is about <b>20 µm</b> wide.</p>
-
-  <h3>A plant cell drawing</h3>
-  <p>Here is a drawing of a plant cell. The <b>drawn size</b> is written first and the <b>real size</b> second.</p>
-
-  <figure class="figure">
-    <svg viewBox="0 0 700 400" role="img" aria-label="Drawing of a plant cell with labels: cell width drawn 10 centimeters (real 100 micrometers); nucleus drawn 1 centimeter (real 10 micrometers); chloroplast drawn 0.5 centimeter (real 5 micrometers); large vacuole drawn 8 centimeters (real 80 micrometers); mitochondrion drawn 1 millimeter (real 1 micrometer); cell wall drawn 0.2 millimeter thick (real 0.2 micrometer).">
-      <rect width="700" height="400" rx="6" fill="var(--paper)"/>
-      <rect x="40" y="60" width="420" height="300" rx="26" fill="var(--good-soft)" stroke="var(--good)" stroke-width="6"/>
-      <rect x="52" y="72" width="396" height="276" rx="18" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <ellipse cx="270" cy="235" rx="150" ry="85" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="2"/>
-      <text x="270" y="300" text-anchor="middle" font-family="Karla" font-size="12" fill="var(--teal)">large vacuole</text>
-      <circle cx="120" cy="140" r="34" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="3"/>
-      <circle cx="120" cy="140" r="9" fill="var(--gold)"/>
-      <g fill="var(--good)" stroke="var(--ink-soft)"><ellipse cx="370" cy="118" rx="20" ry="10"/><ellipse cx="410" cy="180" rx="20" ry="10"/><ellipse cx="90" cy="265" rx="20" ry="10"/></g>
-      <g fill="var(--accent)"><ellipse cx="290" cy="112" rx="6" ry="3"/><ellipse cx="190" cy="120" rx="6" ry="3"/><ellipse cx="420" cy="325" rx="6" ry="3"/></g>
-      <line x1="40" y1="38" x2="460" y2="38" stroke="var(--ink)" stroke-width="2"/>
-      <path d="M40 38 l8 -5 v10 z M460 38 l-8 -5 v10 z" fill="var(--ink)"/>
-      <text x="250" y="28" text-anchor="middle" font-family="Karla" font-size="13" font-weight="700" fill="var(--ink)">Cell width: drawn 10 cm · real 100 µm</text>
-      <g font-family="Karla" font-size="13" fill="var(--ink)">
-        <line x1="154" y1="140" x2="490" y2="84" stroke="var(--ink-soft)"/>
-        <text x="494" y="82" font-weight="700">Nucleus</text><text x="494" y="99">drawn 1 cm · real 10 µm</text>
-        <line x1="390" y1="118" x2="490" y2="140" stroke="var(--ink-soft)"/>
-        <text x="494" y="140" font-weight="700">Chloroplast</text><text x="494" y="157">drawn 0.5 cm · real 5 µm</text>
-        <line x1="380" y1="235" x2="490" y2="198" stroke="var(--ink-soft)"/>
-        <text x="494" y="198" font-weight="700">Large vacuole</text><text x="494" y="215">drawn 8 cm · real 80 µm</text>
-        <line x1="420" y1="325" x2="490" y2="256" stroke="var(--ink-soft)"/>
-        <text x="494" y="256" font-weight="700">Mitochondrion</text><text x="494" y="273">drawn 1 mm · real 1 µm</text>
-        <line x1="460" y1="330" x2="490" y2="314" stroke="var(--ink-soft)"/>
-        <text x="494" y="314" font-weight="700">Cell wall</text><text x="494" y="331">drawn 0.2 mm thick · real 0.2 µm</text>
-        <text x="494" y="372" font-weight="700">Ribosome</text><text x="494" y="389" fill="var(--ink-soft)">real 0.02 µm (too tiny to draw)</text>
-      </g>
-    </svg>
-    <figcaption>The drawing on your screen may not be exactly 10 cm wide. Use the labeled numbers, not your ruler, to answer the questions.</figcaption>
-  </figure>
-
-  <div class="callout key">
-    <span class="ctitle">Units and formulas</span>
-    <p>1 cm = 10 mm · 1 mm = 1,000 µm · so 1 cm = 10,000 µm.</p>
-    <div class="formula">scale = drawing size ÷ real size</div>
-    <div class="formula">drawn size = real size × scale</div>
-    <p><b>Worked example:</b> the drawing is 10 cm wide and the real cell is 100 µm wide. 10 cm = 100,000 µm. Scale = 100,000 ÷ 100 = <b>1,000×</b>. A 10 µm nucleus is drawn 10 × 1,000 = 10,000 µm = <b>1 cm</b>.</p>
-  </div>
-
-  <h3>Answer these in your Lab Report, Section 10 (show your work)</h3>
-  <ol>
-    <li><b>Scale of the drawing.</b> Use the nucleus (drawn 1 cm, real 10 µm) to calculate the scale. Does it match the scale from the whole cell (10 cm and 100 µm)?</li>
-    <li><b>Organelle scale table.</b> Complete the table in your report. For each cell part, use the real size from the Organelle Data Card and the 1,000× scale to find the <b>drawn size in mm</b>. Then circle every part that would be <b>too small to see</b> in the drawing (less than about 0.2 mm).</li>
-    <li><b>How many fit across?</b> A plant cell is 100 µm wide. Divide 100 by each organelle's real size to find how many of that part could line up across the cell (for the nucleus, mitochondrion, lysosome, ribosome, and chloroplast). Then explain: why might a cell need <b>thousands of ribosomes</b> but only <b>one nucleus</b>? Use each part's size and job.</li>
-    <li><b>Shape, size, and function.</b> Choose <b>three</b> organelles. For each one, write its shape, its size, and its job. Then explain how its shape or size helps it do that job. (Example: a chloroplast is a flat disc, so a lot of its surface can face the light.)</li>
-    <li><b>Your microscope's view.</b> Use the scale for your <b>High</b> setting (column F in your Sheet). At that scale, how big would the nucleus, chloroplast, mitochondrion, and ribosome look on your screen, in mm? Which of them could you see if the smallest thing you can clearly see on a screen is about 0.2 mm? Explain.</li>
-    <li><b>Classroom-size cell.</b> Imagine a model of a plant cell that is <b>5 m wide</b> (5 m = 5,000,000 µm). Calculate the scale. Then find the model size of the nucleus, chloroplast, mitochondrion, and ribosome. Choose an <b>everyday object</b> for each one that is about that size (for example, a beach ball or a grain of sand).</li>
-    <li><b>Connect to your data.</b> Pick one object you measured. Which organelle or cell is it closest in size to? About how many of your object's measured features would fit across one 100 µm plant cell? If you measured onion skin, how many 10 µm nuclei would fit across your measured cell width? What does the <b>shape</b> of your measured feature tell you about a job it might do?</li>
-    <li><b>Why are cells small?</b> Cells take in food and get rid of waste through their membrane, so a cell needs a lot of membrane (surface area) for its size (volume). Compare two cubes. For a cube, surface area = 6 × side × side and volume = side × side × side. Find the surface area and volume of a cube with a <b>1 cm</b> side and of a cube with a <b>10 cm</b> side. Which has more surface area <b>for each unit of volume</b>? Use your answer to explain why cells stay tiny.</li>
-  </ol>
-</section>
-
-<!-- PART 6 -->
-<section class="part" id="p6">
-  <div class="part-head"><span class="part-tag">PART 6</span><h2>Finish the lab</h2></div>
-
-  <h3>Conclusion (Claim – Evidence – Reasoning)</h3>
-  <ul>
-    <li><b>Claim:</b> Answer the testable question in one sentence.</li>
-    <li><b>Evidence:</b> Use at least <b>three numbers</b> from your table or graph.</li>
-    <li><b>Reasoning:</b> Explain <i>why</i> your evidence supports your claim, using the words <i>scale</i>, <i>magnification</i>, and <i>real size</i>.</li>
-  </ul>
-
-  <h3>Discussion questions</h3>
-  <p>The Lab Report ends with <b>10 short-essay questions</b>. Answer each one in <b>3–5 sentences</b>, using specific evidence from your lab. Talk them over as a team, then <b>write your own answer in your own words</b>.</p>
-
-  <h3>Clean up</h3>
-  <ul>
-    <li>Turn off and unplug the microscope. Wrap the cable loosely.</li>
-    <li>Put the microscope, stand, and parts back in the box.</li>
-    <li>Throw away or put away your objects. Wash your hands.</li>
-  </ul>
-
-  <div class="callout done">
-    <span class="ctitle">Turn-in checklist</span>
-    <ul class="checklist">
-      <li><input type="checkbox" id="t1"><label for="t1">Lab Prep Assignment finished and turned in.</label></li>
-      <li><input type="checkbox" id="t2"><label for="t2">Lab Report has a hypothesis, variables, data tables, at least 3 pasted photos, and my team's graph with a caption.</label></li>
-      <li><input type="checkbox" id="t3"><label for="t3">Shape &amp; Structure table is complete for every object.</label></li>
-      <li><input type="checkbox" id="t4"><label for="t4">Part 5 cell scale questions (organelle table, shape/size/function, and scale model) are answered with work shown.</label></li>
-      <li><input type="checkbox" id="t5"><label for="t5">Conclusion (CER) is written.</label></li>
-      <li><input type="checkbox" id="t6"><label for="t6">All 10 discussion questions are answered in complete sentences.</label></li>
-      <li><input type="checkbox" id="t7"><label for="t7">Google Sheet and Google Doc are shared with my teammates and my teacher.</label></li>
-    </ul>
-  </div>
-</section>
-
-<!-- GLOSSARY -->
-<section class="part" id="gloss">
-  <div class="part-head"><span class="part-tag">GLOSSARY</span><h2>Words to know</h2></div>
-  <div class="tblwrap"><table class="data">
-    <tr><th>Word</th><th>Meaning</th></tr>
-    <tr><td><b>Magnification</b></td><td>How much bigger something looks in an image compared to real life.</td></tr>
-    <tr><td><b>Scale</b></td><td>The ratio of the image size to the real size. Scale = image size ÷ real size.</td></tr>
-    <tr><td><b>Feature</b></td><td>A small part of an object you choose to measure, like one crystal or one fiber.</td></tr>
-    <tr><td><b>Millimeter (mm)</b></td><td>One thousandth of a meter. About the thickness of a credit card edge.</td></tr>
-    <tr><td><b>Micrometer (µm)</b></td><td>One thousandth of a millimeter. 1 mm = 1,000 µm. A human hair is about 70 µm wide.</td></tr>
-    <tr><td><b>Structure and function</b></td><td>The way something is built (structure) is related to the job it does (function).</td></tr>
-    <tr><td><b>Independent variable</b></td><td>What you change on purpose.</td></tr>
-    <tr><td><b>Dependent variable</b></td><td>What you measure to see the effect.</td></tr>
-    <tr><td><b>Controlled variable</b></td><td>Something you keep the same so the test is fair.</td></tr>
-    <tr><td><b>Organelle</b></td><td>A small structure inside a cell that has a specific job, like the nucleus or a mitochondrion.</td></tr>
-    <tr><td><b>Surface area</b></td><td>The total area of the outside of an object. For a cell, it is the amount of membrane it has for exchanging materials.</td></tr>
-    <tr><td><b>Percent difference</b></td><td>How far apart two numbers are, compared to their average, shown as a percent.</td></tr>
-  </table></div>
-</section>
-
+  <div class="footer-note">Same microscope, same food, three zoom levels — let's find out if scale really holds up. 🔬</div>
 </div>
