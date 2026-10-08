@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Best Organelle Campaign — Weekend HW | YSC Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:   #2563EB;
+      --gold:   #F59E0B;
+      --green:  #10B981;
+      --purple: #7C3AED;
+      --coral:  #EF4444;
+      --dark:   #0F172A;
+      --mid:    #475569;
+      --r:      14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lexend', Arial, sans-serif;
+      background: #F0F4FF;
+      color: var(--dark);
+      line-height: 1.8;
+      font-size: 16.5px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #7C3AED 0%, #2563EB 50%, #0D9488 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header .bg-text {
+      position:absolute; font-size:8rem; opacity:0.07;
+      font-weight:900; letter-spacing:-0.02em;
+      top:0; left:0; right:0; text-align:center;
+      line-height:1; pointer-events:none;
+    }
+    .hw-badge {
+      display:inline-block;
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.35);
+      border-radius:999px;
+      padding:0.3rem 1.1rem;
+      font-size:0.8rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:0.75rem;
+    }
+    header h1 { font-size:clamp(2rem,5vw,3rem); font-weight:700; margin-bottom:0.5rem; }
+    header .sub { font-size:1rem; opacity:0.9; max-width:540px; margin:0 auto; }
+    .due-pill {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      background:rgba(255,255,255,0.2);
+      border:1.5px solid rgba(255,255,255,0.4);
+      border-radius:999px;
+      padding:0.4rem 1.2rem;
+      font-size:0.95rem;
+      font-weight:600;
+      margin-top:1.25rem;
+    }
+
+    /* ── MAIN ── */
+    main { max-width:800px; margin:0 auto; padding:2rem 1.25rem 5rem; }
+
+    /* ── CARDS ── */
+    .card {
+      background:white;
+      border-radius:var(--r);
+      padding:1.5rem 1.75rem;
+      margin-bottom:1.25rem;
+      box-shadow:0 2px 10px rgba(0,0,0,0.06);
+    }
+    .card h2 { font-size:1.1rem; font-weight:700; margin-bottom:0.75rem; }
+    .card p  { font-size:0.95rem; margin-bottom:0.6rem; }
+    .card p:last-child { margin-bottom:0; }
+
+    /* ── THE BIG REVEAL ── */
+    .campaign-hero {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border: 3px solid #F59E0B;
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .trophy { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+    .campaign-hero h2 { font-size: 1.6rem; font-weight: 700; color: #78350F; margin-bottom: 0.5rem; }
+    .campaign-hero p  { font-size: 1rem; color: #92400E; max-width: 460px; margin: 0 auto; }
+
+    /* ── ORGANELLE CHOOSER ── */
+    .organelle-picker {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .org-pick {
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 1rem 0.75rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+    }
+    .org-pick:hover { border-color: var(--purple); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+    .org-pick.selected { border-color: var(--purple); background: #EDE9FE; }
+    .org-pick .op-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.3rem; }
+    .org-pick .op-name  { font-size: 0.88rem; font-weight: 700; color: var(--dark); }
+    .org-pick .op-teaser{ font-size: 0.75rem; color: var(--mid); margin-top: 0.2rem; }
+
+    #selection-display {
+      margin-top: 1rem;
+      min-height: 1.5rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--purple);
+    }
+
+    /* ── REQUIREMENTS ── */
+    .req-list {
+      counter-reset: req;
+      list-style: none;
+      padding: 0;
+    }
+    .req-list li {
+      counter-increment: req;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    .req-num {
+      min-width: 2rem; height: 2rem;
+      border-radius: 50%;
+      background: var(--purple);
+      color: white;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .req-content h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .req-content p  { font-size: 0.88rem; color: var(--mid); }
+
+    /* ── DEBATE PREVIEW ── */
+    .debate-box {
+      background: linear-gradient(135deg, #1E3A5F, #312E81);
+      color: white;
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin: 1.5rem 0;
+    }
+    .debate-box h2 { font-size: 1.1rem; margin-bottom: 1rem; }
+    .debate-point {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.9rem;
+      border-left: 4px solid var(--gold);
+    }
+
+    /* ── POSTER LAYOUT IDEAS ── */
+    .layout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-top: 0.75rem;
+    }
+    @media(max-width:500px){ .layout-grid { grid-template-columns: 1fr; } }
+    .layout-opt {
+      border: 2px dashed #CBD5E1;
+      border-radius: 10px;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: var(--mid);
+    }
+    .layout-opt .lo-head { font-weight: 700; color: var(--dark); margin-bottom: 0.35rem; }
+
+    /* ── AI NOTE ── */
+    .ai-note {
+      background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+      border: 2px solid #6EE7B7;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .ai-note h3 { font-size:0.95rem; font-weight:700; color:#065F46; margin-bottom:0.5rem; }
+    .ai-note p  { font-size:0.88rem; color:#065F46; }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style:none; padding:0; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.85rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.4rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 0.93rem;
+    }
+    .checklist li:hover { background: #F8FAFC; }
+    .check-box {
+      width: 1.3rem; height: 1.3rem;
+      border: 2px solid #CBD5E1;
+      border-radius: 5px;
+      flex-shrink: 0;
+      display: grid; place-items: center;
+      font-size: 0.8rem;
+      transition: all 0.15s;
+      margin-top: 0.1rem;
+    }
+    .checklist li.done .check-box {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+    .checklist li.done span { text-decoration: line-through; color: var(--mid); }
+
+    /* ── EXAMPLE SLOGANS ── */
+    .slogan-row {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.75rem;
+    }
+    .slogan {
+      background: white;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--mid);
+    }
+
+    /* ── MISC ── */
+    ul { padding-left:1.4rem; }
+    li { margin-bottom:0.4rem; font-size:0.9rem; }
+    .tag {
+      display:inline-block;
+      font-size:0.78rem; font-weight:600;
+      border-radius:999px; padding:0.2rem 0.75rem;
+    }
+    .highlight { background:#FEF3C7; padding:0.1em 0.35em; border-radius:4px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="bg-text">BEST<br>ORGANELLE</div>
+  <div class="hw-badge">📋 Weekend Homework · Due Tuesday</div>
+  <h1>🏆 Best Organelle in the Cell Campaign</h1>
+  <p class="sub">Pick your organelle. Build your case. Come ready to debate on Tuesday — because only one can be the best.</p>
+  <div class="due-pill">📅 Due: Tuesday — bring your poster!</div>
+</header>
+
+<main>
+
+  <!-- THE HOOK -->
+  <div class="campaign-hero">
+    <span class="trophy">🏆</span>
+    <h2>The Great Organelle Election</h2>
+    <p>
+      Every organelle in the cell thinks it deserves the top spot.
+      Your job this weekend: pick ONE organelle, learn everything about it, and make a
+      <strong>campaign poster</strong> arguing that it is the most important, most interesting,
+      and most essential organelle in the entire cell.
+      <br><br>
+      <strong>On Tuesday, you'll present your case — and the class will debate.</strong>
+    </p>
+  </div>
+
+  <!-- STEP 1: PICK YOUR ORGANELLE -->
+  <div class="card" style="border-left:5px solid var(--purple);">
+    <h2>Step 1 — Choose Your Organelle</h2>
+    <p>Each of you should pick a <em>different</em> organelle. Click the one you want to claim!</p>
+    <p style="font-size:0.85rem;color:var(--mid);">Think about which one excites you most — which one do you feel you can argue FOR?</p>
+
+    <div class="organelle-picker" id="org-picker"></div>
+    <div id="selection-display"></div>
+  </div>
+
+  <!-- STEP 2: DO YOUR RESEARCH -->
+  <div class="card" style="border-left:5px solid var(--blue);">
+    <h2>Step 2 — Do Your Research 🔍</h2>
+    <p>Before you make your poster, you need to know your organelle <em>really well.</em> Research these questions:</p>
+    <ul style="margin-top:0.75rem;">
+      <li><strong>What does it look like?</strong> (Shape, size, what it looks like under a microscope)</li>
+      <li><strong>What is its job?</strong> (Be specific — "it makes energy" isn't enough. What kind? How?)</li>
+      <li><strong>Where is it found?</strong> (Plant cells? Animal cells? Both?)</li>
+      <li><strong>How does its shape help it do its job?</strong> (structure-function!)</li>
+      <li><strong>What would happen if it was missing?</strong> (This is your biggest argument!)</li>
+      <li><strong>Any cool, surprising facts?</strong> (These win debates!)</li>
+    </ul>
+
+    <div class="ai-note">
+      <h3>🤖 About Using AI</h3>
+      <p>You can use AI to help you find and understand information — that's totally fine! But here's the rule:
+      <strong>your poster and arguments must be in your own words, with your own drawings.</strong>
+      You can't just print or copy an AI response. The debate questions on Tuesday will go beyond any facts AI gives you — you'll need to actually <em>understand</em> your organelle to answer them.</p>
+    </div>
+  </div>
+
+  <!-- STEP 3: MAKE YOUR POSTER -->
+  <div class="card" style="border-left:5px solid var(--gold);">
+    <h2>Step 3 — Design Your Campaign Poster 🎨</h2>
+    <p>Your poster is your organelle's campaign ad. It needs to convince your classmates that YOUR organelle deserves the title of Best Organelle in the Cell.</p>
+
+    <p style="font-weight:600;margin-top:1rem;">Your poster MUST include:</p>
+    <ul class="req-list" style="margin-top:0.75rem;">
+      <li>
+        <div class="req-num">1</div>
+        <div class="req-content">
+          <h3>A catchy campaign name or slogan</h3>
+          <p>Something memorable! This is your opening argument. Examples below 👇</p>
+        </div>
+      </li>
+      <li>
+        <div class="req-num">2</div>
+        <div class="req-content">
+          <h3>A hand-drawn illustration of your organelle</h3>
+          <p>Draw it! Label the important parts. Make it look like a campaign logo or mascot. This should be the biggest part of your poster.</p>
+        </div>
+      </li>
+      <li>
+        <div class="req-num">3</div>
+        <div class="req-content">
+          <h3>3 reasons why your organelle is the best</h3>
+          <p>Use science facts — structure, function, what would happen without it, real-world importance.</p>
+        </div>
+      </li>
+      <li>
+        <div class="req-num">4</div>
+        <div class="req-content">
+          <h3>One "what would happen without me?" argument</h3>
+          <p>What would go wrong in the cell if your organelle disappeared? Make it dramatic. Make it true.</p>
+        </div>
+      </li>
+      <li>
+        <div class="req-num">5</div>
+        <div class="req-content">
+          <h3>A real-world connection</h3>
+          <p>Connect your organelle to something in real life — a disease, a sport, a food, an everyday object. Anything that makes the judges (your classmates) care!</p>
+        </div>
+      </li>
+    </ul>
+
+    <p style="font-weight:600;margin-top:1rem;">Slogan inspiration:</p>
+    <div class="slogan-row">
+      <span class="slogan">"Mitochondria: No Power? No Life."</span>
+      <span class="slogan">"Vote Nucleus: Because Someone Has to Be in Charge."</span>
+      <span class="slogan">"Ribosome: Building the Future, One Protein at a Time."</span>
+      <span class="slogan">"Golgi: On Time, Every Time."</span>
+      <span class="slogan">"Chloroplast: We Started the Food Chain."</span>
+    </div>
+  </div>
+
+  <!-- LAYOUT IDEAS -->
+  <div class="card" style="border-left:5px solid var(--green);">
+    <h2>📐 Poster Layout Ideas</h2>
+    <p>Here are some ways you could organize your poster:</p>
+    <div class="layout-grid">
+      <div class="layout-opt">
+        <div class="lo-head">Campaign Ad Style</div>
+        Big drawing + bold slogan at the top. Bullet points of reasons below. Like a real political campaign poster.
+      </div>
+      <div class="layout-opt">
+        <div class="lo-head">Magazine Cover Style</div>
+        Your organelle as the "cover story." Headline: "The Most Important Organelle You Never Appreciated." Article preview bullets.
+      </div>
+      <div class="layout-opt">
+        <div class="lo-head">Sports Recruiting Poster</div>
+        Like a player profile card — stats, skills, why this organelle should be the MVP of the cell.
+      </div>
+      <div class="layout-opt">
+        <div class="lo-head">Infographic Style</div>
+        Use arrows, icons, and labels to show everything about the organelle. Makes it look professional and science-y.
+      </div>
+    </div>
+  </div>
+
+  <!-- TUESDAY DEBATE PREVIEW -->
+  <div class="debate-box">
+    <h2>⚔️ What Happens on Tuesday: The Debate</h2>
+    <div class="debate-point">
+      Each person gets <strong>2 minutes</strong> to present their poster and make their case.
+    </div>
+    <div class="debate-point">
+      After all three presentations, the group can challenge each other. Expect questions like:
+      "Why is YOUR organelle better than hers?" or "Could the cell survive without yours?"
+    </div>
+    <div class="debate-point">
+      You'll need to defend your organelle — so really <strong>understand it</strong>, not just memorize facts.
+    </div>
+    <div class="debate-point">
+      There may be a vote at the end. 🏆 Come prepared to win.
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card" style="border-left:5px solid var(--coral);">
+    <h2>✅ Before-You-Submit Checklist</h2>
+    <p style="font-size:0.88rem;color:var(--mid);margin-bottom:0.75rem;">Click each item as you complete it!</p>
+    <ul class="checklist" id="checklist">
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>I picked ONE organelle to focus on.</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>I researched what it looks like, its job, where it's found, and cool facts.</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>My poster has a catchy slogan or campaign name.</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>My poster has a hand-drawn illustration of the organelle (labeled).</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>My poster has 3 reasons why my organelle is the best.</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>My poster has a "what would happen without me?" argument.</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>My poster has a real-world connection.</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>I can explain everything on my poster without reading it word-for-word.</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box"></div><span>I've thought about counter-arguments — why someone might say a different organelle is better — and I'm ready to respond.</span></li>
+    </ul>
+    <div id="checklist-score" style="text-align:center;font-size:0.9rem;color:var(--mid);margin-top:0.75rem;"></div>
+  </div>
+
+  <!-- SUPPLIES -->
+  <div class="card">
+    <h2>🎨 What to Use</h2>
+    <p>Use whatever art supplies you have! The more creative and colorful, the better.</p>
+    <ul style="margin-top:0.5rem;">
+      <li>Poster board, large paper, or even thick cardstock</li>
+      <li>Markers, colored pencils, watercolors, paint</li>
+      <li>Ruler for clean lines and labels</li>
+      <li>Your word wall cards + study guide for reference</li>
+    </ul>
+    <p style="margin-top:0.75rem;font-size:0.88rem;color:var(--mid);">
+      You can print out a reference photo of your organelle to look at while you draw — just don't tape the printed picture onto your poster. The illustration should be yours!
+    </p>
+  </div>
+
+</main>
+
+<script>
+// Organelle picker
+const organelles = [
+  { emoji:"🧬", name:"Nucleus",             teaser:"The boss of the cell" },
+  { emoji:"⚡", name:"Mitochondria",        teaser:"The powerhouse" },
+  { emoji:"🔧", name:"Ribosome",            teaser:"The protein builder" },
+  { emoji:"📦", name:"Golgi Apparatus",     teaser:"The shipping dept." },
+  { emoji:"🌀", name:"Endoplasmic Reticulum",teaser:"The transport network" },
+  { emoji:"🚪", name:"Cell Membrane",       teaser:"The gatekeeper" },
+  { emoji:"🫙", name:"Vacuole",             teaser:"The storage unit" },
+  { emoji:"🗑️", name:"Lysosome",           teaser:"The cleanup crew" },
+  { emoji:"🌿", name:"Chloroplast",         teaser:"The energy harvester" },
+  { emoji:"🧱", name:"Cell Wall",           teaser:"The fortress wall" },
+];
+
+let selected = null;
+const picker = document.getElementById('org-picker');
+const display = document.getElementById('selection-display');
+
+organelles.forEach(org => {
+  const div = document.createElement('div');
+  div.className = 'org-pick';
+  div.innerHTML = `<span class="op-emoji">${org.emoji}</span><div class="op-name">${org.name}</div><div class="op-teaser">${org.teaser}</div>`;
+  div.addEventListener('click', () => {
+    if (selected) selected.classList.remove('selected');
+    div.classList.add('selected');
+    selected = div;
+    display.innerHTML = `✅ You've selected: <strong>${org.emoji} ${org.name}</strong> — now go do your research!`;
+  });
+  picker.appendChild(div);
+});
+
+// Checklist toggle
+let checked = 0;
+function toggleCheck(li) {
+  li.classList.toggle('done');
+  checked = document.querySelectorAll('.checklist li.done').length;
+  const total = document.querySelectorAll('.checklist li').length;
+  const scoreEl = document.getElementById('checklist-score');
+  if (checked === total) {
+    scoreEl.innerHTML = `<strong style="color:var(--green)">🏆 You're ready for Tuesday!</strong>`;
+  } else if (checked >= 6) {
+    scoreEl.textContent = `${checked}/${total} — Almost there!`;
+  } else {
+    scoreEl.textContent = `${checked}/${total} completed`;
+  }
+}
+</script>
+
+</body>
+</html>

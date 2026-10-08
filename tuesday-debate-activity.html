@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Organelle Debate + Cell Division Preview | YSC Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:   #2563EB;
+      --gold:   #F59E0B;
+      --green:  #10B981;
+      --purple: #7C3AED;
+      --coral:  #EF4444;
+      --orange: #EA580C;
+      --dark:   #0F172A;
+      --mid:    #475569;
+      --r:      14px;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+
+    body {
+      font-family:'Lexend', Arial, sans-serif;
+      background:#F0F4FF;
+      color:var(--dark);
+      line-height:1.8;
+      font-size:16.5px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background:linear-gradient(135deg, #0F172A 0%, #1E3A5F 60%, #7C3AED 100%);
+      color:white;
+      text-align:center;
+      padding:2.5rem 1.5rem 3rem;
+      position:relative;
+      overflow:hidden;
+    }
+    header::before { content:"⚔️"; font-size:6rem; position:absolute; top:-10px; left:-10px; opacity:0.1; }
+    header::after  { content:"🔬"; font-size:5rem; position:absolute; bottom:-10px; right:0; opacity:0.1; }
+    .header-tag {
+      display:inline-block;
+      background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:999px;
+      padding:0.25rem 1rem;
+      font-size:0.8rem;
+      letter-spacing:0.07em;
+      text-transform:uppercase;
+      margin-bottom:0.75rem;
+    }
+    header h1 { font-size:clamp(1.8rem,4vw,2.6rem); font-weight:700; margin-bottom:0.4rem; }
+    header p  { font-size:1rem; opacity:0.9; max-width:540px; margin:0 auto; }
+    .time-pills {
+      display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem; margin-top:1.25rem;
+    }
+    .tpill {
+      background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.25);
+      border-radius:999px;
+      padding:0.3rem 0.9rem;
+      font-size:0.83rem;
+    }
+
+    /* ── MAIN ── */
+    main { max-width:820px; margin:0 auto; padding:1.75rem 1.25rem 5rem; }
+
+    /* ── AGENDA BAR ── */
+    .agenda {
+      background:white;
+      border-radius:var(--r);
+      padding:1.25rem 1.5rem;
+      box-shadow:0 2px 10px rgba(0,0,0,0.06);
+      margin-bottom:2rem;
+    }
+    .agenda h2 { font-size:0.88rem; text-transform:uppercase; letter-spacing:0.07em; color:var(--mid); font-weight:700; margin-bottom:1rem; }
+    .agenda-row {
+      display:flex; align-items:center; gap:0.85rem;
+      padding:0.5rem 0;
+      border-bottom:1px solid #F1F5F9;
+      font-size:0.92rem;
+    }
+    .agenda-row:last-child { border-bottom:none; }
+    .ag-time {
+      font-size:0.78rem; font-weight:600; color:var(--mid);
+      min-width:65px;
+    }
+    .ag-dot {
+      width:10px; height:10px; border-radius:50%; flex-shrink:0;
+    }
+    .ag-label { font-weight:500; }
+
+    /* ── CARDS ── */
+    .card {
+      background:white;
+      border-radius:var(--r);
+      padding:1.5rem 1.75rem;
+      margin-bottom:1.25rem;
+      box-shadow:0 2px 10px rgba(0,0,0,0.055);
+    }
+    .card h2 { font-size:1.1rem; font-weight:700; margin-bottom:0.75rem; }
+    .card p { font-size:0.95rem; margin-bottom:0.55rem; }
+    .card p:last-child { margin-bottom:0; }
+
+    /* ── SECTION HEADERS ── */
+    .sec-head {
+      display:flex; align-items:center; gap:0.85rem;
+      margin:2.5rem 0 1.1rem;
+      padding-bottom:0.6rem;
+      border-bottom:2px solid #E2E8F0;
+    }
+    .sec-icon {
+      width:2.8rem; height:2.8rem; border-radius:12px;
+      display:grid; place-items:center;
+      font-size:1.3rem; flex-shrink:0;
+    }
+    .sec-head h2 { font-size:1.25rem; font-weight:700; }
+
+    /* ── DEBATE FORMAT ── */
+    .debate-phase {
+      display:flex; gap:1rem; align-items:flex-start;
+      padding:0.85rem 1rem;
+      border-radius:12px;
+      margin-bottom:0.6rem;
+      border:1.5px solid #E2E8F0;
+      background:#FAFBFF;
+    }
+    .dp-num {
+      width:2.2rem; height:2.2rem; border-radius:50%;
+      background:var(--purple); color:white;
+      display:grid; place-items:center;
+      font-weight:700; font-size:0.9rem;
+      flex-shrink:0;
+    }
+    .dp-content h3 { font-size:0.95rem; font-weight:700; margin-bottom:0.2rem; }
+    .dp-content p  { font-size:0.87rem; color:var(--mid); }
+    .time-tag {
+      display:inline-block;
+      background:#EDE9FE;
+      color:#5B21B6;
+      border-radius:999px;
+      padding:0.15rem 0.6rem;
+      font-size:0.75rem;
+      font-weight:600;
+      margin-top:0.25rem;
+    }
+
+    /* ── DEBATE PROMPTS ── */
+    .prompt-card {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border:2px solid #F59E0B;
+      border-radius:14px;
+      padding:1.25rem 1.5rem;
+      margin-bottom:0.85rem;
+    }
+    .prompt-card .pc-label { font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#92400E; margin-bottom:0.4rem; }
+    .prompt-card p { font-size:0.95rem; color:#78350F; font-weight:500; }
+    .prompt-card .pc-hint { font-size:0.83rem; color:#B45309; margin-top:0.4rem; }
+
+    /* ── SCORING ── */
+    .score-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
+      gap:0.85rem;
+      margin-top:0.75rem;
+    }
+    .score-cat {
+      border:1.5px solid #E2E8F0;
+      border-radius:10px;
+      padding:0.85rem 1rem;
+      background:#FAFBFF;
+    }
+    .score-cat .sc-head { font-size:0.88rem; font-weight:700; margin-bottom:0.25rem; }
+    .score-cat .sc-pts  { font-size:1.4rem; font-weight:700; color:var(--purple); }
+    .score-cat p        { font-size:0.8rem; color:var(--mid); }
+
+    /* ── SCOREBOARD ── */
+    .scoreboard {
+      background:linear-gradient(135deg,#0F172A,#1E3A5F);
+      border-radius:16px;
+      padding:1.75rem;
+      color:white;
+    }
+    .scoreboard h2 { font-size:1.1rem; margin-bottom:1.25rem; }
+    .player-row {
+      display:flex; align-items:center; gap:1rem;
+      background:rgba(255,255,255,0.08);
+      border-radius:12px;
+      padding:0.85rem 1.1rem;
+      margin-bottom:0.6rem;
+    }
+    .player-emoji { font-size:1.6rem; }
+    .player-info { flex:1; }
+    .player-name { font-weight:600; font-size:0.95rem; }
+    .player-org  { font-size:0.82rem; opacity:0.75; }
+    .player-score {
+      font-size:1.5rem; font-weight:700; color:var(--gold);
+    }
+    .score-btn {
+      background:var(--gold);
+      color:var(--dark);
+      border:none;
+      border-radius:8px;
+      padding:0.3rem 0.7rem;
+      font-family:'Lexend',sans-serif;
+      font-size:0.85rem;
+      font-weight:600;
+      cursor:pointer;
+      margin-left:0.3rem;
+      transition:background 0.15s;
+    }
+    .score-btn:hover { background:#FBBF24; }
+    .score-btn.minus { background:rgba(255,255,255,0.15); color:white; }
+    .score-btn.minus:hover { background:rgba(255,255,255,0.25); }
+
+    /* ── BRIDGE TO CELL DIVISION ── */
+    .bridge-box {
+      background:linear-gradient(135deg,#064E3B,#0D9488);
+      color:white;
+      border-radius:20px;
+      padding:2rem;
+      margin:2rem 0;
+    }
+    .bridge-box h2 { font-size:1.2rem; margin-bottom:0.75rem; }
+    .bridge-step {
+      background:rgba(255,255,255,0.12);
+      border-radius:10px;
+      padding:0.85rem 1.1rem;
+      margin-bottom:0.6rem;
+      font-size:0.9rem;
+      border-left:4px solid #6EE7B7;
+    }
+    .bridge-step strong { color:#A7F3D0; }
+
+    /* ── INTRO TO CELL DIVISION ── */
+    .cd-hook {
+      background:linear-gradient(135deg,#FEF3C7,#FDE68A);
+      border:2px solid #F59E0B;
+      border-radius:14px;
+      padding:1.5rem;
+      margin:1.25rem 0;
+    }
+    .cd-hook h3 { color:#78350F; font-size:1.05rem; margin-bottom:0.6rem; }
+    .cd-hook p  { color:#92400E; font-size:0.93rem; }
+
+    /* ── QUICK QUIZ ── */
+    .quiz-q {
+      background:white;
+      border:2px solid #E2E8F0;
+      border-radius:12px;
+      padding:1.1rem 1.25rem;
+      margin-bottom:0.85rem;
+    }
+    .quiz-q p { font-size:0.95rem; font-weight:500; margin-bottom:0.6rem; }
+    .quiz-options { display:flex; flex-direction:column; gap:0.4rem; }
+    .quiz-opt {
+      background:#F8FAFC;
+      border:1.5px solid #E2E8F0;
+      border-radius:8px;
+      padding:0.55rem 1rem;
+      cursor:pointer;
+      font-size:0.9rem;
+      transition:all 0.15s;
+      text-align:left;
+      font-family:'Lexend',sans-serif;
+      color:var(--dark);
+    }
+    .quiz-opt:hover { border-color:var(--blue); background:#EFF6FF; }
+    .quiz-opt.correct { background:#D1FAE5; border-color:#10B981; color:#065F46; font-weight:600; }
+    .quiz-opt.wrong   { background:#FEE2E2; border-color:#EF4444; color:#991B1B; }
+    .quiz-feedback { font-size:0.85rem; margin-top:0.5rem; min-height:1.2rem; }
+
+    /* ── EXIT TICKET ── */
+    .exit-box {
+      background:#0F172A;
+      color:white;
+      border-radius:16px;
+      padding:2rem;
+      margin-top:2rem;
+    }
+    .exit-box h2 { font-size:1.1rem; margin-bottom:1rem; }
+    .exit-q {
+      background:rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius:10px;
+      padding:1rem 1.1rem;
+      margin-bottom:0.75rem;
+    }
+    .exit-q p { font-size:0.9rem; opacity:0.9; margin-bottom:0.4rem; }
+    .exit-q textarea {
+      width:100%; min-height:60px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.2);
+      border-radius:8px;
+      padding:0.6rem;
+      color:white;
+      font-family:'Lexend',sans-serif;
+      font-size:0.88rem;
+      resize:vertical;
+    }
+
+    /* ── MISC ── */
+    ul { padding-left:1.4rem; }
+    li { margin-bottom:0.4rem; font-size:0.9rem; }
+    .callout {
+      display:flex; gap:1rem; align-items:flex-start;
+      background:#EDE9FE;
+      border:2px solid #C4B5FD;
+      border-radius:12px;
+      padding:1rem 1.25rem;
+      margin:1rem 0;
+    }
+    .callout .ci { font-size:1.6rem; flex-shrink:0; }
+    .callout p { font-size:0.9rem; color:#4C1D95; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">⚔️ Tuesday — Follow-Up Activity</div>
+  <h1>The Great Organelle Debate + What Comes Next</h1>
+  <p>Present your poster. Argue your case. Then: discover how cells make MORE cells.</p>
+  <div class="time-pills">
+    <span class="tpill">⏱ ~35 minutes total</span>
+    <span class="tpill">🏆 Debate: 15 min</span>
+    <span class="tpill">🔬 Cell Division Intro: 15 min</span>
+    <span class="tpill">🎫 Exit Ticket: 5 min</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- AGENDA -->
+  <div class="agenda">
+    <h2>📋 Today's Agenda</h2>
+    <div class="agenda-row">
+      <span class="ag-time">0–3 min</span>
+      <span class="ag-dot" style="background:#7C3AED;"></span>
+      <span class="ag-label">Warm-up: Quick recap of photosynthesis vs. cellular respiration</span>
+    </div>
+    <div class="agenda-row">
+      <span class="ag-time">3–18 min</span>
+      <span class="ag-dot" style="background:#F59E0B;"></span>
+      <span class="ag-label">⚔️ Organelle Debate — poster presentations + challenges</span>
+    </div>
+    <div class="agenda-row">
+      <span class="ag-time">18–33 min</span>
+      <span class="ag-dot" style="background:#10B981;"></span>
+      <span class="ag-label">🔬 Cell Division intro: What happens when cells need to copy themselves?</span>
+    </div>
+    <div class="agenda-row">
+      <span class="ag-time">33–38 min</span>
+      <span class="ag-dot" style="background:#EF4444;"></span>
+      <span class="ag-label">🎫 Exit ticket</span>
+    </div>
+  </div>
+
+  <!-- PART 1: WARM-UP -->
+  <div class="sec-head">
+    <div class="sec-icon" style="background:#EDE9FE;">🧠</div>
+    <div>
+      <h2>Part 1 — Quick Warm-Up (3 min)</h2>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:5px solid var(--purple);">
+    <h2>Fill in the Blank — No Notes!</h2>
+    <p>In your own words, complete each sentence before the debate starts:</p>
+
+    <div style="margin-top:0.75rem;">
+      <div class="quiz-q" style="border:none;background:#F8FAFC;margin-bottom:0.6rem;">
+        <p>Photosynthesis happens in the <strong>___________</strong> and makes <strong>___________</strong> using sunlight.</p>
+        <textarea style="width:100%;min-height:45px;font-family:'Lexend',sans-serif;font-size:0.88rem;border:1.5px solid #E2E8F0;border-radius:8px;padding:0.5rem;resize:none;color:var(--dark);" placeholder="chloroplast ... glucose (sugar)"></textarea>
+      </div>
+      <div class="quiz-q" style="border:none;background:#F8FAFC;margin-bottom:0.6rem;">
+        <p>Cellular respiration happens in the <strong>___________</strong> and produces <strong>___________</strong> energy.</p>
+        <textarea style="width:100%;min-height:45px;font-family:'Lexend',sans-serif;font-size:0.88rem;border:1.5px solid #E2E8F0;border-radius:8px;padding:0.5rem;resize:none;color:var(--dark);" placeholder="mitochondria ... ATP"></textarea>
+      </div>
+      <div class="quiz-q" style="border:none;background:#F8FAFC;">
+        <p>One reason your muscles burn during a hard volleyball practice is: <strong>___________</strong></p>
+        <textarea style="width:100%;min-height:45px;font-family:'Lexend',sans-serif;font-size:0.88rem;border:1.5px solid #E2E8F0;border-radius:8px;padding:0.5rem;resize:none;color:var(--dark);" placeholder="lactic acid builds up when cells can't get enough oxygen..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2: THE DEBATE -->
+  <div class="sec-head">
+    <div class="sec-icon" style="background:#FEF3C7;">⚔️</div>
+    <div>
+      <h2>Part 2 — The Great Organelle Debate (15 min)</h2>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ci">🏆</span>
+    <p>Each person presents their "Best Organelle" campaign poster. After all three presentations, the group debates — challenge each other, ask tough questions, defend your organelle. The scoreboard below tracks points!</p>
+  </div>
+
+  <!-- DEBATE FORMAT -->
+  <div class="card">
+    <h2>Debate Format</h2>
+    <div class="debate-phase">
+      <div class="dp-num">1</div>
+      <div class="dp-content">
+        <h3>Presentations — 2 min each</h3>
+        <p>Each person presents their poster and makes their top arguments. No interruptions during presentation time.</p>
+        <span class="time-tag">⏱ 6 min total</span>
+      </div>
+    </div>
+    <div class="debate-phase">
+      <div class="dp-num">2</div>
+      <div class="dp-content">
+        <h3>Challenge Round</h3>
+        <p>After all presentations, anyone can challenge any claim. Use the debate prompts below. Point awarded for the best defense!</p>
+        <span class="time-tag">⏱ 6 min</span>
+      </div>
+    </div>
+    <div class="debate-phase">
+      <div class="dp-num">3</div>
+      <div class="dp-content">
+        <h3>The Vote</h3>
+        <p>Each person votes for the organelle they found MOST convincing (you cannot vote for yourself). Points awarded.</p>
+        <span class="time-tag">⏱ 2 min</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEBATE PROMPTS -->
+  <div class="card">
+    <h2>⚔️ Challenge Prompts — Use These During the Debate!</h2>
+
+    <div class="prompt-card">
+      <div class="pc-label">Challenge #1</div>
+      <p>"If your organelle is so important — what would actually happen to the cell WITHOUT it? Be specific."</p>
+      <div class="pc-hint">Tip: The best answers use specific consequences, not just "the cell would die."</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="pc-label">Challenge #2</div>
+      <p>"My organelle does everything yours does, AND more. Why should we pick yours?"</p>
+      <div class="pc-hint">Tip: Defend your organelle's unique job — what CAN'T another organelle replace?</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="pc-label">Challenge #3</div>
+      <p>"Your organelle is only important in ONE type of cell. Mine works in ALL cells. Doesn't that make mine more essential?"</div>
+      <div class="pc-hint">Tip: Think about whether your organelle is in plant cells, animal cells, or both.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="pc-label">Challenge #4</div>
+      <p>"My organelle is the reason YOU have energy right now. Can yours say that?"</p>
+      <div class="pc-hint">Tip: Connect to cellular respiration, ATP, or the role in energy production.</div>
+    </div>
+  </div>
+
+  <!-- SCORING -->
+  <div class="card">
+    <h2>📊 Scoring Guide</h2>
+    <div class="score-grid">
+      <div class="score-cat">
+        <div class="sc-head">Presentation</div>
+        <div class="sc-pts">+3</div>
+        <p>Clear, confident, covers all 5 poster elements</p>
+      </div>
+      <div class="score-cat">
+        <div class="sc-head">Best Argument</div>
+        <div class="sc-pts">+2</div>
+        <p>Most compelling "why mine is best" claim</p>
+      </div>
+      <div class="score-cat">
+        <div class="sc-head">Best Defense</div>
+        <div class="sc-pts">+2</div>
+        <p>Best response to a challenge question</p>
+      </div>
+      <div class="score-cat">
+        <div class="sc-head">Class Vote</div>
+        <div class="sc-pts">+3</div>
+        <p>Points equal to number of votes received</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE SCOREBOARD -->
+  <div class="scoreboard">
+    <h2>🏆 Live Scoreboard</h2>
+    <div id="players-board"></div>
+    <div id="winner-msg" style="text-align:center;margin-top:1rem;font-size:1rem;min-height:1.5rem;"></div>
+  </div>
+
+  <!-- PART 3: CELL DIVISION BRIDGE -->
+  <div class="sec-head" style="margin-top:2.5rem;">
+    <div class="sec-icon" style="background:#D1FAE5;">🔬</div>
+    <div>
+      <h2>Part 3 — What's Next: Cell Division (15 min)</h2>
+    </div>
+  </div>
+
+  <!-- BRIDGE -->
+  <div class="bridge-box">
+    <h2>🔁 From What We Know → What's Next</h2>
+    <div class="bridge-step">
+      <strong>You know:</strong> Cells have organelles that work together to keep the cell alive.
+    </div>
+    <div class="bridge-step">
+      <strong>You know:</strong> Cells need energy (ATP) to do all their jobs.
+    </div>
+    <div class="bridge-step">
+      <strong>Big question coming up:</strong> Where do NEW cells come from? Remember Cell Theory — "new cells come from existing cells." But HOW exactly?
+    </div>
+    <div class="bridge-step">
+      <strong>Next topic:</strong> Cell Division — specifically <em>mitosis</em> — how one cell copies itself to make two identical cells.
+    </div>
+  </div>
+
+  <!-- HOOK -->
+  <div class="cd-hook">
+    <h3>🤔 Think About This…</h3>
+    <p>
+      When you practice volleyball, your muscles get stronger. Do you know why? When you work a muscle hard,
+      some muscle cells actually break down — and your body builds NEW ones to replace them (through cell division).
+      Healing a scrape, growing taller, replacing skin cells — it all comes down to one thing:
+      <strong>cells copying themselves</strong>.
+    </p>
+    <p style="margin-top:0.6rem;">
+      And here's the wild part: <strong>every single organelle inside the cell has to be copied PERFECTLY</strong>
+      before the cell can divide. Your nucleus, mitochondria, ribosomes — all of it doubles first.
+    </p>
+  </div>
+
+  <!-- QUICK INTRO QUIZ -->
+  <div class="card">
+    <h2>🧠 Quick Intro Quiz — Cell Division</h2>
+    <p style="font-size:0.88rem;color:var(--mid);margin-bottom:1rem;">No pressure — these are questions to think about before we really dig in. Try your best!</p>
+
+    <div id="quiz-area"></div>
+  </div>
+
+  <!-- WHAT WE'LL LEARN NEXT -->
+  <div class="card" style="border-left:5px solid var(--green);">
+    <h2>📅 Coming Up Next</h2>
+    <ul style="margin-top:0.25rem;">
+      <li><strong>Mitosis</strong> — the step-by-step process of one cell dividing into two identical cells</li>
+      <li><strong>Why cells divide</strong> — growth, repair, reproduction</li>
+      <li><strong>What can go wrong</strong> — intro to cancer (uncontrolled cell division)</li>
+      <li><strong>The connection to volleyball</strong> — muscle repair, healing, why rest matters</li>
+    </ul>
+    <p style="margin-top:0.75rem;font-size:0.88rem;color:var(--mid);">
+      Keep your study guide and vocab cards handy — the organelles you know will be directly involved in cell division!
+    </p>
+  </div>
+
+  <!-- EXIT TICKET -->
+  <div class="exit-box">
+    <h2>🎫 Exit Ticket — Tuesday</h2>
+    <div class="exit-q">
+      <p>1️⃣ After hearing everyone's arguments, which organelle do YOU think is most essential to cell survival — and why? (Can be yours or someone else's!)</p>
+      <textarea placeholder="I think the ________ is most essential because..."></textarea>
+    </div>
+    <div class="exit-q">
+      <p>2️⃣ In ONE sentence: what is cell division, and why do cells need to do it?</p>
+      <textarea placeholder="Cell division is... Cells need to do it because..."></textarea>
+    </div>
+    <div class="exit-q">
+      <p>3️⃣ What's one question you have about how cells copy themselves?</p>
+      <textarea placeholder="I wonder..."></textarea>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── SCOREBOARD ──────────────────────────────────
+const players = [
+  { name:"Player 1", emoji:"🏐", org:"(pick your organelle)", score:0 },
+  { name:"Player 2", emoji:"🏐", org:"(pick your organelle)", score:0 },
+  { name:"Player 3", emoji:"🏐", org:"(pick your organelle)", score:0 },
+];
+
+function renderBoard() {
+  const board = document.getElementById('players-board');
+  board.innerHTML = '';
+  players.forEach((p, i) => {
+    const row = document.createElement('div');
+    row.className = 'player-row';
+    row.innerHTML = `
+      <span class="player-emoji">${p.emoji}</span>
+      <div class="player-info">
+        <div class="player-name">${p.name}</div>
+        <div class="player-org">${p.org}</div>
+      </div>
+      <span class="player-score" id="score-${i}">${p.score}</span>
+      <button class="score-btn" onclick="addScore(${i},1)">+1</button>
+      <button class="score-btn" onclick="addScore(${i},2)">+2</button>
+      <button class="score-btn" onclick="addScore(${i},3)">+3</button>
+      <button class="score-btn minus" onclick="addScore(${i},-1)">−1</button>
+    `;
+    board.appendChild(row);
+  });
+  checkWinner();
+}
+
+function addScore(i, pts) {
+  players[i].score = Math.max(0, players[i].score + pts);
+  document.getElementById('score-'+i).textContent = players[i].score;
+  checkWinner();
+}
+
+function checkWinner() {
+  const max = Math.max(...players.map(p => p.score));
+  const winners = players.filter(p => p.score === max && max > 0);
+  const msg = document.getElementById('winner-msg');
+  if (winners.length === 1) {
+    msg.innerHTML = `🏆 <strong>Current leader: ${winners[0].name}</strong> with ${winners[0].score} points`;
+    msg.style.color = '#FBBF24';
+  } else if (winners.length > 1) {
+    msg.innerHTML = `🤝 <strong>It's a tie!</strong> — Debate on!`;
+    msg.style.color = '#6EE7B7';
+  } else {
+    msg.innerHTML = '';
+  }
+}
+renderBoard();
+
+// ── INTRO QUIZ ──────────────────────────────────
+const qs = [
+  {
+    q: "Cell Theory says new cells come from ________.",
+    opts: ["The air around us", "Existing cells", "Food we eat", "Chemical reactions in the ground"],
+    ans: 1,
+    feedback: "✅ Correct! Virchow (1855) showed that all cells arise from pre-existing cells — this is part of Cell Theory you already learned!"
+  },
+  {
+    q: "Before a cell divides, it needs to copy its ________ so both new cells have the full instructions.",
+    opts: ["Cell wall", "Vacuoles", "DNA (in the nucleus)", "The cytoplasm"],
+    ans: 2,
+    feedback: "✅ Right! The DNA in the nucleus must be completely copied before cell division can happen."
+  },
+  {
+    q: "Which type of cell division produces two identical 'daughter' cells?",
+    opts: ["Meiosis", "Mitosis", "Osmosis", "Fermentation"],
+    ans: 1,
+    feedback: "✅ Mitosis! Meiosis is different — it makes sex cells (sperm and eggs) with half the DNA. We'll focus on mitosis first."
+  },
+];
+
+const quizArea = document.getElementById('quiz-area');
+qs.forEach((q, qi) => {
+  const div = document.createElement('div');
+  div.className = 'quiz-q';
+  div.innerHTML = `
+    <p>${qi+1}. ${q.q}</p>
+    <div class="quiz-options" id="qopts-${qi}">
+      ${q.opts.map((o,oi) => `<button class="quiz-opt" onclick="checkAns(${qi},${oi},this)">${o}</button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="qfb-${qi}"></div>
+  `;
+  quizArea.appendChild(div);
+});
+
+function checkAns(qi, oi, btn) {
+  const opts = document.querySelectorAll(`#qopts-${qi} .quiz-opt`);
+  opts.forEach(o => o.disabled = true);
+  const fb = document.getElementById(`qfb-${qi}`);
+  if (oi === qs[qi].ans) {
+    btn.classList.add('correct');
+    fb.textContent = qs[qi].feedback;
+    fb.style.color = '#065F46';
+  } else {
+    btn.classList.add('wrong');
+    opts[qs[qi].ans].classList.add('correct');
+    fb.textContent = `Not quite — ${qs[qi].feedback}`;
+    fb.style.color = '#991B1B';
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word Wall — Cells in Action | YSC Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:   #2563EB;
+      --gold:   #F59E0B;
+      --green:  #10B981;
+      --purple: #7C3AED;
+      --teal:   #0D9488;
+      --coral:  #EF4444;
+      --dark:   #0F172A;
+      --mid:    #475569;
+      --light:  #F8FAFC;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lexend', Arial, sans-serif;
+      background: #F0F4FF;
+      color: var(--dark);
+      line-height: 1.75;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #4C1D95 0%, #1E3A5F 100%);
+      color: white;
+      text-align: center;
+      padding: 2.5rem 1.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before { content:"📇"; font-size:5rem; position:absolute; top:-10px; left:-10px; opacity:0.1; }
+    header::after  { content:"🏐"; font-size:4rem; position:absolute; bottom:-10px; right:0; opacity:0.1; }
+    .header-tag {
+      display:inline-block;
+      background:rgba(255,255,255,0.18);
+      border:1px solid rgba(255,255,255,0.35);
+      border-radius:999px;
+      padding:0.25rem 1rem;
+      font-size:0.8rem;
+      letter-spacing:0.07em;
+      text-transform:uppercase;
+      margin-bottom:0.75rem;
+    }
+    header h1 { font-size: clamp(1.8rem,4vw,2.5rem); font-weight:700; margin-bottom:0.4rem; }
+    header p  { font-size:1rem; opacity:0.9; max-width:520px; margin:0 auto; }
+
+    /* ── HOW TO MAKE YOUR CARDS ── */
+    .how-to {
+      background:white;
+      border-radius:16px;
+      padding:1.75rem;
+      max-width:820px;
+      margin:2rem auto 0;
+      box-shadow:0 2px 12px rgba(0,0,0,0.07);
+    }
+    .how-to h2 { font-size:1.05rem; font-weight:700; color:var(--mid); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1rem; }
+    .steps-row {
+      display:flex; gap:0.75rem; flex-wrap:wrap;
+    }
+    .step-pill {
+      display:flex; align-items:center; gap:0.6rem;
+      background:#F8FAFC;
+      border:1.5px solid #E2E8F0;
+      border-radius:12px;
+      padding:0.6rem 1rem;
+      flex:1; min-width:170px;
+      font-size:0.88rem;
+    }
+    .step-num {
+      width:1.6rem; height:1.6rem; border-radius:50%;
+      background:var(--purple);
+      color:white;
+      display:grid; place-items:center;
+      font-weight:700; font-size:0.8rem;
+      flex-shrink:0;
+    }
+
+    .supplies {
+      display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem;
+    }
+    .supply-chip {
+      background:#EDE9FE;
+      border:1.5px solid #C4B5FD;
+      border-radius:999px;
+      padding:0.25rem 0.8rem;
+      font-size:0.85rem;
+      color:#5B21B6;
+      font-weight:500;
+    }
+
+    /* ── FILTERS ── */
+    main { max-width:820px; margin:0 auto; padding:1.5rem 1.25rem 4rem; }
+
+    .filter-row {
+      display:flex; flex-wrap:wrap; gap:0.5rem;
+      margin-bottom:1.5rem;
+      align-items:center;
+    }
+    .filter-label { font-size:0.85rem; color:var(--mid); font-weight:500; }
+    .filter-btn {
+      border:1.5px solid #E2E8F0;
+      background:white;
+      border-radius:999px;
+      padding:0.3rem 0.9rem;
+      font-size:0.85rem;
+      cursor:pointer;
+      font-family:'Lexend',sans-serif;
+      transition:all 0.15s;
+      color:var(--dark);
+    }
+    .filter-btn:hover { border-color:var(--purple); color:var(--purple); }
+    .filter-btn.active { background:var(--purple); border-color:var(--purple); color:white; }
+
+    /* ── VOCAB CARDS GRID ── */
+    .vocab-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+      gap:1rem;
+    }
+
+    /* Flip card */
+    .flip-wrap {
+      height: 220px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    .flip-inner {
+      position:relative;
+      width:100%; height:100%;
+      transform-style:preserve-3d;
+      transition:transform 0.5s ease;
+    }
+    .flip-wrap.flipped .flip-inner { transform: rotateY(180deg); }
+
+    .flip-front, .flip-back {
+      position:absolute;
+      width:100%; height:100%;
+      border-radius:16px;
+      backface-visibility:hidden;
+      padding:1.25rem;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .flip-front {
+      background:white;
+      box-shadow:0 2px 12px rgba(0,0,0,0.07);
+      border:2px solid #E2E8F0;
+      align-items:center;
+      text-align:center;
+    }
+    .flip-back {
+      transform:rotateY(180deg);
+      background:white;
+      box-shadow:0 4px 20px rgba(0,0,0,0.12);
+    }
+
+    .word-emoji { font-size:2.2rem; margin-bottom:0.4rem; }
+    .word-term  { font-size:1.1rem; font-weight:700; margin-bottom:0.2rem; }
+    .word-type  {
+      display:inline-block;
+      font-size:0.75rem;
+      font-weight:600;
+      border-radius:999px;
+      padding:0.15rem 0.6rem;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+    }
+    .word-hint { font-size:0.78rem; color:var(--mid); margin-top:0.4rem; }
+    .tap-hint  { font-size:0.72rem; color:var(--mid); margin-top:auto; }
+
+    .def-tag {
+      font-size:0.72rem; font-weight:700; letter-spacing:0.06em;
+      text-transform:uppercase;
+      margin-bottom:0.4rem;
+    }
+    .def-text { font-size:0.91rem; line-height:1.6; flex:1; }
+    .def-example {
+      background:#F8FAFC;
+      border-radius:8px;
+      padding:0.5rem 0.75rem;
+      font-size:0.82rem;
+      color:var(--mid);
+      margin-top:0.6rem;
+      border-left:3px solid;
+    }
+    .flip-num {
+      font-size:0.72rem; color:var(--mid); margin-top:auto; text-align:right;
+    }
+
+    /* ── SECTION DIVIDERS ── */
+    .section-divider {
+      display:flex; align-items:center; gap:0.75rem;
+      margin:2rem 0 1rem;
+    }
+    .section-divider h3 {
+      font-size:0.88rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:0.07em;
+      white-space:nowrap;
+      color:var(--mid);
+    }
+    .section-divider hr { flex:1; border:none; border-top:1.5px solid #E2E8F0; }
+
+    /* ── INDEX CARD PREVIEW ── */
+    .card-preview-row {
+      display:flex; gap:1rem; margin:1.5rem 0;
+      flex-wrap:wrap;
+    }
+    .index-card-mock {
+      border:2px solid #CBD5E1;
+      border-radius:10px;
+      width:240px;
+      background:white;
+      box-shadow:2px 3px 0 #CBD5E1;
+    }
+    .icm-front {
+      padding:1.25rem;
+      text-align:center;
+      border-bottom:1.5px dashed #E2E8F0;
+    }
+    .icm-label { font-size:0.7rem; color:var(--mid); text-transform:uppercase; letter-spacing:0.06em; }
+    .icm-word  { font-size:1.2rem; font-weight:700; margin:0.4rem 0; }
+    .icm-back  { padding:1rem 1.25rem; font-size:0.85rem; color:var(--mid); }
+
+    /* ── PROGRESS ── */
+    .progress-bar {
+      background:#E2E8F0;
+      border-radius:999px;
+      height:8px;
+      margin-bottom:1.5rem;
+      overflow:hidden;
+    }
+    .progress-fill {
+      height:100%;
+      background:linear-gradient(90deg,var(--purple),var(--blue));
+      border-radius:999px;
+      transition:width 0.4s;
+    }
+    .progress-label {
+      font-size:0.85rem;
+      color:var(--mid);
+      margin-bottom:0.4rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">📇 Word Wall — Unit 2</div>
+  <h1>Cells in Action Vocabulary</h1>
+  <p>10 new words to know. Make your index cards using your art supplies — front: word, back: definition in YOUR words.</p>
+</header>
+
+<div class="how-to">
+  <h2>🎨 How to Make Your Index Cards</h2>
+  <div class="steps-row">
+    <div class="step-pill"><div class="step-num">1</div>Write the word on the front of your index card.</div>
+    <div class="step-pill"><div class="step-num">2</div>Write the definition in your own words on the back.</div>
+    <div class="step-pill"><div class="step-num">3</div>Add a sketch or doodle that helps YOU remember it.</div>
+    <div class="step-pill"><div class="step-num">4</div>Color-code it! New words = purple, review words = blue.</div>
+    <div class="step-pill"><div class="step-num">5</div>Post it on your word wall (or keep it in your vocab set).</div>
+  </div>
+  <p style="font-size:0.85rem;color:var(--mid);margin-top:1rem;">You'll need:</p>
+  <div class="supplies">
+    <span class="supply-chip">📇 Index cards (10 new + 12 review)</span>
+    <span class="supply-chip">✏️ Pencil</span>
+    <span class="supply-chip">🖊️ Markers or pens</span>
+    <span class="supply-chip">🎨 Colored pencils</span>
+    <span class="supply-chip">📐 Ruler (optional)</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- INDEX CARD MOCK -->
+  <div class="section-divider" style="margin-top:2rem;">
+    <h3>What your cards should look like</h3><hr>
+  </div>
+
+  <div class="card-preview-row">
+    <div class="index-card-mock">
+      <div class="icm-front">
+        <div class="icm-label">⭐ New Term — Unit 2</div>
+        <div class="icm-word">Photosynthesis</div>
+        <div style="font-size:1.5rem;margin-top:0.3rem;">🌿☀️</div>
+      </div>
+      <div class="icm-back">How plants make food using sunlight. Happens in the chloroplast.</div>
+    </div>
+    <div style="font-size:2rem;display:flex;align-items:center;color:var(--mid);">→</div>
+    <div style="font-size:0.88rem;color:var(--mid);display:flex;align-items:center;max-width:280px;">
+      <div>
+        <p>💡 <strong>Tips:</strong></p>
+        <ul style="padding-left:1.2rem;margin-top:0.3rem;">
+          <li>Use YOUR words, not a copy of the definition</li>
+          <li>Add a tiny sketch — even a stick figure helps!</li>
+          <li>Color the word or border so it pops</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-label" id="progress-label">Flip the cards to study — 0 / 10 reviewed</div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+  <!-- FILTER -->
+  <div class="filter-row">
+    <span class="filter-label">Show:</span>
+    <button class="filter-btn active" onclick="filterCards('all', this)">All (10)</button>
+    <button class="filter-btn" onclick="filterCards('new', this)">⭐ New Terms (10)</button>
+    <button class="filter-btn" onclick="filterCards('reviewed', this)">✅ Reviewed</button>
+  </div>
+
+  <!-- NEW TERMS DIVIDER -->
+  <div class="section-divider">
+    <h3>⭐ New Terms — Unit 2: Cells in Action</h3><hr>
+  </div>
+
+  <div class="vocab-grid" id="vocab-grid"></div>
+
+  <!-- REVIEW REMINDER -->
+  <div style="background:linear-gradient(135deg,#1E3A5F,#312E81);color:white;border-radius:16px;padding:1.75rem;margin-top:2.5rem;text-align:center;">
+    <div style="font-size:2rem;margin-bottom:0.5rem;">📚</div>
+    <h3 style="font-size:1.1rem;margin-bottom:0.5rem;">Also Review Your Unit 1 Cards!</h3>
+    <p style="font-size:0.92rem;opacity:0.9;max-width:420px;margin:0 auto;">
+      Cell, Cell Theory, Organelle, Nucleus, Cell Membrane, Cytoplasm, Mitochondria, Ribosome, Endoplasmic Reticulum, Golgi Apparatus, Vacuole, Lysosome.
+      <br><br>
+      These words are still being tested — keep your existing cards!
+    </p>
+  </div>
+
+</main>
+
+<script>
+const vocab = [
+  {
+    emoji:"🌱", term:"Photosynthesis", type:"New", typeColor:"#7C3AED", typeBg:"#EDE9FE",
+    hint:"Happens in the chloroplast",
+    def:"The process by which plant cells capture light energy and use it to make glucose (sugar) from carbon dioxide and water.",
+    example:"🌿 Plants on a sunny windowsill are doing photosynthesis right now!",
+    exampleBorder:"#10B981",
+  },
+  {
+    emoji:"⚡", term:"Cellular Respiration", type:"New", typeColor:"#92400E", typeBg:"#FEF3C7",
+    hint:"Happens in the mitochondria",
+    def:"The process by which cells break down glucose using oxygen to release energy in the form of ATP. All living cells do this.",
+    example:"⚡ Every time you breathe in, you're supplying O₂ for cellular respiration in your cells.",
+    exampleBorder:"#F59E0B",
+  },
+  {
+    emoji:"💰", term:"ATP", type:"New", typeColor:"#1E40AF", typeBg:"#DBEAFE",
+    hint:"Adenosine Triphosphate",
+    def:"Adenosine Triphosphate — the molecule that stores and carries energy in the cell. It's like the cell's rechargeable battery or currency.",
+    example:"💪 Every muscle contraction — including a volleyball spike — is powered by ATP.",
+    exampleBorder:"#2563EB",
+  },
+  {
+    emoji:"🍬", term:"Glucose", type:"New", typeColor:"#065F46", typeBg:"#D1FAE5",
+    hint:"Simple sugar, chemical formula C₆H₁₂O₆",
+    def:"A simple sugar molecule that is the main source of energy for living cells. Made by plants during photosynthesis and broken down in cellular respiration.",
+    example:"🍎 When you eat fruit, your body breaks it down into glucose for energy.",
+    exampleBorder:"#10B981",
+  },
+  {
+    emoji:"🟢", term:"Chlorophyll", type:"New", typeColor:"#166534", typeBg:"#DCFCE7",
+    hint:"The green pigment in leaves",
+    def:"The green-colored pigment found inside chloroplasts. It absorbs sunlight (especially red and blue light) and reflects green light — which is why leaves look green!",
+    example:"🍃 Chlorophyll is why grass, lettuce, and leaves are green.",
+    exampleBorder:"#4ADE80",
+  },
+  {
+    emoji:"⬅️", term:"Reactants", type:"New", typeColor:"#9D174D", typeBg:"#FCE7F3",
+    hint:"The 'ingredients' in a chemical reaction",
+    def:"The starting materials that go INTO a chemical reaction. In photosynthesis, the reactants are carbon dioxide, water, and sunlight.",
+    example:"🍳 In baking, eggs + flour + sugar are the reactants — they go in to make a cake.",
+    exampleBorder:"#EC4899",
+  },
+  {
+    emoji:"➡️", term:"Products", type:"New", typeColor:"#5B21B6", typeBg:"#EDE9FE",
+    hint:"What comes OUT of a reaction",
+    def:"The new substances created by a chemical reaction. In photosynthesis, the products are glucose and oxygen.",
+    example:"🎂 The baked cake is the product — it's what you get after the reaction.",
+    exampleBorder:"#7C3AED",
+  },
+  {
+    emoji:"🌊", term:"Diffusion", type:"New", typeColor:"#0369A1", typeBg:"#E0F2FE",
+    hint:"High → low concentration, no energy needed",
+    def:"The movement of molecules from an area of HIGH concentration to an area of LOW concentration. It's passive — no energy required.",
+    example:"🫧 When you spray perfume, the scent spreads from where it's concentrated to the whole room — that's diffusion!",
+    exampleBorder:"#0EA5E9",
+  },
+  {
+    emoji:"💧", term:"Osmosis", type:"New", typeColor:"#0D9488", typeBg:"#CCFBF1",
+    hint:"Diffusion — but for WATER only",
+    def:"The diffusion of water molecules through a selectively permeable membrane, from an area of high water concentration to an area of low water concentration.",
+    example:"🥒 Cucumbers left in salty water shrink because water moves out of the cucumber cells (osmosis).",
+    exampleBorder:"#2DD4BF",
+  },
+  {
+    emoji:"🏗️", term:"Cristae", type:"New", typeColor:"#B45309", typeBg:"#FEF3C7",
+    hint:"Folds inside the mitochondria",
+    def:"The folded inner membranes of the mitochondria. The folds increase the surface area available for chemical reactions, which allows more ATP to be produced.",
+    example:"🔬 More cristae = more surface area = more energy. Muscle cells have extra-folded mitochondria!",
+    exampleBorder:"#F59E0B",
+  },
+];
+
+let reviewedSet = new Set();
+let currentFilter = 'all';
+
+function renderGrid() {
+  const grid = document.getElementById('vocab-grid');
+  grid.innerHTML = '';
+
+  const toShow = vocab.filter(v => {
+    if (currentFilter === 'reviewed') return reviewedSet.has(v.term);
+    return true;
+  });
+
+  if (toShow.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--mid);padding:2rem;font-size:0.95rem;">No cards to show for this filter yet.</div>`;
+    return;
+  }
+
+  toShow.forEach((v, i) => {
+    const reviewed = reviewedSet.has(v.term);
+    const wrap = document.createElement('div');
+    wrap.className = 'flip-wrap' + (reviewed ? ' flipped' : '');
+    wrap.dataset.term = v.term;
+
+    wrap.innerHTML = `
+      <div class="flip-inner">
+        <div class="flip-front">
+          <span class="word-emoji">${v.emoji}</span>
+          <div class="word-term">${v.term}</div>
+          <span class="word-type" style="background:${v.typeBg};color:${v.typeColor};">⭐ New — Unit 2</span>
+          <div class="word-hint">${v.hint}</div>
+          <div class="tap-hint">👆 Tap to flip for definition</div>
+        </div>
+        <div class="flip-back">
+          <div class="def-tag" style="color:${v.typeColor};">Definition</div>
+          <div class="def-text">${v.def}</div>
+          <div class="def-example" style="border-color:${v.exampleBorder};">${v.example}</div>
+          <div class="flip-num">${v.term} · Card ${vocab.indexOf(v)+1} of ${vocab.length}</div>
+        </div>
+      </div>
+    `;
+
+    wrap.addEventListener('click', () => {
+      wrap.classList.toggle('flipped');
+      if (wrap.classList.contains('flipped')) {
+        reviewedSet.add(v.term);
+      }
+      updateProgress();
+    });
+
+    grid.appendChild(wrap);
+  });
+}
+
+function updateProgress() {
+  const count = reviewedSet.size;
+  const total = vocab.length;
+  document.getElementById('progress-fill').style.width = (count/total*100)+'%';
+  document.getElementById('progress-label').textContent = `Flip the cards to study — ${count} / ${total} reviewed`;
+}
+
+function filterCards(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+renderGrid();
+</script>
+
+</body>
+</html>

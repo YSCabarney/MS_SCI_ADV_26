@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cell, Your Team | YSC Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Lexend+Deca:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:    #2563EB;
+      --gold:    #F59E0B;
+      --green:   #10B981;
+      --purple:  #7C3AED;
+      --coral:   #EF4444;
+      --light:   #F0F9FF;
+      --dark:    #1E293B;
+      --mid:     #475569;
+      --white:   #FFFFFF;
+      --card-r:  16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lexend', 'Arial', sans-serif;
+      background: linear-gradient(160deg, #EFF6FF 0%, #F0FDF4 100%);
+      color: var(--dark);
+      line-height: 1.75;
+      font-size: 17px;
+    }
+
+    /* ── HEADER ─────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      color: white;
+      text-align: center;
+      padding: 2.5rem 1.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: "🏐";
+      font-size: 6rem;
+      position: absolute;
+      top: -1rem; left: -1.5rem;
+      opacity: 0.12;
+      transform: rotate(-20deg);
+    }
+    header::after {
+      content: "🔬";
+      font-size: 5rem;
+      position: absolute;
+      bottom: -0.5rem; right: 0.5rem;
+      opacity: 0.12;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 999px;
+      padding: 0.25rem 1rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    header h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 0.4rem; }
+    header p  { font-size: 1.05rem; opacity: 0.9; max-width: 580px; margin: 0 auto; }
+    .time-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    /* ── LAYOUT ─────────────────────────────────── */
+    main { max-width: 860px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+    /* ── SECTION HEADERS ─────────────────────────── */
+    .section-head {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin: 2.5rem 0 1.2rem;
+    }
+    .step-badge {
+      width: 2.4rem; height: 2.4rem; border-radius: 50%;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 1rem;
+      flex-shrink: 0;
+      color: white;
+    }
+    .s1 { background: var(--blue); }
+    .s2 { background: var(--green); }
+    .s3 { background: var(--gold); }
+    .s4 { background: var(--purple); }
+    .s5 { background: var(--coral); }
+    .section-head h2 { font-size: 1.3rem; font-weight: 600; }
+
+    /* ── CARDS ─────────────────────────────────── */
+    .card {
+      background: white;
+      border-radius: var(--card-r);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .card.blue-l  { border-left: 5px solid var(--blue); }
+    .card.gold-l  { border-left: 5px solid var(--gold); }
+    .card.green-l { border-left: 5px solid var(--green); }
+    .card.purple-l{ border-left: 5px solid var(--purple); }
+    .card.coral-l { border-left: 5px solid var(--coral); }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #DBEAFE, #EDE9FE);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #BFDBFE;
+    }
+    .highlight-box p { font-size: 1rem; }
+
+    /* ── VOCAB RECAP CHIPS ───────────────────────── */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+    .chip {
+      background: #EFF6FF;
+      border: 1.5px solid #93C5FD;
+      border-radius: 999px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--blue);
+    }
+
+    /* ── ANALOGY TABLE ─────────────────────────── */
+    .analogy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 600px) {
+      .analogy-grid { grid-template-columns: 1fr; }
+    }
+    .analogy-col-head {
+      background: var(--blue);
+      color: white;
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    .analogy-col-head.gold { background: var(--gold); color: var(--dark); }
+    .analogy-col-head.green{ background: var(--green); }
+
+    /* ── INTERACTIVE MATCHING ────────────────────── */
+    .match-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 580px) {
+      .match-container { grid-template-columns: 1fr; }
+    }
+    .match-col h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      color: white;
+    }
+    .match-col.left  h3 { background: var(--blue); }
+    .match-col.right h3 { background: var(--gold); color: var(--dark); }
+
+    .match-item {
+      background: #F8FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .match-item:hover { border-color: var(--blue); background: #EFF6FF; transform: translateX(3px); }
+    .match-item.selected { border-color: var(--blue); background: #DBEAFE; }
+    .match-item.matched  { border-color: var(--green); background: #D1FAE5; cursor: default; }
+    .match-item.matched:hover { transform: none; }
+    .match-item .emoji { font-size: 1.2rem; }
+
+    #match-feedback {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      min-height: 2rem;
+      margin-top: 0.75rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    #match-feedback.correct { background: #D1FAE5; color: #065F46; }
+    #match-feedback.wrong   { background: #FEE2E2; color: #991B1B; }
+
+    /* ── THINK PAIR SHARE ───────────────────────── */
+    .tps-box {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border-radius: 14px;
+      padding: 1.5rem;
+      border: 2px solid #F59E0B;
+    }
+    .tps-box h3 { color: #92400E; font-size: 1.1rem; margin-bottom: 1rem; }
+    .tps-step {
+      display: flex; gap: 1rem; align-items: flex-start;
+      margin-bottom: 0.85rem;
+    }
+    .tps-icon {
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: #F59E0B; color: white;
+      display: grid; place-items: center;
+      font-size: 0.85rem; font-weight: 700;
+      flex-shrink: 0;
+    }
+    textarea.response-box {
+      width: 100%; min-height: 80px;
+      border: 2px solid #D1D5DB;
+      border-radius: 10px;
+      padding: 0.75rem;
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+      margin-top: 0.5rem;
+      color: var(--dark);
+      background: white;
+      transition: border-color 0.2s;
+    }
+    textarea.response-box:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    /* ── BIG QUESTION ─────────────────────────── */
+    .big-q {
+      background: linear-gradient(135deg, var(--purple), #6D28D9);
+      color: white;
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .big-q .emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+    .big-q h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .big-q p  { opacity: 0.9; font-size: 1rem; }
+
+    /* ── REVEAL CARDS ─────────────────────────── */
+    .reveal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .reveal-card {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .reveal-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .reveal-card .rc-front {
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .reveal-card .rc-emoji { font-size: 2.2rem; display: block; margin-bottom: 0.4rem; }
+    .reveal-card .rc-organelle { font-weight: 700; font-size: 1rem; color: var(--dark); }
+    .reveal-card .rc-vball {
+      font-size: 0.88rem; color: var(--mid);
+      margin-top: 0.25rem;
+    }
+    .reveal-card .rc-back {
+      background: #F0FDF4;
+      border-top: 2px solid #D1FAE5;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #065F46;
+      display: none;
+    }
+    .reveal-card.open .rc-back { display: block; }
+    .reveal-card .rc-hint {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--mid);
+      padding: 0.3rem;
+      border-top: 1px solid #E2E8F0;
+    }
+
+    /* ── EXIT TICKET ─────────────────────────── */
+    .exit-ticket {
+      background: linear-gradient(135deg, #1E293B, #0F172A);
+      color: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    .exit-ticket h2 { font-size: 1.3rem; margin-bottom: 1rem; }
+    .exit-q {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .exit-q p { font-size: 0.95rem; opacity: 0.9; margin-bottom: 0.5rem; }
+    .exit-q textarea {
+      width: 100%; min-height: 65px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      color: white;
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      resize: vertical;
+    }
+    .exit-q textarea::placeholder { color: rgba(255,255,255,0.4); }
+
+    /* ── PROGRESS BAR ──────────────────────────── */
+    .progress-bar-wrap {
+      background: #E2E8F0;
+      border-radius: 999px;
+      height: 8px;
+      margin: 0.5rem 0 1.5rem;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      transition: width 0.6s ease;
+    }
+
+    /* ── SCORE COUNTER ─────────────────────────── */
+    #score-display {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--green);
+      margin-top: 0.5rem;
+    }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    p { margin-bottom: 0.6rem; }
+    ul { padding-left: 1.4rem; }
+    li { margin-bottom: 0.4rem; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ HEADER -->
+<header>
+  <div class="badge">🔬 Life Science · Unit 2 · Day 1</div>
+  <h1>Your Cell, Your Team 🏐</h1>
+  <p>You've seen cells up close. Now let's figure out <strong>what they actually do</strong> — and why your muscles care.</p>
+  <div class="time-pill">⏱ About 35 minutes &nbsp;|&nbsp; 🎯 3 Activities + Exit Ticket</div>
+</header>
+
+<main>
+
+  <!-- ════════════════════ BRIDGE FROM LAB -->
+  <div class="highlight-box">
+    <strong>📸 Quick Look Back — Your Scale Lab</strong><br>
+    Last time you put food under the microscope and measured tiny features at different zoom levels.
+    You discovered something important: <em>the real size stays the same no matter how much you zoom in.</em><br><br>
+    Today's question: <strong>Now that we can see cells — what's actually happening inside them?</strong>
+  </div>
+
+  <!-- ════════════════════ SECTION 1: WARM-UP SORT -->
+  <div class="section-head">
+    <div class="step-badge s1">1</div>
+    <h2>Quick Recall — What Do You Remember? <span style="font-weight:400;color:var(--mid)">(5 min)</span></h2>
+  </div>
+
+  <div class="card blue-l">
+    <p>Below are organelles you've already learned. <strong>Click each chip</strong> to check if you can name its job before looking at your notes!</p>
+    <div class="chip-row" id="recall-chips"></div>
+    <div id="recall-reveal" style="margin-top:1rem;min-height:2rem;"></div>
+  </div>
+
+  <!-- ════════════════════ BIG QUESTION -->
+  <div class="big-q">
+    <span class="emoji">💭</span>
+    <h2>The Big Idea for Today</h2>
+    <p>Cells aren't just <em>made</em> of parts — they're <em>doing things</em> right now.<br>
+    Every second, your cells are making energy, building proteins, and talking to each other.<br>
+    <strong>How? And why does it matter for volleyball?</strong></p>
+  </div>
+
+  <!-- ════════════════════ SECTION 2: ANALOGY BUILD -->
+  <div class="section-head">
+    <div class="step-badge s2">2</div>
+    <h2>The Volleyball Cell Analogy 🏐🔬 <span style="font-weight:400;color:var(--mid)">(12 min)</span></h2>
+  </div>
+
+  <div class="card green-l">
+    <p>A volleyball team and a cell have more in common than you think.
+    Every team member has a <strong>specific job</strong> — and if one person is out, the whole team feels it.
+    Cells work the same way. Each organelle has one job, and they all depend on each other.</p>
+
+    <p style="margin-top:0.8rem;"><strong>👇 Click each card</strong> to see how a volleyball player role matches an organelle:</p>
+
+    <div class="reveal-grid" id="analogy-cards"></div>
+  </div>
+
+  <!-- ════════════════════ MATCHING ACTIVITY -->
+  <div class="section-head">
+    <div class="step-badge s3">3</div>
+    <h2>Match It! Organelle ↔ Volleyball Role <span style="font-weight:400;color:var(--mid)">(10 min)</span></h2>
+  </div>
+
+  <div class="card gold-l">
+    <p><strong>How to play:</strong> Click one item from the <span style="color:var(--blue);font-weight:600;">blue</span> column, then one from the <span style="color:#B45309;font-weight:600;">gold</span> column.
+    If they match, they'll turn green! Work through all 6 pairs.</p>
+
+    <div class="match-container">
+      <div class="match-col left">
+        <h3>🔬 Organelle</h3>
+        <div id="left-col"></div>
+      </div>
+      <div class="match-col right">
+        <h3>🏐 Volleyball Role</h3>
+        <div id="right-col"></div>
+      </div>
+    </div>
+    <div id="match-feedback"></div>
+    <div id="score-display"></div>
+
+    <div style="text-align:center;margin-top:1rem;">
+      <button onclick="resetMatch()" style="background:var(--blue);color:white;border:none;border-radius:8px;padding:0.5rem 1.5rem;cursor:pointer;font-family:'Lexend',sans-serif;font-size:0.9rem;">
+        🔄 Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════════ THINK PAIR SHARE -->
+  <div class="section-head">
+    <div class="step-badge s4">4</div>
+    <h2>Think → Pair → Share <span style="font-weight:400;color:var(--mid)">(5 min)</span></h2>
+  </div>
+
+  <div class="tps-box">
+    <h3>🤔 Discussion Question</h3>
+    <div class="tps-step">
+      <div class="tps-icon">T</div>
+      <div>
+        <strong>Think (1 min):</strong> During an intense volleyball match, your muscles need a LOT of energy fast.
+        Which organelle do you think is working the hardest? Why?
+        <textarea class="response-box" placeholder="Write your thoughts here..."></textarea>
+      </div>
+    </div>
+    <div class="tps-step">
+      <div class="tps-icon">P</div>
+      <div>
+        <strong>Pair (2 min):</strong> Share your answer with the group. Do you all agree?
+      </div>
+    </div>
+    <div class="tps-step" style="margin-bottom:0;">
+      <div class="tps-icon">S</div>
+      <div>
+        <strong>Share (1 min):</strong> What did your group decide? Anything surprising?
+        <textarea class="response-box" placeholder="What did your group decide?"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ PREVIEW: WHAT'S NEXT -->
+  <div class="section-head">
+    <div class="step-badge s5">5</div>
+    <h2>What's Coming Next 👀</h2>
+  </div>
+
+  <div class="card coral-l">
+    <p>You've reviewed the organelles and built a mental model using volleyball. Here's what we're diving into next:</p>
+    <ul style="margin-top:0.75rem;">
+      <li>🌱 <strong>Photosynthesis</strong> — how plant cells capture sunlight and make food</li>
+      <li>⚡ <strong>Cellular Respiration</strong> — how <em>your</em> cells break food down into energy you can use</li>
+      <li>🔁 <strong>The connection</strong> — why plants and animals need each other at the cellular level</li>
+      <li>🏐 <strong>Real talk</strong> — why you breathe harder during a game, and what's happening in your muscle cells</li>
+    </ul>
+    <p style="margin-top:0.85rem;">
+      This weekend, you'll pick <strong>one organelle</strong> and make the case that it's the <em>best</em> one in the cell.
+      Come ready to debate! 🏆
+    </p>
+  </div>
+
+  <!-- ════════════════════ EXIT TICKET -->
+  <div class="exit-ticket">
+    <h2>🎫 Exit Ticket — Before You Go</h2>
+    <p style="opacity:0.8;margin-bottom:1.25rem;font-size:0.95rem;">Answer these 3 questions in your own words. There's no wrong answer — just be honest!</p>
+
+    <div class="exit-q">
+      <p>1️⃣ Name one organelle and explain its job <em>as if you were explaining it to a 5-year-old.</em></p>
+      <textarea placeholder="My organelle is... and its job is..."></textarea>
+    </div>
+
+    <div class="exit-q">
+      <p>2️⃣ Which part of today surprised you or made you think differently about cells?</p>
+      <textarea placeholder="I was surprised that..."></textarea>
+    </div>
+
+    <div class="exit-q">
+      <p>3️⃣ What's ONE question you still have about what cells actually <em>do</em>?</p>
+      <textarea placeholder="I'm wondering..."></textarea>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── RECALL CHIPS ─────────────────────────────────
+const organelleJobs = [
+  { name: "Nucleus",              emoji: "🧬", job: "Controls the cell — holds the DNA (like a team captain calling the plays)" },
+  { name: "Mitochondria",         emoji: "⚡", job: "Makes energy (ATP) the cell can use — the powerhouse!" },
+  { name: "Ribosome",             emoji: "🔧", job: "Builds proteins — tiny but everywhere in the cell" },
+  { name: "Cell Membrane",        emoji: "🚪", job: "Controls what goes in and out — selectively permeable" },
+  { name: "Golgi Apparatus",      emoji: "📦", job: "Packages and ships proteins to where they're needed" },
+  { name: "Endoplasmic Reticulum",emoji: "🌀", job: "A highway that moves materials around inside the cell" },
+  { name: "Vacuole",              emoji: "🫙", job: "Stores water, food, and waste — bigger in plant cells" },
+  { name: "Lysosome",             emoji: "🗑️", job: "Breaks down waste and worn-out cell parts — the cleanup crew" },
+  { name: "Chloroplast",          emoji: "🌿", job: "Only in plants! Captures sunlight for photosynthesis" },
+];
+
+const chipContainer = document.getElementById('recall-chips');
+const revealDiv = document.getElementById('recall-reveal');
+let activeChip = null;
+
+organelleJobs.forEach((org, i) => {
+  const chip = document.createElement('div');
+  chip.className = 'chip';
+  chip.style.cursor = 'pointer';
+  chip.textContent = org.emoji + ' ' + org.name;
+  chip.addEventListener('click', () => {
+    if (activeChip) activeChip.style.background = '#EFF6FF';
+    chip.style.background = '#DBEAFE';
+    activeChip = chip;
+    revealDiv.innerHTML = `<div style="background:#F0FDF4;border:2px solid #6EE7B7;border-radius:10px;padding:0.75rem 1rem;font-size:0.95rem;"><strong>${org.emoji} ${org.name}:</strong> ${org.job}</div>`;
+  });
+  chipContainer.appendChild(chip);
+});
+
+// ── REVEAL ANALOGY CARDS ─────────────────────────
+const analogyData = [
+  { emoji: "🧬", organelle: "Nucleus", vball: "Head Coach", desc: "The nucleus holds all the DNA — the master plan. The head coach calls all the plays and decides the strategy. Without either one, nothing runs smoothly." },
+  { emoji: "⚡", organelle: "Mitochondria", vball: "All the Players", desc: "Every player on the court needs energy to jump, spike, and dive. The mitochondria ARE the energy factory — they make ATP so the cell can do its work." },
+  { emoji: "🔧", organelle: "Ribosome", vball: "Practice Reps", desc: "Ribosomes build proteins over and over, just like how volleyball skills only get better with thousands of practice reps. Small but essential." },
+  { emoji: "📦", organelle: "Golgi Apparatus", vball: "Team Manager", desc: "The team manager organizes equipment, packs bags, and makes sure everything gets where it needs to go. The Golgi packages and ships proteins — same idea!" },
+  { emoji: "🚪", organelle: "Cell Membrane", vball: "Gym Security", desc: "Security decides who gets into the gym and who doesn't. The cell membrane is selectively permeable — it chooses what enters and exits the cell." },
+  { emoji: "🌿", organelle: "Chloroplast", vball: "The Scoreboard / Lights", desc: "A plant cell's chloroplast captures energy from the sun — like how the gym lights and scoreboard power everything that makes the match possible." },
+  { emoji: "🗑️", organelle: "Lysosome", vball: "Equipment Manager (cleanup)", desc: "After every practice, equipment gets sorted, worn gear gets tossed. Lysosomes break down waste and old cell parts — they keep the cell clean." },
+  { emoji: "🌀", organelle: "ER (Endoplasmic Reticulum)", vball: "Communication System", desc: "The ER is like the team's communication network — it moves materials (proteins) around so everything gets to the right place at the right time." },
+];
+
+const cardGrid = document.getElementById('analogy-cards');
+analogyData.forEach(item => {
+  const card = document.createElement('div');
+  card.className = 'reveal-card';
+  card.innerHTML = `
+    <div class="rc-front">
+      <span class="rc-emoji">${item.emoji}</span>
+      <div class="rc-organelle">${item.organelle}</div>
+      <div class="rc-vball">🏐 ${item.vball}</div>
+    </div>
+    <div class="rc-back">${item.desc}</div>
+    <div class="rc-hint">Tap to reveal ↓</div>
+  `;
+  card.addEventListener('click', () => {
+    card.classList.toggle('open');
+    card.querySelector('.rc-hint').textContent = card.classList.contains('open') ? 'Tap to hide ↑' : 'Tap to reveal ↓';
+  });
+  cardGrid.appendChild(card);
+});
+
+// ── MATCHING GAME ─────────────────────────────────
+const matchPairs = [
+  { left: "Nucleus 🧬",              right: "Head Coach — calls all the plays" },
+  { left: "Mitochondria ⚡",         right: "The players — they need and use energy" },
+  { left: "Ribosome 🔧",             right: "Practice reps — builds something over and over" },
+  { left: "Golgi Apparatus 📦",      right: "Team manager — packs and ships equipment" },
+  { left: "Cell Membrane 🚪",        right: "Gym security — controls who enters" },
+  { left: "Lysosome 🗑️",            right: "Equipment manager — cleans up old gear" },
+];
+
+let selectedLeft = null;
+let selectedRight = null;
+let matchedCount = 0;
+const totalPairs = matchPairs.length;
+
+function buildMatch() {
+  const leftCol  = document.getElementById('left-col');
+  const rightCol = document.getElementById('right-col');
+  leftCol.innerHTML = '';
+  rightCol.innerHTML = '';
+  selectedLeft = null; selectedRight = null; matchedCount = 0;
+  document.getElementById('match-feedback').textContent = '';
+  document.getElementById('match-feedback').className = '';
+  document.getElementById('score-display').textContent = '';
+
+  const shuffledRight = [...matchPairs].sort(() => Math.random() - 0.5);
+
+  matchPairs.forEach((pair, i) => {
+    const leftItem = document.createElement('div');
+    leftItem.className = 'match-item';
+    leftItem.innerHTML = `<span class="emoji">🔬</span>${pair.left}`;
+    leftItem.dataset.id = i;
+    leftItem.dataset.side = 'left';
+    leftItem.addEventListener('click', () => handleMatchClick(leftItem, 'left'));
+    leftCol.appendChild(leftItem);
+  });
+
+  shuffledRight.forEach((pair) => {
+    const origIndex = matchPairs.findIndex(p => p.right === pair.right);
+    const rightItem = document.createElement('div');
+    rightItem.className = 'match-item';
+    rightItem.innerHTML = `<span class="emoji">🏐</span>${pair.right}`;
+    rightItem.dataset.id = origIndex;
+    rightItem.dataset.side = 'right';
+    rightItem.addEventListener('click', () => handleMatchClick(rightItem, 'right'));
+    rightCol.appendChild(rightItem);
+  });
+}
+
+function handleMatchClick(item, side) {
+  if (item.classList.contains('matched')) return;
+
+  if (side === 'left') {
+    if (selectedLeft) selectedLeft.classList.remove('selected');
+    selectedLeft = item;
+    item.classList.add('selected');
+  } else {
+    if (selectedRight) selectedRight.classList.remove('selected');
+    selectedRight = item;
+    item.classList.add('selected');
+  }
+
+  if (selectedLeft && selectedRight) {
+    const fb = document.getElementById('match-feedback');
+    if (selectedLeft.dataset.id === selectedRight.dataset.id) {
+      selectedLeft.classList.replace('selected', 'matched');
+      selectedRight.classList.replace('selected', 'matched');
+      matchedCount++;
+      fb.textContent = '✅ Great match!';
+      fb.className = 'correct';
+      selectedLeft = null; selectedRight = null;
+      document.getElementById('score-display').textContent = `${matchedCount} / ${totalPairs} matched`;
+      if (matchedCount === totalPairs) {
+        fb.textContent = '🏆 All matched! You know your organelles!';
+        fb.className = 'correct';
+      }
+    } else {
+      fb.textContent = '❌ Not quite — try again!';
+      fb.className = 'wrong';
+      setTimeout(() => {
+        selectedLeft.classList.remove('selected');
+        selectedRight.classList.remove('selected');
+        selectedLeft = null; selectedRight = null;
+        fb.textContent = '';
+        fb.className = '';
+      }, 1200);
+    }
+  }
+}
+
+function resetMatch() { buildMatch(); }
+buildMatch();
+</script>
+</body>
+</html>

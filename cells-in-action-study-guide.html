@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cells in Action — Study Guide | YSC Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:   #2563EB;
+      --navy:   #1E3A5F;
+      --gold:   #F59E0B;
+      --green:  #10B981;
+      --teal:   #0D9488;
+      --purple: #7C3AED;
+      --coral:  #EF4444;
+      --orange: #EA580C;
+      --light:  #F8FAFC;
+      --dark:   #0F172A;
+      --mid:    #475569;
+      --r:      14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lexend', Arial, sans-serif;
+      background: #F0F4FF;
+      color: var(--dark);
+      line-height: 1.8;
+      font-size: 16.5px;
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(145deg, #0F172A 0%, #1E3A5F 50%, #312E81 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 1.5rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-orbs span {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.08;
+      animation: drift 8s ease-in-out infinite;
+    }
+    @keyframes drift {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-18px) scale(1.06); }
+    }
+    .cover-orbs span:nth-child(1){ width:220px;height:220px;background:var(--blue);top:-60px;left:-60px;animation-delay:0s; }
+    .cover-orbs span:nth-child(2){ width:180px;height:180px;background:var(--purple);bottom:-40px;right:-30px;animation-delay:3s; }
+    .cover-orbs span:nth-child(3){ width:130px;height:130px;background:var(--green);top:40%;left:50%;animation-delay:1.5s; }
+    .cover-tag {
+      display:inline-block;
+      background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:999px;
+      padding:0.3rem 1.1rem;
+      font-size:0.8rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:1rem;
+    }
+    .cover h1 { font-size: clamp(2rem,5vw,3rem); font-weight:700; margin-bottom:0.5rem; }
+    .cover .sub { font-size:1.05rem; opacity:0.85; max-width:500px; margin:0 auto; }
+    .cover-pills {
+      display: flex; flex-wrap:wrap; justify-content:center; gap:0.6rem; margin-top:1.5rem;
+    }
+    .cpill {
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.25);
+      border-radius:999px;
+      padding:0.3rem 0.9rem;
+      font-size:0.82rem;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: white;
+      border-radius: var(--r);
+      padding: 1.5rem 1.75rem;
+      margin: 2rem auto;
+      max-width: 820px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+    .toc h2 { font-size:1rem; font-weight:700; color:var(--mid); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:1rem; }
+    .toc-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; }
+    @media(max-width:500px){ .toc-grid { grid-template-columns:1fr; } }
+    .toc-item {
+      display:flex; align-items:center; gap:0.7rem;
+      padding:0.5rem 0.75rem;
+      border-radius:8px;
+      font-size:0.93rem;
+      text-decoration:none;
+      color:var(--dark);
+      transition:background 0.15s;
+    }
+    .toc-item:hover { background:#EFF6FF; }
+    .toc-dot {
+      width:10px; height:10px; border-radius:50%; flex-shrink:0;
+    }
+
+    /* ── MAIN WRAP ── */
+    main { max-width:820px; margin:0 auto; padding:1.5rem 1.25rem 5rem; }
+
+    /* ── SECTION TITLES ── */
+    .sec-title {
+      display:flex; align-items:center; gap:0.85rem;
+      margin: 2.8rem 0 1.2rem;
+      padding-bottom:0.6rem;
+      border-bottom:2px solid #E2E8F0;
+    }
+    .sec-icon {
+      width:2.8rem; height:2.8rem; border-radius:12px;
+      display:grid; place-items:center;
+      font-size:1.3rem; flex-shrink:0;
+    }
+    .sec-title h2 { font-size:1.35rem; font-weight:700; }
+
+    /* ── CARDS ── */
+    .card {
+      background:white;
+      border-radius:var(--r);
+      padding:1.4rem 1.7rem;
+      margin-bottom:1.1rem;
+      box-shadow:0 2px 10px rgba(0,0,0,0.055);
+    }
+    .card p { margin-bottom:0.5rem; }
+    .card p:last-child { margin-bottom:0; }
+
+    /* ── ORGANELLE REVIEW GRID ── */
+    .org-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+      gap:0.9rem;
+      margin-top:0.5rem;
+    }
+    .org-card {
+      border-radius:12px;
+      overflow:hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .org-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.1); }
+    .org-card .oc-head {
+      padding:0.85rem 1rem 0.5rem;
+      display:flex; align-items:center; gap:0.6rem;
+    }
+    .org-card .oc-emoji { font-size:1.6rem; }
+    .org-card .oc-name { font-weight:700; font-size:0.95rem; color:white; }
+    .org-card .oc-body {
+      background:white;
+      padding:0.75rem 1rem;
+      font-size:0.88rem;
+      color:var(--mid);
+      line-height:1.6;
+    }
+    .org-card .oc-tag {
+      display:inline-block;
+      font-size:0.75rem;
+      font-weight:600;
+      border-radius:999px;
+      padding:0.15rem 0.6rem;
+      margin-top:0.4rem;
+    }
+
+    /* ── PROCESS EXPLAINER ── */
+    .process-box {
+      border-radius:16px;
+      padding:1.75rem;
+      margin-bottom:1.25rem;
+    }
+    .process-box h3 {
+      font-size:1.15rem; font-weight:700; margin-bottom:0.75rem;
+    }
+    .process-box .equation {
+      background:rgba(255,255,255,0.6);
+      border-radius:10px;
+      padding:0.85rem 1.1rem;
+      font-size:0.95rem;
+      text-align:center;
+      font-weight:600;
+      margin:0.75rem 0;
+      letter-spacing:0.01em;
+    }
+
+    /* ── FLOW DIAGRAM ── */
+    .flow {
+      display:flex; align-items:stretch;
+      gap:0; flex-wrap:nowrap; overflow-x:auto;
+      margin:1.25rem 0;
+    }
+    .flow-step {
+      flex:1; min-width:110px;
+      text-align:center;
+      padding:0.85rem 0.5rem;
+      border-radius:12px;
+      font-size:0.83rem;
+    }
+    .flow-step .fs-icon { font-size:1.6rem; display:block; margin-bottom:0.3rem; }
+    .flow-step .fs-label { font-weight:600; font-size:0.82rem; }
+    .flow-step .fs-sub { font-size:0.75rem; opacity:0.8; margin-top:0.2rem; }
+    .flow-arrow {
+      display:flex; align-items:center;
+      font-size:1.4rem; color:var(--mid);
+      padding:0 0.25rem;
+      flex-shrink:0;
+    }
+
+    /* ── COMPARISON TABLE ── */
+    .comp-table { width:100%; border-collapse:collapse; margin-top:0.75rem; }
+    .comp-table th, .comp-table td {
+      padding:0.7rem 1rem;
+      border:1px solid #E2E8F0;
+      text-align:left;
+      font-size:0.9rem;
+    }
+    .comp-table th { font-weight:700; }
+    .comp-table tr:nth-child(even) { background:#F8FAFC; }
+
+    /* ── ANIMATION: BOUNCING BALL ── */
+    .anim-wrapper {
+      background:#0F172A;
+      border-radius:16px;
+      padding:1.75rem;
+      margin:1.25rem 0;
+      position:relative;
+      overflow:hidden;
+      min-height:180px;
+    }
+    .anim-wrapper h3 { color:white; font-size:1rem; margin-bottom:1rem; }
+    .anim-label {
+      display:inline-block;
+      border-radius:999px;
+      padding:0.25rem 0.75rem;
+      font-size:0.8rem;
+      font-weight:600;
+      color:white;
+      margin:0.25rem 0.2rem;
+    }
+    .molecule {
+      position:absolute;
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.72rem; font-weight:700;
+      color:white;
+      animation:bounce 3s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform:translate(0,0); }
+      25%      { transform:translate(12px,-16px); }
+      50%      { transform:translate(-8px,-28px); }
+      75%      { transform:translate(18px,-12px); }
+    }
+
+    /* ── KEY CONCEPT CALLOUT ── */
+    .callout {
+      display:flex; gap:1rem; align-items:flex-start;
+      background:linear-gradient(135deg,#FEF3C7,#FDE68A);
+      border:2px solid #F59E0B;
+      border-radius:12px;
+      padding:1.1rem 1.25rem;
+      margin:1rem 0;
+    }
+    .callout .ci { font-size:1.8rem; flex-shrink:0; }
+    .callout p { font-size:0.93rem; color:#78350F; line-height:1.65; }
+    .callout strong { color:#92400E; }
+
+    /* ── QUIZ SPOTS ── */
+    .quiz-spot {
+      background:#EDE9FE;
+      border:2px solid #7C3AED;
+      border-radius:12px;
+      padding:1.1rem 1.25rem;
+      margin:1.25rem 0;
+    }
+    .quiz-spot p { color:#4C1D95; font-size:0.93rem; margin-bottom:0.5rem; }
+    .quiz-spot textarea {
+      width:100%; min-height:65px;
+      background:white;
+      border:1.5px solid #C4B5FD;
+      border-radius:8px;
+      padding:0.6rem 0.75rem;
+      font-family:'Lexend',sans-serif;
+      font-size:0.9rem;
+      resize:vertical;
+      color:var(--dark);
+    }
+    .quiz-spot textarea:focus { outline:none; border-color:#7C3AED; }
+
+    /* ── REAL WORLD VBALL BOX ── */
+    .vball-box {
+      background:linear-gradient(135deg,#1E3A5F,#312E81);
+      border-radius:16px;
+      padding:1.75rem;
+      color:white;
+      margin:1.25rem 0;
+    }
+    .vball-box h3 { font-size:1.1rem; margin-bottom:0.75rem; }
+    .vball-stat {
+      background:rgba(255,255,255,0.1);
+      border-radius:10px;
+      padding:0.75rem 1rem;
+      margin-bottom:0.6rem;
+      font-size:0.9rem;
+      border-left:4px solid var(--gold);
+    }
+
+    /* ── SUMMARY BOX ── */
+    .summary {
+      background:linear-gradient(135deg,#064E3B,#065F46);
+      color:white;
+      border-radius:16px;
+      padding:2rem;
+      margin:2rem 0;
+    }
+    .summary h2 { font-size:1.2rem; margin-bottom:1rem; }
+    .sum-item {
+      display:flex; gap:0.75rem; align-items:flex-start;
+      margin-bottom:0.75rem;
+    }
+    .sum-check {
+      width:1.4rem; height:1.4rem; border-radius:50%;
+      background:var(--green);
+      display:grid; place-items:center;
+      font-size:0.75rem; flex-shrink:0; margin-top:0.15rem;
+    }
+    .sum-item p { font-size:0.93rem; opacity:0.92; }
+
+    /* ── MISC ── */
+    ul { padding-left:1.4rem; }
+    li { margin-bottom:0.4rem; font-size:0.93rem; }
+    strong { color:inherit; }
+    .highlight { background:#FEF3C7; padding:0.1em 0.3em; border-radius:4px; }
+    .plant-only { color:#059669; font-weight:600; }
+    .animal-only { color:#2563EB; font-weight:600; }
+  </style>
+</head>
+<body>
+
+<!-- ══ COVER ════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-orbs">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="cover-tag">📓 Study Guide · Life Science Unit 2</div>
+  <h1>⚡ Cells in Action</h1>
+  <p class="sub">From organelles you know → to the energy that powers your every move</p>
+  <div class="cover-pills">
+    <span class="cpill">🔬 Organelle Review</span>
+    <span class="cpill">🌱 Photosynthesis</span>
+    <span class="cpill">⚡ Cellular Respiration</span>
+    <span class="cpill">🏐 Real-World Connections</span>
+  </div>
+</div>
+
+<!-- ══ TABLE OF CONTENTS ════════════════════════ -->
+<div class="toc">
+  <h2>📋 What's In This Guide</h2>
+  <div class="toc-grid">
+    <a href="#review" class="toc-item"><span class="toc-dot" style="background:#2563EB"></span>Part 1 — Organelle Review</a>
+    <a href="#photo"  class="toc-item"><span class="toc-dot" style="background:#10B981"></span>Part 2 — Photosynthesis</a>
+    <a href="#resp"   class="toc-item"><span class="toc-dot" style="background:#F59E0B"></span>Part 3 — Cellular Respiration</a>
+    <a href="#connect"class="toc-item"><span class="toc-dot" style="background:#7C3AED"></span>Part 4 — The Connection</a>
+    <a href="#vball"  class="toc-item"><span class="toc-dot" style="background:#EF4444"></span>Part 5 — Volleyball + Cells</a>
+    <a href="#summary"class="toc-item"><span class="toc-dot" style="background:#0D9488"></span>Part 6 — Big Ideas Summary</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- ═══ PART 1: ORGANELLE REVIEW ════════════════ -->
+  <div class="sec-title" id="review">
+    <div class="sec-icon" style="background:#DBEAFE;">🔬</div>
+    <div>
+      <h2>Part 1 — Organelle Review</h2>
+      <p style="font-size:0.88rem;color:var(--mid);">You learned these — now let's connect them to what cells actually DO.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><strong>Remember:</strong> Every organelle has a specific job. The <span class="highlight">shape of an organelle</span> is related to its function — this is called <strong>structure-function relationship.</strong></p>
+    <p>As you read through these, ask yourself: <em>"How does this organelle's job connect to making energy or building something?"</em></p>
+  </div>
+
+  <div class="org-grid">
+    <!-- Nucleus -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#1E3A5F;">
+        <span class="oc-emoji">🧬</span>
+        <span class="oc-name">Nucleus</span>
+      </div>
+      <div class="oc-body">
+        Holds your <strong>DNA</strong> — the instruction manual for everything the cell does. Controls when to make proteins and when to divide.
+        <div class="oc-tag" style="background:#DBEAFE;color:#1E40AF;">Control center</div>
+      </div>
+    </div>
+    <!-- Mitochondria -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#B45309;">
+        <span class="oc-emoji">⚡</span>
+        <span class="oc-name">Mitochondria</span>
+      </div>
+      <div class="oc-body">
+        Makes <strong>ATP</strong> — the energy currency of the cell. Folded inner membranes give more surface area for energy production. You'll see this in cellular respiration!
+        <div class="oc-tag" style="background:#FEF3C7;color:#B45309;">⭐ Key for today</div>
+      </div>
+    </div>
+    <!-- Ribosome -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#5B21B6;">
+        <span class="oc-emoji">🔧</span>
+        <span class="oc-name">Ribosome</span>
+      </div>
+      <div class="oc-body">
+        Tiny factories that <strong>build proteins</strong> using instructions from DNA. There are thousands in each cell. Found on rough ER or floating free.
+        <div class="oc-tag" style="background:#EDE9FE;color:#5B21B6;">Protein maker</div>
+      </div>
+    </div>
+    <!-- Cell Membrane -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#065F46;">
+        <span class="oc-emoji">🚪</span>
+        <span class="oc-name">Cell Membrane</span>
+      </div>
+      <div class="oc-body">
+        The <strong>gatekeeper</strong>. Selectively permeable — it chooses what can pass in or out. Made of a double layer of lipids with proteins.
+        <div class="oc-tag" style="background:#D1FAE5;color:#065F46;">Transport</div>
+      </div>
+    </div>
+    <!-- Golgi -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#9D174D;">
+        <span class="oc-emoji">📦</span>
+        <span class="oc-name">Golgi Apparatus</span>
+      </div>
+      <div class="oc-body">
+        The cell's <strong>post office</strong>. Receives proteins from the ER, packages them, labels them, and ships them to where they're needed.
+        <div class="oc-tag" style="background:#FCE7F3;color:#9D174D;">Shipping dept.</div>
+      </div>
+    </div>
+    <!-- ER -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#0369A1;">
+        <span class="oc-emoji">🌀</span>
+        <span class="oc-name">Endoplasmic Reticulum</span>
+      </div>
+      <div class="oc-body">
+        <strong>Rough ER</strong> has ribosomes on it (builds proteins). <strong>Smooth ER</strong> makes lipids and detoxifies the cell. A maze of connected channels.
+        <div class="oc-tag" style="background:#E0F2FE;color:#0369A1;">Transport highway</div>
+      </div>
+    </div>
+    <!-- Vacuole -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#3730A3;">
+        <span class="oc-emoji">🫙</span>
+        <span class="oc-name">Vacuole</span>
+      </div>
+      <div class="oc-body">
+        A <strong>storage sac</strong>. In plant cells, the central vacuole is huge and filled with water — it keeps the plant stiff and upright. Animal cells have smaller vacuoles.
+        <div class="oc-tag" style="background:#E0E7FF;color:#3730A3;">Storage</div>
+      </div>
+    </div>
+    <!-- Lysosome -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#991B1B;">
+        <span class="oc-emoji">🗑️</span>
+        <span class="oc-name">Lysosome</span>
+      </div>
+      <div class="oc-body">
+        The cell's <strong>cleanup crew</strong>. Contains enzymes that break down old, worn-out organelles and waste products. Only in animal cells.
+        <div class="oc-tag" style="background:#FEE2E2;color:#991B1B;"><span class="animal-only">Animal only</span></div>
+      </div>
+    </div>
+    <!-- Chloroplast -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#166534;">
+        <span class="oc-emoji">🌿</span>
+        <span class="oc-name">Chloroplast</span>
+      </div>
+      <div class="oc-body">
+        <span class="plant-only">Plant cells only!</span> Captures sunlight and uses it to make sugar (glucose) through <strong>photosynthesis</strong>. Contains the green pigment <strong>chlorophyll</strong>.
+        <div class="oc-tag" style="background:#D1FAE5;color:#166534;">⭐ Key for today</div>
+      </div>
+    </div>
+    <!-- Cell Wall -->
+    <div class="org-card">
+      <div class="oc-head" style="background:#4D7C0F;">
+        <span class="oc-emoji">🧱</span>
+        <span class="oc-name">Cell Wall</span>
+      </div>
+      <div class="oc-body">
+        <span class="plant-only">Plant cells only!</span> A rigid outer layer <em>outside</em> the cell membrane. Made of cellulose. Provides extra support and protection.
+        <div class="oc-tag" style="background:#ECFCCB;color:#4D7C0F;"><span class="plant-only">Plant only</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ci">💡</span>
+    <p><strong>Quick check:</strong> Which two organelles are the stars of today's lesson?
+    The <strong>chloroplast</strong> (photosynthesis — makes food using sunlight) and the
+    <strong>mitochondria</strong> (cellular respiration — releases energy from food).
+    These two work as a team — even between plant and animal cells!</p>
+  </div>
+
+  <!-- ═══ PART 2: PHOTOSYNTHESIS ════════════════════ -->
+  <div class="sec-title" id="photo">
+    <div class="sec-icon" style="background:#D1FAE5;">🌱</div>
+    <div>
+      <h2>Part 2 — Photosynthesis</h2>
+      <p style="font-size:0.88rem;color:var(--mid);">How plants capture sunlight and make food.</p>
+    </div>
+  </div>
+
+  <div class="process-box" style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border:2px solid #6EE7B7;">
+    <h3 style="color:#065F46;">🌿 What Is Photosynthesis?</h3>
+    <p style="font-size:0.95rem;color:#064E3B;margin-bottom:0.75rem;">
+      Photosynthesis is how <strong>plant cells</strong> (and some algae) make their own food using sunlight.
+      The chloroplast captures light energy and uses it to convert two simple ingredients into sugar.
+    </p>
+    <p style="font-size:0.9rem;color:#065F46;font-weight:600;">The word equation:</p>
+    <div class="equation" style="background:rgba(255,255,255,0.8);color:#064E3B;">
+      ☀️ Sunlight + 💧 Water + 🌬️ Carbon Dioxide → 🍬 Glucose + 💨 Oxygen
+    </div>
+    <p style="font-size:0.9rem;color:#064E3B;font-weight:600;margin-top:0.75rem;">The chemical equation:</p>
+    <div class="equation" style="background:rgba(255,255,255,0.8);color:#064E3B;">
+      6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂
+    </div>
+  </div>
+
+  <!-- Flow diagram -->
+  <div class="card">
+    <p style="font-weight:600;margin-bottom:0.75rem;">🔄 Step-by-Step: How It Happens</p>
+    <div class="flow">
+      <div class="flow-step" style="background:#FEF3C7;">
+        <span class="fs-icon">☀️</span>
+        <span class="fs-label">Sunlight hits leaf</span>
+        <span class="fs-sub">Energy captured by chlorophyll</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#DCFCE7;">
+        <span class="fs-icon">🌿</span>
+        <span class="fs-label">Chloroplast activates</span>
+        <span class="fs-sub">Inside the plant cell</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#DBEAFE;">
+        <span class="fs-icon">💧+🌬️</span>
+        <span class="fs-label">Water + CO₂ used</span>
+        <span class="fs-sub">Raw materials go in</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#EDE9FE;">
+        <span class="fs-icon">🍬+💨</span>
+        <span class="fs-label">Glucose + O₂ made</span>
+        <span class="fs-sub">Products come out</span>
+      </div>
+    </div>
+    <p style="font-size:0.88rem;color:var(--mid);margin-top:0.5rem;">
+      💡 The <strong>oxygen</strong> that plants release is what we breathe. The <strong>glucose</strong> is stored as food energy — for the plant, and for animals that eat the plant.
+    </p>
+  </div>
+
+  <!-- Where in the chloroplast -->
+  <div class="card">
+    <p style="font-weight:600;">🔬 Inside the Chloroplast</p>
+    <ul style="margin-top:0.5rem;">
+      <li>The chloroplast has a <strong>double membrane</strong> — like a bag inside a bag</li>
+      <li><strong>Thylakoids</strong> — flat, disc-like structures stacked in columns called <em>grana</em>. This is where light energy is captured.</li>
+      <li><strong>Stroma</strong> — the fluid inside the chloroplast where the sugar-making reactions happen</li>
+      <li><strong>Chlorophyll</strong> — the green pigment inside thylakoids that absorbs red and blue light (and reflects green — that's why leaves look green!)</li>
+    </ul>
+  </div>
+
+  <div class="quiz-spot">
+    <p>✏️ <strong>Quick Check:</strong> In your own words, what are the TWO things a plant needs for photosynthesis, and what does it produce?</p>
+    <textarea placeholder="Plants need... and... In return, they make..."></textarea>
+  </div>
+
+  <!-- ═══ PART 3: CELLULAR RESPIRATION ════════════════ -->
+  <div class="sec-title" id="resp">
+    <div class="sec-icon" style="background:#FEF3C7;">⚡</div>
+    <div>
+      <h2>Part 3 — Cellular Respiration</h2>
+      <p style="font-size:0.88rem;color:var(--mid);">How cells break down sugar to release usable energy (ATP).</p>
+    </div>
+  </div>
+
+  <div class="process-box" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:2px solid #F59E0B;">
+    <h3 style="color:#92400E;">⚡ What Is Cellular Respiration?</h3>
+    <p style="font-size:0.95rem;color:#78350F;margin-bottom:0.75rem;">
+      Cellular respiration is how <strong>all living cells</strong> (plants AND animals) release energy from glucose.
+      It happens in the <strong>mitochondria</strong> and produces ATP — the molecule that powers everything you do.
+    </p>
+    <p style="font-size:0.9rem;color:#92400E;font-weight:600;">The word equation:</p>
+    <div class="equation" style="background:rgba(255,255,255,0.7);color:#78350F;">
+      🍬 Glucose + 💨 Oxygen → ⚡ ATP Energy + 💧 Water + 🌬️ Carbon Dioxide
+    </div>
+    <p style="font-size:0.9rem;color:#92400E;font-weight:600;margin-top:0.75rem;">The chemical equation:</p>
+    <div class="equation" style="background:rgba(255,255,255,0.7);color:#78350F;">
+      C₆H₁₂O₆ + 6O₂ → ATP + 6H₂O + 6CO₂
+    </div>
+  </div>
+
+  <!-- ATP explanation -->
+  <div class="card">
+    <p style="font-weight:600;">💰 What Is ATP?</p>
+    <p>Think of <strong>ATP (Adenosine Triphosphate)</strong> like a cell's currency. Energy doesn't go directly from glucose to a muscle — it gets converted into ATP first, and then ATP powers the work.</p>
+    <ul style="margin-top:0.5rem;">
+      <li>One glucose molecule can produce about <strong>36-38 ATP molecules</strong></li>
+      <li>ATP is used for <em>everything</em>: moving muscles, building proteins, sending signals</li>
+      <li>When ATP releases energy, it becomes ADP — and the cell recharges it back to ATP again</li>
+    </ul>
+  </div>
+
+  <!-- Respiration flow -->
+  <div class="card">
+    <p style="font-weight:600;margin-bottom:0.75rem;">🔄 Step-by-Step: Cellular Respiration</p>
+    <div class="flow">
+      <div class="flow-step" style="background:#D1FAE5;">
+        <span class="fs-icon">🍬</span>
+        <span class="fs-label">Glucose arrives</span>
+        <span class="fs-sub">From food or photosynthesis</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#DBEAFE;">
+        <span class="fs-icon">💨</span>
+        <span class="fs-label">Oxygen comes in</span>
+        <span class="fs-sub">You breathe it in</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#FEF3C7;">
+        <span class="fs-icon">⚡</span>
+        <span class="fs-label">Mitochondria react</span>
+        <span class="fs-sub">Break glucose down</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#EDE9FE;">
+        <span class="fs-icon">💪</span>
+        <span class="fs-label">ATP released</span>
+        <span class="fs-sub">Powers cell work!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inside mitochondria -->
+  <div class="card">
+    <p style="font-weight:600;">🔬 Why Does the Mitochondria Have Folds?</p>
+    <p>The inner membrane of the mitochondria is highly folded — these folds are called <strong>cristae</strong>.
+    More folds = more surface area = more space for chemical reactions = MORE ATP produced!</p>
+    <p style="margin-top:0.5rem;">This is a perfect example of how <strong>structure supports function</strong> — the shape of the mitochondria is directly related to its job of making energy.</p>
+  </div>
+
+  <div class="quiz-spot">
+    <p>✏️ <strong>Quick Check:</strong> What does cellular respiration produce that your muscles use? Where in the cell does this happen?</p>
+    <textarea placeholder="Cellular respiration produces... It happens in the..."></textarea>
+  </div>
+
+  <!-- ═══ PART 4: THE CONNECTION ═══════════════════ -->
+  <div class="sec-title" id="connect">
+    <div class="sec-icon" style="background:#EDE9FE;">🔁</div>
+    <div>
+      <h2>Part 4 — The Big Connection</h2>
+      <p style="font-size:0.88rem;color:var(--mid);">How photosynthesis and cellular respiration are opposites — and partners.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="font-weight:600;margin-bottom:0.75rem;">🔁 They're Basically Opposite Reactions!</p>
+    <table class="comp-table">
+      <thead>
+        <tr style="background:#1E293B;color:white;">
+          <th></th>
+          <th>🌱 Photosynthesis</th>
+          <th>⚡ Cellular Respiration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Where?</strong></td><td>Chloroplast</td><td>Mitochondria</td></tr>
+        <tr><td><strong>Who does it?</strong></td><td>Plants (+ algae)</td><td>ALL living cells</td></tr>
+        <tr><td><strong>Uses up</strong></td><td>CO₂ + H₂O + sunlight</td><td>Glucose + O₂</td></tr>
+        <tr><td><strong>Produces</strong></td><td>Glucose + O₂</td><td>ATP + CO₂ + H₂O</td></tr>
+        <tr><td><strong>Energy direction</strong></td><td>Stores energy</td><td>Releases energy</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <span class="ci">🔁</span>
+    <p>
+      <strong>The cycle:</strong> Plants make glucose (photosynthesis) → Animals eat plants → Animals use glucose for energy (cellular respiration) → CO₂ and H₂O are released → Plants use CO₂ again for photosynthesis.
+      <strong>It's a perfect loop!</strong>
+    </p>
+  </div>
+
+  <!-- ═══ PART 5: VOLLEYBALL CONNECTION ═══════════ -->
+  <div class="sec-title" id="vball">
+    <div class="sec-icon" style="background:#FEE2E2;">🏐</div>
+    <div>
+      <h2>Part 5 — Volleyball + Your Cells</h2>
+      <p style="font-size:0.88rem;color:var(--mid);">Why your body works the way it does during a game.</p>
+    </div>
+  </div>
+
+  <div class="vball-box">
+    <h3>🏐 What's Happening in Your Body Right Now?</h3>
+    <div class="vball-stat">
+      <strong>When you spike the ball:</strong> Your arm muscle cells need a huge burst of ATP. Mitochondria in those cells ramp up cellular respiration at high speed.
+    </div>
+    <div class="vball-stat">
+      <strong>Why you breathe harder:</strong> More cellular respiration = more oxygen needed + more CO₂ produced. Your breathing speeds up to supply O₂ and remove CO₂.
+    </div>
+    <div class="vball-stat">
+      <strong>Why muscles burn:</strong> When your muscles work faster than oxygen can arrive, they switch to a backup system (anaerobic respiration) — lactic acid builds up and causes that burning feeling.
+    </div>
+    <div class="vball-stat">
+      <strong>Why you eat before a game:</strong> Food → digested into glucose → glucose stored in muscles → cellular respiration converts it to ATP → you can jump, run, spike!
+    </div>
+    <div class="vball-stat">
+      <strong>Why plant foods are great fuel:</strong> Plants are glucose-making machines (photosynthesis). When you eat vegetables, fruits, or grains, you're using the energy that <em>the sun put into the plant</em> — now powering your jump serve.
+    </div>
+  </div>
+
+  <!-- ═══ PART 6: BIG IDEAS SUMMARY ═══════════════ -->
+  <div class="sec-title" id="summary">
+    <div class="sec-icon" style="background:#CCFBF1;">📌</div>
+    <div>
+      <h2>Part 6 — Big Ideas to Remember</h2>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h2>✅ Key Takeaways from This Unit</h2>
+    <div class="sum-item">
+      <div class="sum-check">✓</div>
+      <p>Every organelle has a specific <strong>structure</strong> that matches its <strong>function</strong> — shape = job.</p>
+    </div>
+    <div class="sum-item">
+      <div class="sum-check">✓</div>
+      <p><strong>Photosynthesis</strong> happens in chloroplasts — plants capture sunlight to make glucose and release oxygen.</p>
+    </div>
+    <div class="sum-item">
+      <div class="sum-check">✓</div>
+      <p><strong>Cellular respiration</strong> happens in mitochondria — cells break down glucose into ATP energy, releasing CO₂ and water.</p>
+    </div>
+    <div class="sum-item">
+      <div class="sum-check">✓</div>
+      <p>These two processes are nearly <strong>opposite reactions</strong> — together they cycle matter and energy through all living things.</p>
+    </div>
+    <div class="sum-item">
+      <div class="sum-check">✓</div>
+      <p><strong>ATP</strong> is the energy currency of every cell — it powers muscle contractions, protein building, and more.</p>
+    </div>
+    <div class="sum-item">
+      <div class="sum-check">✓</div>
+      <p>When you eat, breathe, move, or even just exist — <strong>cellular respiration is happening</strong> in every one of your trillions of cells.</p>
+    </div>
+  </div>
+
+  <!-- New vocab preview -->
+  <div class="card" style="border-left:5px solid var(--purple);">
+    <p style="font-weight:700;font-size:1rem;">📝 New Words to Know — Add to Your Word Wall!</p>
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.75rem;">
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Photosynthesis</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Cellular Respiration</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">ATP</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Glucose</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Chlorophyll</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Reactants</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Products</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Cristae</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Diffusion</span>
+      <span style="background:#EDE9FE;color:#5B21B6;padding:0.3rem 0.85rem;border-radius:999px;font-size:0.88rem;font-weight:500;">Osmosis</span>
+    </div>
+    <p style="font-size:0.85rem;color:var(--mid);margin-top:0.75rem;">Your vocabulary card assignment has all the definitions and card-making instructions! 📇</p>
+  </div>
+
+</main>
+</body>
+</html>
