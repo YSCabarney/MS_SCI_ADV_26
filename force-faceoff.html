@@ -182,6 +182,7 @@
   .mission h3{font-size:1.1rem;}
   .predict{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;}
   .pr-head{display:flex;align-items:baseline;gap:10px;}
+  .pr-head .pr-n{display:none;}
   .pr-n{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
   .pr-head h3{font-size:1.25rem;}
   .pr-q{font-size:16.5px;color:var(--ink);}
@@ -205,198 +206,93 @@
   <div class="eyebrow">Motion Investigation Bureau · Case 07 · Opening Activity</div>
   <h1 class="title">Force Face-Off</h1>
   <p class="subtitle"><b>Today's big question:</b> What makes things speed up, slow down, or stop?</p>
-  <div class="meta-row"><span><b>Part 1</b> Rewind · 6 min</span><span><b>Part 2</b> Face-Off · 15 min</span><span><b>Part 3</b> Game Film · 9 min</span></div>
+  <div class="meta-row"><span><b>5</b> examples</span><span><b>≈ 25</b> min</span><span><b>Whole class</b> on Zoom</span></div>
 </header>
 
-<section>
-  <div class="sect-head"><span class="tag">Before you start</span><h2>Today's Plan</h2></div>
-  <div class="plan">
-    <div><b>Part 1 · Rewind</b><span>Practice the motion math you already learned.</span></div>
-    <div><b>Part 2 · Face-Off</b><span>Predict-It animations, then a tug-of-war simulator with a partner.</span></div>
-    <div><b>Part 3 · Game Film</b><span>Use the new ideas on real sports moments.</span></div>
-  </div>
-  <div class="note gold"><p><b>All you need:</b> your device, and Zoom open with the chat showing. Everything today happens on screen.</p></div>
+<div class="note teal"><p><b>How it works:</b> your teacher shares his screen. For each example, read the question, type <b>A</b>, <b>B</b>, or <b>C</b> in the chat, then watch what really happens.</p></div>
+
+<section style="margin-top:28px">
+  <div class="sect-head"><span class="tag">Example 1 of 5</span><h2>Inertia</h2></div>
+  <div class="predict" data-scene="van" data-label="Example 1 · Inertia"></div>
 </section>
 
-<!-- ============ PART 1 ============ -->
 <section>
-  <div class="sect-head"><span class="tag">Part 1</span><h2>Rewind: Motion Review</h2><span class="time">6 min · type answers in the chat</span></div>
-
-  <div class="card">
-    <h3>Quick reminder: 4 ideas you already know</h3>
-    <div class="words">
-      <div class="word"><b>Distance vs. displacement</b><span><b style="display:inline">Distance</b> = the whole path you traveled. <b style="display:inline">Displacement</b> = a straight line from start to finish.</span></div>
-      <div class="word"><b>Speed vs. velocity</b><span><b style="display:inline">Speed</b> = how fast. <b style="display:inline">Velocity</b> = how fast <u>and</u> which way.</span><i>speed = distance ÷ time</i></div>
-      <div class="word"><b>Acceleration</b><span>How much the velocity changes each second.</span><i>a = (final velocity − starting velocity) ÷ time</i></div>
-      <div class="word"><b>+ or − acceleration</b><span><b style="display:inline">Positive (+)</b> = speeding up. <b style="display:inline">Negative (−)</b> = slowing down.</span></div>
+  <div class="sect-head"><span class="tag">Example 2 of 5</span><h2>Net Force</h2></div>
+  <div class="predict" id="ex-tug">
+    <div class="pr-head"><span class="pr-n">Example 2 · Net force</span><h3>Tug-of-War Showdown</h3></div>
+    <p class="pr-q">Team Left pulls the cart with <b>30 N</b>. Team Right pulls with <b>50 N</b>. The cart is on ice. What happens?</p>
+    <div class="pr-choices">
+      <div class="pr-choice" data-i="0"><b>A</b><span>Nothing. Both teams are pulling, so it's a tie.</span></div>
+      <div class="pr-choice" data-i="1"><b>B</b><span>It moves left.</span></div>
+      <div class="pr-choice" data-i="2"><b>C</b><span>It speeds up to the right.</span></div>
+    </div>
+    <p class="pr-step">① Type <b>A, B, or C</b> in the chat. ② Watch what happens.</p>
+    <div class="pr-btns"><button class="btn primary" id="tug-run">▶ Play</button></div>
+    <div id="fsim" class="fsim"></div>
+    <div class="pr-explain" id="tug-explain" hidden>
+      <p><b>It speeds up to the right.</b> The forces work against each other: 50 − 30 = <b>20 N to the right</b>. That leftover force is the <b>net force</b>. When the net force isn't zero, the forces are <b>unbalanced</b>, and the cart speeds up. Look at the dots spreading apart.</p>
+      <p style="margin-top:8px"><b>Your turn:</b> use the − / + buttons to make it a tie, with both teams still pulling. What's the net force now? (Answer: <b>0 N</b>. Equal pulls make the forces <b>balanced</b>, so the cart doesn't move.)</p>
     </div>
   </div>
-
-  <div class="note teal">
-    <h3>Use the 3-step recipe on every math problem</h3>
-    <p class="formula">① Write the formula &nbsp;→&nbsp; ② Put in the numbers &nbsp;→&nbsp; ③ Write the answer with units</p>
-  </div>
-
-  <div class="q"><span class="qn">Rewind 1 · Distance vs. displacement</span><span class="qt">A volleyball player runs from the end line to the net (9 m). Then she jogs back to the end line. What is her <b>distance</b>? What is her <b>displacement</b>?</span>
-    <details class="ans"><summary>Need a hint?</summary><p>Distance counts every step. Displacement only asks: how far is she from where she started?</p></details>
-    <details class="ans"><summary>Show answer</summary><p>Distance = 9 m + 9 m = <b>18 m</b>. Displacement = <b>0 m</b>, because she ended right where she started.</p></details></div>
-
-  <div class="q"><span class="qn">Rewind 2 · Speed</span><span class="qt">A ball rolls 0.80 m in 0.40 seconds. What is its speed?</span>
-    <details class="ans"><summary>Show the 3 steps</summary><div class="work"><span class="k">① Formula</span><span class="v">speed = distance ÷ time</span><span class="k">② Numbers</span><span class="v">speed = 0.80 m ÷ 0.40 s</span><span class="k">③ Answer</span><span class="v"><b>2.0 m/s</b></span></div></details></div>
-
-  <div class="q"><span class="qn">Rewind 3 · Speed vs. velocity</span><span class="qt">A runner sprints one full lap around a track and ends where she started. Her speed was 5 m/s. What was her <b>velocity</b>?</span>
-    <details class="ans"><summary>Need a hint?</summary><p>Velocity uses displacement. What is her displacement if she ended where she started?</p></details>
-    <details class="ans"><summary>Show answer</summary><p><b>0 m/s.</b> Her displacement was 0 m, so her velocity was 0 m/s, even though she ran fast the whole time.</p></details></div>
-
-  <div class="q"><span class="qn">Rewind 4 · Speeding up</span><span class="qt">A soccer player goes from 2 m/s to 6 m/s in 2 seconds. What is her acceleration?</span>
-    <details class="ans"><summary>Show the 3 steps</summary><div class="work"><span class="k">① Formula</span><span class="v">a = (final − starting) ÷ time</span><span class="k">② Numbers</span><span class="v">a = (6 − 2) ÷ 2 = 4 ÷ 2</span><span class="k">③ Answer</span><span class="v"><b>2 m/s²</b> → positive, so she's <b>speeding up</b></span></div></details></div>
-
-  <div class="q"><span class="qn">Rewind 5 · Slowing down</span><span class="qt">A ball is rolling at 3 m/s. It stops in 1.5 seconds. What is its acceleration?</span>
-    <details class="ans"><summary>Need a hint?</summary><p>"Stops" means the final velocity is <b>0</b>. Always do <b>final minus starting</b>: (0 − 3).</p></details>
-    <details class="ans"><summary>Show the 3 steps</summary><div class="work"><span class="k">① Formula</span><span class="v">a = (final − starting) ÷ time</span><span class="k">② Numbers</span><span class="v">a = (0 − 3) ÷ 1.5 = −3 ÷ 1.5</span><span class="k">③ Answer</span><span class="v"><b>−2 m/s²</b> → negative, so it's <b>slowing down</b></span></div></details></div>
-
-  <div class="q"><span class="qn">Rewind 6 · Think about it</span><span class="qt">A ball goes around a loop at the same speed the whole time. Is it accelerating?</span>
-    <details class="ans"><summary>Need a hint?</summary><p>Acceleration means the <b>velocity</b> changes. Velocity = speed <u>and direction</u>. Does the direction change in a loop?</p></details>
-    <details class="ans"><summary>Show answer</summary><p><b>Yes.</b> Its direction keeps changing, so its velocity keeps changing. That means it's accelerating.</p></details></div>
-</section>
-
-<!-- ============ PART 2 ============ -->
-<section>
-  <div class="sect-head"><span class="tag">Part 2</span><h2>Force Face-Off</h2><span class="time">15 min · start the clock</span></div>
-</section>
-<div class="timer-bar">
-  <div><div class="timer-label">Face-Off Clock</div><div class="timer-num" id="clock">15:00</div></div>
-  <div style="display:flex;gap:8px"><button class="btn primary" id="startBtn">Start</button><button class="btn ghost" id="resetBtn">Reset</button></div>
-</div>
-
-<section>
-  <div class="timeline">
-    <div class="tl"><div class="t">0:00–4:00</div><div class="b"><b>Round 1: Predict It!</b> Your teacher shares his screen. You guess in the chat, then watch.</div></div>
-    <div class="tl"><div class="t">4:00–11:00</div><div class="b"><b>Round 2: Tug-of-War</b> (with your partner in a breakout room).</div></div>
-    <div class="tl"><div class="t">11:00–14:00</div><div class="b"><b>Report back:</b> each pair shares for 1 minute.</div></div>
-    <div class="tl"><div class="t">14:00–15:00</div><div class="b"><b>The Big Idea.</b></div></div>
-  </div>
 </section>
 
 <section>
-  <div class="sect-head"><span class="tag">Round 1</span><h2>Predict It!</h2><span class="time">4 min · whole class</span></div>
-  <div class="note teal"><p><b>How to play:</b> your teacher shares his screen. Read the question, type <b>A</b>, <b>B</b>, or <b>C</b> in the chat, then watch what really happens.</p></div>
-  <div class="predict" data-scene="van"></div>
-  <div class="predict" data-scene="cloth"></div>
-  <div class="predict" data-scene="slide"></div>
-  <div class="predict" data-scene="kick"></div>
-  <div class="frame">Which scene surprised you the most? Why?</div>
+  <div class="sect-head"><span class="tag">Example 3 of 5</span><h2>Friction</h2></div>
+  <div class="predict" data-scene="slide" data-label="Example 3 · Friction"></div>
 </section>
 
 <section>
-  <div class="sect-head"><span class="tag">Round 2</span><h2>Tug-of-War</h2><span class="time">7 min · breakout rooms</span></div>
+  <div class="sect-head"><span class="tag">Example 4 of 5</span><h2>Mass</h2></div>
+  <div class="predict" data-scene="kick" data-label="Example 4 · Mass"></div>
+</section>
 
-  <div class="card">
-    <h3>First, learn 4 new words</h3>
-    <div class="words">
-      <div class="word"><b>Force</b><span>A push or a pull.</span></div>
-      <div class="word"><b>Newton (N)</b><span>The unit we use to measure force. "50 N" means a pull of 50 newtons.</span></div>
-      <div class="word"><b>Net force</b><span>What's left over after the forces work against each other. It's the force that "wins."</span></div>
-      <div class="word"><b>Balanced / Unbalanced</b><span><b style="display:inline">Balanced</b> = net force is 0 (a tie). <b style="display:inline">Unbalanced</b> = net force is not 0 (someone wins).</span></div>
+<section>
+  <div class="sect-head"><span class="tag">Example 5 of 5</span><h2>Trap Question!</h2></div>
+  <div class="predict" id="ex-bus">
+    <div class="pr-head"><span class="pr-n">Example 5 · Put it together</span><h3>The Team Bus</h3></div>
+    <p class="pr-q">On the way to a tournament, the team bus cruises down a straight highway at a <b>steady 55 mph</b>. Its engine is pushing it forward. Are the forces on the bus balanced or unbalanced?</p>
+    <div class="pr-choices">
+      <div class="pr-choice" data-i="0"><b>A</b><span>Balanced</span></div>
+      <div class="pr-choice" data-i="1"><b>B</b><span>Unbalanced. It's moving, so the forward force must be winning.</span></div>
+    </div>
+    <p class="pr-step">① Type <b>A or B</b> in the chat. ② Be ready to explain why.</p>
+    <div class="pr-btns"><button class="btn primary" id="bus-run">Reveal</button></div>
+    <div class="pr-explain" id="bus-explain" hidden>
+      <p><b>Balanced!</b> The bus is moving, but its motion <b>isn't changing</b>: same speed, same direction. The engine's forward push exactly matches friction and air pushing back, so the net force is 0 N.</p>
+      <p style="margin-top:8px">It's the same idea as the van's volleyball in Example 1: thanks to <b>inertia</b>, a moving object keeps moving with <b>no net force</b>. <b>Moving doesn't automatically mean unbalanced.</b></p>
     </div>
   </div>
+</section>
 
-  <div class="card">
-    <h3>How to find the net force</h3>
-    <p>When two teams pull in <b>opposite</b> directions, <b>subtract</b>. Big number minus small number. The bigger team wins.</p>
-    <div class="eq"><span class="r">Left pulls 30 N</span><span class="t">Right pulls 50 N</span>→<span>50 − 30 = <b>20 N to the right</b></span></div>
-    <p>If both teams pull the same, the answer is 0 N. That's a tie, so the forces are <b>balanced</b>.</p>
+<section>
+  <div class="sect-head"><span class="tag">Wrap-up</span><h2>The Big Idea</h2></div>
+  <div class="bigidea"><small>Rule 1 · Balanced (net force = 0)</small>The motion <b>does not change</b>. A still object stays still, and a moving object keeps the same speed and direction.</div>
+  <div class="bigidea"><small>Rule 2 · Unbalanced (net force ≠ 0)</small>The object <b>accelerates</b>: it speeds up, slows down, or turns. Friction slows things down, and more mass means less acceleration.</div>
+  <div class="words">
+    <div class="word"><b>Inertia</b><span>Things keep doing what they're doing until a force changes it. (Example 1)</span></div>
+    <div class="word"><b>Net force</b><span>The force left over after the forces work against each other. (Example 2)</span></div>
+    <div class="word"><b>Friction</b><span>A force that rubs against motion and slows it down. (Example 3)</span></div>
+    <div class="word"><b>Mass</b><span>How much "stuff" an object has. More mass, less acceleration. (Example 4)</span></div>
   </div>
-
-  <div class="card">
-    <h3>Your jobs</h3>
-    <div class="roles">
-      <div class="role"><span class="rn">Partner 1</span><h3>🎮 Driver</h3><p>Shares her screen. Reads the mission out loud. Clicks the buttons.</p></div>
-      <div class="role r2"><span class="rn">Partner 2</span><h3>📝 Recorder</h3><p>Types your guess <b>before</b> you press Run. Then types what happened.</p></div>
-    </div>
-  </div>
-
-  <div class="note teal">
-    <p><b>How to use the simulator:</b> click <b>Load this mission</b> → guess what will happen → press <b>▶ Run</b> → type what happened.</p>
-    <p><span class="k-red">Red rope</span> = Team Left. <span class="k-teal">Teal rope</span> = Team Right. <b>Black arrow</b> = net force. <span class="k-gold">Gold arrow</span> = friction. <b>Dots</b> = where the cart was every half second.</p>
-  </div>
-
-  <div class="mission"><div class="mh"><span class="who">Every pair · do this first</span><h3>Mission A · Make a Tie</h3></div>
-    <p><b>Your goal:</b> both teams pull, but the cart does <b>not</b> move.</p>
-    <p><b>Steps:</b> use the <b>− / +</b> buttons to change the pulls. Neither team can be 0. Find <b>2 different ways</b> to do it.</p>
-    <button class="load" onclick="fsimSet({FL:30,FR:50,m:20,surf:'ice'})">Load this mission</button>
-    <div class="frame">Left ___ N and Right ___ N made a tie. The net force was ___ N.</div>
-    <details class="ans"><summary>Check your answer</summary><p>Any two <b>equal</b> pulls work, like 30 N and 30 N. The net force is <b>0 N</b>, so the forces are <b>balanced</b>, and the cart does not move.</p></details></div>
-
-  <div class="mission"><div class="mh"><span class="who">Pair 1</span><h3>Mission B · Speed Up by 1</h3></div>
-    <p><b>Your goal:</b> make the velocity go up by <b>1 m/s every second</b>: 0, 1, 2, 3, 4, 5.</p>
-    <p><b>Steps:</b> change the pulls and press Run. Look at the <b>"Velocity every second"</b> row. Keep trying until it counts up by 1.</p>
-    <button class="load" onclick="fsimSet({FL:20,FR:20,m:20,surf:'ice'})">Load this mission</button>
-    <p><b>Then do the math:</b> a = (final velocity − starting velocity) ÷ time = (5 − 0) ÷ 5 = ___</p>
-    <div class="frame">We used Left ___ N and Right ___ N. The net force was ___ N. The acceleration was ___ m/s².</div>
-    <details class="ans"><summary>Check your answer</summary><p>A <b>net force of 20 N</b> works, like Left 20 and Right 40. The velocity goes 0, 1, 2, 3, 4, 5. Acceleration = (5 − 0) ÷ 5 = <b>1 m/s²</b>.</p></details></div>
-
-  <div class="mission"><div class="mh"><span class="who">Pair 2</span><h3>Mission C · Heavy Cart</h3></div>
-    <p><b>Your goal:</b> find out what happens when the cart is heavier but the pull stays the same.</p>
-    <p><b>Steps:</b> (1) Press Run with the <b>20 kg</b> cart. Write down the acceleration. (2) Click <b>40 kg</b>. Press Run again. Write down the acceleration.</p>
-    <button class="load" onclick="fsimSet({FL:20,FR:60,m:20,surf:'ice'})">Load this mission</button>
-    <div class="frame">20 kg: ___ m/s². 40 kg: ___ m/s². The heavier cart sped up (more / less).</div>
-    <details class="ans"><summary>Check your answer</summary><p>The net force is 40 N both times. The 20 kg cart: <b>2 m/s²</b>. The 40 kg cart: <b>1 m/s²</b>. <b>A heavier object speeds up less</b> with the same force.</p></details></div>
-
-  <div class="mission"><div class="mh"><span class="who">Pair 3</span><h3>Mission D · Let Go!</h3></div>
-    <p><b>Your goal:</b> find out what the cart does when nobody is pulling anymore.</p>
-    <p><b>Steps:</b> (1) On <b>Ice</b>, press Run. When the clock shows about 2 seconds, press <b>✋ Drop the ropes</b>. Watch the cart. (2) Click <b>Grass</b> and do it again.</p>
-    <button class="load" onclick="fsimSet({FL:0,FR:40,m:20,surf:'ice'})">Load this mission</button>
-    <div class="frame">On ice, after the drop, the cart ___. On grass, after the drop, the cart ___.</div>
-    <details class="ans"><summary>Check your answer</summary><p><b>On ice:</b> the cart keeps rolling at the same speed. There's no friction, so nothing slows it down. The dots stay evenly spaced.</p><p><b>On grass:</b> the cart slows down and stops. Friction pulls backward, so the dots bunch together.</p></details></div>
-
-  <div id="fsim" class="fsim"></div>
-</section>
-
-<section>
-  <div class="sect-head"><span class="tag">Round 3</span><h2>Report Back</h2><span class="time">3 min · 1 minute per pair</span></div>
-  <div class="frame">Our mission was ___. We found out that ___. One number we got was ___.</div>
-</section>
-
-<section>
-  <div class="sect-head"><span class="tag">The Big Idea</span><h2>What We Learned</h2><span class="time">1 min</span></div>
-  <div class="bigidea"><small>Rule 1</small>If the net force is <b>0</b> (balanced), the motion <b>does not change</b>. A still object stays still. A moving object keeps moving at the same speed.</div>
-  <div class="bigidea"><small>Rule 2</small>If the net force is <b>not 0</b> (unbalanced), the object <b>accelerates</b>: it speeds up, slows down, or turns. A heavier object accelerates less.</div>
-  <div class="word"><b>Inertia</b><span>Things keep doing what they're already doing until a force changes it. That's why the volleyball kept rolling when the van braked, why the dishes stayed on the table, and why the cart kept rolling on the ice.</span></div>
-</section>
-
-<!-- ============ PART 3 ============ -->
-<section>
-  <div class="sect-head"><span class="tag">Part 3</span><h2>Game Film: Balanced or Unbalanced?</h2><span class="time">9 min · whole class</span></div>
-  <div class="note teal"><p><b>How to play:</b> read each play and ask, <b>"Is the motion changing?"</b> No → type <b>B</b> (balanced). Yes → type <b>U</b> (unbalanced). Then click to check.</p></div>
-  <div class="q"><span class="qn">Play 1</span><span class="qt">A volleyball sits on the gym floor during a timeout.</span>
-    <details class="ans"><summary>Check</summary><p><b>B: balanced.</b> The ball is not moving and stays not moving. Gravity pulls it down, and the floor pushes it up just as hard. It's a tie.</p></details></div>
-  <div class="q"><span class="qn">Play 2</span><span class="qt">A soccer ball rolls across the grass and slowly stops.</span>
-    <details class="ans"><summary>Check</summary><p><b>U: unbalanced.</b> The ball is slowing down. Friction from the grass pulls backward, and nothing pushes it forward.</p></details></div>
-  <div class="q"><span class="qn">Play 3</span><span class="qt">A hitter's hand smacks the ball during a spike.</span>
-    <details class="ans"><summary>Check</summary><p><b>U: unbalanced.</b> The ball speeds up a lot, very fast. The hand's push is much bigger than anything else.</p></details></div>
-  <div class="q"><span class="qn">Play 4 · Careful!</span><span class="qt">The team bus drives down a straight highway at a steady 55 mph.</span>
-    <details class="ans"><summary>Check</summary><p><b>B: balanced!</b> The bus is moving, but its motion is <b>not changing</b>: same speed, same direction. The engine's push is a tie with the forces pushing back. <b>Moving does not always mean unbalanced.</b></p></details></div>
-  <div class="q"><span class="qn">Play 5</span><span class="qt">You and a teammate push on opposite sides of a door, exactly as hard as each other.</span>
-    <details class="ans"><summary>Check</summary><p><b>B: balanced.</b> Equal pushes in opposite directions make a tie, so the door doesn't move. It's just like Mission A.</p></details></div>
-  <div class="q"><span class="qn">Play 6 · Challenge</span><span class="qt">A volleyball at the very top of a high set, for the instant it isn't going up or down.</span>
-    <details class="ans"><summary>Check</summary><p><b>U: unbalanced.</b> Gravity is still pulling down, and nothing is holding the ball up. That's why it starts to fall right away.</p></details></div>
-</section>
-
-<section>
-  <div class="sect-head"><span class="tag">Exit Ticket</span><h2>Before you leave</h2></div>
-  <div class="frame">When the forces on something are unbalanced, it ___. One example from today is ___.</div>
 </section>
 
 <p class="footer">— Case 07 opened. Next class: The Friction Finish Line lab. —</p>
 </div>
 <script>
 (function(){
-  var total=900,left=total,id=null,el=document.getElementById('clock'),btn=document.getElementById('startBtn');
-  function draw(){var m=Math.floor(left/60),s=left%60;el.textContent=m+':'+(s<10?'0':'')+s;}
-  btn.onclick=function(){if(id){clearInterval(id);id=null;btn.textContent='Start';return;}
-    id=setInterval(function(){if(left>0){left--;draw();}else{clearInterval(id);id=null;btn.textContent='Start';}},1000);btn.textContent='Pause';};
-  document.getElementById('resetBtn').onclick=function(){clearInterval(id);id=null;left=total;btn.textContent='Start';draw();};
+  function reveal(card,answer,explainId){
+    card.querySelectorAll('.pr-choice').forEach(function(c){c.classList.toggle('right',+c.dataset.i===answer);c.classList.toggle('wrong',+c.dataset.i!==answer);});
+    document.getElementById(explainId).hidden=false;
+  }
+  var tug=document.getElementById('ex-tug'),tb=document.getElementById('tug-run');
+  tb.onclick=function(){
+    tug.querySelectorAll('.pr-choice').forEach(function(c){c.classList.remove('right','wrong');});
+    window.fsimSet({FL:30,FR:50,m:20,surf:'ice'});
+    setTimeout(function(){document.getElementById('b-run').click();},400);
+    tb.disabled=true;
+    setTimeout(function(){reveal(tug,2,'tug-explain');tb.disabled=false;tb.textContent='↺ Replay';},5600);
+  };
+  document.getElementById('bus-run').onclick=function(){reveal(document.getElementById('ex-bus'),0,'bus-explain');};
 })();
 </script>
 <script>
@@ -601,6 +497,22 @@
     ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.stroke();
     ctx.fillStyle='#0D1030';[[0,-.35],[-.22,-.05],[.22,-.05]].forEach(function(p){var c=Math.cos(rot),s=Math.sin(rot);ctx.beginPath();ctx.arc(x+(p[0]*c-p[1]*s)*r,y+(p[0]*s+p[1]*c)*r,r*.11,0,TAU);ctx.fill();});}
 
+  /* soccer leg seen from the side, kneeing at (px,py); th = swing angle (0 = straight down, + = forward) */
+  function leg(ctx,px,py,th,sc){sc=sc||1;var L=50;
+    ctx.save();ctx.translate(px,py);ctx.scale(sc,sc);ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.fillStyle='#1E2330';ctx.strokeStyle=C.ink;ctx.lineWidth=2;rr(ctx,-16,-58,30,44,8);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#FFFFFF';ctx.fillRect(10,-56,3,40);
+    ctx.fillStyle='#E8B98F';ctx.beginPath();ctx.arc(0,-8,9,0,TAU);ctx.fill();ctx.stroke();
+    ctx.rotate(-th);
+    ctx.fillStyle='#2B59C3';rr(ctx,-8,-4,16,L,6);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#FFFFFF';ctx.fillRect(-8,6,16,4);ctx.fillRect(-8,13,16,4);
+    ctx.fillStyle='#E9EDF5';rr(ctx,-6,22,13,18,4);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#141821';ctx.beginPath();ctx.moveTo(-10,L-6);ctx.lineTo(10,L-6);ctx.quadraticCurveTo(26,L-4,28,L+6);ctx.lineTo(28,L+10);ctx.lineTo(-10,L+10);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#F2B54A';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(-4,L+3);ctx.quadraticCurveTo(8,L-2,20,L+4);ctx.stroke();
+    ctx.fillStyle='#9AA0B5';[-6,4,14,22].forEach(function(x){ctx.fillRect(x,L+10,3,4);});
+    ctx.restore();}
+  function swing(t,t0){var u=t-t0;if(u<0)return 0;if(u<.45)return -1.0*ease(u/.45);if(u<.7){var k=(u-.45)/.25;return -1.0+1.0*k*k;}if(u<1.0)return .6*ease((u-.7)/.3);if(u<1.6)return .6-.45*ease((u-1.0)/.6);return .15;}
+
   /* ---------------- scenes ---------------- */
   var SCENES={
     van:{
@@ -610,14 +522,14 @@
       answer:2,
       explain:'<b>The ball keeps going forward.</b> The brakes stop the van, but nothing stops the ball. So the ball keeps moving at the same speed it had and rolls into the front. That\'s <b>inertia</b>: moving things keep moving until a force stops them. It\'s also why you wear a seatbelt.',
       dur:4.2,
-      init:function(s){s.vv=1;s.bv=1;s.off=0;s.rel=0;s.rot=0;s.hit=false;s.braking=false;},
+      init:function(s){s.vv=1;s.bv=1;s.off=0;s.rel=0;s.rot=0;s.hit=false;s.braking=false;s.skid=0;},
       step:function(s,dt){
         var V=260;
-        if(s.t>1.3){s.braking=true;s.vv=Math.max(0,s.vv-dt/0.32);}
+        if(s.t>1.3){s.braking=true;s.vv=Math.max(0,s.vv-dt/0.32);s.skid=Math.min(110,s.skid+s.vv*V*dt);}
         s.off+=s.vv*V*dt;
         var relv=(s.bv-s.vv)*V;
-        if(!s.hit){s.rel+=relv*dt;if(s.rel>146){s.rel=146;s.hit=true;s.bv=s.vv-0.18;}}
-        else{s.bv+= (s.vv-s.bv)*Math.min(1,dt*3);s.rel=clamp(s.rel+(s.bv-s.vv)*V*dt,110,146);}
+        if(!s.hit){s.rel+=relv*dt;if(s.rel>142){s.rel=142;s.hit=true;s.bv=s.vv-0.18;}}
+        else{s.bv+= (s.vv-s.bv)*Math.min(1,dt*3);s.rel=clamp(s.rel+(s.bv-s.vv)*V*dt,106,142);}
         s.rot+=relv*dt/16;
       },
       draw:function(ctx,s){
@@ -626,19 +538,27 @@
         ctx.fillStyle='#5B5568';ctx.fillRect(0,250,W,H-250);ctx.globalAlpha=.25;ctx.fillStyle='#000';ctx.fillRect(0,250,W,4);ctx.globalAlpha=1;
         ctx.fillStyle='#F2E6C8';for(var d=0;d<8;d++){var dx=((d*120-s.off)%960+960)%960-120;ctx.fillRect(dx,272,60,6);}
         var vx=170,vy=96,vw=380,vh=146;
+        if(!s.braking){ctx.strokeStyle=C.muted;ctx.lineWidth=3;ctx.lineCap='round';ctx.globalAlpha=.5;[[vy+30,70],[vy+62,100],[vy+94,60]].forEach(function(l,i){var o=(s.off*.8+i*30)%40;ctx.beginPath();ctx.moveTo(vx-14-o,l[0]);ctx.lineTo(vx-14-o-l[1],l[0]);ctx.stroke();});ctx.globalAlpha=1;}
+        if(s.skid>0){ctx.strokeStyle='#1A1A1A';ctx.globalAlpha=.55;ctx.lineWidth=6;[vx+76,vx+vw-76].forEach(function(wx){ctx.beginPath();ctx.moveTo(wx-s.skid,vy+vh+27);ctx.lineTo(wx,vy+vh+27);ctx.stroke();});ctx.globalAlpha=1;}
         shadow(ctx,vx+vw/2,252,vw*.55);
         ctx.fillStyle=C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=3;
         ctx.beginPath();ctx.moveTo(vx+16,vy);ctx.lineTo(vx+vw-80,vy);ctx.quadraticCurveTo(vx+vw-30,vy,vx+vw-6,vy+60);ctx.lineTo(vx+vw,vy+vh-16);ctx.quadraticCurveTo(vx+vw,vy+vh,vx+vw-16,vy+vh);ctx.lineTo(vx+16,vy+vh);ctx.quadraticCurveTo(vx,vy+vh,vx,vy+vh-16);ctx.lineTo(vx,vy+16);ctx.quadraticCurveTo(vx,vy,vx+16,vy);ctx.closePath();ctx.fill();ctx.stroke();
         ctx.fillStyle=C.tealSoft;rr(ctx,vx+22,vy+18,vw-110,92,10);ctx.fill();ctx.strokeStyle=C.teal;ctx.lineWidth=2;ctx.stroke();
         ctx.fillStyle=C.teal;ctx.globalAlpha=.25;ctx.fillRect(vx+22,vy+98,vw-110,12);ctx.globalAlpha=1;
         ctx.fillStyle='#BFE3F2';ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(vx+vw-80,vy+12);ctx.quadraticCurveTo(vx+vw-40,vy+14,vx+vw-20,vy+58);ctx.lineTo(vx+vw-80,vy+58);ctx.closePath();ctx.fill();ctx.stroke();
-        label(ctx,'FRONT',vx+vw-56,vy+76,C.ink,'center');label(ctx,'BACK',vx+44,vy+128,C.muted,'center');
+        [vx+46,vx+116].forEach(function(sx){ctx.fillStyle='#3D4458';ctx.strokeStyle=C.ink;ctx.lineWidth=2;rr(ctx,sx,vy+44,14,56,5);ctx.fill();ctx.stroke();rr(ctx,sx-2,vy+88,40,12,4);ctx.fill();ctx.stroke();});
+        ctx.fillStyle='#3D4458';rr(ctx,vx+vw-104,vy+40,12,60,5);ctx.fill();ctx.stroke();
+        ctx.fillStyle='#2B59C3';rr(ctx,vx+vw-96,vy+50,20,34,7);ctx.fill();ctx.stroke();
+        ctx.fillStyle='#E8B98F';ctx.beginPath();ctx.arc(vx+vw-84,vy+38,10,0,TAU);ctx.fill();ctx.stroke();
+        ctx.fillStyle='#3A2A1E';ctx.beginPath();ctx.arc(vx+vw-86,vy+35,10,Math.PI*.9,Math.PI*1.9);ctx.fill();
+        ctx.strokeStyle=C.ink;ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(vx+vw-66,vy+62,4,11,0,0,TAU);ctx.stroke();ctx.lineWidth=5;ctx.strokeStyle='#E8B98F';ctx.beginPath();ctx.moveTo(vx+vw-80,vy+60);ctx.lineTo(vx+vw-68,vy+62);ctx.stroke();
+        label(ctx,'FRONT',vx+vw-56,vy+122,C.ink,'center');label(ctx,'BACK',vx+44,vy+128,C.muted,'center');
         ctx.fillStyle=s.braking?'#FF3B2F':'#8A2A20';rr(ctx,vx-5,vy+90,9,22,3);ctx.fill();
         if(s.braking){ctx.globalAlpha=.35;ctx.fillStyle='#FF3B2F';ctx.beginPath();ctx.arc(vx-2,vy+101,18,0,TAU);ctx.fill();ctx.globalAlpha=1;}
         [vx+76,vx+vw-76].forEach(function(wx){ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(wx,vy+vh+4,24,0,TAU);ctx.fill();ctx.fillStyle='#9AA0B5';ctx.beginPath();ctx.arc(wx,vy+vh+4,10,0,TAU);ctx.fill();
           var a=s.off/24;ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(wx+Math.cos(a)*3,vy+vh+4+Math.sin(a)*3);ctx.lineTo(wx+Math.cos(a)*9,vy+vh+4+Math.sin(a)*9);ctx.stroke();});
-        var bx=300+s.rel, by=vy+92;
-        shadow(ctx,bx,vy+108,14);volleyball(ctx,bx,by,16,s.rot);
+        var bx=290+s.rel, by=vy+88;
+        shadow(ctx,bx,vy+108,17);volleyball(ctx,bx,by,20,s.rot);
         if(s.braking) pill(ctx,'BRAKES!',vx+vw/2-40,60,C.red,'#fff');
         else pill(ctx,'driving →',vx+vw/2-40,60,C.sunk,C.ink);
         if(s.hit) pill(ctx,'BONK!',bx-10,by-48,C.gold,'#fff');
@@ -711,8 +631,9 @@
           if(i===0){ctx.fillStyle='rgba(120,185,230,.35)';ctx.fillRect(0,top,W,90);ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=2;for(var k=0;k<14;k++){var gx=k*56+10,gy=top+14+((k*37)%60);ctx.beginPath();ctx.moveTo(gx,gy);ctx.lineTo(gx+16,gy-6);ctx.stroke();}}
           else{ctx.fillStyle='rgba(84,160,92,.35)';ctx.fillRect(0,top,W,90);ctx.strokeStyle='rgba(50,120,60,.55)';ctx.lineWidth=1.6;for(var g=0;g<180;g++){var bx=g*4+((g*7)%3),by=top+8+((g*53)%78),h=4+((g*31)%7);ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+((g%3)-1)*2,by-h);ctx.stroke();}}
           ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.strokeRect(0,top,W,90);
-          label(ctx,p.name,12,top+14,C.ink);
+          label(ctx,p.name,W-12,top+14,C.ink,'right');
           p.dots.forEach(function(d){ctx.fillStyle=C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(d,p.y+30,4.5,0,TAU);ctx.fill();ctx.stroke();});
+          leg(ctx,35,p.y-20,swing(s.t,-.2),.6);
           shadow(ctx,p.x,p.y+20,18);soccer(ctx,p.x,p.y,18,(p.x-70)/18);
           if(s.t>.5&&p.v===0&&s.t>1) pill(ctx,'stopped',p.x,p.y-32,C.ink,C.paper);
         });
@@ -737,13 +658,12 @@
         ctx.fillStyle=C.paper;ctx.fillRect(0,0,W,H);
         s.b.forEach(function(b){
           var gy=b.y+28;ctx.fillStyle='rgba(84,160,92,.28)';ctx.fillRect(0,gy,W,14);ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();
-          var kx=120-46, footX=s.t<.7?20+(kx-20)*ease(s.t/.7):kx-Math.min(30,(s.t-.7)*60);
-          ctx.fillStyle=C.red;ctx.strokeStyle=C.ink;ctx.lineWidth=2;rr(ctx,footX-34,b.y+4,46,22,10);ctx.fill();ctx.stroke();ctx.fillStyle='#FFFFFF';ctx.fillRect(footX-30,b.y+20,38,4);
-          ctx.fillStyle=C.ink;rr(ctx,footX-34,b.y-26,18,32,5);ctx.fill();
+          leg(ctx,70,b.y-36,swing(s.t,0),1);
           shadow(ctx,b.x,gy,22);
           if(b.kind==='soccer')soccer(ctx,b.x,b.y,24,b.rot);else bowling(ctx,b.x,b.y,24,b.rot);
           label(ctx,b.kind==='soccer'?'SOCCER BALL · 0.45 kg':'BOWLING BALL · 6 kg',W-12,b.y-48,C.ink,'right');
-          if(s.kicked&&s.t<1.4) pill(ctx,'KICK!',120,b.y-40,C.gold,'#fff');
+          if(s.kicked&&s.t<1.4) pill(ctx,'KICK!',150,b.y-46,C.gold,'#fff');
+          if(s.kicked) label(ctx,'speed after kick: '+(b.kind==='soccer'?'3.3 m/s':'0.25 m/s'),W-12,b.y-28,b.kind==='soccer'?C.good:C.red,'right');
         });
       }
     }
@@ -753,7 +673,7 @@
   function build(el,idx){
     var sc=SCENES[el.dataset.scene];if(!sc)return;
     var letters=['A','B','C'];
-    el.innerHTML='<div class="pr-head"><span class="pr-n">Scene '+(idx+1)+'</span><h3>'+sc.title+'</h3></div>'+
+    el.innerHTML='<div class="pr-head"><span class="pr-n">'+(el.dataset.label||('Scene '+(idx+1)))+'</span><h3>'+sc.title+'</h3></div>'+
       '<p class="pr-q">'+sc.q+'</p>'+
       '<div class="pr-choices">'+sc.choices.map(function(c,i){return '<div class="pr-choice" data-i="'+i+'"><b>'+letters[i]+'</b><span>'+c+'</span></div>';}).join('')+'</div>'+
       '<p class="pr-step">① Type <b>A, B, or C</b> in the chat. ② Watch what happens.</p>'+
