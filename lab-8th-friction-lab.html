@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friction Finish Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#FAF5EC; --card:#FFFFFF; --ink:#221F2B; --ink-soft:#5B5568; --muted:#8A8396;
+    --track-red:#D8432B; --track-red-soft:#F6DAD2;
+    --field-teal:#146B72; --field-teal-soft:#D9ECEA;
+    --gold:#B9791E; --gold-soft:#F5E6C8;
+    --good:#2F8558; --good-soft:#DEF0E3;
+    --line:#E3D9C6; --sunk:#F3ECDF;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Karla',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4; --muted:#968EA3;
+      --track-red:#FF7A5C; --track-red-soft:#3A241F;
+      --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+      --gold:#F2B75A; --gold-soft:#3A2E14;
+      --good:#5FCB8B; --good-soft:#1B3324;
+      --line:#3A3444; --sunk:#1B1822;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4; --muted:#968EA3;
+    --track-red:#FF7A5C; --track-red-soft:#3A241F;
+    --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+    --gold:#F2B75A; --gold-soft:#3A2E14;
+    --good:#5FCB8B; --good-soft:#1B3324;
+    --line:#3A3444; --sunk:#1B1822;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);margin:0;padding-inline:16px;line-height:1.55;font-size:16px;}
+  .wrap{max-width:820px;margin:0 auto;padding-block:32px 80px;}
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;}
+  p{margin:0;color:var(--ink-soft);}
+  ul,ol{margin:0;padding-left:20px;color:var(--ink-soft);}
+  li{margin-bottom:6px;}
+  li b,p b,td b{color:var(--ink);}
+  a{color:var(--track-red);}
+  code,.mono{font-family:var(--mono);font-size:.92em;}
+
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:28px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--track-red);display:flex;gap:10px;align-items:center;}
+  .eyebrow::before{content:"●";font-size:9px;}
+  h1.title{font-weight:600;font-size:clamp(2rem,6vw,2.9rem);margin:8px 0 6px;}
+  .subtitle{color:var(--ink-soft);max-width:62ch;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+  .meta-row b{color:var(--ink);font-weight:600;}
+
+  section{margin-bottom:40px;display:flex;flex-direction:column;gap:14px;}
+  .sect-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px;}
+  .sect-head .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .sect-head h2{font-size:1.5rem;font-weight:600;}
+  .sect-head .time{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;}
+  .card h3{font-size:1.15rem;font-weight:600;}
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--track-red);border-radius:10px;padding:16px 20px;display:flex;flex-direction:column;gap:8px;}
+  .note.teal{border-left-color:var(--field-teal);} .note.gold{border-left-color:var(--gold);} .note.good{border-left-color:var(--good);}
+  .note h3{font-size:1.05rem;font-weight:600;}
+  .point{background:var(--gold-soft);border-radius:10px;padding:12px 16px;font-size:15px;color:var(--ink);}
+  .point b{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-right:6px;}
+
+  .steps{counter-reset:s;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  .steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px 11px 48px;position:relative;margin:0;color:var(--ink-soft);}
+  .steps li::before{content:counter(s);position:absolute;left:13px;top:11px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+  .steps .hint{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:3px;}
+
+  .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+  .role{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--field-teal);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+  .role.r2{border-top-color:var(--track-red);} .role.r3{border-top-color:var(--gold);}
+  .role .rn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .role h3{font-size:1.05rem;}
+  .role p{font-size:14.5px;}
+
+  .timeline{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
+  .tl{display:grid;grid-template-columns:92px 1fr;border-top:1px solid var(--line);}
+  .tl:first-child{border-top:none;}
+  .tl .t{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--track-red);background:var(--sunk);padding:12px 10px;}
+  .tl .b{padding:12px 14px;font-size:15px;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px;}
+  .tl .b b{color:var(--ink);}
+  .tl .w{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--field-teal);}
+  .tl.rev .t{color:var(--gold);}
+  @media (max-width:540px){.tl{grid-template-columns:1fr;}.tl .t{padding:8px 14px;}}
+
+  .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;}
+  details summary{cursor:pointer;font-weight:600;color:var(--ink);}
+  details[open] summary{margin-bottom:8px;}
+  details p+p{margin-top:6px;}
+  details.ans{background:var(--sunk);}
+  details.ans summary{font-family:var(--mono);font-size:12.5px;color:var(--field-teal);}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+  .q .qn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .q .qt{color:var(--ink);font-size:15.5px;}
+  .q .from{font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;color:var(--ink-soft);vertical-align:top;}
+  th{background:var(--sunk);color:var(--ink);font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;}
+  .tscroll{overflow-x:auto;border-radius:10px;border:1px solid var(--line);}
+  .tscroll table{border:none;}
+  .tscroll th:first-child,.tscroll td:first-child{border-left:none;} .tscroll th:last-child,.tscroll td:last-child{border-right:none;}
+  .tscroll tr:first-child th{border-top:none;} .tscroll tr:last-child td{border-bottom:none;}
+
+  .formula{font-family:var(--mono);font-size:15px;background:var(--sunk);border-radius:8px;padding:10px 14px;color:var(--ink);}
+  .work{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:15px;}
+  .work .k{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-top:2px;}
+  .work .v{color:var(--ink);}
+
+  .timer-bar{position:sticky;top:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:28px;}
+  .timer-num{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--track-red);font-variant-numeric:tabular-nums;}
+  .timer-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+  .btn{border:none;border-radius:8px;padding:9px 14px;font:600 13px var(--body);cursor:pointer;}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+  .btn.ghost{background:var(--sunk);color:var(--ink);border:1px solid var(--line);}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-family:var(--mono);font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 11px;color:var(--ink-soft);}
+  .footer{text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:20px;}
+  .k-red{color:var(--track-red)!important;} .k-teal{color:var(--field-teal)!important;} .k-gold{color:var(--gold)!important;} .k-good{color:var(--good)!important;}
+
+  /* clarity helpers */
+  .plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
+  .plan div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;}
+  .plan b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);}
+  .plan span{font-size:15px;color:var(--ink);}
+  .words{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;}
+  .word{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--field-teal);border-radius:10px;padding:10px 14px;}
+  .word b{display:block;color:var(--ink);font-size:16px;}
+  .word span{font-size:15px;color:var(--ink-soft);}
+  .word i{display:block;font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--field-teal);margin-top:4px;}
+  .see{background:var(--good-soft);border-radius:10px;padding:12px 16px;color:var(--ink);font-size:15px;}
+  .see::before{content:"✓ What you should see";display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--good);font-weight:600;margin-bottom:4px;}
+  .frame{background:var(--sunk);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:15px;color:var(--ink);}
+  .frame::before{content:"Type in the chat";display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:4px;}
+  .frame.doc::before{content:"Sentence starter";}
+  .bigidea{background:var(--ink);color:var(--paper);border-radius:12px;padding:16px 20px;font-size:17px;line-height:1.5;}
+  .bigidea b{color:var(--paper);}
+  .bigidea small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+  .eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-family:var(--mono);font-size:15px;color:var(--ink);}
+  .eq span{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;}
+  .eq .r{border-color:var(--track-red);color:var(--track-red);} .eq .t{border-color:var(--field-teal);color:var(--field-teal);}
+
+  .diagram{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:0;}
+  .diagram svg{display:block;width:100%;height:auto;}
+  .diagram figcaption{font-size:14px;color:var(--ink-soft);margin-top:6px;}
+  .lap{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;}
+  .lap div{background:var(--sunk);border-radius:10px;padding:10px 12px;font-size:15px;color:var(--ink);}
+  .lap b{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--track-red);margin-bottom:2px;}
+  .phone{font-family:var(--mono);background:var(--sunk);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--ink);display:grid;grid-template-columns:auto auto 1fr;gap:4px 14px;max-width:440px;}
+  .phone .arrow{color:var(--track-red);}
+  .calc{display:flex;flex-direction:column;gap:10px;}
+  .calc .cs{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;display:grid;grid-template-columns:28px 1fr;gap:4px 10px;}
+  .calc .num{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);font:600 12px var(--mono);display:flex;align-items:center;justify-content:center;}
+  .calc h4{margin:0;font-family:var(--display);font-size:1.05rem;color:var(--ink);}
+  .calc p{grid-column:2;font-size:15px;}
+  .calc .ex{grid-column:2;font-family:var(--mono);font-size:13.5px;background:var(--sunk);border-radius:8px;padding:6px 10px;color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Motion Investigation Bureau · Case 07 · Home Lab</div>
+  <h1 class="title">The Friction Finish Line</h1>
+  <p class="subtitle"><b>What you'll do:</b> roll your Coaster Lab ball onto 3 different surfaces, like a towel, a rug, and the floor. Measure how fast friction stops it on each one.</p>
+  <div class="meta-row"><span><b>Part 1</b> Warm-up · 5 min</span><span><b>Part 2</b> Lab · 30 min</span><span><b>Part 3</b> Questions · homework</span></div>
+</header>
+
+<div class="note"><p>📄 <b>Where do my answers go?</b> In your <b>Lab Report</b> (Google Doc) and your <b>Google Sheet</b>, not on this page. This page is just your instructions.</p></div>
+
+<section style="margin-top:28px">
+  <div class="sect-head"><span class="tag">Before you start</span><h2>Today's Plan</h2></div>
+  <div class="plan">
+    <div><b>Step 1–3</b><span>Warm-up and plan</span></div>
+    <div><b>Step 4–5</b><span>Build the ramp and practice timing</span></div>
+    <div><b>Step 6</b><span>Roll the ball and record data</span></div>
+    <div><b>Step 7–8</b><span>Do the math, answer the questions</span></div>
+  </div>
+  <div class="card">
+    <h3>Words you'll need today</h3>
+    <div class="words">
+      <div class="word"><b>Friction</b><span>A force that rubs against something moving and slows it down.</span></div>
+      <div class="word"><b>Speed trap</b><span>A section of track with a tape mark at each end. You time the ball between the marks to find its speed.</span></div>
+      <div class="word"><b>Trial</b><span>One run of the experiment. You'll do 3 trials on each surface.</span></div>
+      <div class="word"><b>Stopping distance</b><span>How far the ball rolls on the surface before it stops.</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Step 1</span><h2>Warm-Up: Practice the Math</h2><span class="time">5 min</span></div>
+  <p>You will do <b>this exact math</b> with your own numbers later. Use the 3-step recipe: <b>① formula → ② numbers → ③ answer with units</b>.</p>
+  <div class="q"><span class="qn">Warm-up A · How fast is the ball going?</span><span class="qt">A ball rolls through a 0.60 m speed trap in 0.50 seconds. What is its speed?</span>
+    <details class="ans"><summary>Show the 3 steps</summary><div class="work"><span class="k">① Formula</span><span class="v">speed = distance ÷ time</span><span class="k">② Numbers</span><span class="v">speed = 0.60 ÷ 0.50</span><span class="k">③ Answer</span><span class="v"><b>1.2 m/s</b></span></div></details></div>
+  <div class="q"><span class="qn">Warm-up B · How fast does it slow down?</span><span class="qt">That ball rolls onto a carpet and stops 1.5 seconds later. What is its acceleration?</span>
+    <details class="ans"><summary>Need a hint?</summary><p>It stopped, so the final velocity is <b>0</b>. The starting velocity is the speed from Warm-up A: <b>1.2</b>.</p></details>
+    <details class="ans"><summary>Show the 3 steps</summary><div class="work"><span class="k">① Formula</span><span class="v">a = (final − starting) ÷ time</span><span class="k">② Numbers</span><span class="v">a = (0 − 1.2) ÷ 1.5</span><span class="k">③ Answer</span><span class="v"><b>−0.8 m/s²</b> → negative means slowing down</span></div></details></div>
+  <div class="q"><span class="qn">Warm-up C · Forces</span><span class="qt">While the ball rolls on the carpet, are the forces balanced or unbalanced?</span>
+    <details class="ans"><summary>Show answer</summary><p><b>Unbalanced.</b> The ball is slowing down, so its motion is changing. Friction pulls backward, and nothing pushes forward.</p></details></div>
+  <div class="q"><span class="qn">Warm-up D · Inertia</span><span class="qt">Nothing pushes the ball after it leaves the track. So why does it keep rolling?</span>
+    <details class="ans"><summary>Show answer</summary><p><b>Inertia.</b> A moving object keeps moving until a force stops it. Here, that force is friction.</p></details></div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Step 2</span><h2>The Question &amp; Your Guess</h2></div>
+  <div class="card">
+    <h3>Testable question</h3>
+    <p style="font-size:17px;color:var(--ink)"><b>"How does the type of surface change how fast friction stops a rolling ball?"</b></p>
+  </div>
+  <div class="card">
+    <h3>Write your hypothesis (your best guess)</h3>
+    <div class="frame doc">If the ball rolls onto ______, then it will stop the fastest, because ______.</div>
+    <details class="ans"><summary>Need a hint?</summary><p>Which surface feels the most "grabby" or soft? That surface probably has the most friction.</p></details>
+  </div>
+  <div class="card">
+    <h3>Variables (same as the Coaster Lab)</h3>
+    <div class="tscroll"><table>
+      <tr><th>Type</th><th>What it means</th><th>In this lab</th></tr>
+      <tr><td><b>Independent</b></td><td>The one thing you change on purpose</td><td>The <b>surface</b></td></tr>
+      <tr><td><b>Dependent</b></td><td>What you measure</td><td><b>Stopping distance</b> and <b>stopping time</b></td></tr>
+      <tr><td><b>Controlled</b></td><td>Things you keep exactly the same, so the test is fair</td><td>Same ball, same 20 cm ramp height, same speed trap, same way of letting go</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Step 3</span><h2>Get Your Materials</h2></div>
+  <div class="chips">
+    <span class="chip">🧵 2 half-pipes (from your Coaster Lab kit)</span><span class="chip">⚪ The same ball from the Coaster Lab</span>
+    <span class="chip">📚 A stack of books</span><span class="chip">🔵 Painter's tape</span><span class="chip">📏 Tape measure</span>
+    <span class="chip">⏱️ Phone stopwatch</span>
+  </div>
+  <div class="card">
+    <h3>Pick 3 surfaces</h3>
+    <p>Choose <b>3</b> from this list. Pick at least <b>1 hard</b> and <b>1 soft</b>.</p>
+    <p><b>Soft:</b> bath towel · rug or carpet · yoga mat · fleece blanket<br><b>Hard:</b> tile or wood floor</p>
+    <p>Lay each one flat, with no wrinkles. <b>Your partner must pick at least 1 of the same surfaces as you</b>, so you can compare.</p>
+    <p style="font-size:14px;color:var(--muted)">If the ball rolls more than 3 m on the hard floor, or hits a wall, pick a different soft surface instead.</p>
+  </div>
+  <div class="note gold"><p><b>Safety:</b> roll the steel ball only on the floor, and never throw it. Keep it away from little kids and pets. Pick up the ball after every trial so nobody steps on it.</p></div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Step 4</span><h2>Build the Ramp</h2><span class="time">5 min</span></div>
+  <figure class="diagram">
+    <svg viewBox="0 0 640 190" role="img" aria-label="Side view: ramp on books, a flat speed trap, then the test surface where the ball stops">
+      <rect x="20" y="96" width="60" height="64" rx="4" fill="var(--gold-soft)" stroke="var(--gold)"/>
+      <text x="50" y="132" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="var(--ink-soft)">books</text>
+      <path d="M40 92 L240 156" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="46" cy="84" r="7" fill="var(--ink-soft)"/>
+      <text x="60" y="70" font-family="IBM Plex Mono" font-size="12" fill="var(--track-red)">let go here · 20 cm high</text>
+      <line x1="30" y1="92" x2="30" y2="160" stroke="var(--track-red)" stroke-dasharray="3 3"/>
+      <path d="M240 156 L400 156" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>
+      <line x1="270" y1="140" x2="270" y2="170" stroke="var(--field-teal)" stroke-width="3"/>
+      <line x1="390" y1="140" x2="390" y2="170" stroke="var(--field-teal)" stroke-width="3"/>
+      <text x="270" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="var(--field-teal)">MARK 1</text>
+      <text x="390" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="var(--field-teal)">MARK 2</text>
+      <text x="330" y="184" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="var(--field-teal)">speed trap · 60 cm</text>
+      <rect x="400" y="158" width="225" height="8" rx="3" fill="var(--track-red-soft)" stroke="var(--track-red)"/>
+      <text x="512" y="184" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="var(--track-red)">test surface</text>
+      <circle cx="560" cy="151" r="7" fill="var(--ink-soft)"/>
+      <text x="560" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="var(--ink)">STOP</text>
+      <line x1="404" y1="112" x2="556" y2="112" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#ah)" marker-start="url(#ah2)"/>
+      <text x="480" y="104" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="var(--ink)">stopping distance</text>
+      <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="var(--ink)"/></marker><marker id="ah2" markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto"><path d="M8 0 L0 4 L8 8z" fill="var(--ink)"/></marker></defs>
+    </svg>
+    <figcaption>The ball rolls down the ramp, through the speed trap, off the end of the track, and onto the test surface until it stops.</figcaption>
+  </figure>
+  <ol class="steps">
+    <li>Lean <b>half-pipe #1</b> on a stack of books. Make the top <b>20 cm</b> high, measured straight up from the floor. Tape it so it can't slide.</li>
+    <li>Lay <b>half-pipe #2</b> flat on the floor at the bottom of the ramp. Tape the two pieces together so there's no bump.</li>
+    <li>On the flat piece, put a piece of tape for <b>Mark 1</b>. Measure <b>60 cm</b> and put another piece of tape for <b>Mark 2</b>. Mark 2 should be at the very end of the track.</li>
+    <li>Lay your first surface flat on the floor, touching the end of the track.</li>
+    <li><b>Test it:</b> set the ball at the top and let go. Don't push it.</li>
+  </ol>
+  <div class="see">The ball rolls down, through both marks, off the end of the track, and onto the surface. If it gets stuck or jumps out, check the tape at the joint.</div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Step 5</span><h2>Practice the Timer</h2><span class="time">2 min</span></div>
+  <p>You'll use the <b>Lap</b> button on your phone's stopwatch. It lets you get <b>2 times from 1 roll</b>. Tap 3 times:</p>
+  <div class="lap">
+    <div><b>Tap 1 · Start</b>When the ball reaches <b>Mark 1</b></div>
+    <div><b>Tap 2 · Lap</b>When the ball reaches <b>Mark 2</b> (the end of the track)</div>
+    <div><b>Tap 3 · Stop</b>The moment the ball <b>stops</b> rolling</div>
+  </div>
+  <p>Your phone will then show something like this:</p>
+  <div class="phone"><span>Lap 1</span><span>0.48 s</span><span class="arrow">← trap time (how long through the speed trap)</span><span>Lap 2</span><span>1.40 s</span><span class="arrow">← stopping time (how long until it stopped)</span></div>
+  <p><b>Practice 2 or 3 times</b> before you write anything down.</p>
+  <p style="font-size:14px;color:var(--muted)">Three taps too hard? Roll the ball twice: time the speed trap on the first roll, then time the stop on the second roll. Write that in your report.</p>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Step 6</span><h2>Roll and Record</h2><span class="time">≈ 18 min</span></div>
+  <ol class="steps">
+    <li>Set the ball at the top of the ramp. Let go. Don't push it.</li>
+    <li>Use the 3 taps to time it.</li>
+    <li>Measure the <b>stopping distance</b> in cm, from <b>Mark 2</b> to where the ball stopped.</li>
+    <li>Write down 3 numbers: <b>trap time</b>, <b>stopping time</b>, <b>stopping distance</b>.</li>
+    <li>Do this <b>3 times</b> on the same surface. That's 3 trials.</li>
+    <li>Switch to your next surface and repeat. Do all 3 surfaces.</li>
+  </ol>
+  <div class="tscroll"><table>
+    <tr><th>Surface</th><th>Trial</th><th>Trap time (s)</th><th>Stopping time (s)</th><th>Stopping distance (cm)</th></tr>
+    <tr><td rowspan="3"><b>1:</b> ______</td><td>1</td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td></tr>
+    <tr><td rowspan="3"><b>2:</b> ______</td><td>1</td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td></tr>
+    <tr><td rowspan="3"><b>3:</b> ______</td><td>1</td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td></tr>
+  </table></div>
+  <div class="see">The trap times should be about the same on every surface, because the ramp doesn't change. The stopping distances should be <b>different</b> on each surface.</div>
+  <p>If something goes wrong (you bumped the ball, or it rolled off the side), just do that trial again.</p>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Step 7</span><h2>Do the Math</h2><span class="time">≈ 7 min</span></div>
+  <p>Do these 4 steps <b>for each surface</b>. The gray boxes show an example with practice numbers.</p>
+  <div class="calc">
+    <div class="cs"><span class="num">A</span><h4>Find the average trap time</h4><p>Add your 3 trap times, then divide by 3.</p><span class="ex">(0.48 + 0.52 + 0.50) ÷ 3 = 0.50 s</span></div>
+    <div class="cs"><span class="num">B</span><h4>Find the starting speed</h4><p>speed = distance ÷ time. The distance is always <b>0.60 m</b> (the speed trap).</p><span class="ex">0.60 ÷ 0.50 = 1.2 m/s</span></div>
+    <div class="cs"><span class="num">C</span><h4>Find the average stopping time</h4><p>Add your 3 stopping times, then divide by 3.</p><span class="ex">(1.4 + 1.6 + 1.5) ÷ 3 = 1.5 s</span></div>
+    <div class="cs"><span class="num">D</span><h4>Find the acceleration</h4><p>a = (final − starting) ÷ time. Final is <b>0</b> because the ball stopped. Starting is your speed from Step B.</p><span class="ex">(0 − 1.2) ÷ 1.5 = −0.8 m/s²</span></div>
+  </div>
+  <div class="note good"><p><b>Check yourself:</b> every acceleration should be a <b>negative</b> number, because the ball is slowing down. Got a positive number? You probably did (1.2 − 0) instead of (0 − 1.2). Always do <b>final minus starting</b>.</p></div>
+
+  <div class="card">
+    <h3>Let the Google Sheet do the math</h3>
+    <p>Make one row for each surface. Type these headings across Row 1, then type the formulas in Row 2:</p>
+    <div class="tscroll"><table>
+      <tr><th>Column</th><th>Heading</th><th>Type this</th></tr>
+      <tr><td>A</td><td>Surface</td><td>the name (towel, rug…)</td></tr>
+      <tr><td>B, C, D</td><td>Trap time 1, 2, 3 (s)</td><td>your 3 trap times</td></tr>
+      <tr><td>E</td><td>Avg trap time (s)</td><td><code>=AVERAGE(B2:D2)</code></td></tr>
+      <tr><td>F</td><td>Starting speed (m/s)</td><td><code>=0.6/E2</code></td></tr>
+      <tr><td>G, H, I</td><td>Stopping time 1, 2, 3 (s)</td><td>your 3 stopping times</td></tr>
+      <tr><td>J</td><td>Avg stopping time (s)</td><td><code>=AVERAGE(G2:I2)</code></td></tr>
+      <tr><td>K</td><td>Acceleration (m/s²)</td><td><code>=(0-F2)/J2</code></td></tr>
+      <tr><td>L, M, N</td><td>Stopping distance 1, 2, 3 (cm)</td><td>your 3 distances</td></tr>
+      <tr><td>O</td><td>Avg stopping distance (cm)</td><td><code>=AVERAGE(L2:N2)</code></td></tr>
+    </table></div>
+    <p>Then drag the formulas down to Rows 3 and 4 for your other surfaces. That's the same fill-handle trick from the Coaster Lab.</p>
+    <p><b>Make a graph:</b> select columns <b>A</b> and <b>O</b> → <b>Insert → Chart → Column chart</b>. Title it "Stopping Distance by Surface."</p>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Step 8</span><h2>Answer the Questions</h2><span class="time">homework</span></div>
+  <p>Answer in your Lab Report using full sentences. Each question has a sentence starter you can use.</p>
+  <div class="q"><span class="qn">Question 1</span><span class="qt">Which surface stopped the ball the fastest? Use 2 numbers from your data.</span>
+    <div class="frame doc">The ___ stopped the ball fastest. It stopped in ___ cm, but on the ___ it rolled ___ cm.</div></div>
+  <div class="q"><span class="qn">Question 2</span><span class="qt">Was the starting speed about the same on every surface? Why did it need to be the same?</span>
+    <div class="frame doc">My starting speeds were ___, ___, and ___ m/s. They needed to be the same so that the only thing changing was ___.</div></div>
+  <div class="q"><span class="qn">Question 3</span><span class="qt">After the ball left the track, were the forces balanced or unbalanced? What force slowed it down?</span>
+    <div class="frame doc">The forces were ___, because the ball was ___. The force that slowed it down was ___.</div></div>
+  <div class="q"><span class="qn">Question 4</span><span class="qt">All your accelerations are negative. What does the negative sign mean?</span>
+    <div class="frame doc">The negative sign means the ball was ___. The surface with the biggest negative number was ___.</div></div>
+  <div class="q"><span class="qn">Question 5</span><span class="qt">Imagine a floor with <b>no friction at all</b>. What would the ball do after it left the track?</span>
+    <div class="frame doc">With no friction, the ball would ___, because of inertia, which means ___.</div></div>
+  <div class="q"><span class="qn">Question 6</span><span class="qt">Is your stopping distance a distance, a displacement, or both? Why?</span>
+    <div class="frame doc">It is ___, because the ball rolled in a ___ line and never ___.</div></div>
+  <div class="q"><span class="qn">Question 7</span><span class="qt">Compare with your partner on the surface you both tested. Were your numbers close? Why might they be different?</span>
+    <div class="frame doc">My partner and I both tested ___. My distance was ___ cm and hers was ___ cm. They might be different because ___.</div></div>
+  <div class="q"><span class="qn">Question 8 · Real world</span><span class="qt">Why do volleyball and soccer shoes have grippy soles? Use the words <b>friction</b> and <b>acceleration</b>.</span>
+    <div class="frame doc">Grippy soles give more ___, which helps a player ___ quickly. That means a bigger ___.</div></div>
+
+  <div class="card">
+    <h3>Conclusion: write one paragraph with 3 parts</h3>
+    <ol class="steps">
+      <li><b>Claim:</b> answer the testable question in 1 sentence.<span class="hint">"The surface changed how fast the ball stopped. The ___ stopped it fastest."</span></li>
+      <li><b>Evidence:</b> give at least 3 numbers from your data.<span class="hint">"On the towel the ball stopped in ___ cm with an acceleration of ___ m/s²…"</span></li>
+      <li><b>Reasoning:</b> explain why, using the words <b>friction</b>, <b>unbalanced force</b>, <b>acceleration</b>, and <b>inertia</b>.<span class="hint">"The ball kept rolling because of inertia, but friction was an unbalanced force that…"</span></li>
+    </ol>
+  </div>
+</section>
+
+<p class="footer">— Case 07 · Turn in your Lab Report and Google Sheet on Canvas. —</p>
+</div>
+</body>
+</html>

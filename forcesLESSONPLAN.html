@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forces Lesson Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#FAF5EC; --card:#FFFFFF; --ink:#221F2B; --ink-soft:#5B5568; --muted:#8A8396;
+    --track-red:#D8432B; --track-red-soft:#F6DAD2;
+    --field-teal:#146B72; --field-teal-soft:#D9ECEA;
+    --gold:#B9791E; --gold-soft:#F5E6C8;
+    --good:#2F8558; --good-soft:#DEF0E3;
+    --line:#E3D9C6; --sunk:#F3ECDF;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Karla',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4; --muted:#968EA3;
+      --track-red:#FF7A5C; --track-red-soft:#3A241F;
+      --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+      --gold:#F2B75A; --gold-soft:#3A2E14;
+      --good:#5FCB8B; --good-soft:#1B3324;
+      --line:#3A3444; --sunk:#1B1822;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4; --muted:#968EA3;
+    --track-red:#FF7A5C; --track-red-soft:#3A241F;
+    --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+    --gold:#F2B75A; --gold-soft:#3A2E14;
+    --good:#5FCB8B; --good-soft:#1B3324;
+    --line:#3A3444; --sunk:#1B1822;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);margin:0;padding-inline:16px;line-height:1.55;font-size:16px;}
+  .wrap{max-width:820px;margin:0 auto;padding-block:32px 80px;}
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;}
+  p{margin:0;color:var(--ink-soft);}
+  ul,ol{margin:0;padding-left:20px;color:var(--ink-soft);}
+  li{margin-bottom:6px;}
+  li b,p b,td b{color:var(--ink);}
+  a{color:var(--track-red);}
+  code,.mono{font-family:var(--mono);font-size:.92em;}
+
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:28px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--track-red);display:flex;gap:10px;align-items:center;}
+  .eyebrow::before{content:"●";font-size:9px;}
+  h1.title{font-weight:600;font-size:clamp(2rem,6vw,2.9rem);margin:8px 0 6px;}
+  .subtitle{color:var(--ink-soft);max-width:62ch;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+  .meta-row b{color:var(--ink);font-weight:600;}
+
+  section{margin-bottom:40px;display:flex;flex-direction:column;gap:14px;}
+  .sect-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px;}
+  .sect-head .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .sect-head h2{font-size:1.5rem;font-weight:600;}
+  .sect-head .time{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;}
+  .card h3{font-size:1.15rem;font-weight:600;}
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--track-red);border-radius:10px;padding:16px 20px;display:flex;flex-direction:column;gap:8px;}
+  .note.teal{border-left-color:var(--field-teal);} .note.gold{border-left-color:var(--gold);} .note.good{border-left-color:var(--good);}
+  .note h3{font-size:1.05rem;font-weight:600;}
+  .point{background:var(--gold-soft);border-radius:10px;padding:12px 16px;font-size:15px;color:var(--ink);}
+  .point b{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-right:6px;}
+
+  .steps{counter-reset:s;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  .steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px 11px 48px;position:relative;margin:0;color:var(--ink-soft);}
+  .steps li::before{content:counter(s);position:absolute;left:13px;top:11px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+  .steps .hint{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:3px;}
+
+  .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+  .role{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--field-teal);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+  .role.r2{border-top-color:var(--track-red);} .role.r3{border-top-color:var(--gold);}
+  .role .rn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .role h3{font-size:1.05rem;}
+  .role p{font-size:14.5px;}
+
+  .timeline{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
+  .tl{display:grid;grid-template-columns:92px 1fr;border-top:1px solid var(--line);}
+  .tl:first-child{border-top:none;}
+  .tl .t{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--track-red);background:var(--sunk);padding:12px 10px;}
+  .tl .b{padding:12px 14px;font-size:15px;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px;}
+  .tl .b b{color:var(--ink);}
+  .tl .w{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--field-teal);}
+  .tl.rev .t{color:var(--gold);}
+  @media (max-width:540px){.tl{grid-template-columns:1fr;}.tl .t{padding:8px 14px;}}
+
+  .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;}
+  details summary{cursor:pointer;font-weight:600;color:var(--ink);}
+  details[open] summary{margin-bottom:8px;}
+  details p+p{margin-top:6px;}
+  details.ans{background:var(--sunk);}
+  details.ans summary{font-family:var(--mono);font-size:12.5px;color:var(--field-teal);}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+  .q .qn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .q .qt{color:var(--ink);font-size:15.5px;}
+  .q .from{font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;color:var(--ink-soft);vertical-align:top;}
+  th{background:var(--sunk);color:var(--ink);font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;}
+  .tscroll{overflow-x:auto;border-radius:10px;border:1px solid var(--line);}
+  .tscroll table{border:none;}
+  .tscroll th:first-child,.tscroll td:first-child{border-left:none;} .tscroll th:last-child,.tscroll td:last-child{border-right:none;}
+  .tscroll tr:first-child th{border-top:none;} .tscroll tr:last-child td{border-bottom:none;}
+
+  .formula{font-family:var(--mono);font-size:15px;background:var(--sunk);border-radius:8px;padding:10px 14px;color:var(--ink);}
+  .work{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:15px;}
+  .work .k{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-top:2px;}
+  .work .v{color:var(--ink);}
+
+  .timer-bar{position:sticky;top:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:28px;}
+  .timer-num{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--track-red);font-variant-numeric:tabular-nums;}
+  .timer-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+  .btn{border:none;border-radius:8px;padding:9px 14px;font:600 13px var(--body);cursor:pointer;}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+  .btn.ghost{background:var(--sunk);color:var(--ink);border:1px solid var(--line);}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-family:var(--mono);font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 11px;color:var(--ink-soft);}
+  .footer{text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:20px;}
+  .k-red{color:var(--track-red)!important;} .k-teal{color:var(--field-teal)!important;} .k-gold{color:var(--gold)!important;} .k-good{color:var(--good)!important;}
+
+  /* clarity helpers */
+  .plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
+  .plan div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;}
+  .plan b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);}
+  .plan span{font-size:15px;color:var(--ink);}
+  .words{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;}
+  .word{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--field-teal);border-radius:10px;padding:10px 14px;}
+  .word b{display:block;color:var(--ink);font-size:16px;}
+  .word span{font-size:15px;color:var(--ink-soft);}
+  .word i{display:block;font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--field-teal);margin-top:4px;}
+  .see{background:var(--good-soft);border-radius:10px;padding:12px 16px;color:var(--ink);font-size:15px;}
+  .see::before{content:"✓ What you should see";display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--good);font-weight:600;margin-bottom:4px;}
+  .frame{background:var(--sunk);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:15px;color:var(--ink);}
+  .frame::before{content:"Type in the chat";display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:4px;}
+  .frame.doc::before{content:"Sentence starter";}
+  .bigidea{background:var(--ink);color:var(--paper);border-radius:12px;padding:16px 20px;font-size:17px;line-height:1.5;}
+  .bigidea b{color:var(--paper);}
+  .bigidea small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+  .eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-family:var(--mono);font-size:15px;color:var(--ink);}
+  .eq span{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;}
+  .eq .r{border-color:var(--track-red);color:var(--track-red);} .eq .t{border-color:var(--field-teal);color:var(--field-teal);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Teacher Plan · Unit: Motion &amp; Forces · Case 07</div>
+  <h1 class="title">Forces Cause Motion</h1>
+  <p class="subtitle">The next step after the Coaster Lab. Students learn <b>why</b> objects accelerate (net force, balanced vs. unbalanced, friction, inertia), and every new idea is tied back to the speed, velocity and acceleration skills they struggled with.</p>
+  <div class="meta-row"><span><b>Grade</b> 8 Physical Science</span><span><b>Time</b> 2 × 40 min</span><span><b>Class</b> 6 students, virtual, 3 breakout pairs</span><span><b>NGSS</b> MS-PS2-2</span></div>
+</header>
+
+<section>
+  <div class="sect-head"><span class="tag">Where we are</span><h2>How this builds on previous lessons</h2></div>
+  <div class="card"><ul>
+    <li><b>Motion Files, Case 04:</b> students can calculate acceleration. Now they learn what <i>causes</i> it: an unbalanced force.</li>
+    <li><b>Coaster Lab Background Research:</b> they already wrote about gravity and friction informally. This lesson makes those ideas official and measurable.</li>
+    <li><b>Coaster Lab skills:</b> the new lab reuses the same kit, speed trap, 3 trials, AVERAGE formulas, and Google Sheet layout. That way the only new thing is the science.</li>
+    <li><b>Return Trip / Motion Detectives:</b> same breakout-room pairs with defined roles, and the same "Motion Investigation Bureau" story (this is Case 07).</li>
+  </ul></div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Goals</span><h2>Learning objectives</h2></div>
+  <div class="card"><p><b>By the end of Session 2, each student can:</b></p><ol>
+    <li>Calculate a <b>net force</b> and decide whether forces are <b>balanced</b> or <b>unbalanced</b>.</li>
+    <li>Explain that balanced forces mean <b>no change in velocity</b> (even while moving), and unbalanced forces cause <b>acceleration</b> in the direction of the net force.</li>
+    <li>Explain <b>inertia</b> and <b>friction</b> using an everyday or sports example.</li>
+    <li>Use lab data to calculate speed (d ÷ t) and acceleration ((v<sub>f</sub> − v<sub>i</sub>) ÷ t), and explain what a negative acceleration means. <i>This one is review, practiced again until it's solid.</i></li>
+  </ol></div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Review plan</span><h2>Built-in repetition</h2></div>
+  <div class="note teal"><p>Since students struggled with the last section, the old skills aren't reviewed once and dropped. They come back in <b>every</b> part of the lesson, each time attached to the new idea. Students also hear the same <b>3-step recipe</b> every time: ① formula → ② plug in → ③ answer with units.</p></div>
+  <div class="tscroll"><table>
+    <tr><th>Skill they struggled with</th><th>Session 1</th><th>Homework</th><th>Session 2</th></tr>
+    <tr><td><b>Distance vs. displacement</b></td><td>Rewind 1</td><td>Net Force card's "Connects to" line · Self-Check 5</td><td>Analysis Q6</td></tr>
+    <tr><td><b>Speed = d ÷ t</b></td><td>Rewind 2</td><td>Upgrade the Speed card</td><td>Lab Warm-up A · lab calculation</td></tr>
+    <tr><td><b>Speed vs. velocity</b></td><td>Rewind 3 · Game Film Play 4</td><td>Upgrade the Velocity card · Inertia card</td><td>Lab Warm-up D</td></tr>
+    <tr><td><b>Acceleration = (v<sub>f</sub> − v<sub>i</sub>) ÷ t</b></td><td>Rewinds 4–5 · Sim Mission B ("velocity every second" row)</td><td>Self-Checks 3–4 · Newton's 2nd Law card</td><td>Lab Warm-up B · lab calculation for 3 surfaces</td></tr>
+    <tr><td><b>Negative acceleration</b></td><td>Rewind 5 · Mission D on grass · Game Film Play 2</td><td>Friction card · Self-Check 3</td><td>"Check yourself" box · Analysis Q4</td></tr>
+    <tr><td><b>Acceleration includes turning</b></td><td>Rewind 6</td><td>Upgrade the Acceleration card</td><td>—</td></tr>
+  </table></div>
+  <p>By the end, each student will have done the acceleration formula <b>at least 7 times</b>, three of them with her own data.</p>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Cheat sheet</span><h2>Struggle spots to watch for</h2></div>
+  <div class="two">
+    <div class="note"><h3>Carry-over mistakes from motion</h3><ul>
+      <li><b>Flipping the subtraction:</b> (v<sub>i</sub> − v<sub>f</sub>) instead of (v<sub>f</sub> − v<sub>i</sub>). Have them say "final minus starting" out loud every time.</li>
+      <li><b>Mixing units:</b> writing m/s for acceleration. Ask: "Is it a speed, or a change in speed per second?"</li>
+      <li><b>Speed vs. velocity:</b> forgetting direction. Keep asking: "Which way?"</li>
+    </ul></div>
+    <div class="note gold"><h3>New force misconceptions</h3><ul>
+      <li><b>"A moving thing must have a force pushing it."</b> No: Mission D on ice and Game Film Play 4 (the bus).</li>
+      <li><b>"Balanced means not moving."</b> Balanced means <i>velocity not changing</i>, so the object could be at rest or cruising.</li>
+      <li><b>"At the top of a set, there's no force."</b> Gravity never turns off (Game Film Play 6).</li>
+    </ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Session 1</span><h2>Forces Cause Acceleration</h2><span class="time">40 min</span></div>
+  <div class="timeline">
+    <div class="tl rev"><div class="t">0–6</div><div class="b"><span class="w">Main room · share screen</span><b>Rewind: Motion Review</b> (<a href="force-faceoff.html">Force Face-Off, Part 1</a>). Six questions, answers typed in chat. Use <b>cold call + chat waterfall</b>: everyone types, then hits Enter at the same time, so nobody copies. Model the 3-step recipe on Rewinds 2 and 4, then let them do 5 on their own.</div></div>
+    <div class="tl"><div class="t">6–21</div><div class="b"><span class="w">Main room → 3 breakouts → main room</span><b>Engagement: Force Face-Off</b> (Part 2). <b>Predict It!:</b> share your screen and play 4 short animations: the van braking, the tablecloth trick, ice vs. grass, and the same kick on a soccer ball vs. a bowling ball. Students type A/B/C in the chat <i>before</i> you press Play, and everyone hits Enter together. <b>Tug-of-War Lab:</b> each pair does Mission A, then its own mission (B, C or D) in the simulator. Each room reports back for 60 s, then you do the Big Reveal.</div></div>
+    <div class="tl"><div class="t">21–30</div><div class="b"><span class="w">Main room</span><b>Mini-lesson through Game Film</b> (Part 3). Students type B or U for 6 sports moments, then you reveal each answer. Stop on Play 4 (the bus) and Play 6 (the top of a set), since those are the misconception traps. Name the new vocabulary as it comes up: net force, friction, gravity, inertia. Then write <b>a = net force ÷ mass</b> on screen and connect it to Room 2's Heavy Hauler numbers.</div></div>
+    <div class="tl"><div class="t">30–36</div><div class="b"><span class="w">Main room</span><b>Lab preview.</b> Open <a href="lab-8th-friction-lab.html">The Friction Finish Line</a>. Read the testable question, then have each student type a hypothesis and choose 3 surfaces. Pairs must share at least one surface.</div></div>
+    <div class="tl"><div class="t">36–40</div><div class="b"><span class="w">Main room</span><b>Exit ticket</b> (in chat) and assign <a href="force-evidence-cards.html">Force Evidence Cards</a>. Remind them to bring the Coaster Lab kit, 3 surfaces, and a charged phone.</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Session 2</span><h2>The Friction Finish Line Lab</h2><span class="time">40 min</span></div>
+  <div class="timeline">
+    <div class="tl rev"><div class="t">0–5</div><div class="b"><span class="w">Main room</span><b>Lab Warm-Up</b> (lab page, Step 1). These use the exact numbers from the worked example, so students rehearse the calculations right before doing them with their own data. Then quickly flash 3 Word Wall cards: each student holds up one card for the others to define.</div></div>
+    <div class="tl"><div class="t">5–10</div><div class="b"><span class="w">Breakouts (pairs)</span><b>Setup and lap-timer practice.</b> Each student builds the ramp and speed trap at home, while the partner on camera double-checks the 20 cm height and the 60 cm trap.</div></div>
+    <div class="tl"><div class="t">10–28</div><div class="b"><span class="w">Breakouts (pairs)</span><b>Run trials:</b> 3 surfaces × 3 trials each. Partners check in after each surface. Visit each room once and look at one stopwatch reading.</div></div>
+    <div class="tl"><div class="t">28–35</div><div class="b"><span class="w">Breakouts → main room</span><b>Calculate</b> starting speed and acceleration for one surface together, using the worked example as a model. Students do the rest in the Sheet.</div></div>
+    <div class="tl"><div class="t">35–40</div><div class="b"><span class="w">Main room</span><b>Share-out:</b> each student says her "fastest stop" surface and its acceleration, and you build a class ranking in chat. Analysis questions and the CER conclusion are homework.</div></div>
+  </div>
+  <div class="card"><h3>What results to expect</h3>
+    <p>Starting speeds from 20 cm are usually about <b>1.0–1.5 m/s</b>. A towel or thick rug stops the ball fastest: short distance, larger negative acceleration (often −1 to −3 m/s²). A hard floor gives the longest roll. If a student's acceleration comes out <b>positive</b>, she subtracted backwards. The "Check yourself" box on the lab page catches this.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Checklist</span><h2>Materials (at home)</h2></div>
+  <div class="two">
+    <div class="card"><h3>Session 1</h3><ul><li>Nothing hands-on: Session 1 is all on screen</li><li>Teacher: share your screen for Predict It!. Students: a device that can share its screen (the Driver in each pair, for the simulator)</li></ul></div>
+    <div class="card"><h3>Session 2</h3><ul><li>Coaster Lab kit: 2 half-pipes, the same ball, painter's tape, tape measure</li><li>Books for a 20 cm ramp</li><li>3 surfaces (towel, rug, yoga mat, blanket, hard floor)</li><li>A phone stopwatch with a Lap button</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Assessment</span><h2>How you'll know they got it</h2></div>
+  <div class="card"><ul>
+    <li><b>Formative:</b> Rewind chat answers (check who's still flipping the subtraction), mission report-outs, Game Film B/U calls, and the exit ticket.</li>
+    <li><b>Homework:</b> 10 new cards with "Connects to" lines, 4 upgraded old cards, and the student's ★ list of cards she missed.</li>
+    <li><b>Lab:</b> the Sheet (formulas correct, every acceleration negative), 8 analysis questions, and the CER conclusion.</li>
+  </ul></div>
+  <div class="note"><h3>Adjusting the difficulty</h3><ul>
+    <li><b>Extra support:</b> pair a struggling student with a confident partner as Recorder in Session 1, so she sees each step. The sentence starters are already built into the lab questions.</li>
+    <li><b>Extra challenge:</b> in the sim, predict the acceleration with a = net force ÷ mass <i>before</i> running it, then check against the "velocity every second" row. In the lab, use v<sup>2</sup> = 2ad to see whether the stopping distance matches the calculated acceleration.</li>
+  </ul></div>
+</section>
+
+<p class="footer">— Case 07 · Teacher copy —</p>
+</div>
+</body>
+</html>
