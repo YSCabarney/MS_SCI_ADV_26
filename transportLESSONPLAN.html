@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cell Transport Lesson Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#faf7f0; --surface:#ffffff; --surface-2:#f1ece0; --ink:#1c2138; --ink-soft:#454b6b;
+    --muted:#767c99; --line:#e4ddc9; --accent:#ef6c2c; --accent-soft:#ffe4d1; --teal:#127a67;
+    --teal-soft:#d9f0e7; --gold:#c98a1f; --gold-soft:#f7e6c2; --card:#fffdf7; --water:#2f7fd6; --water-soft:rgba(47,127,214,.12); --lipid:#8b90ad; --shadow:0 1px 2px rgba(28,33,56,.06),0 8px 20px -14px rgba(28,33,56,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+      --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+      --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --card:#20243a; --water:#6aa9f0; --water-soft:rgba(106,169,240,.13); --lipid:#7d83a8; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+    --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+    --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --card:#20243a; --water:#6aa9f0; --water-soft:rgba(106,169,240,.13); --lipid:#7d83a8; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'Work Sans',system-ui,sans-serif; margin:0; padding-inline:16px; padding-block:26px;}
+  .wrap{max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:26px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; text-wrap:balance; margin:0;}
+  p{line-height:1.6; color:var(--ink-soft); margin:0;}
+  ul,ol{margin:0; padding-left:20px; color:var(--ink-soft); line-height:1.6; font-size:14.5px;}
+  li b, p b{color:var(--ink);}
+  a{color:var(--accent);}
+
+  .masthead{background:linear-gradient(135deg,var(--ink) 0%,#2a2f52 100%); border-radius:18px; padding:24px; color:#f4f1ff; box-shadow:var(--shadow);}
+  :root[data-theme="dark"] .masthead{background:linear-gradient(135deg,#262a44 0%,#33395f 100%);}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .masthead{background:linear-gradient(135deg,#262a44 0%,#33395f 100%);} }
+  .masthead .tag{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; margin-bottom:12px;}
+  .masthead h1{font-size:clamp(25px,6vw,34px); color:#fff; font-weight:700; line-height:1.1;}
+  .masthead p{color:#d7d9f2; margin-top:8px; font-size:14.5px;}
+  .meta-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .meta-chip{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:7px 11px; color:#e9e9ff;}
+
+  section{display:flex; flex-direction:column; gap:12px;}
+  .section-head{border-bottom:2px solid var(--line); padding-bottom:8px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .section-head h2{font-size:20px; font-weight:700;}
+  .section-head .kicker{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.12em; font-weight:600;}
+
+  .callout{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;}
+  .callout.teal{border-left-color:var(--teal);} .callout.gold{border-left-color:var(--gold);}
+  .callout h3{font-size:16px;}
+  .callout p, .callout li{font-size:14.5px;}
+
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px;}
+  .card h3{font-size:17px;}
+
+  .roles{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;}
+  .role{border-radius:14px; padding:16px; box-shadow:var(--shadow); border:1px solid var(--line); display:flex; flex-direction:column; gap:6px;}
+  .role.a{background:var(--accent-soft); border-color:var(--accent);}
+  .role.b{background:var(--teal-soft); border-color:var(--teal);}
+  .role.c{background:var(--gold-soft); border-color:var(--gold);}
+  .role .rn{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em; font-weight:600;}
+  .role.a .rn{color:var(--accent);} .role.b .rn{color:var(--teal);} .role.c .rn{color:var(--gold);}
+  .role h3{font-size:17px;}
+  .role p{font-size:13.5px;}
+
+  .steps{counter-reset:step; display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .steps li{counter-increment:step; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px 10px 46px; position:relative; font-size:14px; color:var(--ink-soft); box-shadow:var(--shadow);}
+  .steps li::before{content:counter(step); position:absolute; left:12px; top:12px; font-family:'IBM Plex Mono',monospace; font-weight:600; width:22px; height:22px; border-radius:50%; background:var(--surface-2); color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:12.5px;}
+  .steps .mm{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); display:block; margin-top:2px;}
+
+  .round{border-radius:16px; padding:18px; box-shadow:var(--shadow); border:1px solid var(--line); display:flex; flex-direction:column; gap:12px; background:var(--surface);}
+  .round-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .round-pill{font-family:'IBM Plex Mono',monospace; font-size:11.5px; padding:5px 10px; border-radius:999px; font-weight:600; background:var(--surface-2); color:var(--ink-soft);}
+  .round-head h2{font-size:19px;}
+
+  .timeline{display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:var(--shadow);}
+  .tl-row{display:grid; grid-template-columns:96px 1fr; border-top:1px solid var(--line);}
+  .tl-row:first-child{border-top:none;}
+  .tl-time{font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--accent); background:var(--surface-2); padding:12px 10px;}
+  .tl-body{padding:12px 14px; font-size:14px; color:var(--ink-soft); line-height:1.55; display:flex; flex-direction:column; gap:4px;}
+  .tl-body b{color:var(--ink);}
+  .tl-body .where{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--teal); text-transform:uppercase; letter-spacing:.08em;}
+  @media (max-width:520px){ .tl-row{grid-template-columns:1fr;} .tl-time{padding:8px 14px;} }
+
+  .two-col{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px;}
+  .compare{border-radius:14px; padding:16px; border:1px solid var(--line); box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;}
+  .compare.passive{background:var(--teal-soft); border-color:var(--teal);}
+  .compare.active{background:var(--accent-soft); border-color:var(--accent);}
+  .compare h3{font-size:17px;}
+  .compare p, .compare li{font-size:14px;}
+
+  details{background:var(--surface-2); border-radius:10px; padding:10px 14px; font-size:14px; color:var(--ink-soft);}
+  details summary{cursor:pointer; font-weight:600; color:var(--ink);}
+  details p{margin-top:6px; font-size:14px;}
+
+  table{width:100%; border-collapse:collapse; font-size:13.5px; background:var(--surface); border-radius:12px; overflow:hidden; box-shadow:var(--shadow);}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left; color:var(--ink-soft);}
+  th{background:var(--surface-2); color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em;}
+  .table-scroll{overflow-x:auto;}
+
+  .timer-bar{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 18px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; position:sticky; top:0; z-index:5;}
+  .timer-num{font-family:'IBM Plex Mono',monospace; font-size:28px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--accent);}
+  .timer-label{font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-family:'IBM Plex Mono',monospace;}
+  .timer-controls{display:flex; gap:8px;}
+  .tbtn{border:none; border-radius:9px; padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit;}
+  .tbtn.primary{background:var(--accent); color:#fff;}
+  .tbtn.ghost{background:var(--surface-2); color:var(--ink);}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font-family:'IBM Plex Mono',monospace; font-size:12px; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:6px 11px; color:var(--ink-soft);}
+  .footer{text-align:center; font-size:13px; color:var(--muted); padding-top:6px;}
+
+  figure.anim{margin:0; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow);}
+  figure.anim canvas{display:block; width:100%; height:auto; aspect-ratio:600/250;}
+  .anim-bar{display:flex; align-items:center; justify-content:space-between; gap:8px 12px; padding:8px 12px; border-top:1px solid var(--line); background:var(--surface-2); flex-wrap:wrap;}
+  .anim-readout{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-soft); line-height:1.5; min-height:1.5em;}
+  .anim-readout b{color:var(--ink);}
+  .anim-btns{display:flex; gap:6px; margin-left:auto;}
+  .anim-btns button{font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px; padding:5px 9px; cursor:pointer;}
+  figure.anim figcaption{padding:10px 14px; font-size:13.5px; color:var(--ink-soft); line-height:1.55; border-top:1px solid var(--line);}
+  figure.anim figcaption b{color:var(--ink);}
+  .k-teal{color:var(--teal)!important;} .k-accent{color:var(--accent)!important;} .k-gold{color:var(--gold)!important;} .k-water{color:var(--water)!important;}
+  .legend{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12.5px; color:var(--ink-soft);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .sw{width:11px; height:11px; border-radius:50%; display:inline-block;}
+  .sw.hex{border-radius:2px; transform:rotate(45deg) scale(.85);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="tag">🏐 Teacher Plan · Unit: Cells</div>
+  <h1>Through the Net: Cell Transport</h1>
+  <p>The next step after organelles and the scale lab. Students zoom in on the cell membrane's job, "controls what enters and exits the cell," and learn how materials actually get across: passive transport (free, downhill) and active transport (costs energy, uphill).</p>
+  <div class="meta-row">
+    <span class="meta-chip">Grade 7 Life Science</span>
+    <span class="meta-chip">2 sessions × 40 min</span>
+    <span class="meta-chip">3 players, virtual</span>
+    <span class="meta-chip">NGSS MS-LS1-2</span>
+  </div>
+</header>
+
+<section>
+  <div class="section-head"><span class="kicker">Where we are</span><h2>How this builds on what they know</h2></div>
+  <div class="card">
+    <ul>
+      <li><b>Cell membrane</b> (Word Wall card #5): they can already say it "controls what enters and exits." Now they find out <i>how</i>.</li>
+      <li><b>Mitochondria</b> release energy. Active transport is where the cell spends that energy.</li>
+      <li><b>Ribosomes build proteins and the Golgi ships them.</b> Ribosomes build the transport proteins, and the Golgi's packages leave the cell by exocytosis.</li>
+      <li><b>One Job Down, Team Down:</b> if the membrane stops working, the whole cell fails, just like the broken rally.</li>
+      <li><b>Scale Lab:</b> they reuse the same skills: keep the ruler in the photo, write the testable question, hypothesis and variables, and treat small measurement differences as real data.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><span class="kicker">Goals</span><h2>Learning objectives</h2></div>
+  <div class="card">
+    <p><b>By the end of Session 2, each student can:</b></p>
+    <ol>
+      <li>Explain that the cell membrane is <b>selectively permeable</b>: it lets some materials through and blocks others.</li>
+      <li>Explain the difference between <b>passive</b> transport (high → low concentration, no energy) and <b>active</b> transport (low → high, uses energy), using a real-world example of each.</li>
+      <li>Describe <b>osmosis</b> as water moving across a membrane, and use lab evidence (potato strips and cucumber cells) to predict which way water moves.</li>
+      <li>Plan and carry out a fair test and support a claim with data. This builds on the Scale Lab.</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><span class="kicker">The big idea</span><h2>Teacher cheat sheet</h2></div>
+  <div class="two-col">
+    <div class="compare passive">
+      <h3>🛝 Passive transport</h3>
+      <p>Materials move from <b>high → low</b> concentration, down the gradient. <b>The cell spends no energy.</b></p>
+      <ul>
+        <li><b>Diffusion:</b> oxygen in, carbon dioxide out</li>
+        <li><b>Osmosis:</b> water across the membrane</li>
+        <li>Some molecules need a <b>transport protein</b> "door" but still use no energy</li>
+      </ul>
+      <p><i>Volleyball:</i> a ball rolling downhill off a tilted court. Nobody has to push it.</p>
+    </div>
+    <div class="compare active">
+      <h3>🏋️ Active transport</h3>
+      <p>Materials move from <b>low → high</b> concentration, against the gradient. <b>Uses energy</b> from the mitochondria.</p>
+      <ul>
+        <li><b>Transport protein pumps</b>, like the sodium-potassium pump in nerve and muscle cells</li>
+        <li><b>Endocytosis:</b> the membrane wraps around and swallows big particles</li>
+        <li><b>Exocytosis:</b> vesicles from the Golgi fuse with the membrane and dump their contents outside</li>
+      </ul>
+      <p><i>Volleyball:</i> shagging every ball back into one already-full cart. That's sweat and effort.</p>
+    </div>
+  </div>
+  <div class="callout gold">
+    <h3>Watch for these misconceptions</h3>
+    <ul>
+      <li><b>"Molecules stop moving at equilibrium."</b> No. They keep moving, but in equal amounts both ways, so nothing changes overall.</li>
+      <li><b>"Passive means nothing is happening."</b> Lots of motion is happening. The <i>cell</i> just isn't paying for it.</li>
+      <li><b>"Salt moves into the potato."</b> The big visible change is <b>water leaving</b> the cells, which is osmosis. Make students say where the <i>water</i> went.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><span class="kicker">Session 1 · 40 min</span><h2>Downhill vs. Uphill</h2></div>
+  <div class="timeline">
+    <div class="tl-row"><div class="tl-time">0–3</div><div class="tl-body"><span class="where">Classroom · on video</span><b>Huddle recall.</b> Ask: "Grab Word Wall card #5. What's the cell membrane's job?" Then: "Today we find out <i>how</i> it decides what gets in."</div></div>
+    <div class="tl-row"><div class="tl-time">3–18</div><div class="tl-body"><span class="where">Gymnasium · prop the device on a chair</span><b>Engagement: <a href="transport-introactivity.html">Downhill / Uphill</a>.</b> Uses only volleyballs, the court, and a stopwatch. <b>Round 1, The Spread:</b> the girls push the balls around randomly and count them every 30 s, which shows diffusion and then equilibrium. <b>Round 2, The Shag:</b> they put every ball back into the crowded corner and compare their pulse before and after, so they feel the energy cost of active transport. <b>Round 3, Film Room:</b> they sort five body examples into downhill or uphill to check understanding. Each round ends with a matching animation.</div></div>
+    <div class="tl-row"><div class="tl-time">18–30</div><div class="tl-body"><span class="where">Classroom table</span><b>Mini-lesson (share screen).</b> Share your screen on the <a href="transportVOCAB.html">Word Wall page</a> and play its animations in this order: <i>concentration gradient → diffusion → passive transport → osmosis → active transport → endocytosis/exocytosis</i>. Pause each one and ask, "Which way is it moving, and is the cell paying energy?" Then ask the 3 quick checks below.</div></div>
+    <div class="tl-row"><div class="tl-time">30–37</div><div class="tl-body"><span class="where">Classroom table · Google Doc</span><b>Lab preview.</b> Open the <a href="lab-7th-transport-lab.html">Salty Spuds lab</a>. Read the testable question together. Each student writes a hypothesis (If… then… because…) and the IV, DV and 3 controlled variables, just like the Scale Lab.</div></div>
+    <div class="tl-row"><div class="tl-time">37–40</div><div class="tl-body"><span class="where">Classroom</span><b>Assign homework:</b> <a href="transportVOCAB.html">Transport Word Wall</a> (10 cards). Remind them to bring cards and lab materials to Session 2.</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Mini-lesson quick checks (call them out, then reveal)</h3>
+    <details><summary>1. Someone makes popcorn in the kitchen, and soon you can smell it in your bedroom. Passive or active? Why?</summary><p>Passive (diffusion). The scent molecules spread from high concentration (kitchen) to low (bedroom) without anyone pushing them.</p></details>
+    <details><summary>2. A root cell pulls in minerals even though there are already MORE minerals inside the cell than in the soil. Passive or active?</summary><p>Active. The minerals move from low → high, against the gradient, so the cell has to spend energy (from mitochondria) running pumps.</p></details>
+    <details><summary>3. Wilted lettuce gets crispy again after sitting in cold water. What moved, and which direction?</summary><p>Water moved <i>into</i> the lettuce cells by osmosis, from where there was more water (the bowl) to where there was less (inside the cells).</p></details>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><span class="kicker">Session 2 · 40 min</span><h2>Salty Spuds &amp; Sweaty Cucumbers Lab</h2></div>
+  <div class="callout teal">
+    <p><b>Before class (adult on site):</b> cut 3 potato strips the same size (about 1 cm × 1 cm × 6 cm, like thick fries) and set them aside wrapped in damp paper towel. Then cut a few thin cucumber slices. Set out 3 cups, salt, measuring spoons, the mm rulers and the charged microscopes.</p>
+  </div>
+  <div class="timeline">
+    <div class="tl-row"><div class="tl-time">0–4</div><div class="tl-body"><span class="where">Classroom table</span><b>Word Wall flash.</b> Each player picks a card at random, reads the word, and the team gives the definition. Collect the cards for the wall.</div></div>
+    <div class="tl-row"><div class="tl-time">4–9</div><div class="tl-body"><span class="where">Classroom table</span><b>Part A setup.</b> Each player owns one cup: tap water / a little salt / a lot of salt. Measure the starting length of each strip against the ruler, do the floppy test, then drop all 3 in together. <b>Start the 25-minute soak timer.</b></div></div>
+    <div class="tl-row"><div class="tl-time">9–19</div><div class="tl-body"><span class="where">Classroom table · microscopes</span><b>Part B: Cucumber Sweat.</b> Salt half of a cucumber slice. Take microscope photos at 0, 3 and 6 minutes, comparing the salted and plain halves. Students watch water beads form on the salted side as cells lose water by osmosis.</div></div>
+    <div class="tl-row"><div class="tl-time">19–30</div><div class="tl-body"><span class="where">Classroom table · poster board</span><b>Part C: Membrane Playbook Poster.</b> Each player leads one zone of the poster. The data table is left blank for the results.</div></div>
+    <div class="tl-row"><div class="tl-time">30–35</div><div class="tl-body"><span class="where">Classroom table</span><b>Part A results.</b> Pull the strips out, pat them dry, measure the ending length, do the floppy test again, and fill in the data table on the poster.</div></div>
+    <div class="tl-row"><div class="tl-time">35–40</div><div class="tl-body"><span class="where">Hold the poster up to the camera</span><b>Final huddle and exit ticket.</b> Each player answers one question out loud (below). The analysis questions and conclusion go in their Google Doc as homework.</div></div>
+  </div>
+  <div class="card">
+    <h3>Exit ticket: one per player</h3>
+    <ol>
+      <li>Which strip got floppiest, and where did its water go?</li>
+      <li>What did you see on the salted half of the cucumber, and what is the name for that process?</li>
+      <li>Name one thing your body does with <b>active</b> transport, and which organelle pays for it.</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><span class="kicker">Checklist</span><h2>Materials</h2></div>
+  <div class="two-col">
+    <div class="card">
+      <h3>Session 1 · Gym</h3>
+      <ul>
+        <li>10–12 volleyballs</li>
+        <li>A phone stopwatch</li>
+        <li>A device on a chair so you can see the court</li>
+        <li>No tape needed: the center line under the net is the "membrane"</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Session 2 · Classroom table</h3>
+      <ul>
+        <li>Digital microscopes (charged) + Max-See app</li>
+        <li>1 potato, 1 cucumber, table salt, measuring spoons</li>
+        <li>3 clear cups, water, paper towels, plate</li>
+        <li>Millimeter rulers (from the Scale Lab)</li>
+        <li>Poster board + markers</li>
+        <li>Knife, for the adult only</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><span class="kicker">Assessment</span><h2>How you'll know they got it</h2></div>
+  <div class="card">
+    <ul>
+      <li><b>Formative:</b> the Round 1 ball-count data, the Film Room calls in Round 3, the mini-lesson quick checks, and the exit ticket.</li>
+      <li><b>Homework:</b> the 10 Word Wall cards, with definitions in their own words and one real example each.</li>
+      <li><b>Lab:</b> the Google Doc (hypothesis, variables, data, analysis, conclusion) and the Membrane Playbook Poster.</li>
+    </ul>
+  </div>
+  <div class="callout">
+    <h3>Adjusting the difficulty</h3>
+    <ul>
+      <li><b>Extra support:</b> give a sentence frame: "Water moved from the ____ to the ____ because there was more ____ in the ____."</li>
+      <li><b>Extra challenge:</b> calculate the percent change in length: (end − start) ÷ start × 100. Or predict what would happen to a strip in <i>sugar</i> water.</li>
+    </ul>
+  </div>
+</section>
+
+<p class="footer">🏐 Unit: Cells · Next step after the Scale Lab</p>
+</div>
+</body>
+</html>

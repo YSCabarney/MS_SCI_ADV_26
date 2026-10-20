@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transport Word Wall</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#faf7f0; --surface:#ffffff; --surface-2:#f1ece0; --ink:#1c2138; --ink-soft:#454b6b;
+    --muted:#767c99; --line:#e4ddc9; --accent:#ef6c2c; --accent-soft:#ffe4d1; --teal:#127a67;
+    --teal-soft:#d9f0e7; --gold:#c98a1f; --gold-soft:#f7e6c2; --card:#fffdf7; --water:#2f7fd6; --water-soft:rgba(47,127,214,.12); --lipid:#8b90ad; --shadow:0 1px 2px rgba(28,33,56,.06),0 8px 20px -14px rgba(28,33,56,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+      --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+      --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --card:#20243a; --water:#6aa9f0; --water-soft:rgba(106,169,240,.13); --lipid:#7d83a8; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+    --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+    --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --card:#20243a; --water:#6aa9f0; --water-soft:rgba(106,169,240,.13); --lipid:#7d83a8; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'Work Sans',system-ui,sans-serif; margin:0; padding-inline:16px; padding-block:26px;}
+  .wrap{max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:26px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; text-wrap:balance; margin:0;}
+  p{line-height:1.6; color:var(--ink-soft); margin:0;}
+  ul,ol{margin:0; padding-left:20px; color:var(--ink-soft); line-height:1.6; font-size:14.5px;}
+  li b, p b{color:var(--ink);}
+  a{color:var(--accent);}
+
+  .masthead{background:linear-gradient(135deg,var(--ink) 0%,#2a2f52 100%); border-radius:18px; padding:24px; color:#f4f1ff; box-shadow:var(--shadow);}
+  :root[data-theme="dark"] .masthead{background:linear-gradient(135deg,#262a44 0%,#33395f 100%);}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .masthead{background:linear-gradient(135deg,#262a44 0%,#33395f 100%);} }
+  .masthead .tag{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; margin-bottom:12px;}
+  .masthead h1{font-size:clamp(25px,6vw,34px); color:#fff; font-weight:700; line-height:1.1;}
+  .masthead p{color:#d7d9f2; margin-top:8px; font-size:14.5px;}
+  .meta-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .meta-chip{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:7px 11px; color:#e9e9ff;}
+
+  section{display:flex; flex-direction:column; gap:12px;}
+  .section-head{border-bottom:2px solid var(--line); padding-bottom:8px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .section-head h2{font-size:20px; font-weight:700;}
+  .section-head .kicker{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.12em; font-weight:600;}
+
+  .callout{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;}
+  .callout.teal{border-left-color:var(--teal);} .callout.gold{border-left-color:var(--gold);}
+  .callout h3{font-size:16px;}
+  .callout p, .callout li{font-size:14.5px;}
+
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px;}
+  .card h3{font-size:17px;}
+
+  .roles{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;}
+  .role{border-radius:14px; padding:16px; box-shadow:var(--shadow); border:1px solid var(--line); display:flex; flex-direction:column; gap:6px;}
+  .role.a{background:var(--accent-soft); border-color:var(--accent);}
+  .role.b{background:var(--teal-soft); border-color:var(--teal);}
+  .role.c{background:var(--gold-soft); border-color:var(--gold);}
+  .role .rn{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em; font-weight:600;}
+  .role.a .rn{color:var(--accent);} .role.b .rn{color:var(--teal);} .role.c .rn{color:var(--gold);}
+  .role h3{font-size:17px;}
+  .role p{font-size:13.5px;}
+
+  .steps{counter-reset:step; display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .steps li{counter-increment:step; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px 10px 46px; position:relative; font-size:14px; color:var(--ink-soft); box-shadow:var(--shadow);}
+  .steps li::before{content:counter(step); position:absolute; left:12px; top:12px; font-family:'IBM Plex Mono',monospace; font-weight:600; width:22px; height:22px; border-radius:50%; background:var(--surface-2); color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:12.5px;}
+  .steps .mm{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); display:block; margin-top:2px;}
+
+  .round{border-radius:16px; padding:18px; box-shadow:var(--shadow); border:1px solid var(--line); display:flex; flex-direction:column; gap:12px; background:var(--surface);}
+  .round-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .round-pill{font-family:'IBM Plex Mono',monospace; font-size:11.5px; padding:5px 10px; border-radius:999px; font-weight:600; background:var(--surface-2); color:var(--ink-soft);}
+  .round-head h2{font-size:19px;}
+
+  .timeline{display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:var(--shadow);}
+  .tl-row{display:grid; grid-template-columns:96px 1fr; border-top:1px solid var(--line);}
+  .tl-row:first-child{border-top:none;}
+  .tl-time{font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--accent); background:var(--surface-2); padding:12px 10px;}
+  .tl-body{padding:12px 14px; font-size:14px; color:var(--ink-soft); line-height:1.55; display:flex; flex-direction:column; gap:4px;}
+  .tl-body b{color:var(--ink);}
+  .tl-body .where{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--teal); text-transform:uppercase; letter-spacing:.08em;}
+  @media (max-width:520px){ .tl-row{grid-template-columns:1fr;} .tl-time{padding:8px 14px;} }
+
+  .two-col{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px;}
+  .compare{border-radius:14px; padding:16px; border:1px solid var(--line); box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;}
+  .compare.passive{background:var(--teal-soft); border-color:var(--teal);}
+  .compare.active{background:var(--accent-soft); border-color:var(--accent);}
+  .compare h3{font-size:17px;}
+  .compare p, .compare li{font-size:14px;}
+
+  details{background:var(--surface-2); border-radius:10px; padding:10px 14px; font-size:14px; color:var(--ink-soft);}
+  details summary{cursor:pointer; font-weight:600; color:var(--ink);}
+  details p{margin-top:6px; font-size:14px;}
+
+  table{width:100%; border-collapse:collapse; font-size:13.5px; background:var(--surface); border-radius:12px; overflow:hidden; box-shadow:var(--shadow);}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left; color:var(--ink-soft);}
+  th{background:var(--surface-2); color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em;}
+  .table-scroll{overflow-x:auto;}
+
+  .timer-bar{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 18px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; position:sticky; top:0; z-index:5;}
+  .timer-num{font-family:'IBM Plex Mono',monospace; font-size:28px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--accent);}
+  .timer-label{font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-family:'IBM Plex Mono',monospace;}
+  .timer-controls{display:flex; gap:8px;}
+  .tbtn{border:none; border-radius:9px; padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit;}
+  .tbtn.primary{background:var(--accent); color:#fff;}
+  .tbtn.ghost{background:var(--surface-2); color:var(--ink);}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font-family:'IBM Plex Mono',monospace; font-size:12px; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:6px 11px; color:var(--ink-soft);}
+  .footer{text-align:center; font-size:13px; color:var(--muted); padding-top:6px;}
+
+  figure.anim{margin:0; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow);}
+  figure.anim canvas{display:block; width:100%; height:auto; aspect-ratio:600/250;}
+  .anim-bar{display:flex; align-items:center; justify-content:space-between; gap:8px 12px; padding:8px 12px; border-top:1px solid var(--line); background:var(--surface-2); flex-wrap:wrap;}
+  .anim-readout{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-soft); line-height:1.5; min-height:1.5em;}
+  .anim-readout b{color:var(--ink);}
+  .anim-btns{display:flex; gap:6px; margin-left:auto;}
+  .anim-btns button{font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px; padding:5px 9px; cursor:pointer;}
+  figure.anim figcaption{padding:10px 14px; font-size:13.5px; color:var(--ink-soft); line-height:1.55; border-top:1px solid var(--line);}
+  figure.anim figcaption b{color:var(--ink);}
+  .k-teal{color:var(--teal)!important;} .k-accent{color:var(--accent)!important;} .k-gold{color:var(--gold)!important;} .k-water{color:var(--water)!important;}
+  .legend{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12.5px; color:var(--ink-soft);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .sw{width:11px; height:11px; border-radius:50%; display:inline-block;}
+  .sw.hex{border-radius:2px; transform:rotate(45deg) scale(.85);}
+
+  .word{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:16px; display:flex; flex-direction:column; gap:12px;}
+  .word-head{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .word-num{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted);}
+  .word-head h3{font-size:21px;}
+  .type{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; font-weight:600; padding:3px 9px; border-radius:999px; background:var(--surface-2); color:var(--ink-soft);}
+  .type.passive{background:var(--teal-soft); color:var(--teal);}
+  .type.active{background:var(--accent-soft); color:var(--accent);}
+  .def{font-size:15px; color:var(--ink);}
+  .ex{font-size:13.5px;}
+  .ex b{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:600; margin-right:4px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="tag">🗂️ Homework · Word Wall Cards</div>
+  <h1>Cell Transport Word Wall</h1>
+  <p>Ten new words for how materials get into and out of a cell, and each one comes with an animation that shows it in action. Add them to your word wall next to your <b>Cell Membrane</b> card.</p>
+  <div class="meta-row">
+    <span class="meta-chip">10 terms</span>
+    <span class="meta-chip">Due next class</span>
+    <span class="meta-chip">Post on your word wall</span>
+  </div>
+</header>
+
+<div class="callout">
+  <p><b>Same routine as last time, plus one new step.</b> For each word, glue two index cards back-to-back. Write the <b>word</b> on the front and the <b>definition in your own words</b> on the back. <b>New:</b> watch each word's animation, then add a tiny <b>sketch with arrows</b> on the back that shows what you saw.</p>
+</div>
+
+<section>
+  <div class="section-head"><h2>What You'll Need</h2></div>
+  <ol class="steps">
+    <li><b>Materials:</b> 20 index cards (2 per word), glue stick or tape, markers.</li>
+    <li><b>Front:</b> write the word big and bold. Use <span class="k-teal" style="font-weight:600">teal/green</span> for passive words and <span class="k-accent" style="font-weight:600">orange/red</span> for active words. Use black for words that describe the membrane or the setup.</li>
+    <li><b>Back:</b> the definition in your own words, plus a mini sketch from the animation.</li>
+    <li><b>Post</b> all 10 on your word wall and bring them to class for the flash round.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="section-head"><h2>How to Read the Animations</h2></div>
+  <div class="card">
+    <div class="legend">
+      <span><i class="sw" style="background:var(--lipid)"></i>membrane (two rows of beads)</span>
+      <span><i class="sw" style="background:var(--teal)"></i>small molecule (oxygen)</span>
+      <span><i class="sw" style="background:var(--water)"></i>water</span>
+      <span><i class="sw" style="background:var(--accent)"></i>large molecule or salt</span>
+      <span><i class="sw hex" style="background:var(--gold)"></i>sugar or protein</span>
+      <span>⚡ energy from mitochondria</span>
+    </div>
+    <p style="font-size:13.5px">The shaded side is <b>inside the cell</b>. Use <b>❚❚ Pause</b> to freeze a moment for your sketch, and <b>↺ Replay</b> to watch from the start.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><h2>Your 10 Words</h2></div>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">01</span><h3>Selectively Permeable</h3><span class="type">Membrane</span></div>
+    <p class="def">Describes a membrane that lets some materials pass through but blocks others.</p>
+    <p class="ex"><b>Real world</b>A gym door with a check-in table: teammates get in, but not everyone does.</p>
+    <figure class="anim" data-scene="permeable" data-label="Small molecules cross the membrane; large ones bounce off."><figcaption>Small teal molecules slip through the membrane. Large orange ones bounce off every time.</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">02</span><h3>Concentration Gradient</h3><span class="type">Setup</span></div>
+    <p class="def">A difference in how crowded a material is between two areas, going from high concentration to low.</p>
+    <p class="ex"><b>Real world</b>A full ball cart next to an empty court. The bigger the difference, the steeper the "hill."</p>
+    <figure class="anim" data-scene="gradient" data-label="Particles are crowded on the left and sparse on the right, shown as a downhill slope."><figcaption>Particles are crowded on one end and sparse on the other. Think of it as a hill. Things naturally roll <b>down</b> it, from high to low.</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">03</span><h3>Equilibrium</h3><span class="type">Setup</span></div>
+    <p class="def">When a material is evenly spread out on both sides. The particles keep moving, but there's no overall change.</p>
+    <p class="ex"><b>Real world</b>Round 1: once the balls were even on both sides, they still crossed the line both ways.</p>
+    <figure class="anim" data-scene="equilibrium" data-label="Molecules cross a membrane until both sides are about even, then keep crossing both ways."><figcaption>Watch the crossing counts after the sides even out. Molecules still cross <b>both</b> ways, about equally.</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">04</span><h3>Passive Transport</h3><span class="type passive">Passive</span></div>
+    <p class="def">Movement of materials across the cell membrane from high to low concentration, with no energy used by the cell.</p>
+    <p class="ex"><b>Real world</b>A ball rolling downhill. Nobody has to push it.</p>
+    <figure class="anim" data-scene="passive" data-label="Oxygen and sugar move from high to low concentration with zero energy used."><figcaption>Oxygen slips straight through, and sugar uses a channel. Both go from crowded to empty, and the energy counter never moves off <b>0</b>.</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">05</span><h3>Diffusion</h3><span class="type passive">Passive</span></div>
+    <p class="def">Movement of particles from an area of high concentration to an area of low concentration.</p>
+    <p class="ex"><b>Real world</b>Popcorn smell spreading through the house, or food coloring spreading through a glass of water.</p>
+    <figure class="anim" data-scene="diffusion" data-label="A drop of dye spreads out evenly through water."><figcaption>A drop of food coloring spreads out through water with no stirring. The particles move randomly until they're evenly spread.</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">06</span><h3>Osmosis</h3><span class="type passive">Passive</span></div>
+    <p class="def">The diffusion of water across a selectively permeable membrane.</p>
+    <p class="ex"><b>Real world</b>Wilted lettuce crisping up in cold water, or a salted cucumber "sweating."</p>
+    <figure class="anim" data-scene="osmosis" data-label="Water crosses toward the salty side and that side's water level rises."><figcaption>Salt can't cross, but water can, and it moves toward the salty side. Watch the water level rise there. This is what you'll see in the lab.</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">07</span><h3>Active Transport</h3><span class="type active">Active</span></div>
+    <p class="def">Movement of materials across the cell membrane from low to high concentration, using energy from the cell.</p>
+    <p class="ex"><b>Real world</b>Round 2: shagging every ball back into the crowded corner.</p>
+    <figure class="anim" data-scene="active" data-label="A pump moves particles into the already crowded inside using energy from mitochondria."><figcaption>The pump pushes particles <b>into</b> the side that's already crowded, which is uphill. Each push costs ⚡ energy from the mitochondria.</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">08</span><h3>Transport Protein</h3><span class="type">Passive or Active</span></div>
+    <p class="def">A protein in the cell membrane that works as a door or a pump to move materials across.</p>
+    <p class="ex"><b>Real world</b>A turnstile at a stadium: only people with the right ticket get through.</p>
+    <figure class="anim" data-scene="protein" data-label="Only sugar molecules pass through a transport protein channel; other molecules are blocked."><figcaption>The teal transport protein is a door built for <b>sugar</b>. Sugar gets through, and everything else is blocked. (Remember: <b>ribosomes</b> build these proteins.)</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">09</span><h3>Endocytosis</h3><span class="type active">Active</span></div>
+    <p class="def">When the cell membrane folds around a large particle and brings it into the cell in a bubble called a vesicle.</p>
+    <p class="ex"><b>Real world</b>A white blood cell swallowing a germ.</p>
+    <figure class="anim" data-scene="endocytosis" data-label="The membrane folds around a large particle and pinches off into a vesicle inside the cell."><figcaption>The particle is too big for any door, so the membrane wraps around it and pinches off into a vesicle. <b>Endo</b> means "in."</figcaption></figure>
+  </article>
+
+  <article class="word">
+    <div class="word-head"><span class="word-num">10</span><h3>Exocytosis</h3><span class="type active">Active</span></div>
+    <p class="def">When a vesicle joins with the cell membrane and releases its contents outside the cell.</p>
+    <p class="ex"><b>Real world</b>The Golgi's "packages" being shipped out the door.</p>
+    <figure class="anim" data-scene="exocytosis" data-label="A vesicle fuses with the membrane and releases proteins outside the cell."><figcaption>A vesicle packed by the <b>Golgi</b> joins the membrane, opens up, and releases its proteins outside. <b>Exo</b> means "out." It's endocytosis played in reverse.</figcaption></figure>
+  </article>
+</section>
+
+<div class="callout teal">
+  <h3>Connect it to your old cards</h3>
+  <p>Before you post them, put each new card next to the old card it connects to. For example, <b>Active Transport</b> goes beside <b>Mitochondria</b> (the energy source), <b>Transport Protein</b> beside <b>Ribosome</b> (its builder), and <b>Exocytosis</b> beside <b>Golgi Apparatus</b>. Be ready to explain one pair in class.</p>
+</div>
+
+<p class="footer">Bring your finished cards to next class. 🏐</p>
+</div>
+<script>
+/* Cell transport animations. Each <figure class="anim" data-scene="..."> becomes a live canvas. */
+(function(){
+  var W=600, H=250, TAU=Math.PI*2;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rnd(a,b){return a+Math.random()*(b-a);}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function ease(t){t=clamp(t,0,1);return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+  function lerp(a,b,t){return a+(b-a)*t;}
+  var C={};
+  function readColors(){
+    var s=getComputedStyle(document.documentElement);
+    function g(n,f){var v=s.getPropertyValue(n).trim();return v||f;}
+    C={ink:g('--ink'),soft:g('--ink-soft'),muted:g('--muted'),line:g('--line'),bg:g('--surface'),bg2:g('--surface-2'),
+       accent:g('--accent'),teal:g('--teal'),gold:g('--gold'),goldSoft:g('--gold-soft'),tealSoft:g('--teal-soft'),
+       water:g('--water','#2f7fd6'),waterSoft:g('--water-soft','rgba(47,127,214,.12)'),head:g('--lipid','#8b90ad')};
+  }
+
+  /* ---------- particles ---------- */
+  var RADIUS={o2:4.4,water:3,salt:6.2,sugar:5.4,dye:2.5,cargo:9};
+  var SPEED={o2:1.5,water:1.3,salt:.9,sugar:1.1,dye:1,cargo:1};
+  function mk(kind,x,y){return {kind:kind,x:x,y:y,vx:rnd(-1,1),vy:rnd(-1,1),r:RADIUS[kind],a:rnd(0,TAU),side:x<W/2?0:1,pass:false};}
+  function jiggle(p,f){
+    p.vx+=rnd(-.32,.32)*f; p.vy+=rnd(-.32,.32)*f; p.a+=p.vx*.03*f;
+    var m=Math.hypot(p.vx,p.vy), max=SPEED[p.kind];
+    if(m>max){p.vx*=max/m;p.vy*=max/m;}
+  }
+  function walls(p,b){
+    if(p.x-p.r<b.x0){p.x=b.x0+p.r;p.vx=Math.abs(p.vx);}
+    if(p.x+p.r>b.x1){p.x=b.x1-p.r;p.vx=-Math.abs(p.vx);}
+    if(p.y-p.r<b.y0){p.y=b.y0+p.r;p.vy=Math.abs(p.vy);}
+    if(p.y+p.r>b.y1){p.y=b.y1-p.r;p.vy=-Math.abs(p.vy);}
+  }
+  var BOX={x0:10,y0:10,x1:W-10,y1:H-10};
+
+  /* Move a particle and handle a vertical membrane. Returns +1 (crossed to the right), -1 (to the left) or 0. */
+  function move(p,f,b,m){
+    jiggle(p,f);
+    var ox=p.x; p.x+=p.vx*f; p.y+=p.vy*f; walls(p,b);
+    if(!m) return 0;
+    var L=m.x-m.t, R=m.x+m.t, inBand=p.x+p.r>L&&p.x-p.r<R, crossed=(ox<m.x)!==(p.x<m.x);
+    if(!inBand&&!crossed){p.pass=false;p.pore=null;}
+    else if(!p.pass){
+      var ok=false, pore=null;
+      if(m.lipid&&m.lipid(p)&&Math.random()<(m.lipidP||.3)) ok=true;
+      if(!ok) for(var i=0;i<m.pores.length;i++){var q=m.pores[i];
+        if(Math.abs(p.y-q.y)<q.h/2-p.r*.5&&q.allow(p)&&Math.random()<(q.p?q.p(p):1)){ok=true;pore=q;break;}}
+      if(ok){p.pass=true;p.pore=pore;p.dir=ox<m.x?1:-1;}
+      else{ if(ox<m.x){p.x=L-p.r-.1;p.vx=-Math.abs(p.vx);} else {p.x=R+p.r+.1;p.vx=Math.abs(p.vx);} }
+    }
+    if(p.pass){
+      if(p.pore) p.y=clamp(p.y,p.pore.y-p.pore.h/2+p.r,p.pore.y+p.pore.h/2-p.r);
+      if(p.x+p.r>L&&p.x-p.r<R) p.vx=p.dir*Math.max(Math.abs(p.vx),.7);
+    }
+    var side=p.x<m.x?0:1;
+    if(side!==p.side){p.side=side;return side?1:-1;}
+    return 0;
+  }
+
+  /* ---------- drawing helpers ---------- */
+  function dot(ctx,x,y,r){ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();}
+  function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  function text(ctx,s,t,x,y,o){o=o||{};
+    ctx.font=(o.w||600)+' '+((o.size||11)*s.k)+'px "IBM Plex Mono", ui-monospace, monospace';
+    ctx.fillStyle=o.color||C.muted; ctx.textAlign=o.align||'left'; ctx.textBaseline=o.base||'top'; ctx.fillText(t,x,y);}
+  function pill(ctx,s,t,x,y,col){
+    ctx.font='600 '+(11*s.k)+'px "IBM Plex Mono", ui-monospace, monospace';
+    var w=ctx.measureText(t).width+16*s.k, h=20*s.k;
+    ctx.fillStyle=col; ctx.globalAlpha=.95; rr(ctx,x-w/2,y,w,h,h/2); ctx.fill(); ctx.globalAlpha=1;
+    ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(t,x,y+h/2+.5);
+  }
+  function hexagon(ctx,x,y,r,a){ctx.beginPath();for(var i=0;i<6;i++){var t=a+i*TAU/6;ctx[i?'lineTo':'moveTo'](x+r*Math.cos(t),y+r*Math.sin(t));}ctx.closePath();}
+  function particle(ctx,p,alpha){
+    ctx.globalAlpha=alpha==null?1:alpha;
+    if(p.kind==='o2'){ctx.fillStyle=C.teal;var dx=Math.cos(p.a)*1.9,dy=Math.sin(p.a)*1.9;dot(ctx,p.x-dx,p.y-dy,2.7);dot(ctx,p.x+dx,p.y+dy,2.7);}
+    else if(p.kind==='water'){ctx.fillStyle=C.water;dot(ctx,p.x,p.y,3);}
+    else if(p.kind==='salt'){ctx.fillStyle=C.accent;dot(ctx,p.x,p.y,p.r);ctx.globalAlpha*=.35;ctx.fillStyle='#fff';dot(ctx,p.x-2,p.y-2,1.8);}
+    else if(p.kind==='sugar'){ctx.fillStyle=C.gold;hexagon(ctx,p.x,p.y,p.r,p.a);ctx.fill();}
+    else if(p.kind==='dye'){ctx.fillStyle=p.col||C.accent;dot(ctx,p.x,p.y,p.r);}
+    ctx.globalAlpha=1;
+  }
+  function insideFill(ctx,m){ctx.fillStyle=C.bg2;ctx.fillRect(m.x,0,W-m.x,H);}
+  function sideLabels(ctx,s,m){
+    text(ctx,s,'OUTSIDE THE CELL',16,14,{size:10.5});
+    text(ctx,s,'INSIDE THE CELL',W-16,14,{size:10.5,align:'right'});
+  }
+  /* phospholipid bilayer, vertical, with gaps where channels sit */
+  function vMembrane(ctx,m){
+    var t=m.t, hr=3.3;
+    for(var y=-2;y<H+6;y+=8){
+      var skip=false; for(var i=0;i<m.pores.length;i++){if(Math.abs(y-m.pores[i].y)<m.pores[i].h/2+(m.pores[i].pad||14))skip=true;}
+      if(m.gap&&Math.abs(y-m.gap.y)<m.gap.h/2) skip=true;
+      if(skip) continue;
+      ctx.strokeStyle=C.head; ctx.globalAlpha=.45; ctx.lineWidth=1.1; ctx.beginPath();
+      [-1,1].forEach(function(sd){var hx=m.x+sd*(t-hr);
+        ctx.moveTo(hx-sd*hr,y-1.4);ctx.lineTo(m.x+sd*1.5,y-1.4);ctx.moveTo(hx-sd*hr,y+1.4);ctx.lineTo(m.x+sd*1.5,y+1.4);});
+      ctx.stroke(); ctx.globalAlpha=1; ctx.fillStyle=C.head;
+      dot(ctx,m.x-t+hr,y,hr); dot(ctx,m.x+t-hr,y,hr);
+    }
+    m.pores.forEach(function(q){channel(ctx,m,q);});
+  }
+  function channel(ctx,m,q){
+    var w=2*m.t+(q.big?10:4), ph=q.big?20:12;
+    ctx.fillStyle=q.fill||C.goldSoft; ctx.strokeStyle=q.stroke||C.gold; ctx.lineWidth=1.4;
+    rr(ctx,m.x-w/2,q.y-q.h/2-ph,w,ph,6); ctx.fill(); ctx.stroke();
+    rr(ctx,m.x-w/2,q.y+q.h/2,w,ph,6); ctx.fill(); ctx.stroke();
+  }
+  /* bilayer along any polyline (used for the curved membrane and vesicles) */
+  function bilayer(ctx,pts,t,closed){
+    var hr=3.3, acc=4, heads=[], tails=[];
+    var n=pts.length, lim=closed?n:n-1;
+    for(var i=0;i<lim;i++){
+      var a=pts[i], b=pts[(i+1)%n], dx=b[0]-a[0], dy=b[1]-a[1], L=Math.hypot(dx,dy); if(!L) continue;
+      var nx=-dy/L, ny=dx/L, d=0;
+      while(acc+ (L-d) >= 8){ d+=8-acc; acc=0;
+        var px=a[0]+dx*d/L, py=a[1]+dy*d/L;
+        [-1,1].forEach(function(sd){heads.push([px+nx*sd*(t-hr),py+ny*sd*(t-hr)]);
+          tails.push([px+nx*sd*(t-2*hr),py+ny*sd*(t-2*hr),px+nx*sd*1.5,py+ny*sd*1.5]);});
+      }
+      acc+=L-d;
+    }
+    ctx.strokeStyle=C.head; ctx.globalAlpha=.45; ctx.lineWidth=1.2; ctx.beginPath();
+    tails.forEach(function(q){ctx.moveTo(q[0],q[1]);ctx.lineTo(q[2],q[3]);}); ctx.stroke(); ctx.globalAlpha=1;
+    ctx.fillStyle=C.head; heads.forEach(function(h){dot(ctx,h[0],h[1],hr);});
+  }
+  function circlePts(cx,cy,R){var p=[];for(var i=0;i<72;i++){var a=i/72*TAU;p.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}return p;}
+  /* flat membrane at y0 with a cup of radius R around x0. phi = 0 (flat) .. PI (closed) */
+  function cupPts(x0,y0,R,phi){
+    var cy=y0-R*Math.cos(phi), pts=[], ex=R*Math.sin(phi);
+    for(var x=-10;x<x0-ex;x+=4) pts.push([x,y0]);
+    var steps=Math.max(2,Math.round(phi*R/3));
+    for(var i=0;i<=steps;i++){var a=Math.PI/2+phi-2*phi*i/steps;pts.push([x0+R*Math.cos(a),cy+R*Math.sin(a)]);}
+    for(x=x0+ex+4;x<W+12;x+=4) pts.push([x,y0]);
+    return {pts:pts,cy:cy};
+  }
+  function fillBelow(ctx,pts){ctx.fillStyle=C.bg2;ctx.beginPath();ctx.moveTo(pts[0][0],H+5);pts.forEach(function(p){ctx.lineTo(p[0],p[1]);});ctx.lineTo(pts[pts.length-1][0],H+5);ctx.closePath();ctx.fill();}
+  function bolt(ctx,x,y,s,col){ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x+2*s,y-7*s);ctx.lineTo(x-4*s,y+1*s);ctx.lineTo(x,y+1*s);ctx.lineTo(x-2*s,y+7*s);ctx.lineTo(x+4*s,y-1*s);ctx.lineTo(x,y-1*s);ctx.closePath();ctx.fill();}
+  function mito(ctx,s,x,y){
+    ctx.fillStyle=C.tealSoft; ctx.strokeStyle=C.teal; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.ellipse(x,y,30,14,0,0,TAU); ctx.fill(); ctx.stroke();
+    ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(x-24,y);
+    for(var i=0;i<6;i++){var xx=x-24+i*8+4; ctx.lineTo(xx,y+(i%2?7:-7)); ctx.lineTo(xx+4,y);} ctx.stroke();
+    text(ctx,s,'mitochondria',x,y+19,{align:'center',size:9.5});
+  }
+
+  /* ---------- scenes ---------- */
+  var MEM=function(o){return Object.assign({x:W/2,t:13,pores:[]},o||{});};
+  function counts(ps,kind){var l=0,r=0;ps.forEach(function(p){if(kind&&p.kind!==kind)return; if(p.x<W/2)l++;else r++;});return [l,r];}
+  function fillLeft(ps,kind,n,x0,x1){for(var i=0;i<n;i++)ps.push(mk(kind,rnd(x0||24,x1||W/2-24),rnd(24,H-24)));}
+  function fillRight(ps,kind,n){for(var i=0;i<n;i++)ps.push(mk(kind,rnd(W/2+24,W-24),rnd(24,H-24)));}
+
+  var SCENES={
+    permeable:{ dur:16,
+      init:function(s){s.m=MEM({lipid:function(p){return p.kind==='o2';},lipidP:.35});s.ps=[];fillLeft(s.ps,'o2',28);fillLeft(s.ps,'salt',12);},
+      step:function(s,f){s.ps.forEach(function(p){move(p,f,BOX,s.m);});},
+      draw:function(ctx,s){insideFill(ctx,s.m);vMembrane(ctx,s.m);s.ps.forEach(function(p){particle(ctx,p);});sideLabels(ctx,s,s.m);
+        var o=counts(s.ps,'o2'),b=counts(s.ps,'salt');
+        s.ro('<b class="k-teal">small molecules</b> inside: '+o[1]+' &nbsp;·&nbsp; <b class="k-accent">large molecules</b> inside: '+b[1]);}
+    },
+    gradient:{ dur:9999,
+      init:function(s){s.ps=[];for(var i=0;i<150;i++){var u=Math.random(),x=24+(W-48)*(1-Math.cbrt(u));var ry=48+(H-82)*(x-26)/(W-52);var p=mk('dye',x,rnd(Math.min(ry+8,H-22),H-16));p.ax=p.x;p.ay=p.y;p.col=C.accent;s.ps.push(p);} s.ball=0;},
+      step:function(s,f){s.ps.forEach(function(p){jiggle(p,f);p.x+=p.vx*f*.6;p.y+=p.vy*f*.6;p.x+=(p.ax-p.x)*.02*f;p.y+=(p.ay-p.y)*.02*f;}); s.ball=(s.ball+.0035*f)%1;},
+      draw:function(ctx,s){
+        var x0=26,x1=W-26,yh=48,yl=H-34;
+        ctx.fillStyle=C.goldSoft;ctx.globalAlpha=.55;ctx.beginPath();ctx.moveTo(x0,yh);ctx.lineTo(x1,yl);ctx.lineTo(x1,H-10);ctx.lineTo(x0,H-10);ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+        ctx.strokeStyle=C.gold;ctx.lineWidth=2;ctx.setLineDash([6,5]);ctx.beginPath();ctx.moveTo(x0,yh);ctx.lineTo(x1,yl);ctx.stroke();ctx.setLineDash([]);
+        s.ps.forEach(function(p){particle(ctx,p,.9);});
+        var t=s.ball, bx=lerp(x0,x1,t), by=lerp(yh,yl,t)-11, ang=t*28;
+        ctx.fillStyle=C.bg;ctx.strokeStyle=C.ink;ctx.lineWidth=1.6;dot(ctx,bx,by,10);ctx.beginPath();ctx.arc(bx,by,10,0,TAU);ctx.stroke();
+        ctx.lineWidth=1.1;for(var i=0;i<3;i++){var a=ang+i*TAU/3;ctx.beginPath();ctx.arc(bx+Math.cos(a)*7,by+Math.sin(a)*7,7,a+2.2,a+4.1);ctx.stroke();}
+        text(ctx,s,'HIGH',x0,yh-26,{color:C.accent,size:12,w:700});
+        text(ctx,s,'LOW',x1,yl-26,{color:C.accent,size:12,w:700,align:'right'});
+        var l=0,r=0;s.ps.forEach(function(p){if(p.ax<W/5)l++;if(p.ax>W*4/5)r++;});
+        s.ro('crowded end: <b>'+l+'</b> particles &nbsp;→&nbsp; empty end: <b>'+r+'</b> particles &nbsp;·&nbsp; things roll <b>downhill</b>');}
+    },
+    diffusion:{ dur:15,
+      init:function(s){s.ps=[];for(var i=0;i<170;i++){var a=rnd(0,TAU),d=Math.sqrt(Math.random())*14;var p=mk('dye',W*.24+Math.cos(a)*d,H/2+Math.sin(a)*d);p.vx*=.3;p.vy*=.3;p.col=i%3?C.accent:C.gold;s.ps.push(p);}},
+      step:function(s,f){s.ps.forEach(function(p){move(p,f,BOX,null);});},
+      draw:function(ctx,s){
+        ctx.fillStyle=C.waterSoft;ctx.fillRect(0,0,W,H);
+        ctx.strokeStyle=C.muted;ctx.setLineDash([4,4]);ctx.lineWidth=1;ctx.beginPath();ctx.arc(W*.24,H/2,22,0,TAU);ctx.stroke();ctx.setLineDash([]);
+        s.ps.forEach(function(p){particle(ctx,p,.9);});
+        text(ctx,s,'a drop of food coloring in water',16,14,{size:10.5});
+        var n=0;s.ps.forEach(function(p){if(Math.hypot(p.x-W*.24,p.y-H/2)<22)n++;});
+        s.ro('time: <b>'+s.t.toFixed(1)+' s</b> &nbsp;·&nbsp; still in the starting circle: <b>'+n+'</b> of '+s.ps.length);}
+    },
+    passive:{ dur:18,
+      init:function(s){s.m=MEM({lipid:function(p){return p.kind==='o2';},lipidP:.3,
+          pores:[{y:H*.55,h:20,allow:function(p){return p.kind==='sugar';}}]});
+        s.ps=[];fillLeft(s.ps,'o2',24);fillLeft(s.ps,'sugar',12);fillRight(s.ps,'o2',3);fillRight(s.ps,'sugar',1);s.moved=0;},
+      step:function(s,f){s.ps.forEach(function(p){var c=move(p,f,BOX,s.m);s.moved+=c;});},
+      draw:function(ctx,s){insideFill(ctx,s.m);vMembrane(ctx,s.m);s.ps.forEach(function(p){particle(ctx,p);});sideLabels(ctx,s,s.m);
+        text(ctx,s,'channel',W/2,s.m.pores[0].y+s.m.pores[0].h/2+24,{align:'center',size:9.5,color:C.gold});
+        s.ro('net moved high → low: <b>'+Math.max(0,s.moved)+'</b> &nbsp;·&nbsp; energy used: <b class="k-teal">0</b>');}
+    },
+    equilibrium:{ dur:26,
+      init:function(s){s.m=MEM({lipid:function(){return true;},lipidP:.4});s.ps=[];fillLeft(s.ps,'o2',44);s.log=[];},
+      step:function(s,f){s.ps.forEach(function(p){var c=move(p,f,BOX,s.m);if(c)s.log.push([s.t,c]);});s.log=s.log.filter(function(e){return s.t-e[0]<3;});},
+      draw:function(ctx,s){insideFill(ctx,s.m);vMembrane(ctx,s.m);s.ps.forEach(function(p){particle(ctx,p);});sideLabels(ctx,s,s.m);
+        var c=counts(s.ps),r=0,l=0;s.log.forEach(function(e){if(e[1]>0)r++;else l++;});
+        if(s.t>4&&Math.abs(c[0]-c[1])<=4) pill(ctx,s,'≈ EQUILIBRIUM',W/2,H-38,C.teal);
+        s.ro('outside <b>'+c[0]+'</b> · inside <b>'+c[1]+'</b> &nbsp;·&nbsp; crossings in last 3 s: → '+r+' &nbsp;← '+l);}
+    },
+    osmosis:{ dur:24,
+      init:function(s){
+        s.m=MEM({pores:[122,152,182,212].map(function(y){return {y:y,h:17,pad:10,allow:function(p){return p.kind==='water';},p:function(p){return p.side===1?.18:1;}};})});
+        s.ps=[];for(var i=0;i<46;i++){s.ps.push(mk('water',rnd(24,W/2-24),rnd(100,H-20)));s.ps.push(mk('water',rnd(W/2+24,W-24),rnd(100,H-20)));}
+        for(i=0;i<13;i++)s.ps.push(mk('salt',rnd(W/2+30,W-30),rnd(90,H-24)));
+        s.lv=[0,0];},
+      level:function(n){return 30+n*2.3;},
+      step:function(s,f){var c=counts(s.ps,'water'),self=SCENES.osmosis;
+        for(var k=0;k<2;k++){var target=self.level(c[k]);s.lv[k]=s.lv[k]?lerp(s.lv[k],target,.04*f):target;}
+        s.ps.forEach(function(p){var top=H-10-s.lv[p.x<W/2?0:1];move(p,f,{x0:10,y0:Math.min(top,H-30),x1:W-10,y1:H-10},s.m);});},
+      draw:function(ctx,s){
+        for(var k=0;k<2;k++){var x=k?W/2:0,top=H-10-s.lv[k];ctx.fillStyle=C.waterSoft;ctx.fillRect(x,top,W/2,H-top);
+          ctx.strokeStyle=C.water;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+(k?s.m.t:0),top);ctx.lineTo(x+W/2-(k?0:s.m.t),top);ctx.stroke();}
+        vMembrane(ctx,s.m);s.ps.forEach(function(p){particle(ctx,p);});
+        text(ctx,s,'PLAIN WATER',16,14,{size:10.5});text(ctx,s,'SALTY WATER',W-16,14,{size:10.5,align:'right'});
+        var c=counts(s.ps,'water');
+        s.ro('<b class="k-water">water</b> left '+c[0]+' · right '+c[1]+' &nbsp;·&nbsp; <b class="k-accent">salt</b> is too big to cross');}
+    },
+    active:{ dur:9999,
+      init:function(s){s.m=MEM({gap:{y:H/2,h:44}});s.ps=[];fillLeft(s.ps,'salt',9);fillRight(s.ps,'salt',22);s.e=0;s.st='idle';s.tt=0;s.cur=null;s.done=0;},
+      step:function(s,f){var m=s.m,dt=f/60,py=H/2;
+        s.ps.forEach(function(p){if(p!==s.cur){move(p,f,BOX,m); if(Math.abs(p.y-py)<30&&Math.abs(p.x-m.x)<m.t+20){p.y+=(p.y<py?-1:1)*1.2*f;}}});
+        s.tt+=dt;
+        if(s.st==='idle'&&s.tt>.5){var best=null,bd=1e9;s.ps.forEach(function(p){if(p.x<m.x){var d=Math.hypot(p.x-(m.x-40),p.y-py);if(d<bd){bd=d;best=p;}}});
+          if(best){s.cur=best;s.sx=best.x;s.sy=best.y;s.st='dock';s.tt=0;} else if(s.tt>2.2){SCENES.active.init(s);}}
+        else if(s.st==='dock'){var k=ease(s.tt/.7);s.cur.x=lerp(s.sx,m.x-m.t-9,k);s.cur.y=lerp(s.sy,py,k);if(s.tt>.7){s.st='atp';s.tt=0;}}
+        else if(s.st==='atp'){if(s.tt>.55){s.st='flip';s.tt=0;s.e++;}}
+        else if(s.st==='flip'){var k2=ease(s.tt/.5);s.cur.x=lerp(m.x-m.t-9,m.x+m.t+12,k2);if(s.tt>.5){s.cur.vx=1.2;s.cur.side=1;s.cur=null;s.st='idle';s.tt=0;}}
+      },
+      draw:function(ctx,s){var m=s.m,py=H/2;insideFill(ctx,m);vMembrane(ctx,m);
+        var open=s.st==='flip'?ease(s.tt/.5):0, glow=s.st==='atp';
+        ctx.save(); if(glow){ctx.shadowColor=C.gold;ctx.shadowBlur=18;}
+        ctx.fillStyle=glow?C.goldSoft:C.goldSoft;ctx.strokeStyle=C.gold;ctx.lineWidth=1.8;
+        rr(ctx,m.x-24,py-28-open*5,48,22,8);ctx.fill();ctx.stroke();
+        rr(ctx,m.x-24,py+6+open*5,48,22,8);ctx.fill();ctx.stroke(); ctx.restore();
+        ctx.strokeStyle=C.gold;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(m.x-24,py-6);ctx.lineTo(m.x-24+ (1-open)*6,py);ctx.lineTo(m.x-24,py+6);ctx.stroke();
+        var mx=W-80,my=H-44; mito(ctx,s,mx,my);
+        if(s.st==='atp'){var k=clamp(s.tt/.45,0,1);ctx.strokeStyle=C.gold;ctx.setLineDash([4,4]);ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(mx-28,my-6);ctx.lineTo(m.x+26,py+18);ctx.stroke();ctx.setLineDash([]);
+          bolt(ctx,lerp(mx-28,m.x+26,k),lerp(my-6,py+18,k),1.5,C.gold); if(k>=1)bolt(ctx,m.x,py,2.2,C.gold);}
+        s.ps.forEach(function(p){particle(ctx,p);});sideLabels(ctx,s,m);
+        text(ctx,s,'pump',m.x,py-48,{align:'center',size:9.5,color:C.gold});
+        var c=counts(s.ps);
+        s.ro('outside <b>'+c[0]+'</b> → inside <b>'+c[1]+'</b> (already crowded) &nbsp;·&nbsp; energy spent: <b class="k-gold">'+s.e+' ⚡</b>');}
+    },
+    protein:{ dur:22,
+      init:function(s){s.m=MEM({pores:[{y:H/2,h:22,big:true,pad:24,fill:C.tealSoft,stroke:C.teal,allow:function(p){return p.kind==='sugar';},p:function(){return .8;}}]});
+        s.ps=[];fillLeft(s.ps,'sugar',16);fillLeft(s.ps,'salt',8);},
+      step:function(s,f){s.ps.forEach(function(p){move(p,f,BOX,s.m);});},
+      draw:function(ctx,s){insideFill(ctx,s.m);vMembrane(ctx,s.m);s.ps.forEach(function(p){particle(ctx,p);});sideLabels(ctx,s,s.m);
+        text(ctx,s,'transport protein',W/2,H/2+40,{align:'center',size:9.5,color:C.teal});
+        var c=counts(s.ps,'sugar');
+        s.ro('<b class="k-gold">sugar</b> through the protein door: <b>'+c[1]+'</b> &nbsp;·&nbsp; <b class="k-accent">other molecules</b> blocked');}
+    },
+    endocytosis:{ dur:9.5,
+      init:function(s){s.y0=86;s.R=30;s.x0=W/2;},
+      step:function(){},
+      draw:function(ctx,s){var t=s.t,R=s.R,y0=s.y0,x0=s.x0,phi=0,cy,ves=false,cargoY,alpha=1,msg;
+        if(t<1.6){cargoY=lerp(-20,y0-R,ease(t/1.6));msg='a large particle arrives at the membrane';}
+        else if(t<4.6){phi=ease((t-1.6)/3)*Math.PI*.93;cargoY=y0-R*Math.cos(phi);msg='the membrane folds around it';}
+        else {ves=true;cy=lerp(y0+R*.93,H-40,ease((t-4.6)/3));cargoY=cy;msg='it pinches off into a vesicle inside the cell';if(t>8)alpha=clamp(1-(t-8)/1.3,0,1);}
+        var cup=cupPts(x0,y0,R,ves?0:phi); fillBelow(ctx,cup.pts);
+        ctx.globalAlpha=alpha;
+        ctx.fillStyle=C.accent; ctx.save(); ctx.translate(x0,cargoY); ctx.rotate(.5); rr(ctx,-15,-8,30,16,8); ctx.fill(); ctx.globalAlpha*=.3; ctx.fillStyle='#fff'; rr(ctx,-10,-4,14,4,2); ctx.fill(); ctx.restore();
+        if(ves) bilayer(ctx,circlePts(x0,cy,R),11,true);
+        ctx.globalAlpha=1;
+        bilayer(ctx,cup.pts,11,false);
+        text(ctx,s,'OUTSIDE THE CELL',16,14,{size:10.5});text(ctx,s,'INSIDE THE CELL',16,H-24,{size:10.5});
+        if(t>1.6&&t<4.6) bolt(ctx,x0+R+26,y0+18,1.5,C.gold);
+        s.ro(msg+(t>1.6&&t<4.6?' &nbsp;·&nbsp; <b class="k-gold">uses energy ⚡</b>':''));}
+    },
+    exocytosis:{ dur:10,
+      init:function(s){s.y0=118;s.R=30;s.x0=W/2;s.ps=[];for(var i=0;i<7;i++){var p=mk('sugar',0,0);p.ox=rnd(-12,12);p.oy=rnd(-12,12);p.free=false;s.ps.push(p);}},
+      step:function(s,f){var R=s.R,y0=s.y0;s.ps.forEach(function(p){if(p.free){move(p,f,{x0:10,y0:10,x1:W-10,y1:y0-14},null);}});},
+      draw:function(ctx,s){var t=s.t,R=s.R,y0=s.y0,x0=s.x0,phi=Math.PI*.93,cy,ves=true,msg;
+        if(t<2.6){cy=lerp(H+R,y0+R*.93,ease(t/2.6));msg='a vesicle from the Golgi carries proteins to the membrane';}
+        else if(t<5.2){ves=false;phi=Math.PI*.93*(1-ease((t-2.6)/2.6));cy=y0-R*Math.cos(phi);msg='the vesicle fuses with the membrane';}
+        else {ves=false;phi=0;cy=y0-R;msg='the contents are released outside the cell';}
+        var cup=cupPts(x0,y0,R,ves?0:phi); fillBelow(ctx,cup.pts);
+        s.ps.forEach(function(p){
+          if(!p.free){p.x=x0+p.ox;p.y=cy+p.oy;p.a+=.01; if(!ves&&phi<Math.PI*.55){p.free=true;p.vx=rnd(-1,1);p.vy=-rnd(.6,1.4);}}
+          particle(ctx,p);});
+        if(ves) bilayer(ctx,circlePts(x0,cy,R),11,true);
+        bilayer(ctx,cup.pts,11,false);
+        text(ctx,s,'OUTSIDE THE CELL',16,14,{size:10.5});text(ctx,s,'INSIDE THE CELL',16,H-24,{size:10.5});
+        if(t>2.6&&t<5.2) bolt(ctx,x0+R+26,y0+16,1.5,C.gold);
+        s.ro(msg+(t>2.6&&t<5.2?' &nbsp;·&nbsp; <b class="k-gold">uses energy ⚡</b>':''));}
+    }
+  };
+
+  /* ---------- runner ---------- */
+  function Runner(fig){
+    var sc=SCENES[fig.dataset.scene]; if(!sc) return;
+    var cv=document.createElement('canvas'); cv.setAttribute('role','img'); cv.setAttribute('aria-label',fig.dataset.label||fig.dataset.scene+' animation');
+    var bar=document.createElement('div'); bar.className='anim-bar';
+    var ro=document.createElement('span'); ro.className='anim-readout'; ro.setAttribute('aria-live','off');
+    var btns=document.createElement('span'); btns.className='anim-btns';
+    var bp=document.createElement('button'), br=document.createElement('button'); bp.type=br.type='button';
+    btns.appendChild(bp); btns.appendChild(br); br.textContent='↺ Replay';
+    bar.appendChild(ro); bar.appendChild(btns);
+    fig.insertBefore(bar,fig.firstChild); fig.insertBefore(cv,fig.firstChild);
+    var running=!reduce, visible=false, last=0, k=1, s;
+    function setBtn(){bp.textContent=running?'❚❚ Pause':'▶ Play';}
+    function readout(h){if(ro._h!==h){ro._h=h;ro.innerHTML=h;}}
+    function reset(){s={t:0,k:k,ro:readout};sc.init(s);}
+    function draw(){var w=cv.clientWidth; if(!w) return; var ctx=cv.getContext('2d'),d=cv.width/W; ctx.setTransform(d,0,0,d,0,0); ctx.clearRect(0,0,W,H); s.k=k; sc.draw(ctx,s);}
+    function size(){var w=cv.clientWidth; if(!w) return; var dpr=window.devicePixelRatio||1; cv.width=Math.round(w*dpr); cv.height=Math.round(w*H/W*dpr); k=clamp(W/w,.95,2.4); draw();}
+    function frame(ts){
+      if(running&&visible){var dt=last?Math.min(.05,(ts-last)/1000):.016, f=dt*60; s.t+=dt; sc.step(s,f); if(s.t>sc.dur) reset(); draw();}
+      last=ts; requestAnimationFrame(frame);
+    }
+    bp.onclick=function(){running=!running;setBtn();};
+    br.onclick=function(){reset();running=true;setBtn();draw();};
+    readColors(); reset();
+    if(reduce){for(var i=0;i<240;i++){s.t+=1/60;sc.step(s,1);}}
+    setBtn();
+    new ResizeObserver(size).observe(cv);
+    new IntersectionObserver(function(e){visible=e[0].isIntersecting;},{threshold:.05}).observe(cv);
+    var mq=window.matchMedia('(prefers-color-scheme: dark)'); if(mq.addEventListener) mq.addEventListener('change',function(){readColors();draw();});
+    requestAnimationFrame(frame);
+  }
+  function boot(){readColors();document.querySelectorAll('figure.anim[data-scene]').forEach(Runner);}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+</script>
+</body>
+</html>
