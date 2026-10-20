@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Force Face-Off</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#FAF5EC; --card:#FFFFFF; --ink:#221F2B; --ink-soft:#5B5568; --muted:#8A8396;
+    --track-red:#D8432B; --track-red-soft:#F6DAD2;
+    --field-teal:#146B72; --field-teal-soft:#D9ECEA;
+    --gold:#B9791E; --gold-soft:#F5E6C8;
+    --good:#2F8558; --good-soft:#DEF0E3;
+    --line:#E3D9C6; --sunk:#F3ECDF;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Karla',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4; --muted:#968EA3;
+      --track-red:#FF7A5C; --track-red-soft:#3A241F;
+      --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+      --gold:#F2B75A; --gold-soft:#3A2E14;
+      --good:#5FCB8B; --good-soft:#1B3324;
+      --line:#3A3444; --sunk:#1B1822;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4; --muted:#968EA3;
+    --track-red:#FF7A5C; --track-red-soft:#3A241F;
+    --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+    --gold:#F2B75A; --gold-soft:#3A2E14;
+    --good:#5FCB8B; --good-soft:#1B3324;
+    --line:#3A3444; --sunk:#1B1822;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);margin:0;padding-inline:16px;line-height:1.55;font-size:16px;}
+  .wrap{max-width:820px;margin:0 auto;padding-block:32px 80px;}
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;}
+  p{margin:0;color:var(--ink-soft);}
+  ul,ol{margin:0;padding-left:20px;color:var(--ink-soft);}
+  li{margin-bottom:6px;}
+  li b,p b,td b{color:var(--ink);}
+  a{color:var(--track-red);}
+  code,.mono{font-family:var(--mono);font-size:.92em;}
+
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:28px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--track-red);display:flex;gap:10px;align-items:center;}
+  .eyebrow::before{content:"●";font-size:9px;}
+  h1.title{font-weight:600;font-size:clamp(2rem,6vw,2.9rem);margin:8px 0 6px;}
+  .subtitle{color:var(--ink-soft);max-width:62ch;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+  .meta-row b{color:var(--ink);font-weight:600;}
+
+  section{margin-bottom:40px;display:flex;flex-direction:column;gap:14px;}
+  .sect-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px;}
+  .sect-head .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .sect-head h2{font-size:1.5rem;font-weight:600;}
+  .sect-head .time{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;}
+  .card h3{font-size:1.15rem;font-weight:600;}
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--track-red);border-radius:10px;padding:16px 20px;display:flex;flex-direction:column;gap:8px;}
+  .note.teal{border-left-color:var(--field-teal);} .note.gold{border-left-color:var(--gold);} .note.good{border-left-color:var(--good);}
+  .note h3{font-size:1.05rem;font-weight:600;}
+  .point{background:var(--gold-soft);border-radius:10px;padding:12px 16px;font-size:15px;color:var(--ink);}
+  .point b{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-right:6px;}
+
+  .steps{counter-reset:s;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  .steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px 11px 48px;position:relative;margin:0;color:var(--ink-soft);}
+  .steps li::before{content:counter(s);position:absolute;left:13px;top:11px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+  .steps .hint{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:3px;}
+
+  .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+  .role{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--field-teal);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+  .role.r2{border-top-color:var(--track-red);} .role.r3{border-top-color:var(--gold);}
+  .role .rn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .role h3{font-size:1.05rem;}
+  .role p{font-size:14.5px;}
+
+  .timeline{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
+  .tl{display:grid;grid-template-columns:92px 1fr;border-top:1px solid var(--line);}
+  .tl:first-child{border-top:none;}
+  .tl .t{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--track-red);background:var(--sunk);padding:12px 10px;}
+  .tl .b{padding:12px 14px;font-size:15px;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px;}
+  .tl .b b{color:var(--ink);}
+  .tl .w{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--field-teal);}
+  .tl.rev .t{color:var(--gold);}
+  @media (max-width:540px){.tl{grid-template-columns:1fr;}.tl .t{padding:8px 14px;}}
+
+  .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;}
+  details summary{cursor:pointer;font-weight:600;color:var(--ink);}
+  details[open] summary{margin-bottom:8px;}
+  details p+p{margin-top:6px;}
+  details.ans{background:var(--sunk);}
+  details.ans summary{font-family:var(--mono);font-size:12.5px;color:var(--field-teal);}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+  .q .qn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .q .qt{color:var(--ink);font-size:15.5px;}
+  .q .from{font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;color:var(--ink-soft);vertical-align:top;}
+  th{background:var(--sunk);color:var(--ink);font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;}
+  .tscroll{overflow-x:auto;border-radius:10px;border:1px solid var(--line);}
+  .tscroll table{border:none;}
+  .tscroll th:first-child,.tscroll td:first-child{border-left:none;} .tscroll th:last-child,.tscroll td:last-child{border-right:none;}
+  .tscroll tr:first-child th{border-top:none;} .tscroll tr:last-child td{border-bottom:none;}
+
+  .formula{font-family:var(--mono);font-size:15px;background:var(--sunk);border-radius:8px;padding:10px 14px;color:var(--ink);}
+  .work{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:15px;}
+  .work .k{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-top:2px;}
+  .work .v{color:var(--ink);}
+
+  .timer-bar{position:sticky;top:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:28px;}
+  .timer-num{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--track-red);font-variant-numeric:tabular-nums;}
+  .timer-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+  .btn{border:none;border-radius:8px;padding:9px 14px;font:600 13px var(--body);cursor:pointer;}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+  .btn.ghost{background:var(--sunk);color:var(--ink);border:1px solid var(--line);}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-family:var(--mono);font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 11px;color:var(--ink-soft);}
+  .footer{text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:20px;}
+  .k-red{color:var(--track-red)!important;} .k-teal{color:var(--field-teal)!important;} .k-gold{color:var(--gold)!important;} .k-good{color:var(--good)!important;}
+
+  /* clarity helpers */
+  .plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
+  .plan div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;}
+  .plan b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);}
+  .plan span{font-size:15px;color:var(--ink);}
+  .words{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;}
+  .word{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--field-teal);border-radius:10px;padding:10px 14px;}
+  .word b{display:block;color:var(--ink);font-size:16px;}
+  .word span{font-size:15px;color:var(--ink-soft);}
+  .word i{display:block;font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--field-teal);margin-top:4px;}
+  .see{background:var(--good-soft);border-radius:10px;padding:12px 16px;color:var(--ink);font-size:15px;}
+  .see::before{content:"✓ What you should see";display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--good);font-weight:600;margin-bottom:4px;}
+  .frame{background:var(--sunk);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:15px;color:var(--ink);}
+  .frame::before{content:"Type in the chat";display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:4px;}
+  .frame.doc::before{content:"Sentence starter";}
+  .bigidea{background:var(--ink);color:var(--paper);border-radius:12px;padding:16px 20px;font-size:17px;line-height:1.5;}
+  .bigidea b{color:var(--paper);}
+  .bigidea small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+  .eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-family:var(--mono);font-size:15px;color:var(--ink);}
+  .eq span{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;}
+  .eq .r{border-color:var(--track-red);color:var(--track-red);} .eq .t{border-color:var(--field-teal);color:var(--field-teal);}
+
+  .fsim{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;scroll-margin-top:90px;}
+  .fsim-cv{display:block;width:100%;height:auto;aspect-ratio:720/290;border-radius:12px;border:1px solid var(--line);}
+  .fsim-read{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .fsim-read div{background:var(--sunk);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;gap:2px;}
+  .fsim-read span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .fsim-read b{font-family:var(--mono);font-size:clamp(14px,3.6vw,18px);color:var(--ink);}
+  .fsim-vlog{display:flex;flex-direction:column;gap:6px;}
+  .fsim-vlab{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .fsim-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .fsim-chips .chip{display:inline-flex;gap:6px;align-items:baseline;font-weight:600;color:var(--ink);}
+  .fsim-chips .chip i{font-style:normal;color:var(--muted);font-weight:500;}
+  .fsim-chips .chip.empty{opacity:.45;}
+  .fsim-ctrl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 16px;}
+  .stepper{display:flex;align-items:center;gap:8px;}
+  .stepper .sl{font-size:14.5px;font-weight:600;min-width:86px;}
+  .stepper.red .sl{color:var(--track-red);} .stepper.teal .sl{color:var(--field-teal);}
+  .stepper button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);font:700 20px var(--body);cursor:pointer;line-height:1;}
+  .stepper b{font-family:var(--mono);font-size:16px;min-width:54px;text-align:center;}
+  .seg{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+  .seg-l{font-size:14.5px;font-weight:600;min-width:86px;color:var(--ink);}
+  .seg button{font:600 13px var(--body);border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:7px 13px;cursor:pointer;}
+  .seg button.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .fsim-btns{display:flex;flex-wrap:wrap;gap:8px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .mission{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+  .mission .mh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .mission .who{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--field-teal);}
+  .mission h3{font-size:1.1rem;}
+  .predict{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .pr-head{display:flex;align-items:baseline;gap:10px;}
+  .pr-n{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .pr-head h3{font-size:1.25rem;}
+  .pr-q{font-size:16.5px;color:var(--ink);}
+  .pr-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;}
+  .pr-choice{display:flex;gap:10px;align-items:center;background:var(--sunk);border:2px solid transparent;border-radius:10px;padding:10px 12px;font-size:15px;color:var(--ink);transition:.2s;}
+  .pr-choice b{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--mono);}
+  .pr-choice.right{background:var(--good-soft);border-color:var(--good);}
+  .pr-choice.right b{background:var(--good);}
+  .pr-choice.wrong{opacity:.45;}
+  .pr-step{font-size:14px;color:var(--muted);}
+  .pr-cv{display:block;width:100%;height:auto;aspect-ratio:720/300;border-radius:12px;border:1px solid var(--line);}
+  .pr-btns{display:flex;gap:8px;flex-wrap:wrap;}
+  .pr-explain{background:var(--good-soft);border-radius:10px;padding:12px 16px;font-size:15.5px;color:var(--ink);line-height:1.55;}
+  .load{align-self:flex-start;font:600 12px var(--mono);background:var(--sunk);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Motion Investigation Bureau · Case 07 · Opening Activity</div>
+  <h1 class="title">Force Face-Off</h1>
+  <p class="subtitle"><b>Today's big question:</b> What makes things speed up, slow down, or stop?</p>
+  <div class="meta-row"><span><b>Part 1</b> Rewind · 6 min</span><span><b>Part 2</b> Face-Off · 15 min</span><span><b>Part 3</b> Game Film · 9 min</span></div>
+</header>
+
+<section>
+  <div class="sect-head"><span class="tag">Before you start</span><h2>Today's Plan</h2></div>
+  <div class="plan">
+    <div><b>Part 1 · Rewind</b><span>Practice the motion math you already learned.</span></div>
+    <div><b>Part 2 · Face-Off</b><span>Predict-It animations, then a tug-of-war simulator with a partner.</span></div>
+    <div><b>Part 3 · Game Film</b><span>Use the new ideas on real sports moments.</span></div>
+  </div>
+  <div class="note gold"><p><b>All you need:</b> your device, and Zoom open with the chat showing. Everything today happens on screen.</p></div>
+</section>
+
+<!-- ============ PART 1 ============ -->
+<section>
+  <div class="sect-head"><span class="tag">Part 1</span><h2>Rewind: Motion Review</h2><span class="time">6 min · type answers in the chat</span></div>
+
+  <div class="card">
+    <h3>Quick reminder: 4 ideas you already know</h3>
+    <div class="words">
+      <div class="word"><b>Distance vs. displacement</b><span><b style="display:inline">Distance</b> = the whole path you traveled. <b style="display:inline">Displacement</b> = a straight line from start to finish.</span></div>
+      <div class="word"><b>Speed vs. velocity</b><span><b style="display:inline">Speed</b> = how fast. <b style="display:inline">Velocity</b> = how fast <u>and</u> which way.</span><i>speed = distance ÷ time</i></div>
+      <div class="word"><b>Acceleration</b><span>How much the velocity changes each second.</span><i>a = (final velocity − starting velocity) ÷ time</i></div>
+      <div class="word"><b>+ or − acceleration</b><span><b style="display:inline">Positive (+)</b> = speeding up. <b style="display:inline">Negative (−)</b> = slowing down.</span></div>
+    </div>
+  </div>
+
+  <div class="note teal">
+    <h3>Use the 3-step recipe on every math problem</h3>
+    <p class="formula">① Write the formula &nbsp;→&nbsp; ② Put in the numbers &nbsp;→&nbsp; ③ Write the answer with units</p>
+  </div>
+
+  <div class="q"><span class="qn">Rewind 1 · Distance vs. displacement</span><span class="qt">A volleyball player runs from the end line to the net (9 m). Then she jogs back to the end line. What is her <b>distance</b>? What is her <b>displacement</b>?</span>
+    <details class="ans"><summary>Need a hint?</summary><p>Distance counts every step. Displacement only asks: how far is she from where she started?</p></details>
+    <details class="ans"><summary>Show answer</summary><p>Distance = 9 m + 9 m = <b>18 m</b>. Displacement = <b>0 m</b>, because she ended right where she started.</p></details></div>
+
+  <div class="q"><span class="qn">Rewind 2 · Speed</span><span class="qt">A ball rolls 0.80 m in 0.40 seconds. What is its speed?</span>
+    <details class="ans"><summary>Show the 3 steps</summary><div class="work"><span class="k">① Formula</span><span class="v">speed = distance ÷ time</span><span class="k">② Numbers</span><span class="v">speed = 0.80 m ÷ 0.40 s</span><span class="k">③ Answer</span><span class="v"><b>2.0 m/s</b></span></div></details></div>
+
+  <div class="q"><span class="qn">Rewind 3 · Speed vs. velocity</span><span class="qt">A runner sprints one full lap around a track and ends where she started. Her speed was 5 m/s. What was her <b>velocity</b>?</span>
+    <details class="ans"><summary>Need a hint?</summary><p>Velocity uses displacement. What is her displacement if she ended where she started?</p></details>
+    <details class="ans"><summary>Show answer</summary><p><b>0 m/s.</b> Her displacement was 0 m, so her velocity was 0 m/s, even though she ran fast the whole time.</p></details></div>
+
+  <div class="q"><span class="qn">Rewind 4 · Speeding up</span><span class="qt">A soccer player goes from 2 m/s to 6 m/s in 2 seconds. What is her acceleration?</span>
+    <details class="ans"><summary>Show the 3 steps</summary><div class="work"><span class="k">① Formula</span><span class="v">a = (final − starting) ÷ time</span><span class="k">② Numbers</span><span class="v">a = (6 − 2) ÷ 2 = 4 ÷ 2</span><span class="k">③ Answer</span><span class="v"><b>2 m/s²</b> → positive, so she's <b>speeding up</b></span></div></details></div>
+
+  <div class="q"><span class="qn">Rewind 5 · Slowing down</span><span class="qt">A ball is rolling at 3 m/s. It stops in 1.5 seconds. What is its acceleration?</span>
+    <details class="ans"><summary>Need a hint?</summary><p>"Stops" means the final velocity is <b>0</b>. Always do <b>final minus starting</b>: (0 − 3).</p></details>
+    <details class="ans"><summary>Show the 3 steps</summary><div class="work"><span class="k">① Formula</span><span class="v">a = (final − starting) ÷ time</span><span class="k">② Numbers</span><span class="v">a = (0 − 3) ÷ 1.5 = −3 ÷ 1.5</span><span class="k">③ Answer</span><span class="v"><b>−2 m/s²</b> → negative, so it's <b>slowing down</b></span></div></details></div>
+
+  <div class="q"><span class="qn">Rewind 6 · Think about it</span><span class="qt">A ball goes around a loop at the same speed the whole time. Is it accelerating?</span>
+    <details class="ans"><summary>Need a hint?</summary><p>Acceleration means the <b>velocity</b> changes. Velocity = speed <u>and direction</u>. Does the direction change in a loop?</p></details>
+    <details class="ans"><summary>Show answer</summary><p><b>Yes.</b> Its direction keeps changing, so its velocity keeps changing. That means it's accelerating.</p></details></div>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section>
+  <div class="sect-head"><span class="tag">Part 2</span><h2>Force Face-Off</h2><span class="time">15 min · start the clock</span></div>
+</section>
+<div class="timer-bar">
+  <div><div class="timer-label">Face-Off Clock</div><div class="timer-num" id="clock">15:00</div></div>
+  <div style="display:flex;gap:8px"><button class="btn primary" id="startBtn">Start</button><button class="btn ghost" id="resetBtn">Reset</button></div>
+</div>
+
+<section>
+  <div class="timeline">
+    <div class="tl"><div class="t">0:00–4:00</div><div class="b"><b>Round 1: Predict It!</b> Your teacher shares her screen. You guess in the chat, then watch what happens.</div></div>
+    <div class="tl"><div class="t">4:00–11:00</div><div class="b"><b>Round 2: Tug-of-War</b> (with your partner in a breakout room).</div></div>
+    <div class="tl"><div class="t">11:00–14:00</div><div class="b"><b>Report back:</b> each pair shares for 1 minute.</div></div>
+    <div class="tl"><div class="t">14:00–15:00</div><div class="b"><b>The Big Idea.</b></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Round 1</span><h2>Predict It!</h2><span class="time">4 min · whole class</span></div>
+  <div class="card">
+    <h3>How to play</h3>
+    <ol class="steps">
+      <li>Your teacher shares her screen and reads the question.</li>
+      <li>Everyone types <b>A</b>, <b>B</b>, or <b>C</b> in the Zoom chat. Wait, and press Enter at the same time!</li>
+      <li>Your teacher presses <b>▶ Play</b>. Watch what really happens.</li>
+      <li>The right answer turns <span class="k-good">green</span>, and an explanation pops up. Who got it right?</li>
+    </ol>
+  </div>
+  <div class="predict" data-scene="van"></div>
+  <div class="predict" data-scene="cloth"></div>
+  <div class="predict" data-scene="slide"></div>
+  <div class="predict" data-scene="kick"></div>
+  <div class="frame">Which scene surprised you the most? Why?</div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Round 2</span><h2>Tug-of-War</h2><span class="time">7 min · breakout rooms</span></div>
+
+  <div class="card">
+    <h3>First, learn 4 new words</h3>
+    <div class="words">
+      <div class="word"><b>Force</b><span>A push or a pull.</span></div>
+      <div class="word"><b>Newton (N)</b><span>The unit we use to measure force. "50 N" means a pull of 50 newtons.</span></div>
+      <div class="word"><b>Net force</b><span>What's left over after the forces work against each other. It's the force that "wins."</span></div>
+      <div class="word"><b>Balanced / Unbalanced</b><span><b style="display:inline">Balanced</b> = net force is 0 (a tie). <b style="display:inline">Unbalanced</b> = net force is not 0 (someone wins).</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>How to find the net force</h3>
+    <p>When two teams pull in <b>opposite</b> directions, <b>subtract</b>. Big number minus small number. The bigger team wins.</p>
+    <div class="eq"><span class="r">Left pulls 30 N</span><span class="t">Right pulls 50 N</span>→<span>50 − 30 = <b>20 N to the right</b></span></div>
+    <p>If both teams pull the same, the answer is 0 N. That's a tie, so the forces are <b>balanced</b>.</p>
+  </div>
+
+  <div class="card">
+    <h3>Your jobs</h3>
+    <div class="roles">
+      <div class="role"><span class="rn">Partner 1</span><h3>🎮 Driver</h3><p>Shares her screen. Reads the mission out loud. Clicks the buttons.</p></div>
+      <div class="role r2"><span class="rn">Partner 2</span><h3>📝 Recorder</h3><p>Types your guess <b>before</b> you press Run. Then types what happened.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>How to use the simulator</h3>
+    <ol class="steps">
+      <li>Click the <b>Load this mission</b> button under your mission. The simulator scrolls into view, ready to go.</li>
+      <li><b>Guess first.</b> Will the cart move? Which way? The Recorder types the guess.</li>
+      <li>Press <b>▶ Run</b>. The cart moves for 5 seconds.</li>
+      <li>Read the numbers under the picture: <b>net force, acceleration, velocity</b>.</li>
+      <li>The Recorder types what happened in the chat.</li>
+    </ol>
+    <p><b>Reading the picture:</b> the <span class="k-red">red rope</span> is Team Left. The <span class="k-teal">teal rope</span> is Team Right. The <b>black arrow</b> is the net force. The <span class="k-gold">gold arrow</span> is friction (a force that rubs against the cart and slows it down). The <b>dots on the ground</b> show where the cart was every half second.</p>
+  </div>
+
+  <div class="mission"><div class="mh"><span class="who">Every pair · do this first</span><h3>Mission A · Make a Tie</h3></div>
+    <p><b>Your goal:</b> both teams pull, but the cart does <b>not</b> move.</p>
+    <p><b>Steps:</b> use the <b>− / +</b> buttons to change the pulls. Neither team can be 0. Find <b>2 different ways</b> to do it.</p>
+    <button class="load" onclick="fsimSet({FL:30,FR:50,m:20,surf:'ice'})">Load this mission</button>
+    <div class="frame">Left ___ N and Right ___ N made a tie. The net force was ___ N.</div>
+    <details class="ans"><summary>Check your answer</summary><p>Any two <b>equal</b> pulls work, like 30 N and 30 N. The net force is <b>0 N</b>, so the forces are <b>balanced</b>, and the cart does not move.</p></details></div>
+
+  <div class="mission"><div class="mh"><span class="who">Pair 1</span><h3>Mission B · Speed Up by 1</h3></div>
+    <p><b>Your goal:</b> make the velocity go up by <b>1 m/s every second</b>: 0, 1, 2, 3, 4, 5.</p>
+    <p><b>Steps:</b> change the pulls and press Run. Look at the <b>"Velocity every second"</b> row. Keep trying until it counts up by 1.</p>
+    <button class="load" onclick="fsimSet({FL:20,FR:20,m:20,surf:'ice'})">Load this mission</button>
+    <p><b>Then do the math:</b> a = (final velocity − starting velocity) ÷ time = (5 − 0) ÷ 5 = ___</p>
+    <div class="frame">We used Left ___ N and Right ___ N. The net force was ___ N. The acceleration was ___ m/s².</div>
+    <details class="ans"><summary>Check your answer</summary><p>A <b>net force of 20 N</b> works, like Left 20 and Right 40. The velocity goes 0, 1, 2, 3, 4, 5. Acceleration = (5 − 0) ÷ 5 = <b>1 m/s²</b>.</p></details></div>
+
+  <div class="mission"><div class="mh"><span class="who">Pair 2</span><h3>Mission C · Heavy Cart</h3></div>
+    <p><b>Your goal:</b> find out what happens when the cart is heavier but the pull stays the same.</p>
+    <p><b>Steps:</b> (1) Press Run with the <b>20 kg</b> cart. Write down the acceleration. (2) Click <b>40 kg</b>. Press Run again. Write down the acceleration.</p>
+    <button class="load" onclick="fsimSet({FL:20,FR:60,m:20,surf:'ice'})">Load this mission</button>
+    <div class="frame">20 kg: ___ m/s². 40 kg: ___ m/s². The heavier cart sped up (more / less).</div>
+    <details class="ans"><summary>Check your answer</summary><p>The net force is 40 N both times. The 20 kg cart: <b>2 m/s²</b>. The 40 kg cart: <b>1 m/s²</b>. <b>A heavier object speeds up less</b> with the same force.</p></details></div>
+
+  <div class="mission"><div class="mh"><span class="who">Pair 3</span><h3>Mission D · Let Go!</h3></div>
+    <p><b>Your goal:</b> find out what the cart does when nobody is pulling anymore.</p>
+    <p><b>Steps:</b> (1) On <b>Ice</b>, press Run. When the clock shows about 2 seconds, press <b>✋ Drop the ropes</b>. Watch the cart. (2) Click <b>Grass</b> and do it again.</p>
+    <button class="load" onclick="fsimSet({FL:0,FR:40,m:20,surf:'ice'})">Load this mission</button>
+    <div class="frame">On ice, after the drop, the cart ___. On grass, after the drop, the cart ___.</div>
+    <details class="ans"><summary>Check your answer</summary><p><b>On ice:</b> the cart keeps rolling at the same speed. There's no friction, so nothing slows it down. The dots stay evenly spaced.</p><p><b>On grass:</b> the cart slows down and stops. Friction pulls backward, so the dots bunch together.</p></details></div>
+
+  <div id="fsim" class="fsim"></div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Round 3</span><h2>Report Back</h2><span class="time">3 min · 1 minute per pair</span></div>
+  <div class="frame">Our mission was ___. We found out that ___. One number we got was ___.</div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">The Big Idea</span><h2>What We Learned</h2><span class="time">1 min</span></div>
+  <div class="bigidea"><small>Rule 1</small>If the net force is <b>0</b> (balanced), the motion <b>does not change</b>. A still object stays still. A moving object keeps moving at the same speed.</div>
+  <div class="bigidea"><small>Rule 2</small>If the net force is <b>not 0</b> (unbalanced), the object <b>accelerates</b>: it speeds up, slows down, or turns. A heavier object accelerates less.</div>
+  <div class="word"><b>Inertia</b><span>Things keep doing what they're already doing until a force changes it. That's why the volleyball kept rolling when the van braked, why the dishes stayed on the table, and why the cart kept rolling on the ice.</span></div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section>
+  <div class="sect-head"><span class="tag">Part 3</span><h2>Game Film: Balanced or Unbalanced?</h2><span class="time">9 min · whole class</span></div>
+  <div class="card">
+    <h3>How to play</h3>
+    <ol class="steps">
+      <li>Read the play.</li>
+      <li>Ask yourself: <b>is the motion changing?</b> (speeding up, slowing down, or turning)</li>
+      <li>If <b>no</b>, type <b>B</b> for balanced. If <b>yes</b>, type <b>U</b> for unbalanced.</li>
+      <li>Everyone presses Enter at the same time. Then click to check.</li>
+    </ol>
+  </div>
+  <div class="q"><span class="qn">Play 1</span><span class="qt">A volleyball sits on the gym floor during a timeout.</span>
+    <details class="ans"><summary>Check</summary><p><b>B: balanced.</b> The ball is not moving and stays not moving. Gravity pulls it down, and the floor pushes it up just as hard. It's a tie.</p></details></div>
+  <div class="q"><span class="qn">Play 2</span><span class="qt">A soccer ball rolls across the grass and slowly stops.</span>
+    <details class="ans"><summary>Check</summary><p><b>U: unbalanced.</b> The ball is slowing down. Friction from the grass pulls backward, and nothing pushes it forward.</p></details></div>
+  <div class="q"><span class="qn">Play 3</span><span class="qt">A hitter's hand smacks the ball during a spike.</span>
+    <details class="ans"><summary>Check</summary><p><b>U: unbalanced.</b> The ball speeds up a lot, very fast. The hand's push is much bigger than anything else.</p></details></div>
+  <div class="q"><span class="qn">Play 4 · Careful!</span><span class="qt">The team bus drives down a straight highway at a steady 55 mph.</span>
+    <details class="ans"><summary>Check</summary><p><b>B: balanced!</b> The bus is moving, but its motion is <b>not changing</b>: same speed, same direction. The engine's push is a tie with the forces pushing back. <b>Moving does not always mean unbalanced.</b></p></details></div>
+  <div class="q"><span class="qn">Play 5</span><span class="qt">You and a teammate push on opposite sides of a door, exactly as hard as each other.</span>
+    <details class="ans"><summary>Check</summary><p><b>B: balanced.</b> Equal pushes in opposite directions make a tie, so the door doesn't move. It's just like Mission A.</p></details></div>
+  <div class="q"><span class="qn">Play 6 · Challenge</span><span class="qt">A volleyball at the very top of a high set, for the instant it isn't going up or down.</span>
+    <details class="ans"><summary>Check</summary><p><b>U: unbalanced.</b> Gravity is still pulling down, and nothing is holding the ball up. That's why it starts to fall right away.</p></details></div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Exit Ticket</span><h2>Before you leave</h2></div>
+  <div class="frame">When the forces on something are unbalanced, it ___. One example from today is ___.</div>
+</section>
+
+<p class="footer">— Case 07 opened. Next class: The Friction Finish Line lab. —</p>
+</div>
+<script>
+(function(){
+  var total=900,left=total,id=null,el=document.getElementById('clock'),btn=document.getElementById('startBtn');
+  function draw(){var m=Math.floor(left/60),s=left%60;el.textContent=m+':'+(s<10?'0':'')+s;}
+  btn.onclick=function(){if(id){clearInterval(id);id=null;btn.textContent='Start';return;}
+    id=setInterval(function(){if(left>0){left--;draw();}else{clearInterval(id);id=null;btn.textContent='Start';}},1000);btn.textContent='Pause';};
+  document.getElementById('resetBtn').onclick=function(){clearInterval(id);id=null;left=total;btn.textContent='Start';draw();};
+})();
+</script>
+<script>
+/* Tug-of-war net force simulator. Markup: <div class="fsim" id="fsim"></div>. API: window.fsimSet({FL,FR,m,surf}) */
+(function(){
+  var root=document.getElementById('fsim'); if(!root) return;
+  var W=720,H=290,GROUND=214,PXM=26,DUR=5,S=2.0;
+  var SURF={ice:{name:'Ice',f:0,note:'no friction'},gym:{name:'Gym floor',f:10,note:'10 N friction'},grass:{name:'Grass',f:30,note:'30 N friction'}};
+  var st={FL:30,FR:50,m:20,surf:'ice',running:false,t:0,x:0,v:0,cam:0,dropped:false,log:[],ghosts:[]};
+
+  root.innerHTML=
+   '<canvas class="fsim-cv" role="img" aria-label="A cart pulled by two teams, with force arrows and a trail showing how it moves"></canvas>'+
+   '<div class="fsim-read">'+
+     '<div><span>Net force</span><b id="r-net">—</b></div>'+
+     '<div><span>Acceleration</span><b id="r-a">—</b></div>'+
+     '<div><span>Velocity</span><b id="r-v">—</b></div>'+
+   '</div>'+
+   '<div class="fsim-vlog"><span class="fsim-vlab">Velocity every second</span><span id="log" class="fsim-chips"></span></div>'+
+   '<div class="fsim-ctrl">'+
+     '<div class="stepper red"><span class="sl">Team Left</span><button data-k="FL" data-d="-10" aria-label="Team Left pull less">−</button><b id="o-fl"></b><button data-k="FL" data-d="10" aria-label="Team Left pull more">+</button></div>'+
+     '<div class="stepper teal"><span class="sl">Team Right</span><button data-k="FR" data-d="-10" aria-label="Team Right pull less">−</button><b id="o-fr"></b><button data-k="FR" data-d="10" aria-label="Team Right pull more">+</button></div>'+
+     '<div class="seg" id="s-m"><span class="seg-l">Cart</span><button data-v="20">20 kg</button><button data-v="40">40 kg</button></div>'+
+     '<div class="seg" id="s-s"><span class="seg-l">Surface</span><button data-v="ice">Ice</button><button data-v="gym">Gym floor</button><button data-v="grass">Grass</button></div>'+
+   '</div>'+
+   '<div class="fsim-btns"><button class="btn primary" id="b-run">▶ Run</button><button class="btn ghost" id="b-drop" disabled>✋ Drop the ropes</button><button class="btn ghost" id="b-reset">↺ Reset</button></div>';
+
+  var cv=root.querySelector('canvas'), $=function(id){return root.querySelector('#'+id);};
+  var C={},k=1;
+  function colors(){var s=getComputedStyle(document.documentElement);function g(n){return s.getPropertyValue(n).trim();}
+    C={ink:g('--ink'),soft:g('--ink-soft'),muted:g('--muted'),line:g('--line'),card:g('--card'),sunk:g('--sunk'),paper:g('--paper'),
+       red:g('--track-red'),redSoft:g('--track-red-soft'),teal:g('--field-teal'),tealSoft:g('--field-teal-soft'),gold:g('--gold'),goldSoft:g('--gold-soft')};}
+  function size(){var w=cv.clientWidth;if(!w)return;var d=window.devicePixelRatio||1;cv.width=Math.round(w*d);cv.height=Math.round(w*H/W*d);k=Math.max(1,Math.min(2.3,W/w));draw();}
+
+  /* ---------- physics ---------- */
+  function friction(app){var f=SURF[st.surf].f;
+    if(st.v===0) return Math.abs(app)<=f?-app:-Math.sign(app)*f;
+    return -Math.sign(st.v)*f;}
+  function forces(){var a=st.dropped?0:(st.FR-st.FL),fr=friction(a);return {app:a,fric:fr,net:a+fr};}
+  function step(dt){
+    var F=forces(),a=F.net/st.m,v0=st.v;
+    st.v+=a*dt;
+    if(v0!==0&&Math.sign(st.v)!==Math.sign(v0)&&F.app===0) st.v=0;
+    if(Math.abs(st.v)<1e-6) st.v=0;
+    st.x+=st.v*dt; st.t+=dt;
+    var sec=Math.floor(st.t+1e-6); if(sec>st.log.length-1&&sec<=DUR) st.log.push(st.v);
+    var half=Math.floor(st.t*2+1e-6); if(half>st.ghosts.length-1) st.ghosts.push(st.x);
+  }
+
+  /* ---------- drawing helpers ---------- */
+  function font(sz,w){return (w||600)+' '+(sz*k)+'px "IBM Plex Mono",ui-monospace,monospace';}
+  function rrect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  function pill(ctx,text,x,y,bg,fg,align){
+    ctx.font=font(11,700);var pw=ctx.measureText(text).width+16*k,ph=20*k;
+    var px=align==='left'?x:align==='right'?x-pw:x-pw/2;
+    ctx.fillStyle=bg;rrect(ctx,px,y-ph/2,pw,ph,ph/2);ctx.fill();
+    ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,px+pw/2,y+.5);
+    return pw;
+  }
+  function arrow(ctx,x,y,len,col,thick){
+    if(Math.abs(len)<2)return; var dir=Math.sign(len),hx=x+len,hl=Math.min(16,Math.abs(len)*.6),hw=thick*1.6+3;
+    ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=thick;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(hx-dir*hl*.8,y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(hx,y);ctx.lineTo(hx-dir*hl,y-hw);ctx.lineTo(hx-dir*hl,y+hw);ctx.closePath();ctx.fill();
+  }
+  function hash(i){var s=Math.sin(i*127.1)*43758.5453;return s-Math.floor(s);}
+  function sx(x){return W/2+(x-st.cam)*PXM;}
+
+  function drawSurface(ctx){
+    var s=st.surf, top=GROUND, x0=st.cam-W/2/PXM-2, x1=st.cam+W/2/PXM+2;
+    var base=s==='ice'?'rgba(120,185,230,.30)':s==='grass'?'rgba(84,160,92,.30)':'rgba(196,140,70,.26)';
+    ctx.fillStyle=base;ctx.fillRect(0,top,W,H-top);
+    ctx.save();ctx.beginPath();ctx.rect(0,top,W,H-top);ctx.clip();
+    if(s==='ice'){ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=2;ctx.lineCap='round';
+      for(var i=Math.floor(x0/1.3);i<x1/1.3;i++){var px=sx(i*1.3),py=top+16+hash(i)*44;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+14,py-6);ctx.stroke();ctx.beginPath();ctx.moveTo(px+20,py+4);ctx.lineTo(px+26,py+1);ctx.stroke();}}
+    else if(s==='gym'){ctx.strokeStyle='rgba(120,80,30,.22)';ctx.lineWidth=1;
+      for(var r=0;r<4;r++){var y=top+18*(r+1);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
+        for(var j=Math.floor(x0/2.4)-1;j<x1/2.4;j++){var px2=sx(j*2.4+(r%2)*1.2);ctx.beginPath();ctx.moveTo(px2,y-18);ctx.lineTo(px2,y);ctx.stroke();}}
+}
+    else{ctx.strokeStyle='rgba(60,130,70,.55)';ctx.lineWidth=1.6;ctx.lineCap='round';
+      for(var g=Math.floor(x0/.22);g<x1/.22;g++){var gx=sx(g*.22),h=5+hash(g)*8,lean=(hash(g+9)-.5)*6;ctx.beginPath();ctx.moveTo(gx,top+2);ctx.lineTo(gx+lean,top+2-h);ctx.stroke();}}
+    ctx.restore();
+    ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(0,top);ctx.lineTo(W,top);ctx.stroke();
+    ctx.font=font(10,600);ctx.textAlign='center';ctx.textBaseline='top';
+    for(var m=Math.ceil(x0);m<=x1;m++){if(m%5)continue;var mx=sx(m);
+      ctx.fillStyle=C.ink;ctx.globalAlpha=.55;ctx.fillRect(mx-1,top,2,9);ctx.fillText(m+' m',mx,top+34);ctx.globalAlpha=1;}
+    ctx.textAlign='left';ctx.fillStyle=C.ink;ctx.globalAlpha=.7;ctx.font=font(10.5,700);
+    ctx.fillText(SURF[s].name.toUpperCase()+' · '+SURF[s].note,12,H-20);ctx.globalAlpha=1;
+  }
+
+  function cartDims(){return st.m===40?{w:124,h:62}:{w:104,h:46};}
+  function drawCart(ctx,x,ghost){
+    var d=cartDims(),cx=sx(x),bottom=GROUND-16,top=bottom-d.h,left=cx-d.w/2;
+    if(ghost){ctx.fillStyle=C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,GROUND+12,5,0,7);ctx.fill();ctx.stroke();return;}
+    ctx.fillStyle='rgba(0,0,0,.12)';ctx.beginPath();ctx.ellipse(cx,GROUND+1,d.w/2+6,5,0,0,7);ctx.fill();
+    ctx.fillStyle=st.m===40?C.sunk:C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;rrect(ctx,left,top,d.w,d.h,9);ctx.fill();ctx.stroke();
+    ctx.fillStyle=C.ink;ctx.globalAlpha=.08;rrect(ctx,left+5,top+5,d.w-10,8,4);ctx.fill();ctx.globalAlpha=1;
+    ctx.fillStyle=C.ink;ctx.font=font(st.m===40?16:14,700);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(st.m+' kg',cx,top+d.h/2+3);
+    var wr=11,spin=x*PXM/wr;
+    [-d.w/2+24,d.w/2-24].forEach(function(o){var wx=cx+o,wy=GROUND-wr;
+      ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(wx,wy,wr,0,7);ctx.fill();
+      ctx.fillStyle=C.card;ctx.beginPath();ctx.arc(wx,wy,4,0,7);ctx.fill();
+      ctx.strokeStyle=C.card;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(wx+Math.cos(spin)*5,wy+Math.sin(spin)*5);ctx.lineTo(wx+Math.cos(spin)*9,wy+Math.sin(spin)*9);ctx.stroke();});
+    return {cx:cx,top:top,bottom:bottom,left:left,right:left+d.w,midY:top+d.h/2+3};
+  }
+  function drawRope(ctx,fromX,y,toX,force,col){
+    ctx.lineCap='round';
+    if(force>0){ctx.strokeStyle=col;ctx.lineWidth=3.5;ctx.beginPath();ctx.moveTo(fromX,y);ctx.lineTo(toX,y);ctx.stroke();}
+    else{ctx.strokeStyle=C.muted;ctx.lineWidth=2.5;ctx.setLineDash([1,6]);ctx.beginPath();ctx.moveTo(fromX,y);ctx.quadraticCurveTo((fromX+toX)/2,GROUND+4,toX,GROUND-4);ctx.stroke();ctx.setLineDash([]);}
+  }
+
+  function draw(){
+    if(!cv.clientWidth)return; colors();
+    var ctx=cv.getContext('2d'),d=cv.width/W;ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,W,H);
+    ctx.fillStyle=C.paper;ctx.fillRect(0,0,W,H);
+    drawSurface(ctx);
+    st.ghosts.forEach(function(gx,i){if(i<st.ghosts.length)drawCart(ctx,gx,true);});
+    var F=forces(),dims=cartDims(),cx=sx(st.x),ropeY=GROUND-16-dims.h/2+3;
+    if(!st.dropped){
+      drawRope(ctx,cx-dims.w/2,ropeY,0,st.FL,C.red);
+      drawRope(ctx,cx+dims.w/2,ropeY,W,st.FR,C.teal);
+      pill(ctx,'TEAM LEFT  '+st.FL+' N',10,ropeY-22,C.redSoft,C.red,'left');
+      pill(ctx,'TEAM RIGHT  '+st.FR+' N',W-10,ropeY-22,C.tealSoft,C.teal,'right');
+    }
+    var c=drawCart(ctx,st.x,false);
+    if(F.fric!==0){var fx=Math.sign(F.fric)>0?c.right+4:c.left-4,fl=F.fric*S;arrow(ctx,fx,GROUND-6,fl,C.gold,5);
+      pill(ctx,'friction '+Math.abs(F.fric)+' N',fx+fl+Math.sign(fl)*6,GROUND-6,C.goldSoft,C.gold,fl>0?'left':'right');}
+    var ny=c.top-34, bal=Math.abs(F.net)<.005;
+    if(bal){pill(ctx,'NET FORCE = 0 N',c.cx,ny,C.tealSoft,C.teal,'center');}
+    else{var nl=F.net*S;arrow(ctx,c.cx,ny,nl,C.ink,7);pill(ctx,'NET '+Math.abs(F.net)+' N',c.cx-Math.sign(nl)*8,ny,C.ink,C.paper,nl>0?'right':'left');}
+    var msg=bal?'BALANCED · velocity stays the same':'UNBALANCED · accelerating '+(F.net>0?'→ right':'← left');
+    pill(ctx,msg,12,22,bal?C.tealSoft:C.redSoft,bal?C.teal:C.red,'left');
+    ctx.font=font(12,700);ctx.fillStyle=C.ink;ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText('t = '+st.t.toFixed(1)+' s',W-12,22);
+    if(st.ghosts.length>1){ctx.font=font(10,600);ctx.fillStyle=C.muted;ctx.textAlign='right';ctx.fillText('● dots = cart position every 0.5 s',W-12,44);}
+    readouts(F);
+  }
+  function fmt(n){var s=(Math.abs(n)<.005?0:n).toFixed(1);return s==='-0.0'?'0.0':s;}
+  function readouts(F){
+    var a=F.net/st.m;
+    $('r-net').textContent=Math.abs(F.net)+' N'+(Math.abs(F.net)<.005?'':(F.net>0?' →':' ←'));
+    $('r-a').textContent=fmt(a)+' m/s²';
+    $('r-v').textContent=fmt(st.v)+' m/s';
+    var h='';for(var i=0;i<=DUR;i++){var v=st.log[i];h+='<span class="chip'+(v==null?' empty':'')+'"><i>'+i+' s</i>'+(v==null?'—':fmt(v))+'</span>';}
+    $('log').innerHTML=h;
+  }
+
+  /* ---------- loop & controls ---------- */
+  var last=0;
+  function loop(ts){
+    if(!st.running)return;
+    var dt=last?Math.min(.05,(ts-last)/1000):1/60;last=ts;
+    var n=Math.max(1,Math.round(dt*120));for(var i=0;i<n;i++){if(st.t>=DUR-1e-9)break;step(dt/n);}
+    st.cam+=(st.x-st.cam)*.12;
+    if(st.t>=DUR-1e-9){st.t=DUR;st.running=false;$('b-drop').disabled=true;$('b-run').textContent='▶ Run again';}
+    draw(); if(st.running)requestAnimationFrame(loop);
+  }
+  function reset(){st.running=false;st.t=0;st.x=0;st.v=0;st.cam=0;st.dropped=false;st.log=[];st.ghosts=[];$('b-drop').disabled=true;$('b-run').textContent='▶ Run';paint();draw();}
+  function run(){reset();st.running=true;st.log=[0];st.ghosts=[0];last=0;$('b-drop').disabled=false;requestAnimationFrame(loop);}
+  function paint(){$('o-fl').textContent=st.FL+' N';$('o-fr').textContent=st.FR+' N';
+    root.querySelectorAll('#s-m button').forEach(function(b){b.classList.toggle('on',+b.dataset.v===st.m);});
+    root.querySelectorAll('#s-s button').forEach(function(b){b.classList.toggle('on',b.dataset.v===st.surf);});}
+  root.querySelectorAll('.stepper button').forEach(function(b){b.onclick=function(){var key=b.dataset.k;st[key]=Math.max(0,Math.min(60,st[key]+(+b.dataset.d)));paint();if(!st.running)reset();else draw();};});
+  $('s-m').onclick=function(e){var b=e.target.closest('button');if(!b)return;st.m=+b.dataset.v;reset();};
+  $('s-s').onclick=function(e){var b=e.target.closest('button');if(!b)return;st.surf=b.dataset.v;reset();};
+  $('b-run').onclick=run;$('b-reset').onclick=reset;$('b-drop').onclick=function(){st.dropped=true;$('b-drop').disabled=true;draw();};
+  window.fsimSet=function(o){Object.assign(st,o);reset();root.scrollIntoView({behavior:'smooth',block:'start'});};
+  new ResizeObserver(size).observe(cv);
+  var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',draw);
+  reset();
+})();
+</script>
+<script>
+/* "Predict It!" animated scenes. Markup: <div class="predict" data-scene="van|cloth|slide|kick"></div> */
+(function(){
+  var W=720,H=300,TAU=Math.PI*2;
+  var C={},K=1;
+  function colors(){var s=getComputedStyle(document.documentElement);function g(n){return s.getPropertyValue(n).trim();}
+    C={ink:g('--ink'),soft:g('--ink-soft'),muted:g('--muted'),line:g('--line'),card:g('--card'),sunk:g('--sunk'),paper:g('--paper'),
+       red:g('--track-red'),redSoft:g('--track-red-soft'),teal:g('--field-teal'),tealSoft:g('--field-teal-soft'),gold:g('--gold'),goldSoft:g('--gold-soft'),good:g('--good'),goodSoft:g('--good-soft')};}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function ease(t){t=clamp(t,0,1);return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  function font(sz,w){return (w||700)+' '+(sz*K)+'px "IBM Plex Mono",ui-monospace,monospace';}
+  function pill(ctx,text,x,y,bg,fg){ctx.font=font(12);var w=ctx.measureText(text).width+20*K,h=24*K;
+    ctx.fillStyle=bg;rr(ctx,x-w/2,y-h/2,w,h,h/2);ctx.fill();ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,x,y+1);}
+  function label(ctx,text,x,y,col,align){ctx.font=font(11,600);ctx.fillStyle=col||C.muted;ctx.textAlign=align||'left';ctx.textBaseline='middle';ctx.fillText(text,x,y);}
+  function shadow(ctx,x,y,w){ctx.fillStyle='rgba(0,0,0,.13)';ctx.beginPath();ctx.ellipse(x,y,w,w*.18,0,0,TAU);ctx.fill();}
+  function volleyball(ctx,x,y,r,rot){
+    ctx.fillStyle='#FFFFFF';ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.stroke();
+    ctx.save();ctx.beginPath();ctx.arc(x,y,r-1,0,TAU);ctx.clip();
+    var cols=['#F2B75A','#2E6FB7'];for(var i=0;i<3;i++){var a=rot+i*TAU/3;ctx.fillStyle=cols[i%2];ctx.globalAlpha=i===2?0:.9;
+      ctx.beginPath();ctx.arc(x+Math.cos(a)*r*1.05,y+Math.sin(a)*r*1.05,r*.95,0,TAU);ctx.fill();}
+    ctx.globalAlpha=1;ctx.strokeStyle=C.ink;ctx.lineWidth=1.4;
+    for(var j=0;j<3;j++){var b=rot+j*TAU/3;ctx.beginPath();ctx.arc(x+Math.cos(b)*r*1.05,y+Math.sin(b)*r*1.05,r*.95,b+2.3,b+3.98);ctx.stroke();}
+    ctx.restore();}
+  function soccer(ctx,x,y,r,rot){
+    ctx.fillStyle='#FFFFFF';ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.stroke();
+    function pent(px,py,s,a){ctx.beginPath();for(var i=0;i<5;i++){var t=a+i*TAU/5;ctx[i?'lineTo':'moveTo'](px+Math.cos(t)*s,py+Math.sin(t)*s);}ctx.closePath();ctx.fillStyle='#221F2B';ctx.fill();}
+    ctx.save();ctx.beginPath();ctx.arc(x,y,r-1,0,TAU);ctx.clip();
+    pent(x,y,r*.36,rot);for(var i=0;i<5;i++){var a=rot+i*TAU/5+TAU/10;pent(x+Math.cos(a)*r*.92,y+Math.sin(a)*r*.92,r*.3,a);}ctx.restore();}
+  function bowling(ctx,x,y,r,rot){
+    var g=ctx.createRadialGradient(x-r*.35,y-r*.4,r*.1,x,y,r);g.addColorStop(0,'#5A6BB0');g.addColorStop(1,'#1E2550');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle='#0D1030';[[0,-.35],[-.22,-.05],[.22,-.05]].forEach(function(p){var c=Math.cos(rot),s=Math.sin(rot);ctx.beginPath();ctx.arc(x+(p[0]*c-p[1]*s)*r,y+(p[0]*s+p[1]*c)*r,r*.11,0,TAU);ctx.fill();});}
+
+  /* ---------------- scenes ---------------- */
+  var SCENES={
+    van:{
+      title:'Brake Check',
+      q:'The team van is driving down the road. A volleyball is sitting on the floor in the middle of the van. The driver slams on the brakes. What does the ball do?',
+      choices:['It rolls to the back of the van','It stays right where it is','It rolls to the front of the van'],
+      answer:2,
+      explain:'<b>The ball keeps going forward.</b> The brakes stop the van, but nothing stops the ball. So the ball keeps moving at the same speed it had and rolls into the front. That\'s <b>inertia</b>: moving things keep moving until a force stops them. It\'s also why you wear a seatbelt.',
+      dur:4.2,
+      init:function(s){s.vv=1;s.bv=1;s.off=0;s.rel=0;s.rot=0;s.hit=false;s.braking=false;},
+      step:function(s,dt){
+        var V=260;
+        if(s.t>1.3){s.braking=true;s.vv=Math.max(0,s.vv-dt/0.32);}
+        s.off+=s.vv*V*dt;
+        var relv=(s.bv-s.vv)*V;
+        if(!s.hit){s.rel+=relv*dt;if(s.rel>146){s.rel=146;s.hit=true;s.bv=s.vv-0.18;}}
+        else{s.bv+= (s.vv-s.bv)*Math.min(1,dt*3);s.rel=clamp(s.rel+(s.bv-s.vv)*V*dt,110,146);}
+        s.rot+=relv*dt/16;
+      },
+      draw:function(ctx,s){
+        ctx.fillStyle=C.paper;ctx.fillRect(0,0,W,H);
+        for(var i=0;i<6;i++){var px=((i*170-s.off*.35)%1020+1020)%1020-150;ctx.fillStyle=C.sunk;ctx.beginPath();ctx.arc(px,120,46,0,TAU);ctx.arc(px+48,132,34,0,TAU);ctx.fill();ctx.fillStyle=C.line;ctx.fillRect(px+18,150,8,74);}
+        ctx.fillStyle='#5B5568';ctx.fillRect(0,250,W,H-250);ctx.globalAlpha=.25;ctx.fillStyle='#000';ctx.fillRect(0,250,W,4);ctx.globalAlpha=1;
+        ctx.fillStyle='#F2E6C8';for(var d=0;d<8;d++){var dx=((d*120-s.off)%960+960)%960-120;ctx.fillRect(dx,272,60,6);}
+        var vx=170,vy=96,vw=380,vh=146;
+        shadow(ctx,vx+vw/2,252,vw*.55);
+        ctx.fillStyle=C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=3;
+        ctx.beginPath();ctx.moveTo(vx+16,vy);ctx.lineTo(vx+vw-80,vy);ctx.quadraticCurveTo(vx+vw-30,vy,vx+vw-6,vy+60);ctx.lineTo(vx+vw,vy+vh-16);ctx.quadraticCurveTo(vx+vw,vy+vh,vx+vw-16,vy+vh);ctx.lineTo(vx+16,vy+vh);ctx.quadraticCurveTo(vx,vy+vh,vx,vy+vh-16);ctx.lineTo(vx,vy+16);ctx.quadraticCurveTo(vx,vy,vx+16,vy);ctx.closePath();ctx.fill();ctx.stroke();
+        ctx.fillStyle=C.tealSoft;rr(ctx,vx+22,vy+18,vw-110,92,10);ctx.fill();ctx.strokeStyle=C.teal;ctx.lineWidth=2;ctx.stroke();
+        ctx.fillStyle=C.teal;ctx.globalAlpha=.25;ctx.fillRect(vx+22,vy+98,vw-110,12);ctx.globalAlpha=1;
+        ctx.fillStyle='#BFE3F2';ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(vx+vw-80,vy+12);ctx.quadraticCurveTo(vx+vw-40,vy+14,vx+vw-20,vy+58);ctx.lineTo(vx+vw-80,vy+58);ctx.closePath();ctx.fill();ctx.stroke();
+        label(ctx,'FRONT',vx+vw-56,vy+76,C.ink,'center');label(ctx,'BACK',vx+44,vy+128,C.muted,'center');
+        ctx.fillStyle=s.braking?'#FF3B2F':'#8A2A20';rr(ctx,vx-5,vy+90,9,22,3);ctx.fill();
+        if(s.braking){ctx.globalAlpha=.35;ctx.fillStyle='#FF3B2F';ctx.beginPath();ctx.arc(vx-2,vy+101,18,0,TAU);ctx.fill();ctx.globalAlpha=1;}
+        [vx+76,vx+vw-76].forEach(function(wx){ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(wx,vy+vh+4,24,0,TAU);ctx.fill();ctx.fillStyle='#9AA0B5';ctx.beginPath();ctx.arc(wx,vy+vh+4,10,0,TAU);ctx.fill();
+          var a=s.off/24;ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(wx+Math.cos(a)*3,vy+vh+4+Math.sin(a)*3);ctx.lineTo(wx+Math.cos(a)*9,vy+vh+4+Math.sin(a)*9);ctx.stroke();});
+        var bx=300+s.rel, by=vy+92;
+        shadow(ctx,bx,vy+108,14);volleyball(ctx,bx,by,16,s.rot);
+        if(s.braking) pill(ctx,'BRAKES!',vx+vw/2-40,60,C.red,'#fff');
+        else pill(ctx,'driving →',vx+vw/2-40,60,C.sunk,C.ink);
+        if(s.hit) pill(ctx,'BONK!',bx-10,by-48,C.gold,'#fff');
+      }
+    },
+
+    cloth:{
+      title:'Tablecloth Trick',
+      q:'Dishes are sitting on a tablecloth. Someone yanks the tablecloth away <b>super fast</b>. What happens to the dishes?',
+      choices:['They fly off with the tablecloth','They stay on the table','They jump up into the air'],
+      answer:1,
+      explain:'<b>The dishes stay put.</b> They were sitting still, and still things want to stay still. That\'s <b>inertia</b>. The cloth moved so fast that friction didn\'t have time to drag the dishes along. Now press <b>Try a slow pull</b> to see the opposite.',
+      alt:'Try a slow pull',
+      altExplain:'<b>With a slow pull, the dishes ride along and fall off!</b> Pulling slowly gives friction from the cloth plenty of time to drag the dishes with it. Same dishes, same cloth. The only difference is how fast you pull.',
+      dur:2.4, altDur:3.6,
+      init:function(s){s.dx=0;s.items=[{x:250,kind:'plate'},{x:350,kind:'cup'},{x:440,kind:'vase'}].map(function(o){o.dx=0;o.y=0;o.vy=0;o.rot=0;o.fall=false;o.down=false;return o;});},
+      step:function(s,dt){
+        var top=180,edge=560;
+        if(!s.alt){s.dx=ease((s.t-.4)/.28)*640;}
+        else{var vpull=clamp((s.t-.4)*180,0,180);s.dx+=vpull*dt;}
+        s.items.forEach(function(o){
+          if(s.alt&&!o.fall){o.dx=s.dx;if(o.x+o.dx>edge){o.fall=true;o.vx={plate:120,cup:75,vase:30}[o.kind];}}
+          if(o.fall&&!o.down){o.dx+=o.vx*dt;o.vy+=900*dt;o.y+=o.vy*dt;o.rot+=3.2*dt;if(top+o.y>268){o.y=268-top;o.down=true;o.rot={plate:0,cup:1.57,vase:-1.57}[o.kind];}}
+        });
+      },
+      draw:function(ctx,s){
+        ctx.fillStyle=C.paper;ctx.fillRect(0,0,W,H);
+        ctx.fillStyle=C.sunk;ctx.fillRect(0,268,W,H-268);ctx.strokeStyle=C.line;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,268);ctx.lineTo(W,268);ctx.stroke();
+        var top=180,tl=140,tr=560;
+        shadow(ctx,350,270,230);
+        ctx.fillStyle='#B58A5A';ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;
+        [tl+20,tr-34].forEach(function(lx){rr(ctx,lx,top+12,14,76,3);ctx.fill();ctx.stroke();});
+        rr(ctx,tl,top,tr-tl,14,4);ctx.fill();ctx.stroke();
+        var cx0=tl-6+s.dx;
+        ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);ctx.clip();
+        ctx.fillStyle=C.red;ctx.strokeStyle=C.ink;ctx.lineWidth=2;
+        ctx.beginPath();ctx.moveTo(cx0,top-3);ctx.lineTo(cx0+(tr-tl)+12,top-3);ctx.lineTo(cx0+(tr-tl)+12,top+70);ctx.lineTo(cx0+(tr-tl)-4,top+70);ctx.lineTo(cx0+(tr-tl)-4,top+5);ctx.lineTo(cx0,top+5);ctx.closePath();ctx.fill();ctx.stroke();
+        ctx.fillStyle='#FFFFFF';ctx.globalAlpha=.35;for(var i=0;i<9;i++){ctx.fillRect(cx0+10+i*48,top-3,18,8);}ctx.globalAlpha=1;
+        ctx.restore();
+        s.items.forEach(function(o){
+          var x=o.x+o.dx,y=top-3+o.y;
+          ctx.save();ctx.translate(x,y);ctx.rotate(o.rot);ctx.strokeStyle=C.ink;ctx.lineWidth=2;
+          if(o.kind==='plate'){ctx.fillStyle='#FFFFFF';ctx.beginPath();ctx.ellipse(0,-5,40,7,0,0,TAU);ctx.fill();ctx.stroke();ctx.fillStyle=C.tealSoft;ctx.beginPath();ctx.ellipse(0,-6,24,4,0,0,TAU);ctx.fill();
+            ctx.fillStyle=C.gold;ctx.beginPath();ctx.arc(-6,-14,6,0,TAU);ctx.arc(7,-13,5,0,TAU);ctx.fill();}
+          else if(o.kind==='cup'){ctx.fillStyle='#FFFFFF';rr(ctx,-14,-36,28,36,5);ctx.fill();ctx.stroke();ctx.beginPath();ctx.arc(16,-20,8,-1.4,1.4);ctx.stroke();ctx.fillStyle='#7A4A2A';ctx.fillRect(-11,-33,22,5);}
+          else{ctx.fillStyle=C.teal;ctx.beginPath();ctx.moveTo(-10,0);ctx.quadraticCurveTo(-20,-24,-7,-40);ctx.lineTo(7,-40);ctx.quadraticCurveTo(20,-24,10,0);ctx.closePath();ctx.fill();ctx.stroke();
+            ctx.strokeStyle=C.good;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(0,-40);ctx.lineTo(-4,-62);ctx.moveTo(0,-40);ctx.lineTo(8,-58);ctx.stroke();
+            ctx.fillStyle=C.red;ctx.beginPath();ctx.arc(-4,-66,6,0,TAU);ctx.fill();ctx.fillStyle=C.gold;ctx.beginPath();ctx.arc(9,-62,5,0,TAU);ctx.fill();}
+          ctx.restore();});
+        if(s.t>.35&&s.t<1.2) pill(ctx,s.alt?'slow pull →':'YANK! →',640,120,s.alt?C.gold:C.red,'#fff');
+      }
+    },
+
+    slide:{
+      title:'Ice vs. Grass',
+      q:'Two identical pucks get the <b>exact same shove</b>. One slides on ice. One slides on grass. What happens?',
+      choices:['They stop at the same spot','The ice puck goes much farther','The grass puck goes farther'],
+      answer:1,
+      explain:'<b>The ice puck slides way farther.</b> Both got the same push. But grass has a lot more <b>friction</b>, a force that rubs against the puck and slows it down. Look at the dots: on grass they bunch up fast (slowing down quickly). On ice they stay spread out. You\'ll test this for real in the lab!',
+      dur:3.4,
+      init:function(s){s.p=[{x:70,v:230,a:9,y:105,name:'ICE',dots:[]},{x:70,v:230,a:240,y:225,name:'GRASS',dots:[]}];s.nd=0;},
+      step:function(s,dt){
+        if(s.t<.5)return;
+        s.p.forEach(function(p){if(p.v>0){p.x+=p.v*dt;p.v=Math.max(0,p.v-p.a*dt);}});
+        var n=Math.floor((s.t-.5)/.25);if(n>=s.nd){s.p.forEach(function(p){p.dots.push(p.x);});s.nd=n+1;}
+      },
+      draw:function(ctx,s){
+        ctx.fillStyle=C.paper;ctx.fillRect(0,0,W,H);
+        s.p.forEach(function(p,i){
+          var top=p.y-45;
+          if(i===0){ctx.fillStyle='rgba(120,185,230,.35)';ctx.fillRect(0,top,W,90);ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=2;for(var k=0;k<14;k++){var gx=k*56+10,gy=top+14+((k*37)%60);ctx.beginPath();ctx.moveTo(gx,gy);ctx.lineTo(gx+16,gy-6);ctx.stroke();}}
+          else{ctx.fillStyle='rgba(84,160,92,.35)';ctx.fillRect(0,top,W,90);ctx.strokeStyle='rgba(50,120,60,.55)';ctx.lineWidth=1.6;for(var g=0;g<180;g++){var bx=g*4+((g*7)%3),by=top+8+((g*53)%78),h=4+((g*31)%7);ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+((g%3)-1)*2,by-h);ctx.stroke();}}
+          ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.strokeRect(0,top,W,90);
+          label(ctx,p.name,12,top+14,C.ink);
+          p.dots.forEach(function(d){ctx.fillStyle=C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(d,p.y+30,4.5,0,TAU);ctx.fill();ctx.stroke();});
+          shadow(ctx,p.x,p.y+16,24);
+          ctx.fillStyle='#221F2B';ctx.beginPath();ctx.ellipse(p.x,p.y+8,24,8,0,0,TAU);ctx.fill();ctx.fillRect(p.x-24,p.y-2,48,10);ctx.fillStyle='#3B3646';ctx.beginPath();ctx.ellipse(p.x,p.y-2,24,8,0,0,TAU);ctx.fill();
+          if(s.t>.5&&p.v===0&&s.t>1) pill(ctx,'stopped',p.x,p.y-32,C.ink,C.paper);
+        });
+        if(s.t<.75) pill(ctx,'SAME SHOVE →',140,30,C.red,'#fff');
+        label(ctx,'● dots = where the puck was every ¼ second',W-12,286,C.muted,'right');
+      }
+    },
+
+    kick:{
+      title:'Same Kick',
+      q:'A soccer ball and a bowling ball get <b>the exact same kick</b>, just as hard. Which one speeds up more?',
+      choices:['The soccer ball','The bowling ball','They speed up the same'],
+      answer:0,
+      explain:'<b>The soccer ball takes off. The bowling ball barely moves.</b> Same force, but the bowling ball has much more <b>mass</b> (more "stuff"). More mass means less acceleration. Ouch for the kicker\'s toe, too!',
+      dur:3,
+      init:function(s){s.b=[{x:120,v:0,y:110,m:.45,kind:'soccer',rot:0},{x:120,v:0,y:230,m:6,kind:'bowling',rot:0}];s.kicked=false;},
+      step:function(s,dt){
+        if(!s.kicked&&s.t>.7){s.kicked=true;s.b.forEach(function(b){b.v=150/b.m;});}
+        s.b.forEach(function(b){b.x+=b.v*dt;b.v=Math.max(0,b.v-40*dt);b.rot+=b.v*dt/20;});
+      },
+      draw:function(ctx,s){
+        ctx.fillStyle=C.paper;ctx.fillRect(0,0,W,H);
+        s.b.forEach(function(b){
+          var gy=b.y+28;ctx.fillStyle='rgba(84,160,92,.28)';ctx.fillRect(0,gy,W,14);ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();
+          var kx=120-46, footX=s.t<.7?20+(kx-20)*ease(s.t/.7):kx-Math.min(30,(s.t-.7)*60);
+          ctx.fillStyle=C.red;ctx.strokeStyle=C.ink;ctx.lineWidth=2;rr(ctx,footX-34,b.y+4,46,22,10);ctx.fill();ctx.stroke();ctx.fillStyle='#FFFFFF';ctx.fillRect(footX-30,b.y+20,38,4);
+          ctx.fillStyle=C.ink;rr(ctx,footX-34,b.y-26,18,32,5);ctx.fill();
+          shadow(ctx,b.x,gy,22);
+          if(b.kind==='soccer')soccer(ctx,b.x,b.y,24,b.rot);else bowling(ctx,b.x,b.y,24,b.rot);
+          label(ctx,b.kind==='soccer'?'SOCCER BALL · 0.45 kg':'BOWLING BALL · 6 kg',W-12,b.y-48,C.ink,'right');
+          if(s.kicked&&s.t<1.4) pill(ctx,'KICK!',120,b.y-40,C.gold,'#fff');
+        });
+      }
+    }
+  };
+
+  /* ---------------- component ---------------- */
+  function build(el,idx){
+    var sc=SCENES[el.dataset.scene];if(!sc)return;
+    var letters=['A','B','C'];
+    el.innerHTML='<div class="pr-head"><span class="pr-n">Scene '+(idx+1)+'</span><h3>'+sc.title+'</h3></div>'+
+      '<p class="pr-q">'+sc.q+'</p>'+
+      '<div class="pr-choices">'+sc.choices.map(function(c,i){return '<div class="pr-choice" data-i="'+i+'"><b>'+letters[i]+'</b><span>'+c+'</span></div>';}).join('')+'</div>'+
+      '<p class="pr-step">① Everyone types <b>A, B, or C</b> in the chat. ② Then press Play.</p>'+
+      '<canvas class="pr-cv" role="img" aria-label="'+sc.title+' animation"></canvas>'+
+      '<div class="pr-btns"><button class="btn primary pr-play">▶ Play</button>'+(sc.alt?'<button class="btn ghost pr-alt" disabled>'+sc.alt+'</button>':'')+'</div>'+
+      '<div class="pr-explain" hidden></div>';
+    var cv=el.querySelector('canvas'),ex=el.querySelector('.pr-explain'),play=el.querySelector('.pr-play'),altB=el.querySelector('.pr-alt');
+    var s={t:0},running=false,last=0,k=1;
+    function size(){var w=cv.clientWidth;if(!w)return;var d=window.devicePixelRatio||1;cv.width=Math.round(w*d);cv.height=Math.round(w*H/W*d);k=clamp(W/w,1,2.4);draw();}
+    function draw(){if(!cv.clientWidth)return;colors();K=k;var ctx=cv.getContext('2d'),d=cv.width/W;ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,W,H);sc.draw(ctx,s);}
+    function reset(alt){s={t:0,alt:!!alt};sc.init(s);draw();}
+    function frame(ts){if(!running)return;var dt=last?Math.min(.05,(ts-last)/1000):1/60;last=ts;
+      var n=Math.max(1,Math.round(dt*120));for(var i=0;i<n;i++){s.t+=dt/n;sc.step(s,dt/n);}
+      draw();
+      if(s.t<(s.alt?sc.altDur:sc.dur)) requestAnimationFrame(frame); else {running=false;done();}}
+    function start(alt){reset(alt);running=true;last=0;play.disabled=true;if(altB)altB.disabled=true;requestAnimationFrame(frame);}
+    function done(){
+      play.disabled=false;play.textContent='↺ Replay';
+      el.querySelectorAll('.pr-choice').forEach(function(c){c.classList.toggle('right',+c.dataset.i===sc.answer);c.classList.toggle('wrong',+c.dataset.i!==sc.answer);});
+      ex.hidden=false;ex.innerHTML=(s.alt&&sc.altExplain)?sc.altExplain:sc.explain;
+      if(altB)altB.disabled=false;
+    }
+    play.onclick=function(){start(false);};
+    if(altB)altB.onclick=function(){start(true);};
+    new ResizeObserver(size).observe(cv);
+    var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',draw);
+    reset(false);
+  }
+  document.querySelectorAll('.predict[data-scene]').forEach(build);
+})();
+</script>
+</body>
+</html>

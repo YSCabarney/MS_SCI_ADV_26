@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Force Evidence Cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#FAF5EC; --card:#FFFFFF; --ink:#221F2B; --ink-soft:#5B5568; --muted:#8A8396;
+    --track-red:#D8432B; --track-red-soft:#F6DAD2;
+    --field-teal:#146B72; --field-teal-soft:#D9ECEA;
+    --gold:#B9791E; --gold-soft:#F5E6C8;
+    --good:#2F8558; --good-soft:#DEF0E3;
+    --line:#E3D9C6; --sunk:#F3ECDF;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Karla',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4; --muted:#968EA3;
+      --track-red:#FF7A5C; --track-red-soft:#3A241F;
+      --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+      --gold:#F2B75A; --gold-soft:#3A2E14;
+      --good:#5FCB8B; --good-soft:#1B3324;
+      --line:#3A3444; --sunk:#1B1822;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4; --muted:#968EA3;
+    --track-red:#FF7A5C; --track-red-soft:#3A241F;
+    --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+    --gold:#F2B75A; --gold-soft:#3A2E14;
+    --good:#5FCB8B; --good-soft:#1B3324;
+    --line:#3A3444; --sunk:#1B1822;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);margin:0;padding-inline:16px;line-height:1.55;font-size:16px;}
+  .wrap{max-width:820px;margin:0 auto;padding-block:32px 80px;}
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;}
+  p{margin:0;color:var(--ink-soft);}
+  ul,ol{margin:0;padding-left:20px;color:var(--ink-soft);}
+  li{margin-bottom:6px;}
+  li b,p b,td b{color:var(--ink);}
+  a{color:var(--track-red);}
+  code,.mono{font-family:var(--mono);font-size:.92em;}
+
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:28px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--track-red);display:flex;gap:10px;align-items:center;}
+  .eyebrow::before{content:"●";font-size:9px;}
+  h1.title{font-weight:600;font-size:clamp(2rem,6vw,2.9rem);margin:8px 0 6px;}
+  .subtitle{color:var(--ink-soft);max-width:62ch;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+  .meta-row b{color:var(--ink);font-weight:600;}
+
+  section{margin-bottom:40px;display:flex;flex-direction:column;gap:14px;}
+  .sect-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px;}
+  .sect-head .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .sect-head h2{font-size:1.5rem;font-weight:600;}
+  .sect-head .time{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;}
+  .card h3{font-size:1.15rem;font-weight:600;}
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--track-red);border-radius:10px;padding:16px 20px;display:flex;flex-direction:column;gap:8px;}
+  .note.teal{border-left-color:var(--field-teal);} .note.gold{border-left-color:var(--gold);} .note.good{border-left-color:var(--good);}
+  .note h3{font-size:1.05rem;font-weight:600;}
+  .point{background:var(--gold-soft);border-radius:10px;padding:12px 16px;font-size:15px;color:var(--ink);}
+  .point b{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-right:6px;}
+
+  .steps{counter-reset:s;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  .steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px 11px 48px;position:relative;margin:0;color:var(--ink-soft);}
+  .steps li::before{content:counter(s);position:absolute;left:13px;top:11px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+  .steps .hint{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:3px;}
+
+  .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+  .role{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--field-teal);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+  .role.r2{border-top-color:var(--track-red);} .role.r3{border-top-color:var(--gold);}
+  .role .rn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .role h3{font-size:1.05rem;}
+  .role p{font-size:14.5px;}
+
+  .timeline{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
+  .tl{display:grid;grid-template-columns:92px 1fr;border-top:1px solid var(--line);}
+  .tl:first-child{border-top:none;}
+  .tl .t{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--track-red);background:var(--sunk);padding:12px 10px;}
+  .tl .b{padding:12px 14px;font-size:15px;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px;}
+  .tl .b b{color:var(--ink);}
+  .tl .w{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--field-teal);}
+  .tl.rev .t{color:var(--gold);}
+  @media (max-width:540px){.tl{grid-template-columns:1fr;}.tl .t{padding:8px 14px;}}
+
+  .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;}
+  details summary{cursor:pointer;font-weight:600;color:var(--ink);}
+  details[open] summary{margin-bottom:8px;}
+  details p+p{margin-top:6px;}
+  details.ans{background:var(--sunk);}
+  details.ans summary{font-family:var(--mono);font-size:12.5px;color:var(--field-teal);}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+  .q .qn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);font-weight:600;}
+  .q .qt{color:var(--ink);font-size:15.5px;}
+  .q .from{font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;color:var(--ink-soft);vertical-align:top;}
+  th{background:var(--sunk);color:var(--ink);font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;}
+  .tscroll{overflow-x:auto;border-radius:10px;border:1px solid var(--line);}
+  .tscroll table{border:none;}
+  .tscroll th:first-child,.tscroll td:first-child{border-left:none;} .tscroll th:last-child,.tscroll td:last-child{border-right:none;}
+  .tscroll tr:first-child th{border-top:none;} .tscroll tr:last-child td{border-bottom:none;}
+
+  .formula{font-family:var(--mono);font-size:15px;background:var(--sunk);border-radius:8px;padding:10px 14px;color:var(--ink);}
+  .work{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:15px;}
+  .work .k{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-top:2px;}
+  .work .v{color:var(--ink);}
+
+  .timer-bar{position:sticky;top:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:28px;}
+  .timer-num{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--track-red);font-variant-numeric:tabular-nums;}
+  .timer-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+  .btn{border:none;border-radius:8px;padding:9px 14px;font:600 13px var(--body);cursor:pointer;}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+  .btn.ghost{background:var(--sunk);color:var(--ink);border:1px solid var(--line);}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-family:var(--mono);font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 11px;color:var(--ink-soft);}
+  .footer{text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:20px;}
+  .k-red{color:var(--track-red)!important;} .k-teal{color:var(--field-teal)!important;} .k-gold{color:var(--gold)!important;} .k-good{color:var(--good)!important;}
+
+  /* clarity helpers */
+  .plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
+  .plan div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;}
+  .plan b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--track-red);}
+  .plan span{font-size:15px;color:var(--ink);}
+  .words{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;}
+  .word{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--field-teal);border-radius:10px;padding:10px 14px;}
+  .word b{display:block;color:var(--ink);font-size:16px;}
+  .word span{font-size:15px;color:var(--ink-soft);}
+  .word i{display:block;font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--field-teal);margin-top:4px;}
+  .see{background:var(--good-soft);border-radius:10px;padding:12px 16px;color:var(--ink);font-size:15px;}
+  .see::before{content:"✓ What you should see";display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--good);font-weight:600;margin-bottom:4px;}
+  .frame{background:var(--sunk);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:15px;color:var(--ink);}
+  .frame::before{content:"Type in the chat";display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:4px;}
+  .frame.doc::before{content:"Sentence starter";}
+  .bigidea{background:var(--ink);color:var(--paper);border-radius:12px;padding:16px 20px;font-size:17px;line-height:1.5;}
+  .bigidea b{color:var(--paper);}
+  .bigidea small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+  .eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-family:var(--mono);font-size:15px;color:var(--ink);}
+  .eq span{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;}
+  .eq .r{border-color:var(--track-red);color:var(--track-red);} .eq .t{border-color:var(--field-teal);color:var(--field-teal);}
+
+  .deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
+  .ev{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;}
+  .ev-top{display:flex;align-items:baseline;gap:10px;padding:12px 16px;border-bottom:1px dashed var(--line);}
+  .ev-n{font-family:var(--mono);font-size:11px;color:var(--muted);}
+  .ev-top h3{font-size:1.3rem;font-weight:600;}
+  .ev-body{padding:12px 16px;display:flex;flex-direction:column;gap:8px;font-size:15.5px;}
+  .ev-body .def{color:var(--ink);}
+  .lbl{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px;}
+  .conn{background:var(--field-teal-soft);border-radius:8px;padding:8px 10px;font-size:14.5px;color:var(--ink);}
+  .conn .lbl{color:var(--field-teal);}
+  .sample{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .side{background:var(--card);border:1px solid var(--line);border-radius:8px;min-height:150px;padding:12px;display:flex;flex-direction:column;justify-content:center;gap:6px;}
+  .side .lbl{text-align:center;}
+  .side.front{align-items:center;}
+  .side.front b{font-family:var(--display);font-size:24px;color:var(--ink);}
+  .side.back{font-size:14px;color:var(--ink);}
+  .side.back .c{border-top:1px dashed var(--line);padding-top:6px;color:var(--field-teal);}
+  @media (max-width:520px){.sample{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Motion Investigation Bureau · Case 07 · Homework</div>
+  <h1 class="title">Force Evidence Cards</h1>
+  <p class="subtitle">Make 10 new Word Wall cards about forces. Then fix up 4 of your old motion cards.</p>
+  <div class="meta-row"><span><b>Part 1</b> 10 new cards</span><span><b>Part 2</b> fix 4 old cards</span><span><b>Part 3</b> self-check</span><span><b>Due</b> next class</span></div>
+</header>
+
+<section>
+  <div class="sect-head"><span class="tag">Part 1</span><h2>Make 10 New Cards</h2></div>
+  <div class="note gold"><p><b>You need:</b> 20 index cards (2 for each word), a glue stick or tape, and markers.</p></div>
+  <ol class="steps">
+    <li><b>Card 1 (front):</b> write the word. Make it big and bold.</li>
+    <li><b>Card 2 (back):</b> write what the word means, <b>in your own words</b>. Don't copy it exactly. Change it so it makes sense to you.</li>
+    <li><b>Also on Card 2:</b> at the bottom, write <b>"Connects to:"</b> and the old motion word it goes with. Copy it from the <span class="k-teal">teal box</span> on each card below.</li>
+    <li>Glue Card 1 and Card 2 back-to-back.</li>
+    <li>Post it on your Word Wall, <b>right next to</b> the old card it connects to.</li>
+  </ol>
+
+  <div class="card">
+    <h3>Here's what one finished card looks like</h3>
+    <div class="sample">
+      <div class="side front"><span class="lbl">Front</span><b>Friction</b></div>
+      <div class="side back"><span class="lbl">Back</span>A force that rubs against something moving and slows it down. It always pushes the opposite way from the motion.<span class="c"><b>Connects to:</b> Deceleration, because friction is what makes things slow down.</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Your 10 words</span><h2>The Words</h2></div>
+  <div class="deck">
+    <article class="ev"><div class="ev-top"><span class="ev-n">01</span><h3>Force</h3></div><div class="ev-body">
+      <p class="def">A push or a pull.</p>
+      <p><span class="lbl">Example</span>Your hand hitting the ball when you serve.</p>
+      <p class="conn"><span class="lbl">Connects to: Vector</span>A force has a size <u>and</u> a direction, just like velocity.</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">02</span><h3>Newton (N)</h3></div><div class="ev-body">
+      <p class="def">The unit we use to measure force. 1 newton is about how hard a small apple presses down on your hand.</p>
+      <p><span class="lbl">Example</span>"The team pulled with 50 N."</p>
+      <p class="conn"><span class="lbl">Connects to: m/s</span>Speed is measured in m/s. Force is measured in N.</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">03</span><h3>Net Force</h3></div><div class="ev-body">
+      <p class="def">The force that's left over after all the forces work against each other. It's the force that "wins."</p>
+      <p><span class="lbl">Example</span>Right pulls 50 N, left pulls 30 N. Net force = 50 − 30 = <b>20 N to the right</b>.</p>
+      <p class="conn"><span class="lbl">Connects to: Displacement</span>Both care about direction: which way?</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">04</span><h3>Balanced Forces</h3></div><div class="ev-body">
+      <p class="def">Forces that make a tie, so the net force is 0. The motion does <b>not</b> change: a still object stays still, and a moving object keeps the same speed and direction.</p>
+      <p><span class="lbl">Example</span>A tug-of-war where nobody moves.</p>
+      <p class="conn"><span class="lbl">Connects to: Constant Velocity</span>Balanced forces mean the velocity stays the same.</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">05</span><h3>Unbalanced Forces</h3></div><div class="ev-body">
+      <p class="def">Forces that don't make a tie, so the net force is <b>not</b> 0. The object speeds up, slows down, or turns.</p>
+      <p><span class="lbl">Example</span>A soccer ball slowing down on the grass.</p>
+      <p class="conn"><span class="lbl">Connects to: Acceleration</span>Unbalanced forces are what <u>cause</u> acceleration.</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">06</span><h3>Gravity</h3></div><div class="ev-body">
+      <p class="def">The force that pulls things down toward the Earth.</p>
+      <p><span class="lbl">Example</span>A set always comes back down to the hitter.</p>
+      <p class="conn"><span class="lbl">Connects to: The Coaster Lab</span>Gravity made your ball speed up going down the drop.</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">07</span><h3>Friction</h3></div><div class="ev-body">
+      <p class="def">A force that rubs against something moving and slows it down. It always pushes the opposite way from the motion.</p>
+      <p><span class="lbl">Example</span>Your court shoes grip the floor so you can stop fast.</p>
+      <p class="conn"><span class="lbl">Connects to: Deceleration</span>Friction is what makes things slow down.</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">08</span><h3>Mass</h3></div><div class="ev-body">
+      <p class="def">How much "stuff" is in an object. We measure it in kilograms (kg). More mass means the object is harder to speed up or slow down.</p>
+      <p><span class="lbl">Example</span>A medicine ball is harder to throw than a volleyball.</p>
+      <p class="conn"><span class="lbl">Connects to: Acceleration</span>Same push + more mass = less acceleration.</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">09</span><h3>Inertia</h3></div><div class="ev-body">
+      <p class="def">Things keep doing what they're already doing. A still object stays still, and a moving object keeps moving, until a force changes it.</p>
+      <p><span class="lbl">Example</span>You lurch forward when the bus stops suddenly. Your body wants to keep moving.</p>
+      <p class="conn"><span class="lbl">Connects to: Velocity</span>Without an unbalanced force, velocity stays the same.</p></div></article>
+
+    <article class="ev"><div class="ev-top"><span class="ev-n">10</span><h3>Newton's Second Law</h3></div><div class="ev-body">
+      <p class="def">A bigger force makes more acceleration. More mass makes less acceleration. As a formula: <b>acceleration = net force ÷ mass</b>.</p>
+      <p><span class="lbl">Example</span>A 40 N net force on a 20 kg cart: 40 ÷ 20 = <b>2 m/s²</b>.</p>
+      <p class="conn"><span class="lbl">Connects to: Acceleration</span>A second way to find acceleration.</p></div></article>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Part 2</span><h2>Fix Up 4 Old Cards</h2></div>
+  <p>Take these 4 cards off your Motion Word Wall: <b>Speed, Velocity, Acceleration, Displacement</b>.</p>
+  <ol class="steps">
+    <li>Look at the <b>front</b> only. Say what the word means <b>out loud</b>.</li>
+    <li>Flip it over. Were you right? If not, draw a small <b>★</b> in the corner. A ★ means "study this one again."</li>
+    <li>Add <b>one new line</b> to the back that uses a force word.<span class="hint">Example for Acceleration: "Caused by an unbalanced force."</span></li>
+    <li>Put the card back on the wall next to its new force card.</li>
+  </ol>
+  <div class="frame doc">My ★ cards (the ones I need to study again): ___</div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Part 3</span><h2>Self-Check</h2><span class="time">5 min</span></div>
+  <p>Try each question <b>before</b> you click. Use the hint if you get stuck.</p>
+  <div class="q"><span class="qn">Check 1 · Net force</span><span class="qt">Team Left pulls 40 N. Team Right pulls 70 N. What is the net force? Is it balanced or unbalanced?</span>
+    <details class="ans"><summary>Hint</summary><p>Opposite directions, so subtract: big number minus small number.</p></details>
+    <details class="ans"><summary>Answer</summary><p>70 − 40 = <b>30 N to the right</b>. It's not 0, so it's <b>unbalanced</b>.</p></details></div>
+  <div class="q"><span class="qn">Check 2 · Balanced or not?</span><span class="qt">A hockey puck slides across ice at a steady 3 m/s. Nothing slows it down. Are the forces balanced?</span>
+    <details class="ans"><summary>Hint</summary><p>Is the puck speeding up, slowing down, or turning?</p></details>
+    <details class="ans"><summary>Answer</summary><p><b>Balanced.</b> Its motion isn't changing, so the net force is 0. It keeps sliding because of <b>inertia</b>.</p></details></div>
+  <div class="q"><span class="qn">Check 3 · Acceleration math</span><span class="qt">A ball slows from 4 m/s to 0 m/s in 2 seconds. What is its acceleration?</span>
+    <details class="ans"><summary>Hint</summary><p>a = (final − starting) ÷ time. Final = 0, starting = 4.</p></details>
+    <details class="ans"><summary>Answer</summary><p>a = (0 − 4) ÷ 2 = <b>−2 m/s²</b>. It's negative because the ball is slowing down. <b>Friction</b> caused it.</p></details></div>
+  <div class="q"><span class="qn">Check 4 · Newton's Second Law</span><span class="qt">The same 60 N net force pushes a 20 kg cart and a 30 kg cart. Which one speeds up more?</span>
+    <details class="ans"><summary>Hint</summary><p>acceleration = net force ÷ mass. Do it for both carts.</p></details>
+    <details class="ans"><summary>Answer</summary><p>20 kg: 60 ÷ 20 = 3 m/s². 30 kg: 60 ÷ 30 = 2 m/s². The <b>lighter cart</b> speeds up more.</p></details></div>
+  <div class="q"><span class="qn">Check 5 · Distance and displacement</span><span class="qt">A ball rolls 1.2 m in a straight line and stops. What is its distance? What is its displacement?</span>
+    <details class="ans"><summary>Hint</summary><p>Did the ball ever turn around?</p></details>
+    <details class="ans"><summary>Answer</summary><p>Both are <b>1.2 m</b>. In a straight line with no turning back, distance and displacement are the same.</p></details></div>
+</section>
+
+<p class="footer">Bring your cards and your ★ list to the next class. 📇</p>
+</div>
+</body>
+</html>
