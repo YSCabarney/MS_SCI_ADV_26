@@ -197,6 +197,22 @@
   .pr-btns{display:flex;gap:8px;flex-wrap:wrap;}
   .pr-explain{background:var(--good-soft);border-radius:10px;padding:12px 16px;font-size:15.5px;color:var(--ink);line-height:1.55;}
   .load{align-self:flex-start;font:600 12px var(--mono);background:var(--sunk);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer;}
+  .law{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;background:var(--ink);color:var(--paper);border-radius:6px;padding:2px 8px;margin:6px 6px 2px 0;}
+  .pr-explain .law{display:table;margin:10px 0 4px;}
+  .lawtag{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;background:var(--field-teal-soft);color:var(--field-teal);border-radius:999px;padding:4px 10px;}
+  .laws{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+  .lawcard{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--field-teal);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+  .lawcard .n{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--field-teal);font-weight:700;}
+  .lawcard h3{font-size:1.15rem;}
+  .lawcard p{font-size:15px;}
+  .lawcard .ex{font-size:14px;color:var(--ink);background:var(--sunk);border-radius:8px;padding:6px 10px;}
+  .lawcard .see{background:none;padding:0;font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+  .lawcard .see::before{content:none;}
+  .nscale{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;}
+  .nscale > div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:center;}
+  .nscale .i{font-size:28px;line-height:1.2;}
+  .nscale b{display:block;font-family:var(--mono);font-size:18px;color:var(--track-red);}
+  .nscale span{font-size:13.5px;color:var(--ink-soft);}
 </style>
 </head>
 <body>
@@ -206,18 +222,38 @@
   <div class="eyebrow">Motion Investigation Bureau · Case 07 · Opening Activity</div>
   <h1 class="title">Force Face-Off</h1>
   <p class="subtitle"><b>Today's big question:</b> What makes things speed up, slow down, or stop?</p>
-  <div class="meta-row"><span><b>5</b> examples</span><span><b>≈ 25</b> min</span><span><b>Whole class</b> on Zoom</span></div>
+  <div class="meta-row"><span><b>Meet Newton</b> + 5 examples</span><span><b>≈ 30</b> min</span><span><b>Whole class</b> on Zoom</span></div>
 </header>
 
 <div class="note teal"><p><b>How it works:</b> your teacher shares his screen. For each example, read the question, type <b>A</b>, <b>B</b>, or <b>C</b> in the chat, then watch what really happens.</p></div>
 
 <section style="margin-top:28px">
-  <div class="sect-head"><span class="tag">Example 1 of 5</span><h2>Inertia</h2></div>
+  <div class="sect-head"><span class="tag">Start here</span><h2>Meet Newton</h2></div>
+  <p>About 350 years ago, a scientist named <b>Isaac Newton</b> figured out the rules for how forces change motion. Today you'll meet his ideas, then see each one in action.</p>
+  <div class="card">
+    <h3>The newton (N): how we measure force</h3>
+    <p>A <b>force</b> is a push or a pull. We measure forces in <b>newtons</b>, written <b>N</b>, named after Isaac Newton. Here's about how hard Earth pulls down on some everyday things:</p>
+    <div class="nscale">
+      <div><div class="i">🍎</div><b>≈ 1 N</b><span>a small apple</span></div>
+      <div><div class="i">🏐</div><b>≈ 3 N</b><span>a volleyball</span></div>
+      <div><div class="i">⚽</div><b>≈ 4 N</b><span>a soccer ball</span></div>
+      <div><div class="i">🧍</div><b>≈ 500 N</b><span>you!</span></div>
+    </div>
+  </div>
+  <div class="laws">
+    <div class="lawcard"><span class="n">Newton's 1st Law</span><h3>Things keep doing what they're doing</h3><p>A still object stays still, and a moving object keeps moving the same way, <b>unless a force changes it</b>. This is called <b>inertia</b>.</p><p class="ex">A soccer ball sits still until you kick it.</p><p class="see">See it in Examples 1, 3, 5</p></div>
+    <div class="lawcard"><span class="n">Newton's 2nd Law</span><h3>Force makes things speed up</h3><p>A <b>bigger force</b> makes an object speed up more. A <b>bigger mass</b> makes it speed up less.</p><p class="ex">A hard spike sends the ball flying faster than a soft tip.</p><p class="see">See it in Examples 2, 4</p></div>
+    <div class="lawcard"><span class="n">Newton's 3rd Law</span><h3>Every push gets pushed back</h3><p>When you push on something, it pushes back on you <b>just as hard</b>, in the opposite direction.</p><p class="ex">When you jump, you push down on the floor, and the floor pushes you up.</p><p class="see">See it in Example 4</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sect-head"><span class="tag">Example 1 of 5</span><h2>Inertia</h2><span class="lawtag">1st Law</span></div>
   <div class="predict" data-scene="van" data-label="Example 1 · Inertia"></div>
 </section>
 
 <section>
-  <div class="sect-head"><span class="tag">Example 2 of 5</span><h2>Net Force</h2></div>
+  <div class="sect-head"><span class="tag">Example 2 of 5</span><h2>Net Force</h2><span class="lawtag">2nd Law</span></div>
   <div class="predict" id="ex-tug">
     <div class="pr-head"><span class="pr-n">Example 2 · Net force</span><h3>Tug-of-War Showdown</h3></div>
     <p class="pr-q">Team Left pulls the cart with <b>30 N</b>. Team Right pulls with <b>50 N</b>. The cart is on ice. What happens?</p>
@@ -230,24 +266,25 @@
     <div class="pr-btns"><button class="btn primary" id="tug-run">▶ Play</button></div>
     <div id="fsim" class="fsim"></div>
     <div class="pr-explain" id="tug-explain" hidden>
-      <p><b>It speeds up to the right.</b> The forces work against each other: 50 − 30 = <b>20 N to the right</b>. That leftover force is the <b>net force</b>. When the net force isn't zero, the forces are <b>unbalanced</b>, and the cart speeds up. Look at the dots spreading apart.</p>
+      <p><b>It speeds up to the right.</b> The forces work against each other: 50 N − 30 N = <b>20 N to the right</b>. That leftover force is the <b>net force</b>. When the net force isn't zero, the forces are <b>unbalanced</b>, and the cart speeds up. Look at the dots spreading apart.</p>
+      <p style="margin-top:8px"><span class="law">Newton's 2nd Law</span> The net force makes the cart speed up: 20 N on a 20 kg cart gives 20 ÷ 20 = <b>1 m/s every second</b>. Check the "Velocity every second" row: 0, 1, 2, 3, 4, 5!</p>
       <p style="margin-top:8px"><b>Your turn:</b> use the − / + buttons to make it a tie, with both teams still pulling. What's the net force now? (Answer: <b>0 N</b>. Equal pulls make the forces <b>balanced</b>, so the cart doesn't move.)</p>
     </div>
   </div>
 </section>
 
 <section>
-  <div class="sect-head"><span class="tag">Example 3 of 5</span><h2>Friction</h2></div>
+  <div class="sect-head"><span class="tag">Example 3 of 5</span><h2>Friction</h2><span class="lawtag">1st Law</span></div>
   <div class="predict" data-scene="slide" data-label="Example 3 · Friction"></div>
 </section>
 
 <section>
-  <div class="sect-head"><span class="tag">Example 4 of 5</span><h2>Mass</h2></div>
+  <div class="sect-head"><span class="tag">Example 4 of 5</span><h2>Mass</h2><span class="lawtag">2nd + 3rd Laws</span></div>
   <div class="predict" data-scene="kick" data-label="Example 4 · Mass"></div>
 </section>
 
 <section>
-  <div class="sect-head"><span class="tag">Example 5 of 5</span><h2>Trap Question!</h2></div>
+  <div class="sect-head"><span class="tag">Example 5 of 5</span><h2>Trap Question!</h2><span class="lawtag">1st Law</span></div>
   <div class="predict" id="ex-bus">
     <div class="pr-head"><span class="pr-n">Example 5 · Put it together</span><h3>The Team Bus</h3></div>
     <p class="pr-q">On the way to a tournament, the team bus cruises down a straight highway at a <b>steady 55 mph</b>. Its engine is pushing it forward. Are the forces on the bus balanced or unbalanced?</p>
@@ -259,20 +296,22 @@
     <div class="pr-btns"><button class="btn primary" id="bus-run">Reveal</button></div>
     <div class="pr-explain" id="bus-explain" hidden>
       <p><b>Balanced!</b> The bus is moving, but its motion <b>isn't changing</b>: same speed, same direction. The engine's forward push exactly matches friction and air pushing back, so the net force is 0 N.</p>
-      <p style="margin-top:8px">It's the same idea as the van's volleyball in Example 1: thanks to <b>inertia</b>, a moving object keeps moving with <b>no net force</b>. <b>Moving doesn't automatically mean unbalanced.</b></p>
+      <p style="margin-top:8px"><span class="law">Newton's 1st Law</span> Just like the volleyball in Example 1, a moving object keeps moving with <b>no net force</b>. That's <b>inertia</b>. <b>Moving doesn't automatically mean unbalanced.</b></p>
     </div>
   </div>
 </section>
 
 <section>
   <div class="sect-head"><span class="tag">Wrap-up</span><h2>The Big Idea</h2></div>
-  <div class="bigidea"><small>Rule 1 · Balanced (net force = 0)</small>The motion <b>does not change</b>. A still object stays still, and a moving object keeps the same speed and direction.</div>
-  <div class="bigidea"><small>Rule 2 · Unbalanced (net force ≠ 0)</small>The object <b>accelerates</b>: it speeds up, slows down, or turns. Friction slows things down, and more mass means less acceleration.</div>
+  <div class="bigidea"><small>Rule 1 · Balanced (net force = 0) · Newton's 1st Law</small>The motion <b>does not change</b>. A still object stays still, and a moving object keeps the same speed and direction.</div>
+  <div class="bigidea"><small>Rule 2 · Unbalanced (net force ≠ 0) · Newton's 2nd Law</small>The object <b>accelerates</b>: it speeds up, slows down, or turns. Friction slows things down, and more mass means less acceleration.</div>
   <div class="words">
     <div class="word"><b>Inertia</b><span>Things keep doing what they're doing until a force changes it. (Example 1)</span></div>
     <div class="word"><b>Net force</b><span>The force left over after the forces work against each other. (Example 2)</span></div>
     <div class="word"><b>Friction</b><span>A force that rubs against motion and slows it down. (Example 3)</span></div>
     <div class="word"><b>Mass</b><span>How much "stuff" an object has. More mass, less acceleration. (Example 4)</span></div>
+    <div class="word"><b>Newton (N)</b><span>The unit for force. A small apple weighs about 1 N.</span></div>
+    <div class="word"><b>3rd Law</b><span>Every push gets pushed back just as hard. (Example 4)</span></div>
   </div>
 </section>
 
@@ -520,7 +559,7 @@
       q:'The team van is driving down the road. A volleyball is sitting on the floor in the middle of the van. The driver slams on the brakes. What does the ball do?',
       choices:['It rolls to the back of the van','It stays right where it is','It rolls to the front of the van'],
       answer:2,
-      explain:'<b>The ball keeps going forward.</b> The brakes stop the van, but nothing stops the ball. So the ball keeps moving at the same speed it had and rolls into the front. That\'s <b>inertia</b>: moving things keep moving until a force stops them. It\'s also why you wear a seatbelt.',
+      explain:'<b>The ball keeps going forward.</b> The brakes stop the van, but nothing stops the ball, so it keeps moving at the speed it had and rolls into the front. <span class="law">Newton\'s 1st Law</span> A moving object keeps moving until a force changes its motion. That\'s called <b>inertia</b>, and it\'s why you wear a seatbelt.',
       dur:4.2,
       init:function(s){s.vv=1;s.bv=1;s.off=0;s.rel=0;s.rot=0;s.hit=false;s.braking=false;s.skid=0;},
       step:function(s,dt){
@@ -616,7 +655,7 @@
       q:'Two soccer balls get the <b>exact same pass</b>. One rolls across a frozen pond (ice). One rolls through thick grass. What happens?',
       choices:['They stop at the same spot','The ball on ice goes much farther','The ball on grass goes farther'],
       answer:1,
-      explain:'<b>The ball on ice goes way farther.</b> Both got the same pass. But grass has a lot more <b>friction</b>, a force that rubs against the ball and slows it down. That\'s why a pass dies in long grass. Look at the dots: on grass they bunch up fast (slowing down quickly). On ice they stay spread out. You\'ll test this for real in the lab!',
+      explain:'<b>The ball on ice goes way farther.</b> Both got the same pass. Grass pushes back on the ball with a lot more <b>friction</b>, a force that rubs against it and slows it down. The dots show it: on grass they bunch up fast. <span class="law">Newton\'s 1st Law</span> On almost-frictionless ice, hardly any force acts on the ball, so it keeps rolling. On grass, friction is the force that changes its motion. You\'ll measure this in the lab!',
       dur:3.4,
       init:function(s){s.p=[{x:70,v:230,a:9,y:105,name:'ICE',dots:[]},{x:70,v:230,a:240,y:225,name:'GRASS',dots:[]}];s.nd=0;},
       step:function(s,dt){
@@ -647,7 +686,7 @@
       q:'A soccer ball and a bowling ball get <b>the exact same kick</b>, just as hard. Which one speeds up more?',
       choices:['The soccer ball','The bowling ball','They speed up the same'],
       answer:0,
-      explain:'<b>The soccer ball takes off. The bowling ball barely moves.</b> Same force, but the bowling ball has much more <b>mass</b> (more "stuff"). More mass means less acceleration. Ouch for the kicker\'s toe, too!',
+      explain:'<b>The soccer ball takes off. The bowling ball barely moves.</b> <span class="law">Newton\'s 2nd Law</span> The same force makes a <b>small mass</b> speed up a lot and a <b>big mass</b> speed up only a little: 3.3 m/s vs. 0.25 m/s. <span class="law">Newton\'s 3rd Law</span> The ball pushes back on the foot just as hard as the foot pushes the ball. That\'s why kicking a bowling ball hurts!',
       dur:3,
       init:function(s){s.b=[{x:120,v:0,y:110,m:.45,kind:'soccer',rot:0},{x:120,v:0,y:230,m:6,kind:'bowling',rot:0}];s.kicked=false;},
       step:function(s,dt){
