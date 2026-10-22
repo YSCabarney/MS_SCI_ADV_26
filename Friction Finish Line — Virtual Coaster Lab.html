@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friction Finish Line — Virtual Coaster Lab</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#f0f2f8;--surface:#fff;--surface-2:#e8ecf8;--ink:#12182a;--ink-soft:#343e5c;
+  --muted:#6878a8;--line:#ccd4f0;--accent:#d42828;--accent-soft:#fde8e8;
+  --teal:#1070c0;--teal-soft:#d8eaf8;--gold:#b06000;--gold-soft:#fceec0;
+  --green:#186a30;--green-soft:#d4f0dc;
+  --shadow:0 2px 10px rgba(18,24,42,.09),0 1px 2px rgba(18,24,42,.06);
+  --r:14px;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1020;--surface:#141828;--surface-2:#1c2238;--ink:#e8ecff;--ink-soft:#a8b4d8;
+  --muted:#6878b8;--line:#242c48;--accent:#ff5050;--accent-soft:#3a1010;
+  --teal:#50a8f0;--teal-soft:#081828;--gold:#f0b830;--gold-soft:#281808;
+  --green:#40d060;--green-soft:#082818;
+  --shadow:0 2px 10px rgba(0,0,0,.5),0 1px 2px rgba(0,0,0,.3);
+}}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Work Sans',system-ui,sans-serif;padding:18px 14px 60px;}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:26px;}
+h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;text-wrap:balance;}
+p{line-height:1.68;color:var(--ink-soft);}
+ul,ol{padding-left:22px;color:var(--ink-soft);line-height:1.8;font-size:15px;}
+li+li{margin-top:5px;}
+b,strong{color:var(--ink);}
+
+/* MASTHEAD */
+.mast{background:linear-gradient(135deg,#0a0e24 0%,#1a2060 50%,#0a1840 100%);border-radius:22px;padding:28px 28px 22px;color:#e0e8ff;box-shadow:0 6px 28px rgba(10,14,36,.5);position:relative;overflow:hidden;}
+.mast::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 30%,rgba(80,120,255,.15) 0%,transparent 65%);pointer-events:none;}
+.mast-bg{position:absolute;right:14px;bottom:8px;font-size:100px;opacity:.08;pointer-events:none;line-height:1;}
+.mast-tag{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:rgba(255,255,255,.12);padding:5px 12px;border-radius:999px;margin-bottom:13px;}
+.mast h1{font-size:clamp(26px,5.5vw,40px);color:#fff;font-weight:700;line-height:1.08;margin-bottom:10px;}
+.mast-sub{color:#a8b8e8;font-size:15px;line-height:1.65;max-width:580px;}
+.meta-row{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap;}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:6px 11px;color:#c0ceff;}
+
+/* STICKY BAR */
+.sbar{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:11px 16px;box-shadow:var(--shadow);position:sticky;top:4px;z-index:30;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.prog-steps{display:flex;gap:5px;flex:1;min-width:200px;}
+.ps{flex:1;height:7px;border-radius:999px;background:var(--surface-2);transition:background .4s;}
+.ps.done{background:var(--green);}
+.ps.active{background:var(--accent);}
+.ps-lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;}
+
+/* LAYOUT */
+section{display:flex;flex-direction:column;gap:14px;}
+.sec-head{border-bottom:2px solid var(--line);padding-bottom:10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.sec-head h2{font-size:21px;}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.13em;font-weight:600;}
+.kicker.b{color:var(--teal);}
+.kicker.c{color:var(--gold);}
+.kicker.d{color:var(--green);}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:17px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;}
+.card h3{font-size:18px;}
+.callout{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--r);padding:13px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;}
+.callout.b{border-left-color:var(--teal);}
+.callout.c{border-left-color:var(--gold);}
+.callout.d{border-left-color:var(--green);}
+.callout p,.callout li{font-size:14.5px;}
+.doc-box{background:var(--gold-soft);border:1.5px solid var(--gold);border-radius:var(--r);padding:12px 17px;display:flex;align-items:center;gap:12px;}
+.doc-box p{font-size:14.5px;}
+
+/* STEPS */
+.steps{counter-reset:st;list-style:none;display:flex;flex-direction:column;gap:8px;padding:0;}
+.steps li{counter-increment:st;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 14px 11px 50px;position:relative;font-size:14.5px;color:var(--ink-soft);box-shadow:var(--shadow);}
+.steps li::before{content:counter(st);position:absolute;left:12px;top:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;}
+
+/* SIMULATOR */
+.sim-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.sim-header{background:linear-gradient(90deg,#0a0e24,#1a2060);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.sim-title{font-family:'Fraunces',serif;font-size:16px;color:#fff;}
+.sim-cv{display:block;width:100%;aspect-ratio:16/7;background:#1a2060;}
+.sim-controls{background:var(--surface-2);border-top:1px solid var(--line);padding:14px 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.ctrl-group{display:flex;flex-direction:column;gap:6px;}
+.ctrl-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;}
+.ctrl-val{font-weight:600;color:var(--ink);}
+input[type=range]{width:100%;accent-color:var(--teal);height:4px;cursor:pointer;}
+.sim-btns{display:flex;gap:8px;padding:0 18px 14px;background:var(--surface-2);}
+.sbtn{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;border:none;border-radius:9px;padding:9px 18px;cursor:pointer;transition:opacity .15s;}
+.sbtn:hover{opacity:.83;}
+.sbtn.go{background:var(--accent);color:#fff;}
+.sbtn.reset{background:var(--surface);border:1.5px solid var(--line);color:var(--ink-soft);}
+.sbtn.predict{background:var(--teal);color:#fff;}
+.sim-readout{border-top:1px solid var(--line);padding:12px 18px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);min-height:40px;line-height:1.6;}
+.sim-readout b{color:var(--ink);}
+.badge-p{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px;background:var(--green-soft);color:var(--green);border:1px solid var(--green);}
+.badge-a{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);}
+.badge-a,.badge-p{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px;}
+
+/* DATA TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--shadow);}
+table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface);}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;color:var(--ink-soft);}
+th{background:var(--surface-2);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;}
+.di{background:transparent;border:none;border-bottom:2px solid var(--line);width:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);padding:3px 2px;outline:none;}
+.di:focus{border-color:var(--teal);}
+.di.ok{border-color:var(--green);color:var(--green);}
+
+/* Q BLOCKS */
+.qb{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.qb-hd{background:linear-gradient(90deg,#0a0e24,#1a2060);padding:10px 18px;display:flex;align-items:center;gap:10px;}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:11px;background:rgba(255,255,255,.18);padding:3px 8px;border-radius:999px;color:#fff;font-weight:600;}
+.qb-hd h4{font-family:'Fraunces',serif;font-size:16px;color:#e0e8ff;}
+.qb-body{padding:14px 18px;display:flex;flex-direction:column;gap:10px;}
+.qb-body p,.qb-body li{font-size:14.5px;}
+.hint-btn{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--teal);background:none;border:1px solid var(--teal);border-radius:8px;padding:5px 10px;cursor:pointer;width:fit-content;}
+.hint-box{display:none;background:var(--teal-soft);border-radius:8px;padding:10px 14px;font-size:13.5px;color:var(--ink-soft);border-left:3px solid var(--teal);}
+.hint-box.show{display:block;}
+.doc-ref{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--gold-soft);border:1px solid var(--gold);border-radius:8px;padding:7px 12px;color:var(--ink-soft);}
+
+/* PREDICT BOX */
+.predict-zone{background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--ink-soft);}
+.predict-zone strong{color:var(--accent);}
+
+/* CHECKPOINT */
+.ck{background:linear-gradient(135deg,var(--teal-soft),var(--gold-soft));border:1.5px solid var(--teal);border-radius:var(--r);padding:15px 20px;display:flex;align-items:center;gap:14px;}
+.ck-icon{font-size:28px;flex-shrink:0;}
+.ck-text h4{font-size:16px;margin-bottom:4px;}
+.ck-text p{font-size:14px;}
+details{background:var(--surface-2);border-radius:10px;padding:10px 14px;border:1px solid var(--line);}
+details summary{cursor:pointer;font-weight:600;color:var(--ink);font-size:14.5px;user-select:none;}
+details p{margin-top:8px;font-size:14px;color:var(--ink-soft);}
+.footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;border-top:1px solid var(--line);}
+.k-r{color:var(--accent)!important;}
+.k-b{color:var(--teal)!important;}
+.k-g{color:var(--gold)!important;}
+.k-gr{color:var(--green)!important;}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink-soft);}
+.leg{display:inline-flex;align-items:center;gap:7px;}
+.ldot{width:13px;height:13px;border-radius:50%;flex-shrink:0;display:inline-block;}
+
+/* FORCE DIAGRAM PANEL */
+.force-panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:520px){.force-panel{grid-template-columns:1fr;}}
+.force-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow);}
+.force-card h4{font-size:15px;margin-bottom:6px;}
+.force-card p{font-size:13.5px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- MASTHEAD -->
+<header class="mast">
+  <div class="mast-bg">🎢</div>
+  <div class="mast-tag">🎢 Virtual Lab · Forces &amp; Motion · 8th Grade Physical Science</div>
+  <h1>Friction Finish Line</h1>
+  <p class="mast-sub">You built a real roller coaster. Now zoom in on the physics — control the drop height, cart mass, and friction, and watch Newton's Laws play out on every centimeter of the track.</p>
+  <div class="meta-row">
+    <span class="chip">⏱ ~55 min · 2 sessions</span>
+    <span class="chip">🎢 3 interactive simulations</span>
+    <span class="chip">⚡ Newton's Laws in action</span>
+    <span class="chip">📋 Keep your Answer Doc open</span>
+  </div>
+</header>
+
+<!-- STICKY PROGRESS -->
+<div class="sbar">
+  <div class="prog-steps">
+    <div class="ps active" id="ps1"></div>
+    <div class="ps" id="ps2"></div>
+    <div class="ps" id="ps3"></div>
+    <div class="ps" id="ps4"></div>
+  </div>
+  <span class="ps-lbl" id="psLbl">Part A · Warm-Up</span>
+</div>
+
+<!-- ANSWER DOC BANNER -->
+<div class="doc-box">
+  <span style="font-size:28px">📋</span>
+  <p><b>Open your Answer Doc in another tab right now.</b> Every question gets answered there — use this page for the simulations, controls, and hints.</p>
+</div>
+
+<!-- ═══════════ PART A ═══════════ -->
+<section id="partA">
+  <div class="sec-head">
+    <span class="kicker">Session 1 · Part A</span>
+    <h2>Warm-Up — From the Real Lab to the Virtual One</h2>
+  </div>
+
+  <div class="callout b">
+    <p>🎢 <b>You already ran this experiment</b> — with a real track, a real marble, and your own hands. The physics you observed there is exactly what this virtual lab is about. Now you'll control variables you <em>couldn't</em> control at the real lab bench: switch cart mass with a slider, crank friction up or down, and watch the numbers change in real time.</p>
+  </div>
+
+  <div class="card">
+    <h3>🧠 The Big Ideas Behind This Lab</h3>
+    <div class="force-panel">
+      <div class="force-card">
+        <h4 style="color:var(--teal)">⚖️ Balanced Forces → No Change</h4>
+        <p>When all forces cancel out (net force = 0), the cart keeps doing exactly what it's doing. Steady speed on a flat track = balanced forces.</p>
+      </div>
+      <div class="force-card">
+        <h4 style="color:var(--accent)">⚡ Unbalanced Forces → Acceleration</h4>
+        <p>When forces don't cancel (net force ≠ 0), the cart speeds up, slows down, or turns. Dropping down a hill or friction slowing you down — both are unbalanced.</p>
+      </div>
+      <div class="force-card">
+        <h4 style="color:var(--gold)">🌎 Gravity Does the Work on the Drop</h4>
+        <p>Gravity pulls the cart downhill. Higher drop = more speed at the bottom. That's an unbalanced force causing acceleration.</p>
+      </div>
+      <div class="force-card">
+        <h4 style="color:var(--green)">🛑 Friction Fights Back</h4>
+        <p>Friction always pushes <em>against</em> the direction of motion. More friction = faster deceleration. Less friction = the cart travels farther.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 1</span><h4>Before You Start — Think Back to the Real Lab</h4></div>
+    <div class="qb-body">
+      <p>Answer these in your doc before running any simulations:</p>
+      <ol>
+        <li>When your marble rolled down the big drop in the real lab, was it <b>speeding up or slowing down</b>? What force caused that?</li>
+        <li>Did your marble travel farther on a smooth surface or a rough surface? Which force explains the difference?</li>
+        <li>What happened when you tried to push a heavier cart? Was it easier or harder to accelerate? Which of Newton's laws explains this?</li>
+      </ol>
+      <button class="hint-btn" onclick="hnt(this)">💡 Hint — Newton's 2nd Law</button>
+      <div class="hint-box">Newton's 2nd Law: a bigger force = more acceleration, but a bigger mass = less acceleration. Same push, twice the mass → half the speed-up.</div>
+      <div class="doc-ref">📋 Answer Doc → Q1a, Q1b, Q1c</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PART B ═══════════ -->
+<section id="partB">
+  <div class="sec-head">
+    <span class="kicker b">Session 1 · Part B</span>
+    <h2>Simulation 1 — The Drop: Gravity &amp; Speed</h2>
+  </div>
+
+  <div class="callout b">
+    <p>🌎 <b>Gravity is the engine.</b> On a roller coaster, the only reason the cart goes anywhere is because gravity pulls it down the first big drop. The higher the drop, the faster it's going at the bottom. Watch this play out — change the drop height and see the speed change.</p>
+  </div>
+
+  <div class="card">
+    <h3>How to use Simulation 1</h3>
+    <ol class="steps">
+      <li>Set your <b>Drop Height</b> with the slider. Start at <b>Low (2m)</b>.</li>
+      <li>Click <b>▶ Launch</b> and watch the cart's speed at the bottom of the drop.</li>
+      <li>Record the <b>Bottom Speed</b> reading in your data table.</li>
+      <li>Run again at <b>Medium (5m)</b> and <b>High (8m)</b>. Record all three.</li>
+      <li>Notice how the <b>force arrows</b> change size at different points on the track.</li>
+    </ol>
+  </div>
+
+  <!-- SIMULATION 1 -->
+  <div class="sim-wrap">
+    <div class="sim-header">
+      <span class="sim-title">🎢 Sim 1 — Drop Height &amp; Speed</span>
+      <div class="legend">
+        <span class="leg"><span class="ldot" style="background:#f06040;"></span>Gravity (down the hill)</span>
+        <span class="leg"><span class="ldot" style="background:#50a0ff;"></span>Normal force</span>
+        <span class="leg"><span class="ldot" style="background:#30c060;"></span>Friction</span>
+      </div>
+    </div>
+    <canvas class="sim-cv" id="cv1"></canvas>
+    <div class="sim-controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label">🏔️ Drop Height <span class="ctrl-val" id="v1h">5 m</span></div>
+        <input type="range" id="s1h" min="1" max="10" value="5" step="0.5">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">🛑 Track Friction <span class="ctrl-val" id="v1f">Low</span></div>
+        <input type="range" id="s1f" min="0" max="2" value="0" step="1">
+      </div>
+    </div>
+    <div class="sim-btns">
+      <button class="sbtn go" id="btn1">▶ Launch</button>
+      <button class="sbtn reset" id="btn1r">↺ Reset</button>
+    </div>
+    <div class="sim-readout" id="ro1">Set your drop height and click Launch to run the simulation.</div>
+  </div>
+
+  <!-- DATA TABLE 1 -->
+  <div class="card">
+    <h3>📊 Data Table 1 — Drop Height vs. Speed</h3>
+    <p style="font-size:14px;">Run the sim at each height setting and record the bottom speed. Keep friction on Low for all three runs.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Run</th><th>Drop Height</th><th>Friction</th><th>Speed at Bottom (m/s)</th><th>Did the loop complete?</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Low (2 m)</td><td>Low</td><td><input class="di" id="d1a" placeholder="—"></td><td><input class="di" id="d1b" placeholder="yes / no"></td></tr>
+          <tr><td>2</td><td>Medium (5 m)</td><td>Low</td><td><input class="di" id="d1c" placeholder="—"></td><td><input class="di" id="d1d" placeholder="yes / no"></td></tr>
+          <tr><td>3</td><td>High (8 m)</td><td>Low</td><td><input class="di" id="d1e" placeholder="—"></td><td><input class="di" id="d1f" placeholder="yes / no"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 2</span><h4>Drop Height — What the Data Shows</h4></div>
+    <div class="qb-body">
+      <ol>
+        <li>As drop height increased, what happened to the speed at the bottom? Was this what you predicted?</li>
+        <li>What <b>force</b> caused the cart to speed up on the way down? Was this force balanced or unbalanced while the cart was dropping?</li>
+        <li>Why did the cart need more speed to complete the loop? (Think: what happens if it goes too slow at the top of the loop?)</li>
+        <li><b>Real world:</b> Why do real roller coaster engineers always make the first drop the tallest one?</li>
+      </ol>
+      <button class="hint-btn" onclick="hnt(this)">💡 Hint — loop physics</button>
+      <div class="hint-box">At the top of a loop, gravity is still pulling the cart DOWN — toward the center of the loop. If the cart is going too slowly, gravity wins and the cart falls off the track. It needs enough speed so that the centripetal force keeps it on the rails.</div>
+      <div class="doc-ref">📋 Answer Doc → Q2a through Q2d</div>
+    </div>
+  </div>
+
+  <div class="ck">
+    <span class="ck-icon">✅</span>
+    <div class="ck-text">
+      <h4>Session 1 Stopping Point</h4>
+      <p>Make sure your Data Table 1 is filled in and Q1 and Q2 are answered before next class.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PART C ═══════════ -->
+<section id="partC">
+  <div class="sec-head">
+    <span class="kicker c">Session 2 · Part C</span>
+    <h2>Simulation 2 — Friction: The Force That Fights Back</h2>
+  </div>
+
+  <div class="callout c">
+    <p>🛑 <b>Friction is always working against you.</b> It pushes opposite to the direction of motion — always. More friction means more deceleration. Less friction and the cart glides farther. This is Newton's 1st Law in action: without friction, a moving cart would keep moving forever.</p>
+  </div>
+
+  <!-- SIMULATION 2 -->
+  <div class="sim-wrap">
+    <div class="sim-header">
+      <span class="sim-title">🛑 Sim 2 — Friction &amp; Stopping Distance</span>
+    </div>
+    <canvas class="sim-cv" id="cv2"></canvas>
+    <div class="sim-controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label">🏔️ Drop Height <span class="ctrl-val" id="v2h">5 m</span></div>
+        <input type="range" id="s2h" min="2" max="8" value="5" step="1">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">🛑 Friction Level <span class="ctrl-val" id="v2f">Medium</span></div>
+        <input type="range" id="s2f" min="0" max="2" value="1" step="1">
+      </div>
+    </div>
+    <div class="sim-btns">
+      <button class="sbtn go" id="btn2">▶ Launch</button>
+      <button class="sbtn reset" id="btn2r">↺ Reset</button>
+    </div>
+    <div class="sim-readout" id="ro2">Adjust friction and see how far the cart travels on the flat section.</div>
+  </div>
+
+  <!-- DATA TABLE 2 -->
+  <div class="card">
+    <h3>📊 Data Table 2 — Friction vs. Stopping Distance</h3>
+    <p style="font-size:14px;">Keep Drop Height at Medium (5m). Change only the friction level for each run.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Run</th><th>Friction</th><th>Speed at bottom (m/s)</th><th>Stopping distance (m)</th><th>Slower or faster stop?</th></tr></thead>
+        <tbody>
+          <tr><td>4</td><td>None</td><td><input class="di" id="d2a" placeholder="—"></td><td><input class="di" id="d2b" placeholder="—"></td><td><input class="di" id="d2c" placeholder="—"></td></tr>
+          <tr><td>5</td><td>Medium</td><td><input class="di" id="d2d" placeholder="—"></td><td><input class="di" id="d2e" placeholder="—"></td><td><input class="di" id="d2f" placeholder="—"></td></tr>
+          <tr><td>6</td><td>High</td><td><input class="di" id="d2g" placeholder="—"></td><td><input class="di" id="d2h" placeholder="—"></td><td><input class="di" id="d2i" placeholder="—"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 3</span><h4>Friction — Cause and Effect</h4></div>
+    <div class="qb-body">
+      <ol>
+        <li>What happened to stopping distance when friction increased? Explain using the words <b>net force</b> and <b>deceleration</b>.</li>
+        <li>With <b>no friction</b>, the cart kept rolling. Which of Newton's laws explains why it wouldn't stop on its own?</li>
+        <li>In your real roller coaster lab, where did you notice friction most — on the drop, on the flat section, or at the end of the run? How do you know?</li>
+        <li><b>Real world:</b> Roller coaster engineers use friction brakes at the end of the ride. Based on your data, should the brakes apply a lot of friction or a little friction to stop the cart quickly? Explain.</li>
+      </ol>
+      <div class="doc-ref">📋 Answer Doc → Q3a through Q3d</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PART D ═══════════ -->
+<section id="partD">
+  <div class="sec-head">
+    <span class="kicker d">Session 2 · Part D</span>
+    <h2>Simulation 3 — Mass: Does a Heavier Cart Go Faster?</h2>
+  </div>
+
+  <div class="callout d">
+    <p>⚖️ <b>Make a prediction first.</b> Before you run this simulation, think: if you double the mass of the cart but use the same drop height, do you think it will go faster, slower, or the same speed at the bottom? Newton's 2nd Law gives you a hint — but the answer might surprise you.</p>
+  </div>
+
+  <div class="predict-zone">
+    <strong>📝 Write your prediction in your Answer Doc (Q4a) before you run Simulation 3.</strong><br>
+    "If I double the cart's mass but keep the same drop height, the speed at the bottom will be _______ because _______."
+  </div>
+
+  <!-- SIMULATION 3 -->
+  <div class="sim-wrap">
+    <div class="sim-header">
+      <span class="sim-title">⚖️ Sim 3 — Cart Mass &amp; Speed</span>
+    </div>
+    <canvas class="sim-cv" id="cv3"></canvas>
+    <div class="sim-controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label">🏔️ Drop Height <span class="ctrl-val" id="v3h">5 m</span></div>
+        <input type="range" id="s3h" min="2" max="8" value="5" step="1">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">⚖️ Cart Mass <span class="ctrl-val" id="v3m">20 kg</span></div>
+        <input type="range" id="s3m" min="10" max="60" value="20" step="10">
+      </div>
+    </div>
+    <div class="sim-btns">
+      <button class="sbtn go" id="btn3">▶ Launch</button>
+      <button class="sbtn reset" id="btn3r">↺ Reset</button>
+    </div>
+    <div class="sim-readout" id="ro3">Set your cart mass and launch to see if it changes the speed.</div>
+  </div>
+
+  <!-- DATA TABLE 3 -->
+  <div class="card">
+    <h3>📊 Data Table 3 — Mass vs. Speed</h3>
+    <p style="font-size:14px;">Keep Drop Height at Medium (5m) and Friction at Low for all runs. Change only the cart mass.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Run</th><th>Cart Mass</th><th>Drop Height</th><th>Speed at Bottom (m/s)</th><th>Surprising? Y/N</th></tr></thead>
+        <tbody>
+          <tr><td>7</td><td>10 kg (light)</td><td>5 m</td><td><input class="di" id="d3a" placeholder="—"></td><td><input class="di" id="d3b" placeholder="—"></td></tr>
+          <tr><td>8</td><td>20 kg (medium)</td><td>5 m</td><td><input class="di" id="d3c" placeholder="—"></td><td><input class="di" id="d3d" placeholder="—"></td></tr>
+          <tr><td>9</td><td>40 kg (heavy)</td><td>5 m</td><td><input class="di" id="d3e" placeholder="—"></td><td><input class="di" id="d3f" placeholder="—"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <details>
+      <summary>💡 Why does mass not change the speed? (open after you run it)</summary>
+      <p>More mass means more gravity pulling the cart down — but it also means more resistance to acceleration (Newton's 2nd Law). These two effects cancel out perfectly. A heavier cart has more "engine" (gravity) but also more "load" (mass) — the ratio stays the same. That's why Galileo's famous experiment showed that a heavy and a light ball drop at the same rate.</p>
+    </details>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 4</span><h4>Mass — The Surprising Result</h4></div>
+    <div class="qb-body">
+      <ol>
+        <li><b>Before running:</b> What did you predict — faster, slower, or same? (Write in doc before launching.)</li>
+        <li><b>After running:</b> Was your prediction correct? What actually happened to the speed as mass increased?</li>
+        <li>Newton's 2nd Law says: more mass = less acceleration with the same force. But gravity is also bigger on a heavier cart. Explain in your own words why these two effects cancel out.</li>
+        <li>Even though speed is the same, does a heavier cart carry <b>more or less momentum</b> at the bottom? (Think: if you had to stop it with your hands, which one would be harder to stop?)</li>
+      </ol>
+      <button class="hint-btn" onclick="hnt(this)">💡 Momentum hint</button>
+      <div class="hint-box">Momentum = mass × velocity. If velocity is the same but mass is bigger, momentum is bigger. That's why a heavy truck going 30 mph is harder to stop than a bicycle going 30 mph — same speed, very different mass.</div>
+      <div class="doc-ref">📋 Answer Doc → Q4a through Q4d</div>
+    </div>
+  </div>
+
+  <!-- FINAL QUESTIONS -->
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 5</span><h4>Design Challenge — Build the Best Coaster</h4></div>
+    <div class="qb-body">
+      <p>Use any simulation. Your goal: make the cart complete the loop AND travel as far as possible on the flat section after the loop. Find the combination of settings that does both.</p>
+      <ol>
+        <li>What settings did you end up with? (drop height, friction, mass)</li>
+        <li>Explain your choices using at least <b>two</b> force concepts from this lab (gravity, friction, net force, inertia, Newton's laws).</li>
+        <li>What was the <b>trade-off</b> you had to deal with? (Hint: what happens when you try to maximize both loop completion AND distance?)</li>
+      </ol>
+      <div class="doc-ref">📋 Answer Doc → Q5a through Q5c</div>
+    </div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 6</span><h4>Conclusion — Forces on a Real Coaster</h4></div>
+    <div class="qb-body">
+      <p>Write one well-developed paragraph connecting this virtual lab to your real roller coaster lab. Include:</p>
+      <ul>
+        <li>Which variable had the biggest effect on speed — height, mass, or friction?</li>
+        <li>Two specific Newton's Law connections (name the law and what it explained)</li>
+        <li>One thing you observed in the real lab that this simulation confirmed</li>
+        <li>One thing you couldn't test in the real lab that this simulation let you explore</li>
+      </ul>
+      <div class="doc-ref">📋 Answer Doc → Q6 — Conclusion</div>
+    </div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 7 — Bonus 🎢</span><h4>Roller Coaster Engineer Challenge</h4></div>
+    <div class="qb-body">
+      <p>You're hired to design a real roller coaster. The safety rules say: the cart must complete the loop, but the speed at the end of the ride must be under 3 m/s (or it crashes into the safety barrier).</p>
+      <ol>
+        <li>Based on your data, what combination of height, mass, and friction could achieve this?</li>
+        <li>Would you increase or decrease friction near the end of the track? Why?</li>
+        <li>A rider complains the coaster is "too bumpy." Which force concept explains bumpiness, and what could you change about the track to fix it?</li>
+      </ol>
+      <div class="doc-ref">📋 Answer Doc → Bonus Q7a through Q7c</div>
+    </div>
+  </div>
+
+  <div class="ck">
+    <span class="ck-icon">🏆</span>
+    <div class="ck-text">
+      <h4>Lab Complete!</h4>
+      <p>Make sure all data tables are filled in and Q1–Q6 are answered. Submit your Answer Doc. You just did what real roller coaster engineers do every day — use Newton's Laws to predict and control motion.</p>
+    </div>
+  </div>
+</section>
+
+<div class="footer">YSC Academy · 8th Grade Physical Science · Friction Finish Line Virtual Lab</div>
+
+</div>
+<script>
+(function(){
+'use strict';
+/* ══════════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════════ */
+var TAU=Math.PI*2;
+function cl(v,a,b){return Math.max(a,Math.min(b,v));}
+function lr(a,b,t){return a+(b-a)*t;}
+function ease(t){t=cl(t,0,1);return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+
+/* ══════════════════════════════════════════════════
+   CANVAS SETUP — ResizeObserver so width is always valid
+══════════════════════════════════════════════════ */
+// All sims draw into a 800×350 virtual coordinate space
+var VW=800,VH=350;
+
+function initCanvas(id){
+  var cv=document.getElementById(id);
+  if(!cv)return;
+  function resize(){
+    var pw=cv.parentElement?cv.parentElement.clientWidth:0;
+    if(!pw)pw=640;
+    var dpr=window.devicePixelRatio||1;
+    cv.width=Math.round(pw*dpr);
+    cv.height=Math.round(pw*(VH/VW)*dpr);
+    cv.style.width=pw+'px';
+    cv.style.height=Math.round(pw*(VH/VW))+'px';
+  }
+  resize();
+  try{new ResizeObserver(resize).observe(cv.parentElement||document.body);}catch(e){}
+}
+['cv1','cv2','cv3'].forEach(initCanvas);
+
+/* Get a scaled context. Returns null if canvas not ready. */
+function getCtx(id){
+  var cv=document.getElementById(id);if(!cv)return null;
+  var pw=parseInt(cv.style.width)||0;
+  var ph=parseInt(cv.style.height)||0;
+  if(!pw||!ph)return null;
+  var dpr=window.devicePixelRatio||1;
+  var ctx=cv.getContext('2d');
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,cv.width,cv.height);
+  var sc=pw/VW*dpr;
+  ctx.setTransform(sc,0,0,sc,0,0);
+  return ctx;
+}
+
+/* ══════════════════════════════════════════════════
+   SLIDER WIRING
+══════════════════════════════════════════════════ */
+function wire(sId,vId,fmt){
+  var sl=document.getElementById(sId),vl=document.getElementById(vId);
+  if(!sl||!vl)return;
+  function upd(){vl.textContent=fmt(+sl.value);}
+  upd();sl.addEventListener('input',upd);
+}
+wire('s1h','v1h',function(v){return v+' m';});
+wire('s1f','v1f',function(v){return['None','Medium','High'][v];});
+wire('s2h','v2h',function(v){return v+' m';});
+wire('s2f','v2f',function(v){return['None','Medium','High'][v];});
+wire('s3h','v3h',function(v){return v+' m';});
+wire('s3m','v3m',function(v){return v+' kg';});
+
+/* ══════════════════════════════════════════════════
+   DRAWING HELPERS
+══════════════════════════════════════════════════ */
+var GY=VH*0.76; // ground y in virtual coords
+
+/* Sky, hills, grass, clouds, trees */
+function drawScene(ctx){
+  var W=VW,H=VH;
+  // Sky
+  var sk=ctx.createLinearGradient(0,0,0,GY);
+  sk.addColorStop(0,'#3a80cc');sk.addColorStop(0.7,'#7ab4ee');sk.addColorStop(1,'#aad4f8');
+  ctx.fillStyle=sk;ctx.fillRect(0,0,W,GY+4);
+
+  // Clouds
+  function cloud(cx,cy,s){
+    ctx.save();ctx.translate(cx,cy);ctx.scale(s,s*.55);
+    ctx.fillStyle='rgba(255,255,255,0.93)';
+    [[0,0,28],[-32,-5,22],[32,-5,22],[55,3,18],[-52,3,18],[16,-18,16],[-16,-18,16]].forEach(function(b){
+      ctx.beginPath();ctx.arc(b[0],b[1],b[2],0,TAU);ctx.fill();
+    });
+    ctx.restore();
+  }
+  cloud(90,45,1.1);cloud(310,32,1.4);cloud(560,50,0.95);cloud(720,38,1.2);
+
+  // Distant hills
+  ctx.fillStyle='#70a050';
+  ctx.beginPath();ctx.moveTo(0,GY);
+  [[0,.96],[.08,.84],[.18,.89],[.28,.78],[.4,.86],[.52,.75],[.62,.82],[.72,.77],[.84,.85],[1,.96]].forEach(function(p){
+    ctx.lineTo(p[0]*W,p[1]*GY);
+  });
+  ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fill();
+
+  // Ground — green grass
+  var gnd=ctx.createLinearGradient(0,GY,0,H);
+  gnd.addColorStop(0,'#58b030');gnd.addColorStop(0.4,'#3a8820');gnd.addColorStop(1,'#1e5010');
+  ctx.fillStyle=gnd;ctx.fillRect(0,GY-2,W,H-GY+4);
+
+  // Grass tufts
+  ctx.strokeStyle='rgba(80,150,30,0.5)';ctx.lineWidth=1.2;
+  for(var gx=10;gx<W;gx+=18){
+    ctx.beginPath();ctx.moveTo(gx,GY);ctx.lineTo(gx+4,GY-6);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(gx+8,GY);ctx.lineTo(gx+12,GY-5);ctx.stroke();
+  }
+
+  // Background trees (left & right edges)
+  function tree(tx,ty,h2){
+    ctx.fillStyle='#2a6018';
+    ctx.beginPath();ctx.moveTo(tx,ty-h2*1.4);ctx.lineTo(tx-h2*.5,ty);ctx.lineTo(tx+h2*.5,ty);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#3a7820';
+    ctx.beginPath();ctx.moveTo(tx,ty-h2*1.9);ctx.lineTo(tx-h2*.4,ty-h2*.6);ctx.lineTo(tx+h2*.4,ty-h2*.6);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#5a5020';ctx.fillRect(tx-h2*.08,ty,h2*.16,h2*.35);
+  }
+  [[20,GY,28],[55,GY,22],[740,GY,26],[770,GY,20],[790,GY,24]].forEach(function(t){tree(t[0],t[1],t[2]);});
+
+  // Fun park sign
+  ctx.fillStyle='#cc2020';ctx.beginPath();ctx.roundRect(630,18,130,32,6);ctx.fill();
+  ctx.fillStyle='#ffee44';ctx.font='bold 11px Work Sans,sans-serif';ctx.textAlign='center';
+  ctx.fillText('🎢 THRILL PARK',695,40);
+}
+
+/* Steel dual-rail coaster track with crossties and support legs */
+function drawTrack(ctx,pts){
+  if(pts.length<2)return;
+  var n=pts.length;
+
+  // Support structure first (behind everything)
+  var legStep=Math.max(4,Math.floor(n/14));
+  for(var li=0;li<n;li+=legStep){
+    var lp=pts[li];
+    if(lp[1]<GY-6){
+      // Vertical leg
+      ctx.strokeStyle='#7a6a40';ctx.lineWidth=3;ctx.setLineDash([]);
+      ctx.beginPath();ctx.moveTo(lp[0],lp[1]+3);ctx.lineTo(lp[0],GY);ctx.stroke();
+      // Horizontal base
+      ctx.strokeStyle='#6a5a30';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(lp[0]-8,GY);ctx.lineTo(lp[0]+8,GY);ctx.stroke();
+      // Diagonal brace to next leg
+      var nl=Math.min(li+legStep,n-1);
+      ctx.strokeStyle='rgba(110,90,50,0.45)';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+      ctx.beginPath();ctx.moveTo(lp[0],GY);ctx.lineTo(pts[nl][0],GY);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(lp[0],lp[1]+3);ctx.lineTo(pts[nl][0],GY);ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // Wooden crossties
+  var tieStep=Math.max(2,Math.floor(n/80));
+  for(var ti=0;ti<n-1;ti+=tieStep){
+    var tp=pts[ti],tp2=pts[Math.min(ti+1,n-1)];
+    var dx=tp2[0]-tp[0],dy=tp2[1]-tp[1];
+    var len=Math.hypot(dx,dy)||1;
+    var nx=-dy/len,ny=dx/len;
+    ctx.strokeStyle='#8b5e30';ctx.lineWidth=4.5;ctx.lineCap='square';
+    ctx.beginPath();
+    ctx.moveTo(tp[0]+nx*9,tp[1]+ny*9);
+    ctx.lineTo(tp[0]-nx*9,tp[1]-ny*9);
+    ctx.stroke();
+    // Tie grain
+    ctx.strokeStyle='rgba(60,30,10,0.25)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(tp[0]+nx*7,tp[1]+ny*7);ctx.lineTo(tp[0]-nx*7,tp[1]-ny*7);ctx.stroke();
+  }
+
+  // Two steel rails (offset ±7 perpendicular to track)
+  [-7,7].forEach(function(off){
+    var rpts=pts.map(function(p,i){
+      var nxt=pts[Math.min(i+1,n-1)],prv=pts[Math.max(i-1,0)];
+      var dx=nxt[0]-prv[0],dy=nxt[1]-prv[1],len=Math.hypot(dx,dy)||1;
+      return [p[0]+(-dy/len)*off, p[1]+(dx/len)*off];
+    });
+    // Shadow
+    ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=5.5;ctx.lineJoin='round';ctx.lineCap='round';
+    ctx.beginPath();rpts.forEach(function(p,i){i?ctx.lineTo(p[0]+1.5,p[1]+1.5):ctx.moveTo(p[0]+1.5,p[1]+1.5);});ctx.stroke();
+    // Rail body
+    ctx.strokeStyle='#d0d0d8';ctx.lineWidth=4;
+    ctx.beginPath();rpts.forEach(function(p,i){i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.stroke();
+    // Shine
+    ctx.strokeStyle='rgba(255,255,255,0.6)';ctx.lineWidth=1.5;
+    ctx.beginPath();rpts.forEach(function(p,i){i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.stroke();
+  });
+}
+
+/* Coaster cart — large cartoon black dog riding solo
+   ed=0: ears hang down naturally  ed=1: ears blown flat behind head */
+function drawCart(ctx,x,y,ang,col,earDroop){
+  ctx.save();ctx.translate(x,y);ctx.rotate(ang);
+  var cw=68, ch=20;          // cart dimensions (same as before so wheel/body unchanged)
+  col=col||'#dd2222';
+  var ed=earDroop===undefined?0:cl(earDroop,0,1);
+
+  /* ── WHEEL BOGEY ── */
+  ctx.fillStyle='#3a3a3a';ctx.beginPath();ctx.roundRect(-cw/2+2,4,cw-4,10,3);ctx.fill();
+
+  /* ── WHEELS ── */
+  [-cw*0.33,cw*0.33].forEach(function(wx){
+    ctx.fillStyle='#222';ctx.beginPath();ctx.arc(wx,10,7,0,TAU);ctx.fill();
+    var wg=ctx.createRadialGradient(wx-1,9,0,wx,10,6);
+    wg.addColorStop(0,'#bbb');wg.addColorStop(0.6,'#888');wg.addColorStop(1,'#555');
+    ctx.fillStyle=wg;ctx.beginPath();ctx.arc(wx,10,6,0,TAU);ctx.fill();
+    ctx.fillStyle='#ccc';ctx.beginPath();ctx.arc(wx,10,2,0,TAU);ctx.fill();
+  });
+  // Guide wheels on top rail
+  [-cw*0.25,cw*0.25].forEach(function(wx){
+    ctx.fillStyle='#444';ctx.beginPath();ctx.arc(wx,-1,3,0,TAU);ctx.fill();
+  });
+
+  /* ── CART BODY ── */
+  var bod=ctx.createLinearGradient(-cw/2,-ch,cw/2,4);
+  bod.addColorStop(0,lighter(col,50));bod.addColorStop(0.5,col);bod.addColorStop(1,darker(col,40));
+  ctx.fillStyle=bod;
+  ctx.beginPath();
+  ctx.moveTo(-cw/2+6,-ch);ctx.lineTo(cw/2-6,-ch);
+  ctx.arcTo(cw/2,-ch,cw/2,-ch+6,6);
+  ctx.lineTo(cw/2,4);ctx.lineTo(-cw/2,4);
+  ctx.arcTo(-cw/2,-ch,-cw/2+6,-ch,6);
+  ctx.closePath();ctx.fill();
+  ctx.strokeStyle=darker(col,60);ctx.lineWidth=1.5;ctx.stroke();
+  // Highlight stripe
+  ctx.fillStyle='rgba(255,255,255,0.2)';
+  ctx.beginPath();ctx.roundRect(-cw/2+4,-ch+1,cw-8,5,2);ctx.fill();
+  // Yellow nose band
+  ctx.fillStyle='#ffdd00';ctx.beginPath();ctx.roundRect(cw/2-10,-ch,10,ch+4,3);ctx.fill();
+  ctx.fillStyle='rgba(0,0,0,0.12)';ctx.beginPath();ctx.roundRect(cw/2-10,-ch,10,ch+4,3);ctx.fill();
+
+  /* ══════════════════════════════════════════════════════════
+     CARTOON ALIEN in glass bubble cockpit — matching reference
+     Green alien, big dark almond eyes, antenna, waving hand,
+     sitting inside a clear dome on top of the cart
+  ══════════════════════════════════════════════════════════ */
+  var AX=0, AY=-ch-28; // alien/dome centre
+  var DR=22; // dome radius
+
+  /* ── GLASS DOME ── */
+  // Dome shadow
+  ctx.fillStyle='rgba(0,0,0,0.15)';
+  ctx.beginPath();ctx.ellipse(AX+2,AY+3,DR+2,DR,0,0,TAU);ctx.fill();
+  // Dome body — translucent blue-white
+  var domeG=ctx.createRadialGradient(AX-DR*0.3,AY-DR*0.35,0,AX,AY,DR*1.1);
+  domeG.addColorStop(0,'rgba(200,235,255,0.55)');
+  domeG.addColorStop(0.6,'rgba(160,210,255,0.35)');
+  domeG.addColorStop(1,'rgba(100,170,230,0.25)');
+  ctx.fillStyle=domeG;
+  ctx.beginPath();ctx.arc(AX,AY,DR,0,TAU);ctx.fill();
+  // Dome rim (bottom half solid purple-blue, like reference saucer)
+  ctx.fillStyle='#5848c8';
+  ctx.beginPath();ctx.ellipse(AX,AY+DR*0.6,DR*1.1,DR*0.45,0,0,Math.PI);ctx.fill();
+  ctx.strokeStyle='#3828a0';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.ellipse(AX,AY+DR*0.6,DR*1.1,DR*0.45,0,0,Math.PI);ctx.stroke();
+  // Dome main outline
+  ctx.strokeStyle='#3060b0';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(AX,AY,DR,0,TAU);ctx.stroke();
+  // Dome highlight — big oval reflection upper-left
+  ctx.fillStyle='rgba(255,255,255,0.45)';
+  ctx.beginPath();ctx.ellipse(AX-DR*0.38,AY-DR*0.38,DR*0.32,DR*0.2,-0.5,0,TAU);ctx.fill();
+  // Secondary small reflection
+  ctx.fillStyle='rgba(255,255,255,0.25)';
+  ctx.beginPath();ctx.ellipse(AX-DR*0.55,AY-DR*0.1,DR*0.1,DR*0.16,-0.3,0,TAU);ctx.fill();
+
+  /* ── ALIEN BODY (inside dome, clipped feel) ── */
+  // Neck/torso — simple green oval peeking above rim
+  ctx.fillStyle='#50c828';
+  ctx.beginPath();ctx.ellipse(AX,AY+8,10,12,0,0,TAU);ctx.fill();
+  ctx.strokeStyle='#389010';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.ellipse(AX,AY+8,10,12,0,0,TAU);ctx.stroke();
+
+  /* ── WAVING ARM (right side, like reference) ── */
+  // Upper arm
+  ctx.strokeStyle='#50c828';ctx.lineWidth=6;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(AX+8,AY+4);ctx.quadraticCurveTo(AX+18,AY-2,AX+16,AY-10);ctx.stroke();
+  ctx.strokeStyle='#389010';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(AX+8,AY+4);ctx.quadraticCurveTo(AX+18,AY-2,AX+16,AY-10);ctx.stroke();
+  // Hand — three stubby fingers
+  ctx.fillStyle='#50c828';
+  ctx.beginPath();ctx.ellipse(AX+16,AY-11,5,4,0.3,0,TAU);ctx.fill();
+  ctx.strokeStyle='#389010';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(AX+16,AY-11,5,4,0.3,0,TAU);ctx.stroke();
+  // Fingers
+  [[-2,-4],[0,-5],[2,-4]].forEach(function(f){
+    ctx.fillStyle='#50c828';
+    ctx.beginPath();ctx.ellipse(AX+16+f[0],AY-13+f[1]*0.6,1.8,2.5,-0.1,0,TAU);ctx.fill();
+    ctx.strokeStyle='#389010';ctx.lineWidth=0.8;ctx.beginPath();ctx.ellipse(AX+16+f[0],AY-13+f[1]*0.6,1.8,2.5,-0.1,0,TAU);ctx.stroke();
+  });
+
+  /* ── ALIEN HEAD ── */
+  var HX2=AX, HY2=AY-6, HR2=14;
+  // Head shadow
+  ctx.fillStyle='rgba(0,0,0,0.12)';
+  ctx.beginPath();ctx.ellipse(HX2+1.5,HY2+2,HR2+1,HR2,0,0,TAU);ctx.fill();
+  // Head — bright lime green
+  var hg2=ctx.createRadialGradient(HX2-HR2*0.3,HY2-HR2*0.3,0,HX2,HY2,HR2*1.1);
+  hg2.addColorStop(0,'#78e040');
+  hg2.addColorStop(0.5,'#50c828');
+  hg2.addColorStop(1,'#309010');
+  ctx.fillStyle=hg2;
+  ctx.beginPath();ctx.ellipse(HX2,HY2,HR2,HR2*1.1,0,0,TAU);ctx.fill();
+  ctx.strokeStyle='#289008';ctx.lineWidth=2;
+  ctx.beginPath();ctx.ellipse(HX2,HY2,HR2,HR2*1.1,0,0,TAU);ctx.stroke();
+  // Head highlight
+  ctx.fillStyle='rgba(255,255,255,0.18)';
+  ctx.beginPath();ctx.ellipse(HX2-5,HY2-7,7,4,-0.4,0,TAU);ctx.fill();
+
+  /* ── ANTENNA ── */
+  ctx.strokeStyle='#389010';ctx.lineWidth=2;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(HX2+2,HY2-HR2);ctx.quadraticCurveTo(HX2+8,HY2-HR2-8,HX2+6,HY2-HR2-14);ctx.stroke();
+  // Antenna ball
+  ctx.fillStyle='#78e040';
+  ctx.beginPath();ctx.arc(HX2+6,HY2-HR2-14,3.5,0,TAU);ctx.fill();
+  ctx.strokeStyle='#289008';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(HX2+6,HY2-HR2-14,3.5,0,TAU);ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,0.5)';ctx.beginPath();ctx.arc(HX2+5,HY2-HR2-15.5,1.2,0,TAU);ctx.fill();
+
+  /* ── EYES — large dark almond shapes, like reference alien ── */
+  // Reference: eyes are big filled dark ovals, no whites, slight purple sheen
+  [-5.5,5.5].forEach(function(ex){
+    var EX=HX2+ex, EY=HY2-2;
+    // Eye shadow
+    ctx.fillStyle='rgba(0,0,0,0.2)';
+    ctx.beginPath();ctx.ellipse(EX+0.5,EY+1,6,4.5,ex>0?0.3:-0.3,0,TAU);ctx.fill();
+    // Eye fill — dark purple-black like reference
+    var eyeG=ctx.createRadialGradient(EX-1.5,EY-1.5,0,EX,EY,5.5);
+    eyeG.addColorStop(0,'#4a3868');
+    eyeG.addColorStop(0.5,'#241840');
+    eyeG.addColorStop(1,'#0c0818');
+    ctx.fillStyle=eyeG;
+    ctx.beginPath();ctx.ellipse(EX,EY,5.5,4,ex>0?0.25:-0.25,0,TAU);ctx.fill();
+    ctx.strokeStyle='#180c28';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.ellipse(EX,EY,5.5,4,ex>0?0.25:-0.25,0,TAU);ctx.stroke();
+    // Catch-light — small white oval upper-left
+    ctx.fillStyle='rgba(255,255,255,0.75)';
+    ctx.beginPath();ctx.ellipse(EX-2,EY-1.5,1.8,1.1,0.3,0,TAU);ctx.fill();
+  });
+
+  /* ── MOUTH — small happy open smile ── */
+  var MY2=HY2+8;
+  ctx.fillStyle='#1a0808';
+  ctx.beginPath();ctx.arc(HX2,MY2,4.5,0,Math.PI);ctx.fill();
+  // Small teeth
+  ctx.fillStyle='#f0f0e8';
+  ctx.beginPath();ctx.ellipse(HX2,MY2,3.5,2,0,0,Math.PI);ctx.fill();
+  // Tongue (pink, streams back with speed)
+  var tf=ed*8;
+  ctx.fillStyle='#e83858';
+  ctx.beginPath();
+  ctx.moveTo(HX2-3,MY2+1);
+  ctx.quadraticCurveTo(HX2-3-tf*0.3,MY2+5+tf*0.3,HX2-1-tf*0.4,MY2+7+tf*0.4);
+  ctx.quadraticCurveTo(HX2+2-tf*0.2,MY2+6+tf*0.3,HX2+3,MY2+1);
+  ctx.closePath();ctx.fill();
+  ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=0.8;ctx.lineCap='round';
+  ctx.beginPath();
+  ctx.moveTo(HX2-3,MY2+1);
+  ctx.quadraticCurveTo(HX2-3-tf*0.3,MY2+5+tf*0.3,HX2-1-tf*0.4,MY2+7+tf*0.4);
+  ctx.quadraticCurveTo(HX2+2-tf*0.2,MY2+6+tf*0.3,HX2+3,MY2+1);
+  ctx.stroke();
+  // Mouth corner marks
+  ctx.strokeStyle='rgba(30,80,10,0.5)';ctx.lineWidth=1.2;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(HX2-4.5,MY2);ctx.lineTo(HX2-6,MY2-2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(HX2+4.5,MY2);ctx.lineTo(HX2+6,MY2-2);ctx.stroke();
+
+  /* ── DOME OVERLAY (re-draw front arc over alien for glass-in-front feel) ── */
+  var domeOver=ctx.createRadialGradient(AX-DR*0.25,AY-DR*0.3,DR*0.3,AX,AY,DR);
+  domeOver.addColorStop(0,'rgba(220,245,255,0.0)');
+  domeOver.addColorStop(0.7,'rgba(180,225,255,0.08)');
+  domeOver.addColorStop(1,'rgba(100,170,230,0.22)');
+  ctx.fillStyle=domeOver;
+  ctx.beginPath();ctx.arc(AX,AY,DR,0,TAU);ctx.fill();
+
+  /* Car number */
+  ctx.fillStyle='rgba(255,255,255,0.7)';ctx.font='bold 8px IBM Plex Mono,monospace';ctx.textAlign='left';
+  ctx.fillText('No.1',-cw/2+4,-ch+9);
+
+  ctx.restore();
+}
+
+function lighter(c,a){
+  var p=parseRGB(c);
+  return'rgb('+Math.min(255,p[0]+a)+','+Math.min(255,p[1]+a)+','+Math.min(255,p[2]+a)+')';
+}
+function darker(c,a){
+  var p=parseRGB(c);
+  return'rgb('+Math.max(0,p[0]-a)+','+Math.max(0,p[1]-a)+','+Math.max(0,p[2]-a)+')';
+}
+function parseRGB(c){
+  if(c&&c[0]==='#')return[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];
+  var m=c.match(/\d+/g)||[0,0,0];return[+m[0],+m[1],+m[2]];
+}
+function lrpCol(a,b,t){
+  var ca=parseRGB(a),cb=parseRGB(b);
+  return'rgb('+Math.round(ca[0]+t*(cb[0]-ca[0]))+','+Math.round(ca[1]+t*(cb[1]-ca[1]))+','+Math.round(ca[2]+t*(cb[2]-ca[2]))+')';
+}
+
+/* Force arrow */
+function arrow(ctx,x,y,dx,dy,col,lbl){
+  var len=Math.hypot(dx,dy);if(len<8)return;
+  ctx.save();ctx.translate(x,y);ctx.rotate(Math.atan2(dy,dx));
+  ctx.shadowColor=col;ctx.shadowBlur=5;
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=3;ctx.globalAlpha=.9;
+  ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(len-10,0);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(len,0);ctx.lineTo(len-11,-6);ctx.lineTo(len-11,6);ctx.closePath();ctx.fill();
+  if(lbl){
+    ctx.shadowBlur=0;ctx.globalAlpha=1;
+    ctx.fillStyle='rgba(10,10,20,0.72)';ctx.beginPath();ctx.roundRect(len/2-20,-20,40,15,4);ctx.fill();
+    ctx.fillStyle=col;ctx.font='bold 9px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.fillText(lbl,len/2,-8);
+  }
+  ctx.restore();
+}
+
+/* Speed badge */
+function badge(ctx,x,y,spd,col){
+  ctx.save();ctx.shadowColor=col;ctx.shadowBlur=10;
+  ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x-44,y-16,88,26,12);ctx.fill();
+  ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='bold 14px IBM Plex Mono,monospace';ctx.textAlign='center';
+  ctx.fillText(spd.toFixed(1)+' m/s',x,y+4);
+  ctx.restore();
+}
+
+/* Height dimension line */
+function dimLine(ctx,x,topY,botY,label){
+  ctx.save();
+  ctx.strokeStyle='rgba(255,210,0,.85)';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(x,topY);ctx.lineTo(x,botY);ctx.stroke();ctx.setLineDash([]);
+  [[topY,-7],[botY,7]].forEach(function(a){
+    ctx.fillStyle='rgba(255,210,0,.85)';ctx.beginPath();
+    ctx.moveTo(x,a[0]);ctx.lineTo(x-5,a[0]+a[1]);ctx.lineTo(x+5,a[0]+a[1]);ctx.closePath();ctx.fill();
+  });
+  ctx.fillStyle='rgba(10,10,20,.75)';ctx.beginPath();ctx.roundRect(x-24,(topY+botY)/2-12,48,22,6);ctx.fill();
+  ctx.fillStyle='rgba(255,210,0,1)';ctx.font='bold 12px IBM Plex Mono,monospace';ctx.textAlign='center';
+  ctx.fillText(label,x,(topY+botY)/2+5);
+  ctx.restore();
+}
+
+/* ══════════════════════════════════════════════════
+   TRACK POINT BUILDERS
+══════════════════════════════════════════════════ */
+function bez(pts,x0,y0,cx0,cy0,cx1,cy1,x1,y1,n){
+  n=n||30;
+  for(var i=0;i<=n;i++){
+    var t=i/n,mt=1-t;
+    pts.push([mt*mt*mt*x0+3*mt*mt*t*cx0+3*mt*t*t*cx1+t*t*t*x1,
+              mt*mt*mt*y0+3*mt*mt*t*cy0+3*mt*t*t*cy1+t*t*t*y1]);
+  }
+}
+function arcPts(pts,cx,cy,R,a0,span,n){
+  n=n||Math.max(12,Math.round(Math.abs(span)*R/4));
+  for(var i=0;i<=n;i++){var a=a0+span*(i/n);pts.push([cx+Math.cos(a)*R,cy+Math.sin(a)*R]);}
+}
+function linePts(pts,x0,y0,x1,y1,n){
+  n=n||8;
+  for(var i=0;i<=n;i++){var t=i/n;pts.push([x0+t*(x1-x0),y0+t*(y1-y0)]);}
+}
+
+/* ── SIM 1 track: platform → big drop → flat → loop → run-out ──
+   Key design decisions:
+   • Loop entry/exit beziers have control points that are tangent to the circle
+     so the join is smooth — no visible kink at the junction
+   • High point counts (40-60) on curved sections so angle never jumps
+   • All segments added with no duplicate end/start point (last point of one
+     segment == first point of next — so we skip the first point on each
+     subsequent segment via splice at push time using the helper below)        */
+function appendBez(pts,x0,y0,cx0,cy0,cx1,cy1,x1,y1,n){
+  // Skips i=0 to avoid duplicating the join point
+  n=n||40;
+  for(var i=1;i<=n;i++){
+    var t=i/n,mt=1-t;
+    pts.push([mt*mt*mt*x0+3*mt*mt*t*cx0+3*mt*t*t*cx1+t*t*t*x1,
+              mt*mt*mt*y0+3*mt*mt*t*cy0+3*mt*t*t*cy1+t*t*t*y1]);
+  }
+}
+function appendArc(pts,cx,cy,R,a0,span,n){
+  n=n||Math.max(24,Math.round(Math.abs(span)*R/3));
+  for(var i=1;i<=n;i++){var a=a0+span*(i/n);pts.push([cx+Math.cos(a)*R,cy+Math.sin(a)*R]);}
+}
+function appendLine(pts,x0,y0,x1,y1,n){
+  n=n||10;
+  for(var i=1;i<=n;i++){var t=i/n;pts.push([x0+t*(x1-x0),y0+t*(y1-y0)]);}
+}
+
+function makeSim1Track(h){
+  var topY=GY-cl(h*(GY/11),GY*.12,GY*.72);
+  var botY=GY-16;
+  var R=62;
+  // Loop center so bottom of loop sits exactly at botY
+  var lcx=VW*.57, lcy=botY-R;
+  // Tangent point where flat meets the loop on the left: (lcx-R, lcy)
+  // At angle=PI on the circle, tangent direction is (0,-1) i.e. straight up
+  // So the bezier control point going INTO the loop must come from below
+  var pts=[];
+  // Start: push the very first point manually
+  pts.push([30,topY]);
+  appendLine(pts,30,topY,VW*.10,topY,3);
+  appendBez(pts,VW*.10,topY, VW*.115,topY, VW*.20,botY, VW*.24,botY,40);
+  appendLine(pts,VW*.24,botY, lcx-R,botY, 14);
+  // Curve up into loop — entry tangent at (lcx-R, lcy) is straight up (0,-R)
+  // so control points: from (lcx-R, botY) control=(lcx-R, lcy+R*.6), then
+  // the circle join point is (lcx-R, lcy) with control=(lcx-R, lcy-R*.1)
+  appendBez(pts, lcx-R,botY, lcx-R,botY-R*.5, lcx-R,lcy+R*.15, lcx-R,lcy, 20);
+  // Full loop (clockwise: starts at left-middle, angle=PI, goes +TAU)
+  appendArc(pts,lcx,lcy,R,Math.PI,TAU,72);
+  // Exit — from (lcx-R, lcy) tangent is down, mirror of entry
+  appendBez(pts, lcx-R,lcy, lcx-R,lcy+R*.15, lcx+R+30,botY-R*.3, lcx+R+40,botY, 20);
+  appendLine(pts,lcx+R+40,botY, VW*.98,botY, 20);
+  return{pts:pts,topY:topY,botY:botY,lcx:lcx,lcy:lcy,R:R};
+}
+
+/* ── SIM 2 track: platform → drop → long flat run-out ── */
+function makeSim2Track(h){
+  var topY=GY-cl(h*(GY/11),GY*.12,GY*.72);
+  var botY=GY-16;
+  var pts=[];
+  pts.push([30,topY]);
+  appendLine(pts,30,topY,VW*.10,topY,3);
+  appendBez(pts,VW*.10,topY, VW*.115,topY, VW*.22,botY, VW*.26,botY, 40);
+  appendLine(pts,VW*.26,botY, VW*.98,botY, 60);
+  return{pts:pts,topY:topY,botY:botY,flatStart:VW*.26};
+}
+
+/* ── SIM 3: three parallel drops ── */
+function makeSim3Drop(h,cx){
+  var topY=GY-cl(h*(GY/11),GY*.12,GY*.72);
+  var botY=GY-16;
+  var pts=[];
+  pts.push([cx,topY]);
+  appendBez(pts,cx,topY, cx,topY+40, cx,botY-40, cx,botY, 40);
+  appendLine(pts,cx,botY, cx+70,botY, 10);
+  return{pts:pts,topY:topY,botY:botY};
+}
+
+/* ══════════════════════════════════════════════════
+   SIM STATES
+══════════════════════════════════════════════════ */
+var S1={run:false,t:0,done:false,failed:false};
+var S2={run:false,t:0,done:false,stopped:false,stopPt:null};
+var S3={run:false,t:0,done:false};
+
+/* ══════════════════════════════════════════════════
+   SIM 1 — DROP HEIGHT & LOOP
+══════════════════════════════════════════════════ */
+function drawSim1(){
+  var ctx=getCtx('cv1');if(!ctx)return;
+  var h=+document.getElementById('s1h').value||5;
+  var fLvl=+document.getElementById('s1f').value||0;
+  var tr=makeSim1Track(h);
+  var baseSpd=Math.sqrt(2*9.8*h);
+  var needSpd=Math.sqrt(2*9.8*tr.R*2.5);
+  var canLoop=baseSpd>=needSpd;
+
+  drawScene(ctx);
+  dimLine(ctx,VW*.06,tr.topY,tr.botY,h+'m');
+
+  // Loop glow hint
+  ctx.save();ctx.strokeStyle='rgba(100,180,255,0.12)';ctx.lineWidth=tr.R*.5;
+  ctx.beginPath();ctx.arc(tr.lcx,tr.lcy,tr.R,0,TAU);ctx.stroke();ctx.restore();
+
+  drawTrack(ctx,tr.pts);
+
+  var n=tr.pts.length;
+
+  if(S1.run||S1.done){
+    var dropFrac=0.26;
+    var pIdx=cl(Math.floor(S1.t*(n-1)),0,n-2);
+    var ptFrac=pIdx/(n-1);
+    var curSpd;
+    if(ptFrac<dropFrac){
+      curSpd=baseSpd*Math.sqrt(Math.max(0.01,ptFrac/dropFrac));
+    } else {
+      var flatF=cl((ptFrac-dropFrac)/(1-dropFrac),0,1);
+      var frictionK=[0,.10,.28][fLvl];
+      curSpd=baseSpd*(1-frictionK*flatF);
+    }
+    curSpd=Math.max(0,curSpd);
+
+    var atTop=ptFrac>0.54&&ptFrac<0.64;
+    var inLoop=ptFrac>0.44&&ptFrac<0.74;
+
+    // ── Smooth angle: use span of ±4 pts to avoid jitter on tight curves ──
+    var span=4;
+    var ia=cl(pIdx-span,0,n-1), ib=cl(pIdx+span,0,n-1);
+    var ang=Math.atan2(tr.pts[ib][1]-tr.pts[ia][1], tr.pts[ib][0]-tr.pts[ia][0]);
+
+    // ── Perpendicular offset: cart rides ON TOP of the rail ──
+    // Normal = rotate tangent 90° CCW = (-sin(ang), cos(ang))
+    // We want the cart above the rail, so offset in -normal direction
+    // (the rail is below the cart; normal pointing "up" from the rail is -sin, cos)
+    var CART_OFFSET=8; // px — how far cart center sits above rail centerline
+    var nx=-Math.sin(ang), ny=Math.cos(ang);
+    // Ensure normal points away from the track center (upward in screen = negative y)
+    // On the bottom of a loop normal points down — we always want to push "inward" on loops
+    // and "upward" on straights. The sign: if ny>0 (pointing down), flip.
+    var cx2=tr.pts[pIdx][0] + nx*CART_OFFSET;
+    var cy2=tr.pts[pIdx][1] + ny*CART_OFFSET;
+
+    var earD=cl(curSpd/12,0,1); // ears fully back at 12 m/s
+    drawCart(ctx,cx2,cy2,ang,'#dd2222',earD);
+
+    // Force arrows
+    if(ptFrac<0.28){// on the drop
+      var gcomp=Math.sin(ang)*120;
+      arrow(ctx,cx2,cy2,Math.cos(ang)*gcomp,Math.sin(ang)*gcomp,'#ff5030','gravity');
+    }
+    if(ptFrac>0.30&&fLvl>0){
+      arrow(ctx,cx2,cy2,-Math.cos(ang)*fLvl*40,-Math.sin(ang)*fLvl*40,'#30cc60','friction');
+    }
+    if(inLoop&&canLoop){
+      // centripetal arrow toward loop center
+      var toCx=tr.lcx-cx2,toCy=tr.lcy-cy2;
+      var tlen=Math.hypot(toCx,toCy)||1;
+      arrow(ctx,cx2,cy2,toCx/tlen*45,toCy/tlen*45,'#80d0ff','centripetal');
+    }
+
+    // Speed badge — to the right of the dog, clear of the head
+    if(ptFrac>0.27&&ptFrac<0.38){
+      badge(ctx,cx2+64,cy2-20,baseSpd,'rgba(30,180,80,0.95)');
+    }
+
+    if(!canLoop&&atTop){
+      ctx.fillStyle='rgba(220,40,30,.9)';ctx.font='bold 15px Work Sans,sans-serif';ctx.textAlign='center';
+      ctx.shadowColor='rgba(0,0,0,0.5)';ctx.shadowBlur=6;
+      ctx.fillText('⚠️ Too slow — loop not completed!',VW/2,40);ctx.shadowBlur=0;
+    }
+
+    if(S1.t>=1&&!S1.done){
+      S1.done=true;S1.run=false;
+      document.getElementById('ro1').innerHTML=
+        '<b>Bottom speed:</b> '+baseSpd.toFixed(1)+' m/s &nbsp;·&nbsp; Loop: <b class="'+(canLoop?'k-gr':'k-r')+'">'+(canLoop?'✅ Complete':'❌ Failed — not enough height')+
+        '</b>&nbsp;·&nbsp; Friction: '+['None','Medium','High'][fLvl];
+    }
+  } else {
+    // Cart sitting at start
+    var sp=tr.pts[0];drawCart(ctx,sp[0],sp[1]-8,0,'#dd2222',0);
+  }
+
+  // Labels
+  ctx.fillStyle='rgba(255,255,255,0.8)';ctx.font='bold 11px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=4;
+  ctx.fillText('START',VW*.10,tr.topY-24);
+  ctx.fillText('LOOP',tr.lcx,tr.lcy-tr.R-16);
+  ctx.fillText('FINISH',VW*.92,tr.botY-18);ctx.shadowBlur=0;
+}
+
+document.getElementById('btn1').onclick=function(){
+  S1={run:true,t:0,done:false,failed:false};
+  document.getElementById('ro1').textContent='Running…';
+};
+document.getElementById('btn1r').onclick=function(){
+  S1={run:false,t:0,done:false,failed:false};
+  document.getElementById('ro1').textContent='Set your drop height and click Launch.';
+};
+
+/* ══════════════════════════════════════════════════
+   SIM 2 — FRICTION & STOPPING DISTANCE
+══════════════════════════════════════════════════ */
+function drawSim2(){
+  var ctx=getCtx('cv2');if(!ctx)return;
+  var h=+document.getElementById('s2h').value||5;
+  var fLvl=+document.getElementById('s2f').value||1;
+  var frK=[0,.22,.52][fLvl];
+  var tr=makeSim2Track(h);
+  var baseSpd=Math.sqrt(2*9.8*h);
+  var n=tr.pts.length;
+
+  drawScene(ctx);
+  dimLine(ctx,VW*.06,tr.topY,tr.botY,h+'m');
+
+  // Friction surface visualisation on flat
+  var flatW=VW*.98-tr.flatStart;
+  if(fLvl>0){
+    var fcol=['','rgba(255,180,0,0.18)','rgba(255,60,30,0.22)'][fLvl];
+    ctx.fillStyle=fcol;ctx.fillRect(tr.flatStart,tr.botY,flatW,12);
+    ctx.strokeStyle=['','rgba(255,160,0,.55)','rgba(255,50,20,.7)'][fLvl];ctx.lineWidth=1;
+    for(var fx=tr.flatStart;fx<tr.flatStart+flatW;fx+=14){
+      ctx.beginPath();ctx.moveTo(fx,tr.botY);ctx.lineTo(fx+7,tr.botY+12);ctx.stroke();
+    }
+  }
+
+  // Distance ruler
+  ctx.strokeStyle='rgba(220,240,255,0.35)';ctx.lineWidth=1;ctx.setLineDash([3,5]);
+  for(var dm=0;dm<=6;dm++){
+    var mx=tr.flatStart+dm*(flatW/6);
+    ctx.beginPath();ctx.moveTo(mx,tr.botY-8);ctx.lineTo(mx,tr.botY+18);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(200,225,255,0.7)';ctx.font='10px IBM Plex Mono,monospace';ctx.textAlign='center';
+    ctx.fillText((dm*10)+'m',mx,tr.botY+30);ctx.setLineDash([3,5]);
+  }
+  ctx.setLineDash([]);
+
+  drawTrack(ctx,tr.pts);
+
+  if(S2.run||S2.done){
+    var pIdx2=cl(Math.floor(S2.t*(n-1)),0,n-2);
+    var ptFrac2=pIdx2/(n-1);
+    var dropFrac2=0.36;
+    var curSpd2;
+    if(ptFrac2<dropFrac2){
+      curSpd2=baseSpd*Math.sqrt(ptFrac2/dropFrac2);
+    } else {
+      var flatF2=cl((ptFrac2-dropFrac2)/(1-dropFrac2),0,1);
+      curSpd2=Math.max(0,baseSpd*(1-frK*2.2*flatF2));
+    }
+
+    // If speed hits 0, cart stops; freeze ptIdx there
+    if(S2.stopped&&S2.stopPt){
+      pIdx2=S2.stopPt;
+    } else if(curSpd2<=0&&ptFrac2>dropFrac2&&!S2.stopped){
+      S2.stopped=true;S2.stopPt=pIdx2;S2.run=false;S2.done=true;
+      var stopM=Math.round((tr.pts[pIdx2][0]-tr.flatStart)/flatW*60);
+      document.getElementById('ro2').innerHTML=
+        '<b>Bottom speed:</b> '+baseSpd.toFixed(1)+' m/s &nbsp;·&nbsp; <b>Stopped at: ~'+stopM+' m</b> &nbsp;·&nbsp; Friction: '+['None','Medium','High'][fLvl]+
+        ' &nbsp;·&nbsp; <span class="badge-a">Friction = unbalanced force → deceleration</span>';
+    }
+
+    var sp2b=4;
+    var ia2=cl(pIdx2-sp2b,0,n-1),ib2=cl(pIdx2+sp2b,0,n-1);
+    var ang2=Math.atan2(tr.pts[ib2][1]-tr.pts[ia2][1],tr.pts[ib2][0]-tr.pts[ia2][0]);
+    var nx2=-Math.sin(ang2),ny2=Math.cos(ang2);
+    var cx2b=tr.pts[pIdx2][0]+nx2*8, cy2b=tr.pts[pIdx2][1]+ny2*8;
+    var earD2=cl(curSpd2/12,0,1);
+    drawCart(ctx,cx2b,cy2b,ang2,'#1a60dd',earD2);
+
+    if(ptFrac2>dropFrac2&&fLvl>0&&curSpd2>0.5){
+      arrow(ctx,cx2b,cy2b,-frK*80,0,'#30cc60','friction');
+    }
+    badge(ctx,cx2b+64,cy2b-20,curSpd2,curSpd2<1.5?'rgba(220,50,30,.95)':'rgba(30,180,80,.95)');
+
+    if(S2.stopped){
+      ctx.fillStyle='rgba(220,40,30,.9)';ctx.font='bold 14px Work Sans,sans-serif';ctx.textAlign='center';
+      ctx.shadowColor='rgba(0,0,0,0.5)';ctx.shadowBlur=4;
+      ctx.fillText('🛑 STOPPED',cx2b,cy2b-65);ctx.shadowBlur=0;
+    }
+
+    if(S2.t>=1&&!S2.done&&!S2.stopped){
+      S2.done=true;S2.run=false;
+      document.getElementById('ro2').innerHTML='<b>Bottom speed:</b> '+baseSpd.toFixed(1)+' m/s &nbsp;·&nbsp; Friction: '+['None','Medium','High'][fLvl]+' &nbsp;·&nbsp; Cart reached the end!';
+    }
+  } else {
+    var sp2=tr.pts[0];drawCart(ctx,sp2[0],sp2[1]-8,0,'#1a60dd',0);
+  }
+
+  ctx.fillStyle='rgba(255,255,255,0.8)';ctx.font='bold 11px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=4;
+  ctx.fillText('START',VW*.10,tr.topY-24);
+  ctx.fillStyle=['rgba(120,220,80,.9)','rgba(255,180,0,.9)','rgba(255,60,30,.9)'][fLvl];
+  ctx.fillText(['🟢 No Friction','🟡 Medium Friction','🔴 High Friction'][fLvl],tr.flatStart+flatW/2,tr.botY-18);ctx.shadowBlur=0;
+}
+
+document.getElementById('btn2').onclick=function(){
+  S2={run:true,t:0,done:false,stopped:false,stopPt:null};
+  document.getElementById('ro2').textContent='Running…';
+};
+document.getElementById('btn2r').onclick=function(){
+  S2={run:false,t:0,done:false,stopped:false,stopPt:null};
+  document.getElementById('ro2').textContent='Adjust friction and see how far the cart travels.';
+};
+
+/* ══════════════════════════════════════════════════
+   SIM 3 — MASS (3 carts drop simultaneously)
+══════════════════════════════════════════════════ */
+var cartColors=['#2288dd','#dd8820','#cc2828'];
+var massLabels=['10 kg','20 kg','40 kg'];
+var masses=[10,20,40];
+
+function drawSim3(){
+  var ctx=getCtx('cv3');if(!ctx)return;
+  var h=+document.getElementById('s3h').value||5;
+  var spd=Math.sqrt(2*9.8*h);
+  var xcs=[VW*.22,VW*.50,VW*.78];
+
+  drawScene(ctx);
+
+  // Header note
+  ctx.fillStyle='rgba(240,248,255,.82)';ctx.font='bold 12px IBM Plex Mono,monospace';ctx.textAlign='center';
+  ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=4;
+  ctx.fillText('All 3 carts drop from '+h+'m — watch the speed at the bottom',VW/2,22);ctx.shadowBlur=0;
+
+  xcs.forEach(function(cx3,mi){
+    var tr3=makeSim3Drop(h,cx3);
+    dimLine(ctx,cx3-22,tr3.topY,tr3.botY,h+'m');
+    drawTrack(ctx,tr3.pts);
+
+    var n3=tr3.pts.length;
+    ctx.fillStyle=cartColors[mi];ctx.font='bold 11px IBM Plex Mono,monospace';ctx.textAlign='center';
+    ctx.fillText(massLabels[mi],cx3,tr3.topY-28);
+
+    if(S3.run||S3.done){
+      var pIdx3=cl(Math.floor(ease(S3.t)*(n3-1)),0,n3-2);
+      var sp3=4;
+      var ia3=cl(pIdx3-sp3,0,n3-1),ib3=cl(pIdx3+sp3,0,n3-1);
+      var ang3=Math.atan2(tr3.pts[ib3][1]-tr3.pts[ia3][1],tr3.pts[ib3][0]-tr3.pts[ia3][0]);
+      var nx3=-Math.sin(ang3),ny3=Math.cos(ang3);
+      var cx3b=tr3.pts[pIdx3][0]+nx3*8, cy3b=tr3.pts[pIdx3][1]+ny3*8;
+      var earD3=cl(curSpd3/12,0,1);
+      drawCart(ctx,cx3b,cy3b,ang3,cartColors[mi],earD3);
+
+      var ptFrac3=pIdx3/(n3-1);
+      var curSpd3=ptFrac3<0.85?spd*Math.sqrt(ptFrac3/.85):spd;
+      if(ptFrac3>.82){
+        badge(ctx,cx3b+62,cy3b-20,spd,cartColors[mi]);
+      }
+    } else {
+      var sp3=tr3.pts[0];drawCart(ctx,sp3[0],sp3[1]-8,0,cartColors[mi],0);
+    }
+  });
+
+  if(S3.t>=1&&S3.run){
+    S3.done=true;S3.run=false;
+    document.getElementById('ro3').innerHTML=
+      '<b>All three carts: '+spd.toFixed(1)+' m/s</b> &nbsp;·&nbsp; 🤯 Same speed regardless of mass! &nbsp;·&nbsp; More mass = more gravity force AND more inertia — they cancel perfectly &nbsp;·&nbsp; <span class="badge-p">Newton\'s 2nd Law</span>';
+  }
+}
+
+document.getElementById('btn3').onclick=function(){
+  S3={run:true,t:0,done:false};
+  document.getElementById('ro3').textContent='Watch all three carts drop at the same time…';
+};
+document.getElementById('btn3r').onclick=function(){
+  S3={run:false,t:0,done:false};
+  document.getElementById('ro3').textContent='Set cart mass and launch to see if it changes the speed.';
+};
+
+/* ══════════════════════════════════════════════════
+   MAIN LOOP
+══════════════════════════════════════════════════ */
+var prevT=0;
+(function loop(ts){
+  var dt=prevT?Math.min(0.05,(ts-prevT)/1000):0.016;prevT=ts;
+  if(S1.run)S1.t=Math.min(S1.t+dt*.22,1);
+  if(S2.run)S2.t=Math.min(S2.t+dt*.20,1);
+  if(S3.run)S3.t=Math.min(S3.t+dt*.24,1);
+
+  // Only draw canvases that are visible
+  function vis(id){var cv=document.getElementById(id);if(!cv)return false;var r=cv.getBoundingClientRect();return r.bottom>0&&r.top<window.innerHeight;}
+  if(vis('cv1'))drawSim1();
+  if(vis('cv2'))drawSim2();
+  if(vis('cv3'))drawSim3();
+
+  // Progress bar
+  var mid=window.scrollY+window.innerHeight*.45;
+  var act=0;
+  ['partA','partB','partC','partD'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top+window.scrollY<mid)act=i;
+  });
+  ['ps1','ps2','ps3','ps4'].forEach(function(id,i){
+    var el=document.getElementById(id);if(!el)return;
+    el.className='ps'+(i<act?' done':i===act?' active':'');
+  });
+  var pl=document.getElementById('psLbl');
+  if(pl)pl.textContent=['Part A · Warm-Up','Part B · Drop & Speed','Part C · Friction','Part D · Mass'][act]||'';
+
+  requestAnimationFrame(loop);
+})(0);
+
+// Hints
+window.hnt=function(btn){
+  var b=btn.nextElementSibling;
+  b.classList.toggle('show');
+  btn.textContent=b.classList.contains('show')?'💡 Hide hint':'💡 Need a hint?';
+};
+
+})();
+</script>
+</body>
+</html>
