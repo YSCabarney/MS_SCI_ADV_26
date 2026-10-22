@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salty Spuds Virtual Lab</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#f4f8f0;--surface:#fff;--surface-2:#edf2e6;--ink:#18200f;--ink-soft:#3a4828;
+  --muted:#7a8a62;--line:#d4e0c4;--accent:#c83a18;--accent-soft:#fdeee8;
+  --teal:#14785a;--teal-soft:#d0ede3;--gold:#a87010;--gold-soft:#fceec8;
+  --water:#2060b0;--water-soft:#d8e8f8;--potato:#c0982a;--potato-dk:#7a6010;
+  --purple:#5a2ea0;--shadow:0 2px 10px rgba(20,30,10,.09),0 1px 2px rgba(20,30,10,.06);
+  --r:14px;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e160a;--surface:#161e0e;--surface-2:#1c2612;--ink:#e2f0d0;--ink-soft:#aac088;
+  --muted:#6a8050;--line:#263418;--accent:#f06040;--accent-soft:#3a1208;
+  --teal:#40d0a0;--teal-soft:#082c1e;--gold:#e0b030;--gold-soft:#281e04;
+  --water:#60a0f0;--water-soft:#08182e;--potato:#d0a840;--potato-dk:#906020;
+  --shadow:0 2px 10px rgba(0,0,0,.5),0 1px 2px rgba(0,0,0,.3);
+}}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Work Sans',system-ui,sans-serif;padding:18px 14px 60px;}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:26px;}
+h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;text-wrap:balance;}
+p{line-height:1.68;color:var(--ink-soft);}
+ul,ol{padding-left:22px;color:var(--ink-soft);line-height:1.8;font-size:15px;}
+li+li{margin-top:5px;}
+b,strong{color:var(--ink);}
+
+/* MASTHEAD */
+.mast{background:linear-gradient(135deg,#141e0a 0%,#263a14 55%,#183020 100%);border-radius:22px;padding:28px 28px 22px;color:#e8f4d8;box-shadow:0 6px 28px rgba(20,30,10,.35);position:relative;overflow:hidden;}
+.mast::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,rgba(100,180,80,.12) 0%,transparent 60%);pointer-events:none;}
+.mast-bg{position:absolute;right:16px;bottom:10px;font-size:88px;opacity:.1;pointer-events:none;line-height:1;}
+.mast-tag{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:rgba(255,255,255,.13);padding:5px 12px;border-radius:999px;margin-bottom:13px;}
+.mast h1{font-size:clamp(26px,5.5vw,40px);color:#fff;font-weight:700;line-height:1.08;margin-bottom:10px;}
+.mast-sub{color:#b8d898;font-size:15px;line-height:1.65;max-width:560px;}
+.meta-row{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap;}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:6px 11px;color:#cce8a8;}
+
+/* STICKY BAR */
+.sbar{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:11px 16px;box-shadow:var(--shadow);position:sticky;top:4px;z-index:30;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;}
+.sbar-left{display:flex;flex-direction:column;gap:2px;}
+.sbar-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);}
+.sbar-time{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:var(--accent);line-height:1.1;}
+.sbar-time.go{color:var(--teal);}
+.sbar-btns{display:flex;gap:8px;}
+.btn{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;border:none;border-radius:9px;padding:8px 14px;cursor:pointer;transition:opacity .15s;}
+.btn:hover{opacity:.83;}
+.btn-go{background:var(--teal);color:#fff;}
+.btn-soft{background:var(--surface-2);color:var(--ink-soft);}
+.btn-drop{background:var(--teal);color:#fff;font-size:12px;padding:7px 13px;}
+.btn-drop:disabled{background:var(--muted);cursor:default;opacity:.7;}
+.prog-row{grid-column:1/-1;display:flex;gap:5px;align-items:center;}
+.ps{flex:1;height:6px;border-radius:999px;background:var(--surface-2);transition:background .5s;}
+.ps.done{background:var(--teal);}
+.ps.active{background:var(--accent);}
+.ps-lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;margin-left:4px;}
+
+/* LAYOUT */
+section{display:flex;flex-direction:column;gap:14px;}
+.sec-head{border-bottom:2px solid var(--line);padding-bottom:10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.sec-head h2{font-size:21px;}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.13em;font-weight:600;}
+.kicker.t{color:var(--teal);}
+.kicker.g{color:var(--gold);}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:17px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;}
+.card h3{font-size:18px;}
+.callout{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--r);padding:13px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;}
+.callout.t{border-left-color:var(--teal);}
+.callout.g{border-left-color:var(--gold);}
+.callout p,.callout li{font-size:14.5px;}
+.doc-box{background:var(--gold-soft);border:1.5px solid var(--gold);border-radius:var(--r);padding:12px 17px;display:flex;align-items:center;gap:12px;}
+.doc-box p{font-size:14.5px;}
+
+/* STEPS */
+.steps{counter-reset:st;list-style:none;display:flex;flex-direction:column;gap:8px;padding:0;}
+.steps li{counter-increment:st;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 14px 11px 50px;position:relative;font-size:14.5px;color:var(--ink-soft);box-shadow:var(--shadow);}
+.steps li::before{content:counter(st);position:absolute;left:12px;top:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink-soft);}
+.leg{display:inline-flex;align-items:center;gap:7px;}
+.ldot{width:13px;height:13px;border-radius:50%;flex-shrink:0;}
+
+/* CUP LAB */
+.cup-lab{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.cup-lab-hd{background:var(--surface-2);border-bottom:1px solid var(--line);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.cup-lab-hd h3{font-size:18px;}
+.cup-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.cup-col{display:flex;flex-direction:column;align-items:center;padding:14px 10px;gap:9px;border-right:1px solid var(--line);}
+.cup-col:last-child{border-right:none;}
+.cup-lbl{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;text-align:center;}
+.cup-cv{display:block;width:100%;max-width:164px;}
+.cup-ro{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-align:center;min-height:34px;line-height:1.45;}
+.cup-ro b{color:var(--ink);}
+@media(max-width:480px){.cup-grid{grid-template-columns:1fr;}.cup-col{border-right:none;border-bottom:1px solid var(--line);}.cup-col:last-child{border-bottom:none;}}
+
+/* DATA TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--shadow);}
+table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface);}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;color:var(--ink-soft);}
+th{background:var(--surface-2);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;}
+.di{background:transparent;border:none;border-bottom:2px solid var(--line);width:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);padding:3px 2px;outline:none;transition:border-color .2s;}
+.di:focus{border-color:var(--teal);}
+.di.ok{border-color:var(--teal);color:var(--teal);}
+
+/* MICROSCOPE */
+.scope-wrap{background:#0a0e0a;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.scope-hd{background:#141a12;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid #222;}
+.scope-title{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6a9;text-transform:uppercase;letter-spacing:.1em;}
+.scope-btns{display:flex;gap:7px;flex-wrap:wrap;}
+.sc-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;border:1.5px solid #333;background:#1e241e;color:#8a9;border-radius:8px;padding:5px 11px;cursor:pointer;transition:all .18s;}
+.sc-btn:hover{background:#2a342a;color:#aba;}
+.sc-btn.on{background:#1a3a28;border-color:#40a070;color:#60d090;}
+.time-row{background:#111814;border-bottom:1px solid #1e241e;padding:8px 14px;display:flex;gap:7px;align-items:center;}
+.t-lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#4a6a4a;text-transform:uppercase;letter-spacing:.1em;}
+.t-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;border:1.5px solid #2a342a;background:#141a12;color:#5a7a5a;border-radius:8px;padding:5px 11px;cursor:pointer;transition:all .2s;}
+.t-btn.on{background:#162e1e;border-color:#40a070;color:#60d090;}
+.scope-cv{display:block;width:100%;aspect-ratio:16/9;}
+.scope-ro{background:#0e140e;border-top:1px solid #1a201a;padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6a9;min-height:36px;line-height:1.5;}
+.scope-ro b{color:#acd;}
+
+/* CELL ANIMATION */
+.cell-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.cell-hd{background:var(--surface-2);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.cell-hd h3{font-size:17px;}
+.ztabs{display:flex;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex-wrap:wrap;}
+.zt{flex:1;padding:8px 10px;font-family:'Work Sans',sans-serif;font-size:13px;font-weight:600;background:var(--surface);border:none;border-right:1px solid var(--line);cursor:pointer;color:var(--muted);transition:all .2s;min-width:90px;text-align:center;}
+.zt:last-child{border-right:none;}
+.zt.on{background:var(--teal);color:#fff;}
+.cell-desc{padding:12px 18px;background:var(--surface-2);border-bottom:1px solid var(--line);font-size:14px;color:var(--ink-soft);line-height:1.6;}
+.cell-desc b{color:var(--ink);}
+.cell-cv{display:block;width:100%;aspect-ratio:16/9;}
+.cell-ro{padding:10px 16px;background:var(--surface-2);border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);min-height:38px;line-height:1.55;}
+.cell-ro b{color:var(--ink);}
+.badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px;text-transform:uppercase;letter-spacing:.05em;vertical-align:middle;}
+.badge.p{background:var(--teal-soft);color:var(--teal);border:1px solid var(--teal);}
+.badge.a{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);}
+
+/* Q BLOCKS */
+.qb{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.qb-hd{background:linear-gradient(90deg,#141e0a 0%,#263414 100%);padding:10px 18px;display:flex;align-items:center;gap:10px;}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:11px;background:rgba(255,255,255,.18);padding:3px 8px;border-radius:999px;color:#fff;font-weight:600;}
+.qb-hd h4{font-family:'Fraunces',serif;font-size:16px;color:#e0f0c8;}
+.qb-body{padding:14px 18px;display:flex;flex-direction:column;gap:10px;}
+.qb-body p,.qb-body li{font-size:14.5px;}
+.hint-btn{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--teal);background:none;border:1px solid var(--teal);border-radius:8px;padding:5px 10px;cursor:pointer;width:fit-content;}
+.hint-box{display:none;background:var(--teal-soft);border-radius:8px;padding:10px 14px;font-size:13.5px;color:var(--ink-soft);border-left:3px solid var(--teal);}
+.hint-box.show{display:block;}
+.doc-ref{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--gold-soft);border:1px solid var(--gold);border-radius:8px;padding:7px 12px;color:var(--ink-soft);}
+
+/* CHECKPOINT */
+.ck{background:linear-gradient(135deg,var(--teal-soft),var(--gold-soft));border:1.5px solid var(--teal);border-radius:var(--r);padding:15px 20px;display:flex;align-items:center;gap:14px;}
+.ck-icon{font-size:28px;flex-shrink:0;}
+.ck-text h4{font-size:16px;margin-bottom:4px;}
+.ck-text p{font-size:14px;}
+details{background:var(--surface-2);border-radius:10px;padding:10px 14px;border:1px solid var(--line);}
+details summary{cursor:pointer;font-weight:600;color:var(--ink);font-size:14.5px;user-select:none;}
+details p,details ul{margin-top:8px;font-size:14px;color:var(--ink-soft);}
+.footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;border-top:1px solid var(--line);}
+.k-t{color:var(--teal)!important;}.k-a{color:var(--accent)!important;}.k-g{color:var(--gold)!important;}.k-w{color:var(--water)!important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- MASTHEAD -->
+<header class="mast">
+  <div class="mast-bg">🥔🥒</div>
+  <div class="mast-tag">🥔 Virtual Lab · Osmosis &amp; Cell Transport · 7th Grade Life Science</div>
+  <h1>Salty Spuds &amp;<br>Sweaty Cucumbers</h1>
+  <p class="mast-sub">Can salt pull water <em>out</em> of living plant cells? You'll run the same experiment your class would do at a real lab bench — three cups, a potato strip in each, and a microscope view showing exactly what's happening inside the cells while you wait.</p>
+  <div class="meta-row">
+    <span class="chip">⏱ ~55 min · 2 class sessions</span>
+    <span class="chip">🥔 3 animated cups</span>
+    <span class="chip">🔬 Live cell microscope</span>
+    <span class="chip">📋 Keep your Answer Doc open in another tab</span>
+  </div>
+</header>
+
+<!-- STICKY SOAK TIMER -->
+<div class="sbar">
+  <div class="sbar-left">
+    <div class="sbar-label" id="soakLbl">⏱ SOAK TIMER — start this when strips go in (Part A, Step 4)</div>
+    <div class="sbar-time" id="soakClock">25:00</div>
+  </div>
+  <div class="sbar-btns">
+    <button class="btn btn-go" id="soakStart">▶ Start</button>
+    <button class="btn btn-soft" id="soakReset">↺ Reset</button>
+  </div>
+  <div class="prog-row">
+    <div class="ps active" id="ps1"></div>
+    <div class="ps" id="ps2"></div>
+    <div class="ps" id="ps3"></div>
+    <div class="ps" id="ps4"></div>
+    <span class="ps-lbl" id="psLbl">Part A · Setup</span>
+  </div>
+</div>
+
+<!-- ANSWER DOC REMINDER -->
+<div class="doc-box">
+  <span style="font-size:28px">📋</span>
+  <p><b>Open your Answer Doc in another browser tab right now.</b> You'll answer every question there — use this page for the animations, steps, and hints.</p>
+</div>
+
+<!-- ═══════════════ PART A ═══════════════ -->
+<section id="partA">
+  <div class="sec-head">
+    <span class="kicker">Session 1 · Part A</span>
+    <h2>Salty Spuds — Setting Up the Experiment</h2>
+  </div>
+
+  <!-- VB CONNECTION -->
+  <div class="callout t" style="background:var(--teal-soft);">
+    <p>🏐 <b>Remember the volleyball gym?</b> The net was like a cell membrane. The volleyballs were molecules. When you spread them evenly on your own (no instructions) — that was <b class="k-t">diffusion</b>. When a coach told you to push them all to one crowded side — that was <b class="k-a">active transport</b> (and exhausting!). Today's experiment shows you the exact same thing, just inside a potato cell.</p>
+  </div>
+
+  <div class="card">
+    <h3>🧪 What we're testing</h3>
+    <p><b>Testable question:</b> Does the amount of salt in the water change how much a potato strip's length changes after soaking?</p>
+    <p style="margin-top:4px;"><b>Your hypothesis:</b> "If I soak a potato strip in water with <b>more salt</b>, then its length will _______, because water will move _______ the potato cells by osmosis."</p>
+    <button class="hint-btn" onclick="hnt(this)">💡 Hint — which way does water move?</button>
+    <div class="hint-box">Think of it like this: water always moves toward the saltier side, trying to "balance things out." A potato cell is slightly salty inside. If the water outside is way saltier, which direction will water go — IN to the cell, or OUT of the cell?</div>
+    <div class="doc-ref">📋 Answer Doc → Q1: Write your full hypothesis before you start</div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Setup — What to do</h3>
+    <ol class="steps">
+      <li>Look at the <b>three cups below</b>. Cup 1 = plain tap water · Cup 2 = 1 tsp salt · Cup 3 = 2 tablespoons salt. Salt is already dissolved — the more salt, the cloudier the tint.</li>
+      <li>In your Answer Doc, <b>record starting length = 60 mm</b> and <b>starting floppy score = 1 (Stiff)</b> for all three strips.</li>
+      <li>Click <b>"Drop strip in"</b> for each cup. Watch the strip fall into the water and the bubbles appear.</li>
+      <li>Once all 3 strips are in, <b>click ▶ Start</b> on the soak timer above. The cups will animate in real time.</li>
+      <li><b>While the strips soak</b>, scroll down to Part B — the microscope view shows you what's happening inside the cells right now.</li>
+      <li>When the timer hits 0:00, scroll back here and <b>record your final results</b> in the data table.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>🔍 What the colors mean</h3>
+    <div class="legend" style="margin-top:4px;">
+      <span class="leg"><span class="ldot" style="background:#4090e0;"></span> Water molecule (H₂O)</span>
+      <span class="leg"><span class="ldot" style="background:#c83a18;border-radius:3px;transform:rotate(45deg) scale(.85);"></span> Salt (NaCl) — too large to enter potato cells</span>
+      <span class="leg"><span class="ldot" style="background:#c0982a;border-radius:2px;"></span> Potato cell — contains cytoplasm &amp; vacuole</span>
+    </div>
+  </div>
+
+  <!-- THE THREE CUPS -->
+  <div class="cup-lab">
+    <div class="cup-lab-hd">
+      <h3>🥤 Your Three Cups</h3>
+      <span id="soakStatus" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);">Strips not yet soaking</span>
+    </div>
+    <div class="cup-grid">
+      <div class="cup-col">
+        <span class="cup-lbl" style="color:var(--water);">Cup 1<br>Plain Tap Water</span>
+        <canvas class="cup-cv" id="cv1" width="164" height="240"></canvas>
+        <div class="cup-ro" id="ro1">Click button to start</div>
+        <button class="btn btn-drop" id="db1" onclick="drop(0)">Drop strip in</button>
+      </div>
+      <div class="cup-col">
+        <span class="cup-lbl" style="color:var(--gold);">Cup 2<br>1 tsp Salt</span>
+        <canvas class="cup-cv" id="cv2" width="164" height="240"></canvas>
+        <div class="cup-ro" id="ro2">Click button to start</div>
+        <button class="btn btn-drop" id="db2" onclick="drop(1)">Drop strip in</button>
+      </div>
+      <div class="cup-col">
+        <span class="cup-lbl" style="color:var(--accent);">Cup 3<br>2 Tbsp Salt</span>
+        <canvas class="cup-cv" id="cv3" width="164" height="240"></canvas>
+        <div class="cup-ro" id="ro3">Click button to start</div>
+        <button class="btn btn-drop" id="db3" onclick="drop(2)">Drop strip in</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA TABLE -->
+  <div class="card">
+    <h3>📊 Your Data Table</h3>
+    <p style="font-size:14px;">Record your results here AND in your Answer Doc. The simulator will show you final measurements when the timer finishes — but YOU write the numbers down.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Cup</th><th>Salt</th><th>Start length</th><th>End length</th><th>Change (+ or −)</th><th>Floppy: start → end</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>None</td><td><input class="di" value="60 mm" readonly></td><td><input class="di" id="e1" placeholder="—"></td><td><input class="di" id="c1" placeholder="—"></td><td><input class="di" id="f1" placeholder="1 → ?"></td></tr>
+          <tr><td>2</td><td>1 tsp</td><td><input class="di" value="60 mm" readonly></td><td><input class="di" id="e2" placeholder="—"></td><td><input class="di" id="c2" placeholder="—"></td><td><input class="di" id="f2" placeholder="1 → ?"></td></tr>
+          <tr><td>3</td><td>2 Tbsp</td><td><input class="di" value="60 mm" readonly></td><td><input class="di" id="e3" placeholder="—"></td><td><input class="di" id="c3" placeholder="—"></td><td><input class="di" id="f3" placeholder="1 → ?"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <details>
+      <summary>💡 What to expect from the results</summary>
+      <p>Changes are usually small — 1 to 5 mm. That's real science, not a mistake! The floppy score often shows the effect more clearly. A strip that <b>lost water</b> will feel limp and droopy. A strip that <b>gained water</b> will feel crisp and stiff.</p>
+    </details>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 1</span><h4>Hypothesis &amp; Variables</h4></div>
+    <div class="qb-body">
+      <p>Answer these in your doc <b>before</b> dropping your strips in:</p>
+      <ol>
+        <li><b>Hypothesis:</b> Fill in the sentence frame above completely.</li>
+        <li><b>Independent variable</b> — what one thing are we changing on purpose between cups?</li>
+        <li><b>Dependent variable</b> — what are we measuring to see if anything changed?</li>
+        <li><b>3 controlled variables</b> — list 3 things we kept exactly the same to make this a fair test. (Think: strip size? Amount of water? Temperature?)</li>
+      </ol>
+      <div class="doc-ref">📋 Answer Doc → Q1a through Q1d</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PART B ═══════════════ -->
+<section id="partB">
+  <div class="sec-head">
+    <span class="kicker t">Session 1 · Part B — Do this while the strips soak!</span>
+    <h2>Sweaty Cucumber — Microscope View</h2>
+  </div>
+
+  <div class="callout t">
+    <p>🔬 <b>This is a simulated microscope view of a real cucumber slice</b> — split down the middle. The <b>left side</b> has no salt (your control). The <b>right side</b> has salt sprinkled on it. Watch what happens to the cells over 6 minutes. This is the same osmosis happening inside your potato strips right now.</p>
+  </div>
+
+  <div class="card">
+    <h3>How to use this microscope</h3>
+    <ol class="steps">
+      <li>Click <b>"Add Salt to Right Side"</b> to start the experiment. You'll see the right side change.</li>
+      <li>Click <b>0 min → 3 min → 6 min</b> to fast-forward and watch what happens to the cells over time.</li>
+      <li>Click <b>"Remove Salt"</b> to see what the cells look like without any osmosis happening — that's what the left (plain) side always looks like.</li>
+      <li>Use the <b>Zoom In</b> button to look at individual cells up close.</li>
+    </ol>
+  </div>
+
+  <!-- MICROSCOPE -->
+  <div class="scope-wrap">
+    <div class="scope-hd">
+      <span class="scope-title">🔬 Virtual Microscope · Cucumber Slice · 100×</span>
+      <div class="scope-btns">
+        <button class="sc-btn on" id="btnSalt" onclick="setSalt(true)">🧂 Add Salt (right side)</button>
+        <button class="sc-btn" id="btnPlain" onclick="setSalt(false)">💧 Remove Salt</button>
+        <button class="sc-btn" id="btnZoom" onclick="toggleZoom()">🔍 Zoom In</button>
+      </div>
+    </div>
+    <div class="time-row">
+      <span class="t-lbl">Time elapsed →</span>
+      <button class="t-btn on" id="t0" onclick="setT(0)">0 min</button>
+      <button class="t-btn" id="t3" onclick="setT(3)">3 min</button>
+      <button class="t-btn" id="t6" onclick="setT(6)">6 min</button>
+    </div>
+    <canvas class="scope-cv" id="scopeCv"></canvas>
+    <div class="scope-ro" id="scopeRo">👆 Click "Add Salt" and watch what happens to the right side cells. Then toggle between time points.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 2</span><h4>Microscope Observations</h4></div>
+    <div class="qb-body">
+      <p>Use the microscope simulator — click through the time points and try both salt and no-salt. Then answer:</p>
+      <ol>
+        <li>Describe what you see on the <b>salted side</b> at 3 min and at 6 min. What's happening to the cells?</li>
+        <li>What does the <b>plain side</b> look like throughout? Why do we need it — what's its job in this experiment?</li>
+        <li>Is water moving <b>into</b> or <b>out of</b> the cells on the salted side? How can you tell?</li>
+        <li>How is this the exact same process happening inside your potato strips right now?</li>
+      </ol>
+      <button class="hint-btn" onclick="hnt(this)">💡 Hint — what to look for</button>
+      <div class="hint-box">Watch the <b>size of the vacuole</b> (the big water-filled bubble inside each cell). When a cell loses water, the vacuole shrinks and the cell membrane pulls away from the cell wall — that's called <b>plasmolysis</b>. When a cell gains water, the vacuole swells up. Can you see this happening on the salted side?</div>
+      <div class="doc-ref">📋 Answer Doc → Q2a through Q2d</div>
+    </div>
+  </div>
+
+  <div class="callout g">
+    <p>🌍 <b>Real world connections:</b> This is why cooks salt cucumbers before cooking (pulls water out to keep them crispy). It's why a slug shrivels when salted. It's why you <em>can't</em> drink seawater — it would pull water OUT of your cells instead of hydrating you. It's also why athletes need electrolytes in their sports drinks, not just plain water.</p>
+  </div>
+
+  <div class="ck">
+    <span class="ck-icon">✅</span>
+    <div class="ck-text">
+      <h4>Session 1 Stopping Point</h4>
+      <p>Has the soak timer finished? Record your final strip measurements in the data table. Make sure Q1 and Q2 are answered in your doc before next class.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PART C ═══════════════ -->
+<section id="partC">
+  <div class="sec-head">
+    <span class="kicker g">Session 2 · Part C</span>
+    <h2>Zoom In — What's Happening at the Cell Membrane</h2>
+  </div>
+
+  <div class="card">
+    <h3>Now we zoom all the way in 🔬</h3>
+    <p>You've seen the potato strips change size. You've seen cucumber cells shrink. But <em>why</em> does this happen? Below, you'll watch the actual molecules moving across the cell membrane — just like they did in your potato experiment. Pick a transport type and watch the animation. Try all four!</p>
+  </div>
+
+  <!-- CELL ANIMATION -->
+  <div class="cell-wrap">
+    <div class="cell-hd">
+      <h3>Cell Membrane — Live View</h3>
+      <div class="ztabs">
+        <button class="zt on" onclick="setTab(this,'osm')">💧 Osmosis</button>
+        <button class="zt" onclick="setTab(this,'dif')">🌬️ Diffusion</button>
+        <button class="zt" onclick="setTab(this,'act')">⚡ Active Transport</button>
+        <button class="zt" onclick="setTab(this,'end')">🫧 Endo &amp; Exo</button>
+      </div>
+    </div>
+    <div class="cell-desc" id="cellDesc">
+      <b>Osmosis</b> — Water molecules move across the membrane from the plain-water side (left) toward the salty side (right). The membrane has tiny water-channel proteins called <b>aquaporins</b>. Watch the water level rise on the right as water crosses. Salt is too big to fit through — it stays put. This is exactly what happened in Cup 3. <span class="badge p">Passive — no energy needed</span>
+    </div>
+    <canvas class="cell-cv" id="cellCv"></canvas>
+    <div class="cell-ro" id="cellRo">Loading…</div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 3</span><h4>Connect the Lab to the Cell</h4></div>
+    <div class="qb-body">
+      <p>Watch all 4 animation tabs. Then answer in your doc:</p>
+      <ol>
+        <li>Which transport type caused the potato strips to change size? How do you know — did it use energy?</li>
+        <li>In Cup 3 (lots of salt), water moved OUT of the potato cells. Was that going from HIGH → LOW or LOW → HIGH concentration? Was energy needed?</li>
+        <li>Active Transport moves things from LOW → HIGH concentration (uphill). Why does that require energy when osmosis doesn't? Use the words <b>gradient</b> and <b>concentration</b>.</li>
+        <li>The volleyball game modeled one of these transport types. Which one, and how? (Think about Round 1 vs Round 2.)</li>
+      </ol>
+      <button class="hint-btn" onclick="hnt(this)">💡 Volleyball hint</button>
+      <div class="hint-box">Round 1: you spread balls evenly on your own — nobody forced you, they just naturally spread out (like diffusion/osmosis). Round 2: coach said push all balls to the already-crowded side. That's working against the gradient — that's active transport, and it cost YOU energy (just like it costs the cell ATP).</div>
+      <div class="doc-ref">📋 Answer Doc → Q3a through Q3d</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PART D ═══════════════ -->
+<section id="partD">
+  <div class="sec-head">
+    <span class="kicker">Session 2 · Part D</span>
+    <h2>Analysis &amp; Conclusion</h2>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 4</span><h4>Data Analysis — What Did Your Results Show?</h4></div>
+    <div class="qb-body">
+      <ol>
+        <li>Which cup's strip changed the most? <b>Use numbers from your data table</b> as evidence.</li>
+        <li>In Cup 3 — did the strip gain or lose water? How do you know from both the length AND the floppy score?</li>
+        <li>Cup 1 (plain water) — did the strip get longer, shorter, or stay the same? What does this tell you about how salty a potato cell is compared to plain tap water?</li>
+        <li>Was your hypothesis supported? Write a full sentence saying yes or no and why.</li>
+        <li>Name one source of error that could affect results <em>in a real potato lab</em> that doesn't exist in this virtual version.</li>
+      </ol>
+      <div class="doc-ref">📋 Answer Doc → Q4a through Q4e</div>
+    </div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 5</span><h4>Conclusion Paragraph</h4></div>
+    <div class="qb-body">
+      <p>Write one well-developed paragraph that includes all of these:</p>
+      <ul>
+        <li>Restate the testable question in your own words</li>
+        <li>What your data showed — use actual numbers</li>
+        <li>Whether your hypothesis was correct</li>
+        <li>One real-world example of osmosis that relates to this lab</li>
+      </ul>
+      <div class="doc-ref">📋 Answer Doc → Q5 — Conclusion</div>
+    </div>
+  </div>
+
+  <div class="qb">
+    <div class="qb-hd"><span class="q-num">Q 6 — Bonus 🏐</span><h4>Athlete Application</h4></div>
+    <div class="qb-body">
+      <p>You're playing a long volleyball match in the heat. You sweat a lot and only drink plain water to rehydrate.</p>
+      <ol>
+        <li>As you sweat, what happens to the <b>salt concentration</b> in your blood?</li>
+        <li>If you drink only plain water, the concentration outside your muscle cells stays high while the inside becomes more dilute. Which way would water move by osmosis — into or out of your cells? What might happen to them?</li>
+        <li>Why do sports drinks contain electrolytes (salts)? Connect your answer to what you saw in the cup experiment.</li>
+      </ol>
+      <div class="doc-ref">📋 Answer Doc → Bonus Q6a through Q6c</div>
+    </div>
+  </div>
+
+  <div class="ck">
+    <span class="ck-icon">🏆</span>
+    <div class="ck-text">
+      <h4>Lab Complete!</h4>
+      <p>Make sure all questions are answered and your data table is filled in. Submit your Answer Doc when you're done. Great work — you just ran the same experiment scientists use to study how every living cell manages water.</p>
+    </div>
+  </div>
+</section>
+
+<div class="footer">YSC Academy · 7th Grade Life Science · Salty Spuds Virtual Lab</div>
+
+</div>
+<script>
+(function(){
+'use strict';
+var TAU=Math.PI*2;
+function rnd(a,b){return a+Math.random()*(b-a);}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function ease(t){t=clamp(t,0,1);return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+function dot(ctx,x,y,r){ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();}
+
+/* ── COLORS ── */
+var C={};
+function rc(){
+  var cs=getComputedStyle(document.documentElement);
+  function g(v){return cs.getPropertyValue(v).trim();}
+  C.bg=g('--bg');C.surf=g('--surface');C.surf2=g('--surface-2');
+  C.ink=g('--ink');C.soft=g('--ink-soft');C.muted=g('--muted');C.line=g('--line');
+  C.acc=g('--accent');C.teal=g('--teal');C.gold=g('--gold');
+  C.water=g('--water');C.wsoft=g('--water-soft');
+  C.potato=g('--potato');C.potatoDk=g('--potato-dk');
+  C.purple=g('--purple');
+}
+rc();
+var mq=window.matchMedia('(prefers-color-scheme:dark)');
+if(mq.addEventListener)mq.addEventListener('change',function(){rc();});
+
+/* ══════════ SOAK TIMER ══════════ */
+var SOAK=25*60, sec=SOAK, running=false, iv=null;
+var sClock=document.getElementById('soakClock');
+var sLbl=document.getElementById('soakLbl');
+var sStat=document.getElementById('soakStatus');
+
+function fmt(s){var m=Math.floor(s/60),ss=s%60;return m+':'+(ss<10?'0':'')+ss;}
+function upClock(){sClock.textContent=fmt(sec);sClock.className='sbar-time'+(running?' go':'');}
+
+document.getElementById('soakStart').onclick=function(){
+  if(running){clearInterval(iv);running=false;this.textContent='▶ Resume';}
+  else{running=true;this.textContent='❚❚ Pause';
+    iv=setInterval(function(){if(sec>0){sec--;upClock();}else{clearInterval(iv);running=false;document.getElementById('soakStart').textContent='Done!';sLbl.textContent='⏰ Soak complete! Scroll up and record your final results.';sStat.textContent='✓ Soaking done!';fillTable();}},1000);}
+};
+document.getElementById('soakReset').onclick=function(){clearInterval(iv);running=false;sec=SOAK;upClock();document.getElementById('soakStart').textContent='▶ Start';sLbl.textContent='⏱ SOAK TIMER — start this when strips go in (Part A, Step 4)';};
+
+/* ══════════ CUP ANIMATION ══════════ */
+var DEFS=[
+  // saltLevel 0-1, waterTint, finalLen, floppyEnd, saltPct
+  {saltLevel:0,  waterR:40, waterG:120, waterB:210, finalLen:63, floppy:'Still stiff (1)', saltPct:0},
+  {saltLevel:0.38,waterR:100,waterG:140,waterB:190, finalLen:58, floppy:'Slight bend (2)', saltPct:0.38},
+  {saltLevel:0.85,waterR:160,waterG:120,waterB:130, finalLen:52, floppy:'Droopy like a noodle (3)', saltPct:0.85}
+];
+var dropped=[false,false,false];
+var startMs=null;
+var TOTAL_MS=25*60*1000;
+
+// Per-cup particle state
+var cupState=[null,null,null];
+
+function initCupState(i){
+  var d=DEFS[i], W=164, H=240;
+  var waterH=155;
+  var ps=[];
+  // water molecules
+  for(var n=0;n<28;n++){ps.push({kind:'w',x:rnd(14,W-14),y:rnd(H-waterH+8,H-20),vx:rnd(-.5,.5),vy:rnd(-.4,.4)});}
+  // salt particles
+  var ns=Math.round(d.saltPct*18);
+  for(var m=0;m<ns;m++){ps.push({kind:'s',x:rnd(18,W-18),y:rnd(H-waterH+10,H-22),vx:rnd(-.4,.4),vy:rnd(-.3,.3)});}
+  // bubbles (initial drop burst)
+  var bs=[];
+  for(var b=0;b<10;b++){bs.push({x:rnd(W*.25,W*.75),y:H-waterH+4,vx:rnd(-.4,.4),vy:rnd(-1.2,-.4),r:rnd(2,5),a:1});}
+  cupState[i]={ps:ps,bs:bs,W:W,H:H,waterH:waterH,stripY:H-waterH-10,stripDropping:true,dropT:0};
+}
+
+function stepCupParticles(st,f){
+  var W=st.W,H=st.H,waterH=st.waterH;
+  st.ps.forEach(function(p){
+    p.vx+=(rnd(-.5,.5))*f*.3; p.vy+=(rnd(-.5,.5))*f*.3;
+    var spd=Math.hypot(p.vx,p.vy); if(spd>0.9){p.vx*=.9/spd;p.vy*=.9/spd;}
+    p.x+=p.vx*f*.8; p.y+=p.vy*f*.8;
+    var minY=H-waterH+4, maxY=H-6, minX=8,maxX=W-8;
+    if(p.x<minX){p.x=minX;p.vx*=-1;}if(p.x>maxX){p.x=maxX;p.vx*=-1;}
+    if(p.y<minY){p.y=minY;p.vy*=-1;}if(p.y>maxY){p.y=maxY;p.vy*=-1;}
+  });
+  st.bs=st.bs.filter(function(b){return b.a>0;});
+  st.bs.forEach(function(b){b.x+=b.vx*f;b.y+=b.vy*f;b.vy+=0.04*f;b.a-=0.04*f;b.r*=0.98;});
+  if(st.stripDropping){
+    st.dropT+=f*.06; var k=ease(st.dropT);
+    st.stripY=lerp(-30, H-waterH-6, k);
+    if(k>=1){st.stripDropping=false;}
+  }
+}
+
+function drawCup(i){
+  var cv=document.getElementById('cv'+(i+1));
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  var d=DEFS[i], dr=dropped[i], st=cupState[i];
+
+  /* ── GLASS CUP BODY ── */
+  var gx=8,gy=28,gw=W-16,gh=H-50;
+  // glass fill (empty look)
+  var glassGrad=ctx.createLinearGradient(gx,0,gx+gw,0);
+  glassGrad.addColorStop(0,'rgba(180,220,255,0.08)');
+  glassGrad.addColorStop(0.15,'rgba(255,255,255,0.18)');
+  glassGrad.addColorStop(0.85,'rgba(255,255,255,0.04)');
+  glassGrad.addColorStop(1,'rgba(180,220,255,0.12)');
+  ctx.fillStyle=glassGrad;
+  ctx.beginPath();ctx.moveTo(gx+4,gy);ctx.lineTo(gx,gy+gh);ctx.lineTo(gx+gw,gy+gh);ctx.lineTo(gx+gw-4,gy);ctx.closePath();ctx.fill();
+
+  var waterH=dr?155:0, waterY=gy+gh-waterH;
+
+  if(dr&&st){
+    /* ── WATER FILL ── */
+    var r=d.waterR,g2=d.waterG,b2=d.waterB;
+    var wGrad=ctx.createLinearGradient(0,waterY,0,gy+gh);
+    wGrad.addColorStop(0,'rgba('+r+','+g2+','+b2+',0.55)');
+    wGrad.addColorStop(1,'rgba('+r+','+g2+','+b2+',0.80)');
+    ctx.fillStyle=wGrad;
+    ctx.beginPath();ctx.moveTo(gx,waterY);ctx.lineTo(gx,gy+gh);ctx.lineTo(gx+gw,gy+gh);ctx.lineTo(gx+gw,waterY);
+    // gentle wave on surface
+    var wx=gx, wex=gx+gw, wy=waterY;
+    ctx.beginPath();ctx.moveTo(wx,wy+2);
+    for(var xx=wx;xx<=wex;xx+=6){ctx.lineTo(xx,wy+Math.sin((xx-wx)*0.4+Date.now()*.002)*1.8);}
+    ctx.lineTo(wex,gy+gh);ctx.lineTo(wx,gy+gh);ctx.closePath();ctx.fill();
+    // water surface sheen
+    ctx.strokeStyle='rgba('+r+','+g2+','+b2+',0.9)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(gx,waterY+2);
+    for(var xx2=gx;xx2<=gx+gw;xx2+=6){ctx.lineTo(xx2,waterY+Math.sin((xx2-gx)*0.4+Date.now()*.002)*1.8);}
+    ctx.stroke();
+
+    /* ── SALT CRYSTALS on bottom/dissolved ── */
+    if(d.saltPct>0){
+      var ns=Math.round(d.saltPct*12);
+      ctx.fillStyle='rgba(255,255,255,0.22)';
+      for(var si=0;si<ns;si++){
+        var sx2=gx+8+(si/(ns-1||1))*(gw-16);
+        var sy2=gy+gh-8;
+        ctx.save();ctx.translate(sx2,sy2);ctx.rotate(si*.7);
+        ctx.beginPath();ctx.rect(-2.5,-2.5,5,5);ctx.fill();ctx.restore();
+      }
+    }
+
+    /* ── MOLECULES (water + salt) ── */
+    stepCupParticles(st,1);
+    st.ps.forEach(function(p){
+      if(p.kind==='w'){
+        ctx.fillStyle='rgba(80,160,240,0.7)';
+        ctx.beginPath();ctx.arc(p.x,p.y,3.5,0,TAU);ctx.fill();
+        // H2O bond lines
+        ctx.strokeStyle='rgba(80,160,240,0.35)';ctx.lineWidth=0.8;
+        ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+4,p.y-3);ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-4,p.y-3);ctx.stroke();
+      } else {
+        // Na+ and Cl- crystals
+        ctx.fillStyle='rgba(220,80,40,0.75)';
+        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);
+        ctx.beginPath();ctx.rect(-4,-4,8,8);ctx.fill();
+        ctx.strokeStyle='rgba(255,120,80,0.5)';ctx.lineWidth=0.8;ctx.stroke();
+        ctx.restore();
+      }
+    });
+
+    /* ── BUBBLES ── */
+    st.bs.forEach(function(b){
+      ctx.globalAlpha=b.a*0.6;
+      ctx.strokeStyle='rgba(180,220,255,0.8)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.stroke();
+      ctx.globalAlpha=1;
+    });
+
+    /* ── POTATO STRIP ── */
+    var t=startMs?clamp((Date.now()-startMs)/TOTAL_MS,0,1):0;
+    var finalLen=d.finalLen, curLen=lerp(60,finalLen,ease(t));
+    var sw=16, sh=Math.round(curLen*1.1);
+    var sx=W/2-sw/2, sy=st.stripDropping?st.stripY:(gy+gh-waterH-sh+4);
+
+    // strip shadow in water
+    if(!st.stripDropping){ctx.fillStyle='rgba(0,0,0,0.08)';ctx.beginPath();ctx.ellipse(W/2,gy+gh-3,sw*.9,4,0,0,TAU);ctx.fill();}
+
+    // potato skin gradient
+    var potatoGrad=ctx.createLinearGradient(sx,sy,sx+sw,sy);
+    potatoGrad.addColorStop(0,C.potatoDk);
+    potatoGrad.addColorStop(0.3,C.potato);
+    potatoGrad.addColorStop(0.7,C.potato);
+    potatoGrad.addColorStop(1,C.potatoDk);
+    ctx.fillStyle=potatoGrad;
+    ctx.beginPath();ctx.roundRect(sx,sy,sw,sh,4);ctx.fill();
+
+    // potato flesh texture (cross-section lines)
+    ctx.strokeStyle='rgba(150,110,20,0.35)';ctx.lineWidth=0.8;
+    for(var ly=sy+6;ly<sy+sh-3;ly+=7){ctx.beginPath();ctx.moveTo(sx+2,ly);ctx.lineTo(sx+sw-2,ly);ctx.stroke();}
+    // starch cells (tiny dots)
+    ctx.fillStyle='rgba(200,170,60,0.3)';
+    for(var lx=sx+3;lx<sx+sw-3;lx+=4){for(var ly2=sy+5;ly2<sy+sh-3;ly2+=5){ctx.beginPath();ctx.arc(lx,ly2,1.2,0,TAU);ctx.fill();}}
+
+    // length indicator
+    if(!st.stripDropping){
+      ctx.strokeStyle=C.teal;ctx.lineWidth=1;ctx.setLineDash([2,2]);
+      ctx.beginPath();ctx.moveTo(sx-12,sy);ctx.lineTo(sx-12,sy+sh);ctx.stroke();
+      ctx.fillStyle=C.teal;ctx.save();ctx.translate(sx-20,sy+sh/2);ctx.rotate(-Math.PI/2);
+      ctx.font='bold 9px IBM Plex Mono,monospace';ctx.textAlign='center';
+      ctx.fillText(Math.round(curLen)+'mm',0,0);ctx.restore();ctx.setLineDash([]);
+    }
+  } else {
+    // empty cup hint
+    ctx.fillStyle=C.muted;ctx.font='13px Work Sans,sans-serif';ctx.textAlign='center';
+    ctx.fillText('Click button',W/2,gy+gh/2-8);ctx.fillText('below to start',W/2,gy+gh/2+10);
+  }
+
+  /* ── GLASS OUTLINE + SHEEN ── */
+  ctx.strokeStyle='rgba(150,200,255,0.45)';ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.moveTo(gx+4,gy);ctx.lineTo(gx,gy+gh);ctx.lineTo(gx+gw,gy+gh);ctx.lineTo(gx+gw-4,gy);ctx.stroke();
+  // left edge highlight
+  ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(gx+7,gy+10);ctx.lineTo(gx+3,gy+gh-10);ctx.stroke();
+  // rim
+  ctx.fillStyle='rgba(180,210,255,0.2)';
+  ctx.beginPath();ctx.ellipse(W/2,gy,gw/2,5,0,0,TAU);ctx.fill();
+  ctx.strokeStyle='rgba(150,200,255,0.5)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.ellipse(W/2,gy,gw/2,5,0,0,TAU);ctx.stroke();
+
+  // cup label bottom
+  ctx.fillStyle=i===0?C.water:i===1?C.gold:C.acc;
+  ctx.font='bold 10.5px IBM Plex Mono,monospace';ctx.textAlign='center';
+  ctx.fillText(i===0?'0 salt':i===1?'1 tsp salt':'2 Tbsp salt',W/2,H-6);
+
+  /* ── READOUT ── */
+  var ro=document.getElementById('ro'+(i+1));
+  if(!dr){ro.innerHTML='Click <b>Drop strip in</b> below';return;}
+  var t2=startMs?clamp((Date.now()-startMs)/TOTAL_MS,0,1):0;
+  var curLen2=Math.round(lerp(60,d.finalLen,ease(t2)));
+  if(t2<0.99){
+    ro.innerHTML='<b>'+curLen2+' mm</b> · '+Math.round(t2*100)+'% through soak';
+  } else {
+    ro.innerHTML='✓ Done! <b>'+d.finalLen+' mm</b><br>Floppy: <b>'+d.floppy+'</b>';
+  }
+}
+
+window.drop=function(i){
+  if(dropped[i])return;
+  dropped[i]=true;
+  var btn=document.getElementById('db'+(i+1));
+  btn.disabled=true;btn.textContent='✓ Soaking…';btn.style.background='var(--muted)';
+  initCupState(i);
+  if(!startMs)startMs=Date.now();
+  if(dropped[0]&&dropped[1]&&dropped[2]) document.getElementById('soakStatus').textContent='All 3 strips soaking ⏱';
+};
+
+function fillTable(){
+  DEFS.forEach(function(d,i){
+    var ef=document.getElementById('e'+(i+1));
+    var cf=document.getElementById('c'+(i+1));
+    var ff=document.getElementById('f'+(i+1));
+    if(ef&&!ef.dataset.f){ef.value=d.finalLen+' mm';ef.classList.add('ok');ef.dataset.f=1;}
+    if(cf&&!cf.dataset.f){var ch=d.finalLen-60;cf.value=(ch>0?'+':'')+ch+' mm';cf.classList.add('ok');cf.dataset.f=1;}
+    if(ff&&!ff.dataset.f){ff.value=d.floppy;ff.classList.add('ok');ff.dataset.f=1;}
+  });
+}
+
+/* ══════════ MICROSCOPE ══════════ */
+var saltOn=true, timeMin=0, zoomIn=false;
+
+window.setSalt=function(v){saltOn=v;document.getElementById('btnSalt').className=v?'sc-btn on':'sc-btn';document.getElementById('btnPlain').className=v?'sc-btn':'sc-btn on';};
+window.setT=function(m){timeMin=m;['t0','t3','t6'].forEach(function(id){document.getElementById(id).className='t-btn';});document.getElementById('t'+m).className='t-btn on';};
+window.toggleZoom=function(){zoomIn=!zoomIn;document.getElementById('btnZoom').className=zoomIn?'sc-btn on':'sc-btn';};
+
+/* ══════════ MICROSCOPE — full rebuild ══════════ */
+var scopeT=0; // animated time for living movement
+
+// Fixed cell layout — 3 plain left, 3 salt right, bigger and well-spaced
+var SCOPE_LAYOUT=[
+  // plain side (left)
+  {fx:0.18,fy:0.28,R:0.115,side:'plain'},
+  {fx:0.32,fy:0.65,R:0.10, side:'plain'},
+  {fx:0.08,fy:0.60,R:0.095,side:'plain'},
+  {fx:0.24,fy:0.12,R:0.085,side:'plain'},
+  // salt side (right)
+  {fx:0.62,fy:0.25,R:0.115,side:'salt'},
+  {fx:0.80,fy:0.60,R:0.10, side:'salt'},
+  {fx:0.54,fy:0.62,R:0.095,side:'salt'},
+  {fx:0.72,fy:0.10,R:0.085,side:'salt'},
+];
+
+function drawScope(){
+  var cv=document.getElementById('scopeCv');
+  if(!cv)return;
+  var W=cv.clientWidth;if(!W)return;
+  var dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(W*dpr);cv.height=Math.round(W*9/16*dpr);
+  var ctx=cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  var Wl=W, Hl=Math.round(W*9/16);
+  scopeT+=0.016;
+
+  // ── BACKGROUND: warm amber/straw microscope field ──
+  // Real brightfield microscopy looks like illuminated amber, not black
+  var bgGrad=ctx.createRadialGradient(Wl/2,Hl/2,0,Wl/2,Hl/2,Hl*.7);
+  bgGrad.addColorStop(0,'#e8d89a');   // bright center — straw yellow
+  bgGrad.addColorStop(0.5,'#c8b870');
+  bgGrad.addColorStop(0.85,'#9a8840');
+  bgGrad.addColorStop(1,'#5a5020');
+  ctx.fillStyle=bgGrad;ctx.fillRect(0,0,Wl,Hl);
+
+  // ── CELL WALL INTERCELLULAR SPACE (background texture) ──
+  ctx.fillStyle='rgba(80,60,20,0.18)';
+  ctx.fillRect(0,0,Wl,Hl);
+
+  // shrink factor from osmosis
+  var shrink=saltOn?clamp(timeMin/6,0,1)*0.32:0;
+  var animPulse=Math.sin(scopeT*1.2)*0.012; // subtle living movement
+
+  SCOPE_LAYOUT.forEach(function(cell){
+    var cx=cell.fx*Wl, cy=cell.fy*Hl;
+    var R=cell.R*Math.min(Wl,Hl);
+    var isSalt=cell.side==='salt';
+    var shr=isSalt?shrink:0;
+
+    // Cell wall R stays fixed
+    var wallR=R;
+    // Cytoplasm shrinks inward as water leaves
+    var cytoR=R*(1-shr*0.55)+animPulse*R*0.5;
+    // Vacuole shrinks dramatically
+    var vacR=cytoR*(isSalt? Math.max(0.08,0.68-shr*0.82) : 0.68+animPulse*0.3);
+
+    ctx.globalAlpha=1;
+
+    // ── INTERCELLULAR SPACE inside wall ──
+    ctx.fillStyle='rgba(120,95,30,0.35)';
+    ctx.beginPath();ctx.arc(cx,cy,wallR,0,TAU);ctx.fill();
+
+    // ── CELL WALL (thick, clearly visible) ──
+    // Outer wall — dark brown/green like real plant cell wall staining
+    ctx.strokeStyle=isSalt?'rgba(80,55,15,0.95)':'rgba(60,90,20,0.95)';
+    ctx.lineWidth=R*0.09;
+    ctx.beginPath();ctx.arc(cx,cy,wallR-R*0.045,0,TAU);ctx.stroke();
+
+    // ── CYTOPLASM FILL ──
+    // Healthy cells: bright green cytoplasm. Plasmolyzed: paler, pulled inward
+    var cytoColor1=isSalt?
+      'rgba(160,195,90,0.85)':   // slightly pale under salt stress
+      'rgba(120,185,60,0.90)';   // healthy bright green
+    var cytoColor2=isSalt?
+      'rgba(100,150,55,0.70)':
+      'rgba(75,145,35,0.75)';
+    var cytoGrad=ctx.createRadialGradient(cx-cytoR*.25,cy-cytoR*.25,0,cx,cy,cytoR);
+    cytoGrad.addColorStop(0,cytoColor1);
+    cytoGrad.addColorStop(1,cytoColor2);
+    ctx.fillStyle=cytoGrad;
+    ctx.beginPath();ctx.arc(cx,cy,cytoR,0,TAU);ctx.fill();
+
+    // ── PLASMOLYSIS GAP — the key observable in this experiment ──
+    if(isSalt&&shr>0.05){
+      // Gap between wall and shrunken cytoplasm — pale yellow space (water pulled out)
+      ctx.fillStyle='rgba(220,200,120,0.7)';
+      ctx.beginPath();
+      ctx.arc(cx,cy,wallR-R*0.045,0,TAU);
+      ctx.arc(cx,cy,cytoR,0,TAU,true);
+      ctx.fill();
+      // Emphasize gap with dotted border on cytoplasm
+      ctx.strokeStyle='rgba(180,140,40,0.6)';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+      ctx.beginPath();ctx.arc(cx,cy,cytoR,0,TAU);ctx.stroke();ctx.setLineDash([]);
+    }
+
+    // ── VACUOLE (large central water sac) ──
+    if(vacR>2){
+      var vacGrad=ctx.createRadialGradient(cx-vacR*.3,cy-vacR*.3,0,cx,cy,vacR);
+      if(isSalt&&shr>0.1){
+        // Depleted vacuole — darker, less water
+        vacGrad.addColorStop(0,'rgba(100,140,200,0.75)');
+        vacGrad.addColorStop(0.6,'rgba(60,90,170,0.6)');
+        vacGrad.addColorStop(1,'rgba(40,60,140,0.45)');
+      } else {
+        // Healthy full vacuole — bright blue, water-filled
+        vacGrad.addColorStop(0,'rgba(180,220,255,0.92)');
+        vacGrad.addColorStop(0.5,'rgba(100,170,240,0.82)');
+        vacGrad.addColorStop(1,'rgba(50,110,210,0.65)');
+      }
+      ctx.fillStyle=vacGrad;
+      ctx.beginPath();ctx.arc(cx,cy,vacR,0,TAU);ctx.fill();
+      // Tonoplast (vacuole membrane)
+      ctx.strokeStyle=isSalt?'rgba(60,90,180,0.55)':'rgba(80,140,230,0.7)';
+      ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.arc(cx,cy,vacR,0,TAU);ctx.stroke();
+      // Water shimmer highlight in vacuole
+      if(vacR>5){
+        ctx.fillStyle='rgba(255,255,255,0.35)';
+        ctx.beginPath();ctx.ellipse(cx-vacR*.3,cy-vacR*.35,vacR*.3,vacR*.14,-0.4,0,TAU);ctx.fill();
+      }
+    }
+
+    // ── NUCLEUS (clearly visible purple oval) ──
+    var nrx=R*.19, nry=R*.15;
+    var nox=R*.18, noy=-R*.15;
+    var nucGrad=ctx.createRadialGradient(cx+nox-nrx*.2,cy+noy-nry*.2,0,cx+nox,cy+noy,Math.max(nrx,nry));
+    nucGrad.addColorStop(0,'rgba(180,80,220,0.92)');
+    nucGrad.addColorStop(1,'rgba(110,30,160,0.75)');
+    ctx.fillStyle=nucGrad;
+    ctx.beginPath();ctx.ellipse(cx+nox,cy+noy,nrx,nry,0.3,0,TAU);ctx.fill();
+    ctx.strokeStyle='rgba(200,100,240,0.7)';ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.ellipse(cx+nox,cy+noy,nrx,nry,0.3,0,TAU);ctx.stroke();
+    // Nucleolus
+    ctx.fillStyle='rgba(240,160,255,0.85)';
+    ctx.beginPath();ctx.arc(cx+nox,cy+noy,nrx*.42,0,TAU);ctx.fill();
+
+    // ── CHLOROPLASTS (bright green lens-shaped) ──
+    var nChl=isSalt&&shr>0.15?2:3;
+    for(var cl=0;cl<nChl;cl++){
+      var cang=cl/3*TAU+1.1+cell.fx*2;
+      var cdist=cytoR*(isSalt?0.45:0.52);
+      var clx=cx+Math.cos(cang)*cdist, cly=cy+Math.sin(cang)*cdist;
+      var cr=R*0.10, crl=R*0.065;
+      ctx.save();ctx.translate(clx,cly);ctx.rotate(cang+Math.PI/2);
+      var chlGrad=ctx.createRadialGradient(-cr*.2,-crl*.2,0,0,0,cr);
+      chlGrad.addColorStop(0,'rgba(80,200,60,0.95)');
+      chlGrad.addColorStop(0.6,'rgba(40,160,30,0.85)');
+      chlGrad.addColorStop(1,'rgba(20,110,15,0.7)');
+      ctx.fillStyle=chlGrad;
+      ctx.beginPath();ctx.ellipse(0,0,cr,crl,0,0,TAU);ctx.fill();
+      ctx.strokeStyle='rgba(30,140,20,0.6)';ctx.lineWidth=0.8;
+      ctx.beginPath();ctx.ellipse(0,0,cr,crl,0,0,TAU);ctx.stroke();
+      // thylakoid lines inside chloroplast
+      ctx.strokeStyle='rgba(60,200,40,0.4)';ctx.lineWidth=0.6;
+      for(var tl=-1;tl<=1;tl++){ctx.beginPath();ctx.moveTo(tl*cr*.5,-crl*.7);ctx.lineTo(tl*cr*.5,crl*.7);ctx.stroke();}
+      ctx.restore();
+    }
+
+    // ── WATER DROPLETS forming outside salted cells ──
+    if(isSalt&&saltOn&&timeMin>0){
+      var nDrops=Math.round(timeMin*4.5+2);
+      for(var dg=0;dg<nDrops;dg++){
+        var dang=(dg/nDrops)*TAU+cx*0.05+scopeT*0.08;
+        var ddist=wallR+R*0.08+Math.sin(scopeT*2+dg)*R*0.015;
+        var ddx=cx+Math.cos(dang)*ddist;
+        var ddy=cy+Math.sin(dang)*ddist;
+        var dsize=(R*0.04)*(0.6+timeMin/6*0.8)*(0.8+Math.sin(scopeT+dg)*0.2);
+        var dGrad=ctx.createRadialGradient(ddx-dsize*.3,ddy-dsize*.4,0,ddx,ddy,dsize);
+        dGrad.addColorStop(0,'rgba(255,255,255,0.98)');
+        dGrad.addColorStop(0.4,'rgba(180,220,255,0.9)');
+        dGrad.addColorStop(1,'rgba(100,160,230,0.5)');
+        ctx.fillStyle=dGrad;
+        ctx.beginPath();ctx.arc(ddx,ddy,dsize,0,TAU);ctx.fill();
+        // specular highlight on each droplet
+        ctx.fillStyle='rgba(255,255,255,0.6)';
+        ctx.beginPath();ctx.arc(ddx-dsize*.25,ddy-dsize*.3,dsize*.28,0,TAU);ctx.fill();
+      }
+    }
+  });
+
+  // ── DIVIDING LINE (the boundary between plain and salt sides) ──
+  ctx.strokeStyle='rgba(80,60,20,0.5)';ctx.lineWidth=2;ctx.setLineDash([8,6]);
+  ctx.beginPath();ctx.moveTo(Wl/2,0);ctx.lineTo(Wl/2,Hl);ctx.stroke();ctx.setLineDash([]);
+
+  // ── MICROSCOPE CROSSHAIR ──
+  ctx.strokeStyle='rgba(80,60,20,0.25)';ctx.lineWidth=0.8;
+  ctx.beginPath();ctx.moveTo(Wl*.5,0);ctx.lineTo(Wl*.5,Hl);ctx.moveTo(0,Hl*.5);ctx.lineTo(Wl,Hl*.5);ctx.stroke();
+
+  // ── VIGNETTE (moderate — don't kill the image) ──
+  var vig=ctx.createRadialGradient(Wl/2,Hl/2,Hl*.28,Wl/2,Hl/2,Hl*.68);
+  vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(0,0,0,0.52)');
+  ctx.fillStyle=vig;ctx.fillRect(0,0,Wl,Hl);
+
+  // ── SIDE LABELS ──
+  // Label backgrounds for readability
+  ctx.fillStyle='rgba(40,30,10,0.65)';
+  ctx.beginPath();ctx.roundRect(8,6,Wl*.38,26,6);ctx.fill();
+  ctx.beginPath();ctx.roundRect(Wl*.54,6,Wl*.44,26,6);ctx.fill();
+
+  ctx.font='bold 12px IBM Plex Mono,monospace';ctx.textAlign='center';
+  ctx.fillStyle='rgba(120,230,80,1)';
+  ctx.fillText('← PLAIN WATER (control)',Wl*.25,23);
+  ctx.fillStyle=saltOn?'rgba(255,140,60,1)':'rgba(120,230,80,0.7)';
+  ctx.fillText(saltOn?'SALT ADDED → ('+timeMin+' min)':'← No salt added',Wl*.76,23);
+
+  // ── ZOOM: actual inset of one salt cell ──
+  if(zoomIn&&SCOPE_LAYOUT.length>4){
+    var zc=SCOPE_LAYOUT[4]; // first salt cell
+    var zcx=zc.fx*Wl, zcy=zc.fy*Hl, zR=zc.R*Math.min(Wl,Hl);
+    var zx=Wl*.60, zy=Hl*.36, zBox=Math.min(Wl*.34,Hl*.52);
+    var scale=zBox/(zR*2.6);
+
+    // Zoom panel background + border
+    ctx.fillStyle='rgba(220,200,100,0.95)';
+    ctx.strokeStyle='rgba(255,200,0,0.9)';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.roundRect(zx,zy,zBox,zBox,8);ctx.fill();ctx.stroke();
+
+    // Draw zoomed cell inside clipped panel
+    ctx.save();
+    ctx.beginPath();ctx.roundRect(zx+2,zy+2,zBox-4,zBox-4,6);ctx.clip();
+    ctx.translate(zx+zBox/2,zy+zBox/2);ctx.scale(scale,scale);
+    // re-draw this cell large
+    var shr2=SCOPE_LAYOUT[4].side==='salt'?shrink:0;
+    var wR2=zR, cytoR2=zR*(1-shr2*0.55), vacR2=cytoR2*Math.max(0.08,0.68-shr2*0.82);
+    // cytoplasm
+    var cg2=ctx.createRadialGradient(-cytoR2*.25,-cytoR2*.25,0,0,0,cytoR2);
+    cg2.addColorStop(0,'rgba(155,195,80,0.92)');cg2.addColorStop(1,'rgba(90,150,40,0.8)');
+    ctx.fillStyle=cg2;ctx.beginPath();ctx.arc(0,0,cytoR2,0,TAU);ctx.fill();
+    // gap
+    if(shr2>0.05){ctx.fillStyle='rgba(220,200,120,0.75)';ctx.beginPath();ctx.arc(0,0,wR2-zR*.045,0,TAU);ctx.arc(0,0,cytoR2,0,TAU,true);ctx.fill();}
+    // cell wall
+    ctx.strokeStyle='rgba(70,50,10,0.9)';ctx.lineWidth=zR*0.09;ctx.beginPath();ctx.arc(0,0,wR2-zR*.045,0,TAU);ctx.stroke();
+    // vacuole
+    var vg2=ctx.createRadialGradient(-vacR2*.3,-vacR2*.35,0,0,0,vacR2);
+    vg2.addColorStop(0,'rgba(140,190,255,0.9)');vg2.addColorStop(1,'rgba(50,100,210,0.7)');
+    ctx.fillStyle=vg2;ctx.beginPath();ctx.arc(0,0,vacR2,0,TAU);ctx.fill();
+    ctx.strokeStyle='rgba(60,100,210,0.6)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(0,0,vacR2,0,TAU);ctx.stroke();
+    if(vacR2>4){ctx.fillStyle='rgba(255,255,255,0.4)';ctx.beginPath();ctx.ellipse(-vacR2*.3,-vacR2*.35,vacR2*.3,vacR2*.14,-0.4,0,TAU);ctx.fill();}
+    // nucleus
+    var ng2=ctx.createRadialGradient(zR*.12,zR*-.18,0,zR*.18,-zR*.15,zR*.2);
+    ng2.addColorStop(0,'rgba(190,90,230,0.95)');ng2.addColorStop(1,'rgba(120,35,170,0.8)');
+    ctx.fillStyle=ng2;ctx.beginPath();ctx.ellipse(zR*.18,-zR*.15,zR*.2,zR*.16,0.3,0,TAU);ctx.fill();
+    ctx.strokeStyle='rgba(210,110,250,0.7)';ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(zR*.18,-zR*.15,zR*.2,zR*.16,0.3,0,TAU);ctx.stroke();
+    // chloroplast labels
+    ctx.fillStyle='rgba(40,200,40,0.85)';ctx.font='bold '+(zR*.12)+'px sans-serif';ctx.textAlign='left';
+    ctx.fillText('chloroplast',-zR*.65,zR*.55);
+    ctx.fillStyle='rgba(150,60,210,0.85)';ctx.fillText('nucleus',zR*.22,-zR*.38);
+    ctx.fillStyle='rgba(100,160,255,0.85)';ctx.fillText('vacuole',-vacR2*.35+4,6);
+    ctx.restore();
+
+    // "ZOOMED IN" label
+    ctx.fillStyle='rgba(255,210,0,0.95)';ctx.font='bold 10px IBM Plex Mono,monospace';ctx.textAlign='center';
+    ctx.fillText('🔍 ZOOMED IN — SALT SIDE CELL',zx+zBox/2,zy-5);
+
+    // Connector line from cell to zoom panel
+    ctx.strokeStyle='rgba(255,220,0,0.55)';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(zcx,zcy);ctx.lineTo(zx,zy+zBox/2);ctx.stroke();ctx.setLineDash([]);
+  }
+
+  // ── READOUT ──
+  var ro=document.getElementById('scopeRo');
+  if(!saltOn){
+    ro.innerHTML='<b>No salt added.</b> Both sides look identical — healthy cells with large blue vacuoles packed with water. The left side always looks like this (your control).';
+    return;
+  }
+  var msgs=[
+    '<b>0 min — Salt just added.</b> Both sides still look the same. The concentration gradient has just formed — more salt <em>outside</em> the cells on the right than inside. Osmosis is about to begin.',
+    '<b>3 min — Osmosis underway.</b> Look at the right side: the blue vacuoles are visibly <b>smaller</b> as water moves out. A pale gap is forming between the cytoplasm and cell wall. Water droplets are appearing on the cell surface. Left side? Still normal.',
+    '<b>6 min — Plasmolysis visible.</b> The salted cells are <b>plasmolyzed</b> — the cytoplasm has pulled away from the rigid cell wall, leaving a pale yellow gap. The blue vacuoles are tiny or gone. This is the water your potato strips lost. Hit <b>Zoom In</b> to see the detail.'
+  ];
+  ro.innerHTML=msgs[timeMin===0?0:timeMin===3?1:2];
+}
+
+/* ══════════ CELL TRANSPORT ANIMATIONS ══════════ */
+var cellTab='osm';
+var CW=640,CH=320;
+var cParticles=[];
+var cPump=null;
+var cEndoT=0;
+// Smoothed water levels for the osmosis animation — prevents per-frame twitching
+var osmLvL=0, osmLvR=0;
+var cExoT=0;
+var cEndoPhase='endo'; // 'endo' or 'exo'
+
+var DESCS={
+  osm:'<b>Osmosis</b> — Water molecules move across the membrane from the plain-water side (left) toward the salty side (right). The membrane has tiny protein channels called <b>aquaporins</b> that let water through. Watch the water level rise on the right. Salt is too large for the channels — it stays put. This is exactly what happened in Cup 3. <span class="badge p">Passive transport — no energy (ATP) needed</span>',
+  dif:'<b>Diffusion</b> — Oxygen molecules (O₂) start packed tightly in one spot, then spread out naturally in all directions. They move from where there\'s a lot of them (HIGH concentration) to where there\'s fewer (LOW concentration). No energy needed — it\'s like a crowd naturally spreading out when the doors open. <span class="badge p">Passive transport — no energy needed</span>',
+  act:'<b>Active Transport</b> — The sodium-potassium pump (gold) grabs ions from the <em>less crowded</em> outside and forces them into the <em>already crowded</em> inside. That\'s uphill — against the gradient. It requires <b>ATP energy ⚡</b> from the mitochondria (the bean-shaped organelle, bottom right). Without energy, this pump stops. <span class="badge a">Active transport — requires ATP energy</span>',
+  end:'<b>Endocytosis &amp; Exocytosis</b> — When molecules are too large for any channel, the membrane itself moves. <b>Endocytosis (endo = in):</b> membrane folds around a large particle, pinches off into a bubble called a <b>vesicle</b>, bringing it inside. <b>Exocytosis (exo = out):</b> a vesicle from the Golgi fuses with the membrane and releases its contents outside. Both use energy ⚡. <span class="badge a">Active (bulk transport) — requires ATP</span>'
+};
+
+window.setTab=function(btn,tab){
+  document.querySelectorAll('.zt').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  cellTab=tab;
+  document.getElementById('cellDesc').innerHTML=DESCS[tab];
+  initCellScene();
+};
+
+function initCellScene(){
+  cParticles=[];cPump=null;cEndoT=0;osmLvL=0;osmLvR=0;cExoT=0;
+  if(cellTab==='osm'){
+    for(var i=0;i<44;i++)cParticles.push(mkp('w',rnd(20,CW/2-18),rnd(20,CH-20)));
+    for(var j=0;j<44;j++)cParticles.push(mkp('w',rnd(CW/2+18,CW-20),rnd(20,CH-20)));
+    for(var k=0;k<16;k++)cParticles.push(mkp('s',rnd(CW/2+18,CW-20),rnd(20,CH-20)));
+  } else if(cellTab==='dif'){
+    for(var n=0;n<110;n++){var a=rnd(0,TAU),d=Math.sqrt(Math.random())*22;cParticles.push(mkp('o',CW*.2+Math.cos(a)*d,CH/2+Math.sin(a)*d));}
+  } else if(cellTab==='act'){
+    for(var p=0;p<7;p++)cParticles.push(mkp('s',rnd(20,CW/2-30),rnd(20,CH-20)));
+    for(var q=0;q<24;q++)cParticles.push(mkp('s',rnd(CW/2+30,CW-20),rnd(20,CH-20)));
+    cPump={state:'idle',tt:0,cur:null,energy:0,sx:0,sy:0};
+  }
+}
+initCellScene();
+
+function mkp(kind,x,y){
+  var spds={w:1.1,s:.8,o:1.3};
+  var sp=spds[kind]||1;
+  return {kind:kind,x:x,y:y,vx:rnd(-sp,sp),vy:rnd(-sp,sp),a:rnd(0,TAU)};
+}
+
+function stepP(p,f,memX){
+  p.vx+=(rnd(-.35,.35))*f*.45; p.vy+=(rnd(-.35,.35))*f*.45;
+  var sp=Math.hypot(p.vx,p.vy); if(sp>1.3){p.vx*=1.3/sp;p.vy*=1.3/sp;}
+  p.x+=p.vx*f*.75; p.y+=p.vy*f*.75;
+  if(p.x<6){p.x=6;p.vx*=-1;}if(p.x>CW-6){p.x=CW-6;p.vx*=-1;}
+  if(p.y<6){p.y=6;p.vy*=-1;}if(p.y>CH-6){p.y=CH-6;p.vy*=-1;}
+  if(memX){var L=memX-15,R=memX+15;if(p.x+6>L&&p.x-6<R){if(p.x<memX){p.x=L-6;p.vx=-Math.abs(p.vx);}else{p.x=R+6;p.vx=Math.abs(p.vx);}}}
+}
+
+function drawCellMembrane(ctx,mx,pores){
+  var t=14,hr=3.5;
+  // Solid membrane background strip — clearly visible
+  var memGrad=ctx.createLinearGradient(mx-t,0,mx+t,0);
+  memGrad.addColorStop(0,'rgba(80,50,140,0.22)');
+  memGrad.addColorStop(0.5,'rgba(110,70,180,0.35)');
+  memGrad.addColorStop(1,'rgba(80,50,140,0.22)');
+  ctx.fillStyle=memGrad;ctx.fillRect(mx-t,0,t*2,CH);
+
+  for(var y=4;y<CH-4;y+=9){
+    var skip=false;
+    if(pores)pores.forEach(function(po){if(Math.abs(y-po.y)<po.h/2+13)skip=true;});
+    if(skip)continue;
+    // tails
+    ctx.strokeStyle='rgba(80,50,150,0.65)';ctx.globalAlpha=.8;ctx.lineWidth=1.3;
+    ctx.beginPath();
+    [-1,1].forEach(function(sd){var hx=mx+sd*(t-hr);ctx.moveTo(hx-sd*hr,y-1.5);ctx.lineTo(mx+sd*2,y-1.5);ctx.moveTo(hx-sd*hr,y+1.5);ctx.lineTo(mx+sd*2,y+1.5);});
+    ctx.stroke();ctx.globalAlpha=1;
+    // heads (phospholipid circles) — bold purple
+    var hGrad=ctx.createRadialGradient(mx-t+hr-1,y-1,0,mx-t+hr,y,hr);
+    hGrad.addColorStop(0,'rgba(200,160,255,1)');hGrad.addColorStop(1,'rgba(110,60,200,0.92)');
+    ctx.fillStyle=hGrad;ctx.beginPath();ctx.arc(mx-t+hr,y,hr,0,TAU);ctx.fill();
+    var hGrad2=ctx.createRadialGradient(mx+t-hr-1,y-1,0,mx+t-hr,y,hr);
+    hGrad2.addColorStop(0,'rgba(200,160,255,1)');hGrad2.addColorStop(1,'rgba(110,60,200,0.92)');
+    ctx.fillStyle=hGrad2;ctx.beginPath();ctx.arc(mx+t-hr,y,hr,0,TAU);ctx.fill();
+  }
+
+  // aquaporin channels
+  if(pores)pores.forEach(function(po){
+    ctx.fillStyle='rgba(30,140,200,0.25)';ctx.strokeStyle='rgba(60,160,220,0.7)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.roundRect(mx-t-1,po.y-po.h/2-13,t*2+2,13,4);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.roundRect(mx-t-1,po.y+po.h/2,t*2+2,13,4);ctx.fill();ctx.stroke();
+    // channel opening glow
+    ctx.fillStyle='rgba(60,160,220,0.12)';
+    ctx.beginPath();ctx.roundRect(mx-t+1,po.y-po.h/2,t*2-2,po.h,2);ctx.fill();
+    ctx.fillStyle='rgba(60,180,240,0.6)';ctx.font='7px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.fillText('aq',mx,po.y+2.5);
+  });
+}
+
+function drawParticle(ctx,p){
+  ctx.globalAlpha=0.88;
+  if(p.kind==='w'){
+    // water molecule — O with 2 H bonds
+    var wGrad=ctx.createRadialGradient(p.x-1.5,p.y-1.5,0,p.x,p.y,5);
+    wGrad.addColorStop(0,'rgba(140,200,255,1)');wGrad.addColorStop(1,'rgba(40,100,220,0.85)');
+    ctx.fillStyle=wGrad;ctx.beginPath();ctx.arc(p.x,p.y,5,0,TAU);ctx.fill();
+    ctx.strokeStyle='rgba(60,140,240,0.4)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+5.5*Math.cos(p.a+2.4),p.y+5.5*Math.sin(p.a+2.4));
+    ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+5.5*Math.cos(p.a-2.4),p.y+5.5*Math.sin(p.a-2.4));ctx.stroke();
+    ctx.fillStyle='rgba(220,240,255,0.8)';ctx.beginPath();ctx.arc(p.x+5*Math.cos(p.a+2.4),p.y+5*Math.sin(p.a+2.4),2.2,0,TAU);ctx.fill();
+    ctx.beginPath();ctx.arc(p.x+5*Math.cos(p.a-2.4),p.y+5*Math.sin(p.a-2.4),2.2,0,TAU);ctx.fill();
+    p.a+=0.015;
+  } else if(p.kind==='s'){
+    // sodium chloride — cubic crystal shape
+    ctx.fillStyle='rgba(210,70,40,0.8)';
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a*.05);
+    ctx.beginPath();ctx.rect(-5.5,-5.5,11,11);ctx.fill();
+    ctx.fillStyle='rgba(240,120,80,0.4)';
+    ctx.beginPath();ctx.rect(-5.5,-5.5,5.5,5.5);ctx.fill();
+    ctx.strokeStyle='rgba(240,100,60,0.5)';ctx.lineWidth=0.8;ctx.strokeRect(-5.5,-5.5,11,11);
+    ctx.restore();
+  } else if(p.kind==='o'){
+    // oxygen — double bonded pair
+    var oGrad=ctx.createRadialGradient(p.x-1,p.y-1,0,p.x,p.y,4.5);
+    oGrad.addColorStop(0,'rgba(160,230,160,1)');oGrad.addColorStop(1,'rgba(30,140,60,0.9)');
+    ctx.fillStyle=oGrad;
+    ctx.beginPath();ctx.arc(p.x-3*Math.cos(p.a),p.y-3*Math.sin(p.a),4.5,0,TAU);ctx.fill();
+    ctx.beginPath();ctx.arc(p.x+3*Math.cos(p.a),p.y+3*Math.sin(p.a),4.5,0,TAU);ctx.fill();
+    ctx.strokeStyle='rgba(60,180,80,0.5)';ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.moveTo(p.x-1.5*Math.cos(p.a),p.y-1.5*Math.sin(p.a));ctx.lineTo(p.x+1.5*Math.cos(p.a),p.y+1.5*Math.sin(p.a));ctx.stroke();
+    p.a+=0.02;
+  }
+  ctx.globalAlpha=1;
+}
+
+function drawMitochondria(ctx,x,y){
+  // outer membrane
+  ctx.save();ctx.translate(x,y);
+  var mGrad=ctx.createRadialGradient(-5,-3,0,0,0,28);
+  mGrad.addColorStop(0,'rgba(60,180,100,0.35)');mGrad.addColorStop(1,'rgba(20,100,50,0.2)');
+  ctx.fillStyle=mGrad;ctx.strokeStyle='rgba(40,180,90,0.7)';ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.ellipse(0,0,30,15,0,0,TAU);ctx.fill();ctx.stroke();
+  // inner cristae
+  ctx.strokeStyle='rgba(40,160,80,0.5)';ctx.lineWidth=1.2;
+  for(var ci=-18;ci<=18;ci+=8){ctx.beginPath();ctx.moveTo(ci,-14);ctx.bezierCurveTo(ci+4,-4,ci-4,4,ci,14);ctx.stroke();}
+  // matrix gradient
+  var matGrad=ctx.createRadialGradient(-3,-2,0,0,0,20);
+  matGrad.addColorStop(0,'rgba(100,220,140,0.18)');matGrad.addColorStop(1,'rgba(30,120,60,0.08)');
+  ctx.fillStyle=matGrad;ctx.beginPath();ctx.ellipse(0,0,22,10,0,0,TAU);ctx.fill();
+  ctx.fillStyle='rgba(60,200,100,0.7)';ctx.font='bold 9px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.fillText('ATP',0,3.5);
+  ctx.restore();
+  ctx.fillStyle=C.muted;ctx.font='9px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.fillText('mitochondria',x,y+22);
+}
+
+function cellBg(ctx,col1,col2){
+  // Draw a clear, bright gradient background for each cell animation panel
+  var bg=ctx.createLinearGradient(0,0,0,CH);
+  bg.addColorStop(0,col1);bg.addColorStop(1,col2);
+  ctx.fillStyle=bg;ctx.fillRect(0,0,CW,CH);
+}
+
+function sidePanel(ctx,mx,leftCol,rightCol){
+  // Color the inside of the cell differently from outside
+  ctx.fillStyle=leftCol;ctx.fillRect(0,0,mx,CH);
+  ctx.fillStyle=rightCol;ctx.fillRect(mx,0,CW-mx,CH);
+}
+
+function drawLabel(ctx,txt,x,y,col,bgCol){
+  ctx.font='bold 12px IBM Plex Mono,monospace';ctx.textAlign='center';
+  var mw=ctx.measureText(txt).width;
+  if(bgCol){ctx.fillStyle=bgCol;ctx.beginPath();ctx.roundRect(x-mw/2-8,y-14,mw+16,20,5);ctx.fill();}
+  ctx.fillStyle=col;ctx.fillText(txt,x,y);
+}
+
+function drawCellCanvas(){
+  var cv=document.getElementById('cellCv');
+  if(!cv)return;
+  var w=cv.clientWidth;if(!w)return;
+  var dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(w*dpr);cv.height=Math.round(w*CH/CW*dpr);
+  var ctx=cv.getContext('2d');
+  ctx.setTransform(w*dpr/CW,0,0,w*dpr/CW,0,0);
+  ctx.clearRect(0,0,CW,CH);
+  var mx=CW/2;
+
+  if(cellTab==='osm'){
+    // ── BACKGROUND: clearly distinct sides ──
+    sidePanel(ctx,mx,'rgba(200,230,255,0.55)','rgba(255,210,180,0.45)');
+
+    // count water on each side
+    var wL=0,wR=0;
+    cParticles.forEach(function(p){if(p.kind==='w'){if(p.x<mx)wL++;else wR++;}});
+
+    // ── SMOOTH the levels — lerp toward target so they glide, not twitch ──
+    var targetL=14+wL*4.2, targetR=14+wR*4.2;
+    osmLvL=osmLvL?lerp(osmLvL,targetL,0.06):targetL;
+    osmLvR=osmLvR?lerp(osmLvR,targetR,0.06):targetR;
+    var lvL=osmLvL, lvR=osmLvR;
+    ctx.fillStyle='rgba(40,110,230,0.28)';ctx.fillRect(0,CH-lvL,mx,lvL);
+    ctx.fillStyle='rgba(40,110,230,0.28)';ctx.fillRect(mx,CH-lvR,mx,lvR);
+    // surface wave lines
+    var ts=Date.now()*.001;
+    ctx.strokeStyle='rgba(40,120,240,0.75)';ctx.lineWidth=2.5;
+    ctx.beginPath();
+    for(var wx=0;wx<mx;wx+=4){ctx.lineTo(wx,CH-lvL+Math.sin(wx*.06+ts)*2.5);}ctx.stroke();
+    ctx.beginPath();
+    for(var wx2=mx;wx2<CW;wx2+=4){ctx.lineTo(wx2,CH-lvR+Math.sin(wx2*.06+ts+1)*2.5);}ctx.stroke();
+
+    // ── WATER LEVEL DIFFERENCE ANNOTATION ──
+    if(Math.abs(lvL-lvR)>4){
+      var hi=lvL>lvR?'LEFT':'RIGHT', hiY=CH-(lvL>lvR?lvL:lvR)-12;
+      ctx.fillStyle='rgba(40,110,230,0.7)';ctx.font='bold 10px IBM Plex Mono,monospace';ctx.textAlign='center';
+      ctx.fillText('water level rising →',mx*1.5,hiY);
+    }
+
+    // ── FLOW ARROW ──
+    if(wR<wL-2){
+      ctx.save();ctx.globalAlpha=0.6;
+      ctx.fillStyle='rgba(40,120,240,0.85)';ctx.strokeStyle='rgba(40,120,240,0.85)';ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(mx-55,CH/2);ctx.lineTo(mx-8,CH/2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(mx-5,CH/2-10);ctx.lineTo(mx+18,CH/2);ctx.lineTo(mx-5,CH/2+10);ctx.closePath();ctx.fill();
+      ctx.restore();
+    }
+
+    var pores=[{y:CH*.25,h:18},{y:CH*.5,h:18},{y:CH*.76,h:18}];
+    drawCellMembrane(ctx,mx,pores);
+
+    cParticles.forEach(function(p){
+      if(p.kind==='w'){if(p.x>mx&&Math.random()<.007)p.vx=-Math.abs(p.vx)*1.2;}
+      if(p.kind==='s'){stepP(p,1,mx);}else stepP(p,1,null);
+      if(p.kind==='w'&&Math.abs(p.x-mx)<16)p.vx=(p.x<mx?1:-1)*0.9;
+      drawParticle(ctx,p);
+    });
+
+    drawLabel(ctx,'← PLAIN WATER',mx*.5,18,'#1a3a80','rgba(200,220,255,0.7)');
+    drawLabel(ctx,'SALTY WATER →',mx+mx*.5,18,'#8a3010','rgba(255,210,180,0.7)');
+    var wL2=0,wR2=0;cParticles.forEach(function(p){if(p.kind==='w'){if(p.x<mx)wL2++;else wR2++;}});
+    document.getElementById('cellRo').innerHTML='<b class="k-w">Water on plain side:</b> '+wL2+' molecules &nbsp;·&nbsp; <b class="k-w">Water on salty side:</b> '+wR2+' &nbsp;·&nbsp; Water moves toward higher salt concentration &nbsp;·&nbsp; <span class="badge p">Passive — 0 ATP used</span>';
+
+  } else if(cellTab==='dif'){
+    // ── DIFFUSION: bright lab background ──
+    cellBg(ctx,'rgba(240,248,255,0.9)','rgba(210,235,255,0.9)');
+
+    // Concentration heatmap — orange where dense, fade to blue
+    for(var hx=0;hx<CW;hx+=8){
+      var density=Math.max(0,1-(hx-CW*.18)/(CW*.65));
+      ctx.fillStyle='rgba(255,140,0,'+(density*0.12)+')';
+      ctx.fillRect(hx,0,8,CH);
+    }
+
+    // starting zone ring
+    ctx.strokeStyle='rgba(255,100,0,0.6)';ctx.lineWidth=2;ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.arc(CW*.2,CH/2,30,0,TAU);ctx.stroke();ctx.setLineDash([]);
+    drawLabel(ctx,'HIGH',CW*.2,CH/2-40,'#c84000','rgba(255,200,150,0.75)');
+    drawLabel(ctx,'LOW →',CW*.82,CH/2,'#1a6a40','rgba(180,240,200,0.75)');
+
+    // gradient bar label
+    ctx.font='11px IBM Plex Mono,monospace';ctx.textAlign='left';ctx.fillStyle='rgba(180,90,0,0.6)';
+    ctx.fillText('concentration gradient ───────────────→',CW*.18,CH-14);
+
+    cParticles.forEach(function(p){stepP(p,1,null);drawParticle(ctx,p);});
+    var near=0;cParticles.forEach(function(p){if(Math.hypot(p.x-CW*.2,p.y-CH/2)<30)near++;});
+    document.getElementById('cellRo').innerHTML='<b>Molecules still near start zone:</b> '+near+' of '+cParticles.length+' &nbsp;·&nbsp; Spreading HIGH → LOW concentration spontaneously &nbsp;·&nbsp; <span class="badge p">Passive — 0 ATP used</span>';
+
+  } else if(cellTab==='act'){
+    // ── ACTIVE TRANSPORT: inside reddish, outside cool ──
+    sidePanel(ctx,mx,'rgba(220,240,255,0.6)','rgba(255,220,210,0.6)');
+
+    var py=CH/2;
+    var pump=cPump;
+    var isGlow=pump.state==='push';
+
+    drawCellMembrane(ctx,mx,[]);
+
+    // ── PUMP PROTEIN ── bigger, clearer, more protein-like
+    var gap=isGlow?8:2;
+    ctx.save();
+    if(isGlow){ctx.shadowColor='rgba(255,200,0,1)';ctx.shadowBlur=30;}
+    // Upper subunit
+    var pg1=ctx.createLinearGradient(mx-28,py-35,mx+28,py-13);
+    pg1.addColorStop(0,'rgba(220,170,20,0.95)');pg1.addColorStop(0.5,'rgba(255,210,60,1)');pg1.addColorStop(1,'rgba(200,150,10,0.9)');
+    ctx.fillStyle=pg1;ctx.strokeStyle='rgba(180,130,0,0.9)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.roundRect(mx-27,py-35-gap/2,54,22,10);ctx.fill();ctx.stroke();
+    // Lower subunit
+    var pg2=ctx.createLinearGradient(mx-28,py+14,mx+28,py+35);
+    pg2.addColorStop(0,'rgba(200,150,10,0.9)');pg2.addColorStop(0.5,'rgba(255,210,60,1)');pg2.addColorStop(1,'rgba(220,170,20,0.95)');
+    ctx.fillStyle=pg2;
+    ctx.beginPath();ctx.roundRect(mx-27,py+12+gap/2,54,22,10);ctx.fill();ctx.stroke();
+    // binding site between subunits
+    ctx.fillStyle=isGlow?'rgba(255,240,100,0.9)':'rgba(255,230,80,0.5)';
+    ctx.beginPath();ctx.roundRect(mx-14,py-12,28,22,4);ctx.fill();
+    ctx.restore();
+    drawLabel(ctx,'Na⁺/K⁺ PUMP',mx,py-42,'#7a5500','rgba(255,240,180,0.85)');
+
+    // ── ENERGY BOLT ──
+    if(isGlow){
+      ctx.save();ctx.shadowColor='rgba(255,220,0,0.8)';ctx.shadowBlur=18;
+      ctx.fillStyle='rgba(255,220,0,1)';
+      ctx.font='bold 26px sans-serif';ctx.textAlign='center';
+      ctx.fillText('⚡',mx,py-60);ctx.restore();
+    }
+
+    // ── MITOCHONDRIA (larger, clearer) ──
+    drawMitochondria(ctx,CW-72,CH-50);
+
+    // ATP dashed line when firing
+    if(isGlow){
+      ctx.save();ctx.strokeStyle='rgba(255,200,0,0.6)';ctx.setLineDash([6,5]);ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(CW-72,CH-64);ctx.lineTo(mx+28,py+20);ctx.stroke();
+      ctx.setLineDash([]);ctx.restore();
+    }
+
+    // pump logic
+    pump.tt+=1/60;
+    if(pump.state==='idle'&&pump.tt>.5){
+      var best=null,bd=9999;
+      cParticles.forEach(function(p){if(!p._pump&&p.kind==='s'&&p.x<mx){var d=Math.hypot(p.x-(mx-42),p.y-py);if(d<bd){bd=d;best=p;}}});
+      if(best){pump.cur=best;best._pump=true;pump.sx=best.x;pump.sy=best.y;pump.state='dock';pump.tt=0;}
+      else if(pump.tt>3){cParticles.forEach(function(p){if(p.kind==='s'&&p.x>mx){p.x=rnd(22,mx-30);p.vx=rnd(-.6,.6);}});pump.energy=0;}
+    } else if(pump.state==='dock'){
+      var kd=ease(pump.tt/.65);pump.cur.x=lerp(pump.sx,mx-16,kd);pump.cur.y=lerp(pump.sy,py,kd);
+      if(pump.tt>.65){pump.state='push';pump.tt=0;}
+    } else if(pump.state==='push'){
+      if(pump.tt>.55){pump.state='release';pump.tt=0;pump.energy++;}
+    } else if(pump.state==='release'){
+      var kr=ease(pump.tt/.45);pump.cur.x=lerp(mx-16,mx+22,kr);
+      if(pump.tt>.45){pump.cur.vx=1.4;pump.cur._pump=false;pump.cur=null;pump.state='idle';pump.tt=0;}
+    }
+
+    cParticles.forEach(function(p){if(p.kind==='s'&&p!==pump.cur){stepP(p,1,mx);}drawParticle(ctx,p);});
+    drawLabel(ctx,'← OUTSIDE (low concentration)',mx*.5,18,'#1a3a80','rgba(200,220,255,0.75)');
+    drawLabel(ctx,'INSIDE (already crowded) →',mx+mx*.5,18,'#8a2000','rgba(255,210,190,0.75)');
+    var cL=0,cR=0;cParticles.forEach(function(p){if(p.kind==='s'){if(p.x<mx)cL++;else cR++;}});
+    document.getElementById('cellRo').innerHTML='Outside: <b>'+cL+'</b> ions &nbsp; Inside: <b>'+cR+'</b> ions &nbsp;·&nbsp; ATP spent: <b class="k-g">'+pump.energy+' ⚡</b> &nbsp;·&nbsp; Pump forces molecules <b>LOW → HIGH</b> (uphill — against the gradient) &nbsp;·&nbsp; <span class="badge a">Active Transport</span>';
+
+  } else if(cellTab==='end'){
+    // ── ENDO/EXO: clear two-tone background ──
+    cellBg(ctx,'rgba(235,245,255,0.9)','rgba(215,235,250,0.9)');
+    // inside cell tint (lower half = inside)
+    ctx.fillStyle='rgba(180,230,200,0.35)';ctx.fillRect(0,CH*.38,CW,CH*.62);
+    cEndoT+=1/60;
+    var cycle=16; // seconds per full endo+exo cycle
+    var half=cycle/2;
+    var phase=Math.floor(cEndoT/half)%2; // 0=endo, 1=exo
+    var pt=(cEndoT%half);
+    var x0=CW/2,y0=80,R=38;
+
+    if(phase===0){
+      // ENDOCYTOSIS
+      var phi=0,ves=false,cargoY,msg;
+      if(pt<2.2){cargoY=lerp(-32,y0-R,ease(pt/2.2));msg='A large particle arrives — too big for any channel or pump';}
+      else if(pt<6){phi=ease((pt-2.2)/3.8)*Math.PI*.93;cargoY=y0-R*Math.cos(phi);msg='⚡ Energy used — membrane folds around the particle (endocytosis)';}
+      else{ves=true;cargoY=lerp(y0+R*.93,CH-55,ease((pt-6)/2));msg='A vesicle forms and moves inside. Endocytosis complete.';}
+      var cup=cpPts(x0,y0,R,ves?0:phi);
+      fillBelowCP(ctx,cup,CH);
+      // cargo (bacterium-like)
+      drawCargo(ctx,x0,cargoY,pt>9?clamp(1-(pt-9)/1.2,0,1):1);
+      if(ves)drawBilayerCircle(ctx,x0,cargoY,R);
+      drawBilayerCurve(ctx,cup.pts);
+      drawLabel(ctx,'OUTSIDE THE CELL',CW*.5,16,'#2a1860','rgba(220,210,255,0.8)');
+      drawLabel(ctx,'INSIDE THE CELL',CW*.5,CH-8,'#0a3a18','rgba(180,240,200,0.8)');
+      if(pt>2.2&&pt<6){ctx.save();ctx.shadowColor='rgba(255,200,0,0.8)';ctx.shadowBlur=16;ctx.fillStyle='rgba(255,210,0,1)';ctx.font='bold 26px sans-serif';ctx.textAlign='center';ctx.fillText('⚡',x0+R+48,y0+22);ctx.restore();}
+      document.getElementById('cellRo').innerHTML='<b>'+msg+'</b> — <span class="badge a">Endocytosis · Active Transport</span>';
+    } else {
+      // EXOCYTOSIS
+      var phi2=Math.PI*.93,cy2,msg2;
+      if(pt<3){cy2=lerp(CH+R,y0+R*.93,ease(pt/3));msg2='A vesicle from the Golgi carries proteins up toward the membrane';}
+      else if(pt<6){phi2=Math.PI*.93*(1-ease((pt-3)/3));cy2=y0-R*Math.cos(phi2);msg2='⚡ Energy used — vesicle fuses with the membrane (exocytosis)';}
+      else{phi2=0;cy2=y0-R;msg2='Contents are released outside the cell. Exocytosis complete!';}
+      var cup2=cpPts(x0,y0,R,phi2);fillBelowCP(ctx,cup2,CH);
+      // vesicle contents (proteins = glowing hexagons)
+      var nProts=6;
+      for(var pp=0;pp<nProts;pp++){
+        var pa=pp/nProts*TAU+0.2;
+        var spread=pt>6?(pt-6)*rnd(10,22):0;
+        var px2=x0+Math.cos(pa)*(R*.55+spread);
+        var py2=cy2+Math.sin(pa)*(R*.45)-(pt>6?(pt-6)*rnd(4,14):0);
+        if(py2<8)py2=8;
+        ctx.fillStyle='rgba(220,170,20,0.9)';ctx.strokeStyle='rgba(255,220,80,0.7)';ctx.lineWidth=1.5;
+        ctx.beginPath();
+        for(var hh=0;hh<6;hh++){var ha=hh/6*TAU;hh?ctx.lineTo(px2+Math.cos(ha)*9,py2+Math.sin(ha)*9):ctx.moveTo(px2+Math.cos(ha)*9,py2+Math.sin(ha)*9);}
+        ctx.closePath();ctx.fill();ctx.stroke();
+      }
+      if(phi2>0.05)drawBilayerCircle(ctx,x0,cy2,R);
+      drawBilayerCurve(ctx,cup2.pts);
+      drawLabel(ctx,'OUTSIDE THE CELL',CW*.5,16,'#2a1860','rgba(220,210,255,0.8)');
+      drawLabel(ctx,'INSIDE THE CELL',CW*.5,CH-8,'#0a3a18','rgba(180,240,200,0.8)');
+      if(pt>3&&pt<6){ctx.save();ctx.shadowColor='rgba(255,200,0,0.8)';ctx.shadowBlur=16;ctx.fillStyle='rgba(255,210,0,1)';ctx.font='bold 26px sans-serif';ctx.textAlign='center';ctx.fillText('⚡',x0+R+48,y0+22);ctx.restore();}
+      document.getElementById('cellRo').innerHTML='<b>'+msg2+'</b> — <span class="badge a">Exocytosis · Active Transport</span>';
+    }
+  }
+}
+
+function drawCargo(ctx,x,y,alpha){
+  ctx.globalAlpha=alpha;
+  // bacterium shape — elongated oval with flagellum
+  ctx.fillStyle='rgba(200,60,40,0.85)';ctx.strokeStyle='rgba(230,100,70,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.ellipse(x,y,18,10,0.3,0,TAU);ctx.fill();ctx.stroke();
+  // cell wall texture
+  ctx.fillStyle='rgba(240,120,90,0.4)';ctx.beginPath();ctx.ellipse(x-5,y-3,8,4,0.3,0,TAU);ctx.fill();
+  // flagellum
+  ctx.strokeStyle='rgba(200,60,40,0.5)';ctx.lineWidth=1.2;ctx.setLineDash([2,2]);
+  ctx.beginPath();ctx.moveTo(x+18,y);ctx.bezierCurveTo(x+26,y-8,x+30,y+6,x+38,y-2);ctx.stroke();ctx.setLineDash([]);
+  ctx.globalAlpha=1;
+}
+
+function cpPts(x0,y0,R,phi){
+  var cy=y0-R*Math.cos(phi),pts=[],ex=R*Math.sin(phi);
+  for(var x=-10;x<x0-ex;x+=5)pts.push([x,y0]);
+  var steps=Math.max(2,Math.round(phi*R/3));
+  for(var i=0;i<=steps;i++){var a=Math.PI/2+phi-2*phi*i/steps;pts.push([x0+R*Math.cos(a),cy+R*Math.sin(a)]);}
+  for(x=x0+ex+5;x<CW+12;x+=5)pts.push([x,y0]);
+  return {pts:pts,cy:cy};
+}
+function fillBelowCP(ctx,cup,hh){
+  // Interior of cell — warm green tint, clearly visible
+  ctx.fillStyle='rgba(140,210,160,0.55)';ctx.globalAlpha=1;
+  ctx.beginPath();ctx.moveTo(cup.pts[0][0],hh+5);cup.pts.forEach(function(p){ctx.lineTo(p[0],p[1]);});
+  ctx.lineTo(cup.pts[cup.pts.length-1][0],hh+5);ctx.closePath();ctx.fill();
+}
+function drawBilayerCurve(ctx,pts){
+  // Bold purple/violet bilayer — clearly visible on bright bg
+  ctx.lineJoin='round';ctx.lineCap='round';
+  ctx.strokeStyle='rgba(90,50,160,0.95)';ctx.lineWidth=10;
+  ctx.beginPath();pts.forEach(function(p,i){i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.stroke();
+  // Inner lighter stripe (bilayer inner leaflet)
+  ctx.strokeStyle='rgba(200,160,255,0.7)';ctx.lineWidth=4;
+  ctx.beginPath();pts.forEach(function(p,i){i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.stroke();
+  // Outermost highlight
+  ctx.strokeStyle='rgba(240,220,255,0.35)';ctx.lineWidth=1.5;
+  ctx.beginPath();pts.forEach(function(p,i){i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.stroke();
+}
+function drawBilayerCircle(ctx,cx,cy,R){
+  ctx.strokeStyle='rgba(90,50,160,0.9)';ctx.lineWidth=10;
+  ctx.beginPath();ctx.arc(cx,cy,R,0,TAU);ctx.stroke();
+  ctx.strokeStyle='rgba(200,160,255,0.65)';ctx.lineWidth=4;
+  ctx.beginPath();ctx.arc(cx,cy,R,0,TAU);ctx.stroke();
+}
+
+/* ══════ PROGRESS ══════ */
+var sects=['partA','partB','partC','partD'];
+function updProg(){
+  var mid=window.scrollY+window.innerHeight*.42;
+  var act=0;
+  sects.forEach(function(id,i){var el=document.getElementById(id);if(el&&el.getBoundingClientRect().top+window.scrollY<mid)act=i;});
+  ['ps1','ps2','ps3','ps4'].forEach(function(id,i){var el=document.getElementById(id);if(!el)return;el.className='ps'+(i<act?' done':i===act?' active':'');});
+  var lbls=['Part A · Setup','Part B · Microscope','Part C · Cell Zoom','Part D · Analysis'];
+  var pl=document.getElementById('psLbl');if(pl)pl.textContent=lbls[act]||'';
+}
+window.addEventListener('scroll',updProg,{passive:true});
+
+/* ══════ MAIN LOOP ══════ */
+var lastTs=0;
+(function loop(ts){
+  var dt=lastTs?Math.min(.05,(ts-lastTs)/1000):.016;lastTs=ts;
+  [0,1,2].forEach(drawCup);
+  var scv=document.getElementById('scopeCv');
+  if(scv){var sr=scv.getBoundingClientRect();if(sr.top<window.innerHeight&&sr.bottom>0)drawScope();}
+  var ccv=document.getElementById('cellCv');
+  if(ccv){var cr=ccv.getBoundingClientRect();if(cr.top<window.innerHeight&&cr.bottom>0)drawCellCanvas();}
+  updProg();
+  requestAnimationFrame(loop);
+})(0);
+
+/* ══════ HINTS ══════ */
+window.hnt=function(btn){var b=btn.nextElementSibling;b.classList.toggle('show');btn.textContent=b.classList.contains('show')?'💡 Hide hint':'💡 Need a hint?';};
+
+})();
+</script>
+</body>
+</html>
