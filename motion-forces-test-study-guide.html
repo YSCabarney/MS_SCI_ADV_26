@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motion &amp; Forces Study Guide | YSC Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF5EC;
+    --card:#FFFFFF;
+    --ink:#221F2B;
+    --ink-soft:#5B5568;
+    --track-red:#D8432B;
+    --track-red-soft:#F6DAD2;
+    --field-teal:#146B72;
+    --field-teal-soft:#D9ECEA;
+    --gold:#B9791E;
+    --gold-soft:#F5E6C8;
+    --good:#2E7D4F;
+    --good-soft:#DDF0E3;
+    --line:#E3D9C6;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Karla',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4;
+      --track-red:#FF7A5C; --track-red-soft:#3A241F;
+      --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+      --gold:#F2B75A; --gold-soft:#3A2E14;
+      --good:#7FD6A0; --good-soft:#1C3325;
+      --line:#3A3444;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17151C; --card:#201C29; --ink:#F3EEE3; --ink-soft:#C7C0B4;
+    --track-red:#FF7A5C; --track-red-soft:#3A241F;
+    --field-teal:#5AD1D9; --field-teal-soft:#1B3436;
+    --gold:#F2B75A; --gold-soft:#3A2E14;
+    --good:#7FD6A0; --good-soft:#1C3325;
+    --line:#3A3444;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    margin:0;
+    padding-inline:16px;
+    line-height:1.6;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding-block:36px 80px;}
+
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:22px;margin-bottom:28px;}
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--track-red);display:flex;gap:10px;align-items:center;
+  }
+  .eyebrow::before{content:"●";font-size:9px;}
+  h1.title{font-family:var(--display);font-weight:600;font-size:clamp(2.1rem,6vw,3.1rem);margin:8px 0 6px;line-height:1.1;}
+  .lede{color:var(--ink-soft);font-size:1.05rem;margin:0;}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .tag{font-family:var(--mono);font-size:12px;border:1.5px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--card);}
+
+  nav.toc{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:28px;}
+  nav.toc h2{font-family:var(--mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px;color:var(--ink-soft);}
+  nav.toc ol{margin:0;padding-left:1.3rem;columns:2;column-gap:2rem;}
+  nav.toc li{break-inside:avoid;margin:2px 0;}
+  nav.toc a{color:var(--field-teal);text-decoration:none;}
+  nav.toc a:hover{text-decoration:underline;}
+
+  section.case{margin:40px 0;}
+  .case-tag{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--track-red);}
+  h2{font-family:var(--display);font-weight:600;font-size:1.75rem;margin:4px 0 10px;line-height:1.2;}
+  h3{font-family:var(--display);font-weight:600;font-size:1.2rem;margin:22px 0 6px;}
+  p{margin:0 0 10px;}
+  ul.tight{margin:6px 0 10px;padding-left:1.25rem;}
+  ul.tight li{margin:4px 0;}
+  b, strong{color:var(--ink);}
+
+  .card{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0;}
+  .formula{
+    font-family:var(--mono);font-size:1rem;text-align:center;
+    background:var(--gold-soft);border-radius:10px;padding:10px 14px;margin:10px 0;
+  }
+  .formula small{display:block;font-family:var(--body);color:var(--ink-soft);margin-top:2px;font-size:.85rem;}
+  .callout{border-left:5px solid var(--field-teal);background:var(--field-teal-soft);border-radius:0 10px 10px 0;padding:10px 14px;margin:12px 0;}
+  .callout.red{border-color:var(--track-red);background:var(--track-red-soft);}
+  .callout.gold{border-color:var(--gold);background:var(--gold-soft);}
+
+  .format-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px;}
+  .fmt{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:10px;text-align:center;}
+  .fmt b{display:block;font-family:var(--display);font-size:1.1rem;}
+  .fmt span{font-size:.85rem;color:var(--ink-soft);}
+
+  .table-wrap{overflow-x:auto;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;font-size:.95rem;background:var(--card);}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:var(--ink);color:var(--paper);font-weight:500;font-family:var(--mono);font-size:.82rem;letter-spacing:.04em;}
+
+  .laws{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:12px 0;}
+  .law{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--track-red);border-radius:12px;padding:12px 14px;}
+  .law:nth-child(2){border-top-color:var(--field-teal);}
+  .law:nth-child(3){border-top-color:var(--gold);}
+  .law .n{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+  .law h4{font-family:var(--display);font-size:1.1rem;margin:2px 0 6px;}
+  .law p{font-size:.95rem;margin:0 0 6px;}
+  .law .ex{font-size:.88rem;color:var(--ink-soft);}
+
+  figure{margin:12px 0;}
+  figure svg{width:100%;height:auto;max-width:520px;display:block;margin:0 auto;}
+  figcaption{font-size:.85rem;color:var(--ink-soft);text-align:center;margin-top:4px;}
+  .ax{stroke:var(--ink);stroke-width:2;fill:none;}
+  .grid{stroke:var(--line);stroke-width:1;}
+  .lineA{stroke:var(--track-red);stroke-width:4;fill:none;stroke-linecap:round;}
+  .lineB{stroke:var(--field-teal);stroke-width:4;fill:none;stroke-linecap:round;}
+  .lbl{font-family:var(--mono);font-size:13px;fill:var(--ink);}
+  .lbl-soft{font-family:var(--mono);font-size:12px;fill:var(--ink-soft);}
+
+  .vocab{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:10px;}
+  .vocab div{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.93rem;}
+
+  details{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;}
+  summary{cursor:pointer;font-weight:500;}
+  summary::marker{color:var(--track-red);}
+  details[open] summary{margin-bottom:8px;}
+  .ans{background:var(--good-soft);color:var(--ink);border-radius:8px;padding:8px 12px;margin:0;}
+  .ans b{color:var(--good);}
+
+  .checklist{list-style:none;padding:0;margin:8px 0;}
+  .checklist li{margin:6px 0;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;}
+  .checklist input{margin-top:4px;width:18px;height:18px;flex:none;accent-color:var(--good);}
+
+  footer{border-top:3px solid var(--ink);margin-top:48px;padding-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-align:center;}
+
+  @media (max-width:600px){
+    nav.toc ol{columns:1;}
+    body{font-size:16px;}
+  }
+  @media print{
+    body{background:#fff;color:#000;}
+    details{break-inside:avoid;}
+    details > *:not(summary){display:block;}
+    .card,.law{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">Motion Investigation Bureau · Test Prep File</div>
+    <h1 class="title">Motion &amp; Forces Study Guide</h1>
+    <p class="lede">Everything from The Motion Files, the Coaster Warm-Up, Force Face-Off, the Coaster Lab, and the Friction Finish Line virtual lab, in one case file.</p>
+    <div class="tags">
+      <span class="tag">Position-time graphs</span>
+      <span class="tag">Speed vs. velocity</span>
+      <span class="tag">Acceleration</span>
+      <span class="tag">Newton's laws</span>
+      <span class="tag">Coaster lab</span>
+    </div>
+  </header>
+
+  <section class="case" id="format">
+    <div class="case-tag">Briefing</div>
+    <h2>What the Test Looks Like</h2>
+    <p>Your test is pulled at random from a big question pool, so no two tests are exactly alike. Know all five topics.</p>
+    <div class="format-grid">
+      <div class="fmt"><b>30 questions</b><span>50 points total</span></div>
+      <div class="fmt"><b>Multiple choice</b><span>including calculations</span></div>
+      <div class="fmt"><b>True / False</b><span>read every word</span></div>
+      <div class="fmt"><b>Matching</b><span>vocab &amp; variables</span></div>
+      <div class="fmt"><b>2 written answers</b><span>4 points each</span></div>
+    </div>
+    <div class="callout gold">🧮 <b>Bring your calculator skills.</b> Many questions ask you to calculate speed, velocity, acceleration, or percent change. Write the formula, plug in numbers, and include units.</div>
+  </section>
+
+  <nav class="toc" aria-label="Contents">
+    <h2>Case Files</h2>
+    <ol>
+      <li><a href="#graphs">Position-Time Graphs</a></li>
+      <li><a href="#speed">Speed, Velocity &amp; Units</a></li>
+      <li><a href="#accel">Acceleration</a></li>
+      <li><a href="#forces">Forces &amp; Newton's Laws</a></li>
+      <li><a href="#lab">The Coaster Lab</a></li>
+      <li><a href="#vocab">Vocabulary</a></li>
+      <li><a href="#written">Writing Strong Answers</a></li>
+      <li><a href="#practice">Practice &amp; Checklist</a></li>
+    </ol>
+  </nav>
+
+  <!-- 01 -->
+  <section class="case" id="graphs">
+    <div class="case-tag">Case 01</div>
+    <h2>Position-Time Graphs</h2>
+    <p>To describe motion you need a <b>reference point</b>: a fixed spot you measure from. <b>Position</b> is your location compared to that point.</p>
+    <ul class="tight">
+      <li><b>Time</b> goes on the <b>x-axis</b> (it's the independent variable; it ticks forward no matter what).</li>
+      <li><b>Position</b> goes on the <b>y-axis</b> (dependent variable).</li>
+      <li>The <b>slope</b> (steepness) = <b>speed</b>. Steeper line → faster.</li>
+      <li>A <b>flat line</b> → the object is <b>stopped</b> (time passes, position doesn't change).</li>
+    </ul>
+    <div class="formula">slope = rise ÷ run = change in position ÷ change in time</div>
+
+    <figure>
+      <svg viewBox="0 0 520 300" role="img" aria-label="Position-time graph. Red line A rises steeply, teal line B rises gently, then goes flat.">
+        <g class="grid">
+          <line x1="60" y1="60" x2="480" y2="60"/><line x1="60" y1="110" x2="480" y2="110"/>
+          <line x1="60" y1="160" x2="480" y2="160"/><line x1="60" y1="210" x2="480" y2="210"/>
+          <line x1="165" y1="20" x2="165" y2="260"/><line x1="270" y1="20" x2="270" y2="260"/>
+          <line x1="375" y1="20" x2="375" y2="260"/><line x1="480" y1="20" x2="480" y2="260"/>
+        </g>
+        <path class="ax" d="M60 20 V260 H490"/>
+        <polyline class="lineA" points="60,260 270,60"/>
+        <polyline class="lineB" points="60,260 270,160 480,160"/>
+        <text class="lbl" x="282" y="56">A · steep = fast</text>
+        <text class="lbl" x="300" y="150">B · flat = stopped</text>
+        <text class="lbl-soft" x="150" y="226">B · gentle = slow</text>
+        <text class="lbl" x="250" y="292">time (s) →</text>
+        <text class="lbl" x="18" y="150" transform="rotate(-90 18 150)">position (m) →</text>
+      </svg>
+      <figcaption>Read the story: A moves fast. B moves slowly, then stops.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 02 -->
+  <section class="case" id="speed">
+    <div class="case-tag">Case 02 · 03</div>
+    <h2>Speed, Velocity &amp; Units</h2>
+    <p>In everyday life people mix these up. In science, they are <b>not</b> the same.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Speed</th><th>Velocity</th></tr></thead>
+        <tbody>
+          <tr><td><b>Question it answers</b></td><td>How fast?</td><td>How fast <b>and which way</b>?</td></tr>
+          <tr><td><b>Formula</b></td><td>distance ÷ time</td><td>displacement ÷ time</td></tr>
+          <tr><td><b>Uses</b></td><td><b>Distance</b>: the total path, curves included</td><td><b>Displacement</b>: straight-line start → finish, with direction</td></tr>
+          <tr><td><b>Type</b></td><td><b>Scalar</b>: size only</td><td><b>Vector</b>: size + direction</td></tr>
+          <tr><td><b>Negative?</b></td><td>Never</td><td>Yes: the sign shows direction</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">🔁 <b>Back where you started = zero velocity.</b> If you end where you began, your displacement is 0, so your average velocity is 0, no matter how fast you went. A ball in a loop has a <b>big distance</b> but a <b>tiny displacement</b>, so its speed is much bigger than its velocity.</div>
+    <div class="callout red">➖ <b>Direction signs:</b> pick one direction as positive. Moving the opposite way gives a <b>negative velocity</b>, even at the same speed. Example: +4 m/s downfield, −4 m/s back.</div>
+
+    <h3>Units</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Unit</th><th>Where it's used</th></tr></thead>
+        <tbody>
+          <tr><td><b>m/s</b></td><td>Science and lab reports: it's the <b>SI unit</b>, so it works with meters, seconds, and kilograms.</td></tr>
+          <tr><td><b>km/h</b></td><td>Everyday speeds in most countries outside the U.S.</td></tr>
+          <tr><td><b>mph</b></td><td>Everyday speeds in the U.S.: road signs, speedometers.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">1 m/s ≈ 2.24 mph ≈ 3.6 km/h<small>To change m/s to mph, multiply by 2.24.</small></div>
+  </section>
+
+  <!-- 04 -->
+  <section class="case" id="accel">
+    <div class="case-tag">Case 04</div>
+    <h2>Acceleration</h2>
+    <p><b>Acceleration</b> is the rate at which <b>velocity</b> changes. Speeding up, slowing down, <em>and changing direction</em> all count.</p>
+    <div class="formula">acceleration = (final velocity − initial velocity) ÷ time<small>Units: m/s² (meters per second, per second)</small></div>
+    <ul class="tight">
+      <li><b>Positive acceleration:</b> speeding up (in the positive direction).</li>
+      <li><b>Negative acceleration (deceleration):</b> slowing down.</li>
+      <li><b>Constant velocity → zero acceleration</b>, even if the object is moving very fast.</li>
+      <li><b>Turning counts!</b> Rounding a curve or going around a loop at a steady speed is still acceleration, because direction (and so velocity) is changing.</li>
+    </ul>
+    <div class="card">
+      <b>Worked example:</b> A skier goes from 5 m/s to 17 m/s in 4 s.<br>
+      a = (17 − 5) ÷ 4 = 12 ÷ 4 = <b>3 m/s²</b>.<br>
+      Then she slows from 17 m/s to 2 m/s in 5 s: a = (2 − 17) ÷ 5 = <b>−3 m/s²</b>. The negative sign means she's slowing down.
+    </div>
+    <p><b>Real world:</b> GPS trackers, sprint-start video, helmet impact sensors, and motion-capture cameras all measure speed, velocity, and acceleration to keep athletes safe and improve performance.</p>
+  </section>
+
+  <!-- 05 -->
+  <section class="case" id="forces">
+    <div class="case-tag">Case 07</div>
+    <h2>Forces &amp; Newton's Laws</h2>
+    <p>A <b>force</b> is a <b>push or a pull</b>. Forces are measured in <b>newtons (N)</b>. Earth pulls on a small apple with about 1 N, a volleyball about 3 N, a soccer ball about 4 N, and you about 500 N.</p>
+
+    <div class="laws">
+      <div class="law"><span class="n">1st Law · Inertia</span><h4>Things keep doing what they're doing</h4>
+        <p>A still object stays still, and a moving object keeps moving the same way, <b>unless a force changes it</b>.</p>
+        <p class="ex">Ball rolls forward when the van brakes · tablecloth yanked fast, snacks stay put · seatbelts</p></div>
+      <div class="law"><span class="n">2nd Law · Force &amp; mass</span><h4>Force makes things accelerate</h4>
+        <p><b>Bigger force → more acceleration.</b> <b>Bigger mass → less acceleration.</b></p>
+        <p class="ex">Same kick: soccer ball (0.45 kg) flies, bowling ball (6 kg) barely moves</p></div>
+      <div class="law"><span class="n">3rd Law · Action–reaction</span><h4>Every push gets pushed back</h4>
+        <p>When you push on something, it pushes back on you <b>just as hard</b>, in the <b>opposite direction</b>.</p>
+        <p class="ex">Jumping: you push down on the floor, the floor pushes you up · kicking a bowling ball hurts</p></div>
+    </div>
+
+    <h3>Net force: balanced vs. unbalanced</h3>
+    <p>The <b>net force</b> is what's left over after forces work against each other. Forces in opposite directions subtract.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Balanced</th><th>Unbalanced</th></tr></thead>
+        <tbody>
+          <tr><td><b>Net force</b></td><td>0 N</td><td>Not 0 N</td></tr>
+          <tr><td><b>What happens</b></td><td>Motion <b>does not change</b>: still stays still, moving keeps the same speed and direction</td><td>The object <b>accelerates</b>: speeds up, slows down, or turns</td></tr>
+          <tr><td><b>Example</b></td><td>Bus cruising at a steady 55 mph; equal tug-of-war pulls</td><td>40 N vs. 70 N tug-of-war → 30 N net, cart speeds up toward the 70 N team</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout red">⚠️ <b>Trap:</b> moving does <b>not</b> automatically mean unbalanced. An object moving at a steady speed in a straight line has <b>balanced</b> forces.</div>
+    <div class="formula">acceleration = net force ÷ mass<small>Example: a 30 N net force on a 15 kg cart → 2 m/s every second</small></div>
+    <p><b>Friction</b> is a force that rubs against motion and always pushes <b>opposite the direction of motion</b>. More friction (grass, rough track) slows things faster; less friction (ice) lets them travel farther.</p>
+  </section>
+
+  <!-- 06 -->
+  <section class="case" id="lab">
+    <div class="case-tag">Lab Files</div>
+    <h2>The Coaster Lab &amp; Friction Finish Line</h2>
+
+    <h3>Variables</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Meaning</th><th>In the Coaster Lab</th></tr></thead>
+        <tbody>
+          <tr><td><b>Independent</b></td><td>What you change on purpose</td><td>Release height (cm)</td></tr>
+          <tr><td><b>Dependent</b></td><td>What you measure</td><td>Speed in the speed trap; whether the ball completes the loop</td></tr>
+          <tr><td><b>Controlled</b></td><td>What you keep the same</td><td>Same ball, track layout, loop size, release method, speed-trap length, timer</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Change <b>only one</b> variable at a time. If you changed the height <em>and</em> the ball, you couldn't tell which one caused the speed change. Doing <b>3 trials</b> makes your data more trustworthy.</p>
+
+    <h3>What the data show</h3>
+    <ul class="tight">
+      <li><b>Higher release → faster at the bottom</b>, but the graph <b>curves and levels off</b>. Gravity speeds the ball up longer on a taller drop, while friction takes a bigger share at higher speeds.</li>
+      <li><b>Gravity</b> is the unbalanced force that speeds the cart up on a drop. That's why the first drop is the tallest.</li>
+      <li><b>Friction</b> slows the ball, so it's slower at the final speed trap than the first. More friction = shorter stopping distance (that's how coaster brakes work).</li>
+      <li><b>Loops:</b> at the top, gravity pulls the cart down. If it's going too slowly, it falls off. Taller drop → more speed → loop completed.</li>
+      <li><b>Mass surprise:</b> a 10 kg, 20 kg, and 40 kg cart dropped from the same height reach the <b>same speed</b>. More mass means more gravity pulling, but also more inertia resisting; the two effects cancel.</li>
+      <li><b>Momentum = mass × velocity.</b> Same speed but more mass means more momentum, so it's harder to stop.</li>
+    </ul>
+
+    <h3>Lab math</h3>
+    <div class="formula">speed = speed-trap length (m) ÷ average time (s)</div>
+    <div class="formula">percent change = (final − start) ÷ start × 100<small>A negative answer means the ball slowed down.</small></div>
+    <div class="card">
+      <b>Worked example:</b> Start speed 2.5 m/s, final speed 2.0 m/s.<br>
+      Change = 2.0 − 2.5 = −0.5 m/s → (−0.5 ÷ 2.5) × 100 = <b>−20%</b>. The ball lost 20% of its speed, mostly to friction.
+    </div>
+  </section>
+
+  <!-- VOCAB -->
+  <section class="case" id="vocab">
+    <div class="case-tag">Evidence Locker</div>
+    <h2>Vocabulary</h2>
+    <div class="vocab">
+      <div><b>Reference point</b>: fixed spot used to measure position</div>
+      <div><b>Distance</b>: total length of the path traveled</div>
+      <div><b>Displacement</b>: straight-line change in position, with direction</div>
+      <div><b>Speed</b>: distance ÷ time</div>
+      <div><b>Velocity</b>: displacement ÷ time</div>
+      <div><b>Scalar</b>: size only (distance, speed)</div>
+      <div><b>Vector</b>: size + direction (displacement, velocity)</div>
+      <div><b>Acceleration</b>: change in velocity ÷ time (m/s²)</div>
+      <div><b>Force</b>: a push or a pull, measured in newtons (N)</div>
+      <div><b>Net force</b>: force left over after forces work against each other</div>
+      <div><b>Balanced / unbalanced</b>: net force is 0 / net force is not 0</div>
+      <div><b>Inertia</b>: things keep doing what they're doing until a force changes it</div>
+      <div><b>Friction</b>: force that rubs against motion and slows it</div>
+      <div><b>Gravity</b>: force pulling objects toward Earth</div>
+      <div><b>Mass</b>: how much "stuff" an object has (kg)</div>
+      <div><b>Momentum</b>: mass × velocity</div>
+      <div><b>Speed trap</b>: marked section of track used to measure speed</div>
+      <div><b>Trendline</b>: line showing the general pattern on a graph</div>
+    </div>
+  </section>
+
+  <!-- WRITTEN -->
+  <section class="case" id="written">
+    <div class="case-tag">Field Report</div>
+    <h2>Writing Strong Answers</h2>
+    <p>You'll have two written-response questions worth 4 points each.</p>
+    <ul class="tight">
+      <li><b>Show your math:</b> formula → numbers → answer <b>with units</b>.</li>
+      <li><b>Use the vocabulary:</b> net force, balanced/unbalanced, inertia, displacement, vector.</li>
+      <li><b>Name the law</b> and say what it explains: "Newton's 1st Law (inertia) explains…"</li>
+      <li><b>Claim–Evidence–Reasoning:</b> Claim = your answer in 1–2 sentences. Evidence = specific numbers from data. Reasoning = the science that connects them.</li>
+    </ul>
+  </section>
+
+  <!-- PRACTICE -->
+  <section class="case" id="practice">
+    <div class="case-tag">Case Closed?</div>
+    <h2>Practice: Test Yourself</h2>
+    <p>Work each one out first, then tap to check.</p>
+
+    <details><summary>1. A walker's position-time graph goes in a straight line from 0 m at 0 s to 50 m at 10 s. What is her speed?</summary>
+      <p class="ans">Slope = 50 m ÷ 10 s = <b>5 m/s</b>.</p></details>
+    <details><summary>2. A swimmer swims one length of a 50 m pool and back (100 m total) in 80 s. Find her average speed and average velocity.</summary>
+      <p class="ans">Speed = 100 ÷ 80 = <b>1.25 m/s</b>. She ends where she started, so displacement = 0 and velocity = <b>0 m/s</b>.</p></details>
+    <details><summary>3. A car moves at 25 m/s. About how many mph is that?</summary>
+      <p class="ans">25 × 2.24 ≈ <b>56 mph</b>.</p></details>
+    <details><summary>4. A skateboarder speeds up from 2 m/s to 10 m/s in 4 s. What is the acceleration?</summary>
+      <p class="ans">(10 − 2) ÷ 4 = <b>2 m/s²</b>.</p></details>
+    <details><summary>5. A ball rolling at 8 m/s stops in 2 s. What is its acceleration, and what does the sign mean?</summary>
+      <p class="ans">(0 − 8) ÷ 2 = <b>−4 m/s²</b>. The negative sign means it is slowing down.</p></details>
+    <details><summary>6. Two teams each pull a sled with 40 N in opposite directions. What is the net force, and what happens?</summary>
+      <p class="ans">40 − 40 = <b>0 N</b>. The forces are balanced, so the sled's motion doesn't change.</p></details>
+    <details><summary>7. Which of Newton's laws explains why you should wear a seatbelt?</summary>
+      <p class="ans"><b>1st Law (inertia).</b> When the car stops suddenly, your body keeps moving forward until a force (the seatbelt) stops it.</p></details>
+    <details><summary>8. A ball crosses a 0.60 m speed trap in an average time of 0.40 s. What is its speed?</summary>
+      <p class="ans">0.60 ÷ 0.40 = <b>1.5 m/s</b>.</p></details>
+    <details><summary>9. A ball's speed drops from 3.0 m/s to 2.4 m/s. What is the percent change?</summary>
+      <p class="ans">(2.4 − 3.0) ÷ 3.0 × 100 = <b>−20%</b>.</p></details>
+    <details><summary>10. A truck and a bicycle both go 30 mph. Which is harder to stop, and why?</summary>
+      <p class="ans">The <b>truck</b>: same speed, much more mass, so it has much more <b>momentum</b> (mass × velocity).</p></details>
+    <details><summary>11. A student tests whether loop size affects whether the ball makes it around. Name the independent variable, the dependent variable, and two controlled variables.</summary>
+      <p class="ans">IV: <b>loop diameter</b>. DV: <b>whether the ball completes the loop</b>. Controlled: release height, type of ball, release method, track layout (any two).</p></details>
+
+    <h3>✅ Am I ready? Check off what you can do</h3>
+    <ul class="checklist">
+      <li><label><input type="checkbox"> Read a position-time graph and find speed from the slope.</label></li>
+      <li><label><input type="checkbox"> Explain the difference between distance/displacement and speed/velocity.</label></li>
+      <li><label><input type="checkbox"> Tell scalars from vectors.</label></li>
+      <li><label><input type="checkbox"> Pick the right unit (m/s, km/h, mph) and convert m/s to mph.</label></li>
+      <li><label><input type="checkbox"> Calculate acceleration, including negative acceleration.</label></li>
+      <li><label><input type="checkbox"> State Newton's three laws and give an example of each.</label></li>
+      <li><label><input type="checkbox"> Find net force and decide if forces are balanced or unbalanced.</label></li>
+      <li><label><input type="checkbox"> Identify independent, dependent, and controlled variables in the Coaster Lab.</label></li>
+      <li><label><input type="checkbox"> Explain why mass doesn't change a cart's speed at the bottom of a drop.</label></li>
+      <li><label><input type="checkbox"> Calculate speed from a speed trap and percent change in speed.</label></li>
+    </ul>
+  </section>
+
+  <footer>YSC Academy · 8th Grade Physical Science · Motion &amp; Forces Study Guide 🎢</footer>
+</div>
+</body>
+</html>
