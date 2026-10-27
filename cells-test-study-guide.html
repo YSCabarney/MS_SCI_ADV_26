@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cells Test Study Guide | YSC Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:   #2563EB;
+      --navy:   #1E3A5F;
+      --gold:   #F59E0B;
+      --green:  #10B981;
+      --teal:   #0D9488;
+      --purple: #7C3AED;
+      --coral:  #EF4444;
+      --orange: #EA580C;
+      --light:  #F8FAFC;
+      --dark:   #0F172A;
+      --mid:    #475569;
+      --line:   #E2E8F0;
+      --r:      14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Lexend', Arial, sans-serif;
+      background: #F0F4FF;
+      color: var(--dark);
+      line-height: 1.7;
+      font-size: 16.5px;
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(145deg, #0F172A 0%, #1E3A5F 50%, #312E81 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 1rem 3.25rem;
+    }
+    .cover-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 999px;
+      padding: 0.3rem 1.1rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .cover h1 { font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; margin-bottom: 0.5rem; }
+    .cover .sub { font-size: 1.05rem; opacity: 0.88; max-width: 540px; margin: 0 auto; }
+    .cover-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 1.5rem; }
+    .cpill {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.82rem;
+    }
+
+    /* ── LAYOUT ── */
+    main { max-width: 860px; margin: 0 auto; padding: 0 16px 3rem; }
+    .card {
+      background: white;
+      border-radius: var(--r);
+      padding: 1.5rem 1.5rem;
+      margin: 1.75rem 0;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+    .part-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; }
+    .part-num {
+      flex: none;
+      width: 2.4rem; height: 2.4rem;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      color: white; font-weight: 700;
+    }
+    h2 { font-size: 1.45rem; color: var(--navy); line-height: 1.25; }
+    h3 { font-size: 1.08rem; color: var(--navy); margin: 1.25rem 0 0.4rem; }
+    p + p { margin-top: 0.6rem; }
+    .lead { color: var(--mid); margin-bottom: 1rem; }
+    ul.tight { padding-left: 1.25rem; }
+    ul.tight li { margin: 0.25rem 0; }
+    strong { color: var(--navy); }
+
+    /* ── TOC ── */
+    .toc ol { padding-left: 1.25rem; columns: 2; column-gap: 2rem; }
+    .toc li { margin: 0.2rem 0; break-inside: avoid; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ── TEST FORMAT ── */
+    .format-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .fmt {
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .fmt b { display: block; font-size: 1.05rem; color: var(--navy); }
+    .fmt span { font-size: 0.85rem; color: var(--mid); }
+
+    /* ── CALLOUTS ── */
+    .callout {
+      border-left: 5px solid var(--gold);
+      background: #FFFBEB;
+      border-radius: 0 10px 10px 0;
+      padding: 0.8rem 1rem;
+      margin: 1rem 0;
+    }
+    .callout.green { border-color: var(--green); background: #ECFDF5; }
+    .callout.blue  { border-color: var(--blue);  background: #EFF6FF; }
+
+    /* ── TIMELINE ── */
+    .timeline { list-style: none; border-left: 3px solid var(--blue); margin: 0.75rem 0 0 0.5rem; }
+    .timeline li { position: relative; padding: 0 0 1rem 1.25rem; }
+    .timeline li::before {
+      content: ""; position: absolute; left: -9px; top: 0.45rem;
+      width: 15px; height: 15px; border-radius: 50%;
+      background: white; border: 3px solid var(--blue);
+    }
+    .timeline .yr { font-weight: 700; color: var(--blue); margin-right: 0.4rem; }
+
+    /* ── ORGANELLE CARDS ── */
+    .org-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.9rem; margin-top: 1rem; }
+    .org {
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--blue);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+    }
+    .org h4 { font-size: 1.02rem; color: var(--navy); }
+    .org .role { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); }
+    .org p { font-size: 0.93rem; margin-top: 0.35rem; }
+    .org .shape { color: var(--teal); }
+    .org.plant { border-top-color: var(--green); }
+
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin: 0.75rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
+    th, td { border: 1px solid var(--line); padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
+    th { background: var(--navy); color: white; font-weight: 500; }
+    tr:nth-child(even) td { background: var(--light); }
+    .yes { color: #047857; font-weight: 600; }
+    .no  { color: var(--coral); font-weight: 600; }
+
+    /* ── SIZE LADDER ── */
+    .ladder { margin: 0.75rem 0; }
+    .rung { display: grid; grid-template-columns: 170px 1fr 70px; align-items: center; gap: 0.6rem; margin: 0.35rem 0; font-size: 0.9rem; }
+    .bar { height: 14px; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--purple)); }
+    .rung .um { text-align: right; color: var(--mid); font-variant-numeric: tabular-nums; }
+
+    /* ── EQUATIONS ── */
+    .eq {
+      background: var(--light);
+      border: 1px dashed #CBD5E1;
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      margin: 0.5rem 0;
+      font-weight: 500;
+      text-align: center;
+    }
+    .eq small { display: block; color: var(--mid); font-weight: 400; margin-top: 0.2rem; }
+
+    /* ── VOCAB ── */
+    .vocab { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.6rem; margin-top: 0.75rem; }
+    .vocab div { border: 1px solid var(--line); border-radius: 10px; padding: 0.6rem 0.8rem; font-size: 0.92rem; }
+    .vocab b { color: var(--navy); }
+
+    /* ── PRACTICE ── */
+    details {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      margin: 0.6rem 0;
+      background: white;
+    }
+    summary { cursor: pointer; font-weight: 500; }
+    summary::marker { color: var(--blue); }
+    details[open] summary { margin-bottom: 0.45rem; }
+    details .ans { color: #065F46; background: #ECFDF5; border-radius: 8px; padding: 0.5rem 0.75rem; }
+
+    .checklist { list-style: none; }
+    .checklist li { margin: 0.4rem 0; }
+    .checklist label { display: flex; gap: 0.6rem; align-items: flex-start; cursor: pointer; }
+    .checklist input { margin-top: 0.4rem; width: 1.05rem; height: 1.05rem; flex: none; accent-color: var(--green); }
+
+    footer { text-align: center; color: var(--mid); font-size: 0.85rem; padding: 1rem 16px 2rem; }
+
+    @media (max-width: 600px) {
+      .toc ol { columns: 1; }
+      .card { padding: 1.2rem 1rem; }
+      .rung { grid-template-columns: 120px 1fr 58px; font-size: 0.82rem; }
+    }
+    @media print {
+      body { background: white; }
+      .cover { background: none; color: var(--dark); padding: 1rem 0; }
+      .cpill, .cover-tag { border-color: #999; background: none; }
+      .card { box-shadow: none; border: 1px solid #CBD5E1; break-inside: avoid-page; }
+      details { break-inside: avoid; }
+      details > *:not(summary) { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-tag">🏐 Life Science · Cells Test Prep</div>
+  <h1>Cells Test Study Guide</h1>
+  <p class="sub">Everything you need from the Cell Biology Playbook, the Interactive Cell Diagram, the Cell Size Warm-Up, and Cells in Action, all in one place.</p>
+  <div class="cover-pills">
+    <span class="cpill">🔬 Cell Theory</span>
+    <span class="cpill">🧬 Organelles</span>
+    <span class="cpill">🌿 Plant vs. Animal</span>
+    <span class="cpill">📏 Size &amp; Scale</span>
+    <span class="cpill">⚡ Energy in Cells</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- TEST FORMAT -->
+  <section class="card" id="format">
+    <h2>📋 What the Test Looks Like</h2>
+    <p class="lead">Your quiz is built from a pool of questions, so you and your teammates will not get the exact same test. Know all five topics, not just a few.</p>
+    <div class="format-grid">
+      <div class="fmt"><b>30 questions</b><span>50 points, all 5 topics</span></div>
+      <div class="fmt"><b>Multiple choice</b><span>pick the best answer</span></div>
+      <div class="fmt"><b>True / False</b><span>read every word</span></div>
+      <div class="fmt"><b>Matching</b><span>vocab, scientists, organelles</span></div>
+      <div class="fmt"><b>2 written answers</b><span>4 points each, full sentences</span></div>
+    </div>
+  </section>
+
+  <!-- TOC -->
+  <nav class="card toc" aria-label="Contents">
+    <h2>🗂️ In This Guide</h2>
+    <ol>
+      <li><a href="#theory">Cell Theory &amp; the Scientists</a></li>
+      <li><a href="#organelles">Organelles: Shape = Job</a></li>
+      <li><a href="#plant-animal">Plant vs. Animal Cells</a></li>
+      <li><a href="#size">Cell Size &amp; Scale</a></li>
+      <li><a href="#energy">Photosynthesis &amp; Respiration</a></li>
+      <li><a href="#vocab">Vocabulary to Know</a></li>
+      <li><a href="#written">Writing Strong Answers</a></li>
+      <li><a href="#practice">Practice &amp; Checklist</a></li>
+    </ol>
+  </nav>
+
+  <!-- PART 1 -->
+  <section class="card" id="theory">
+    <div class="part-head"><span class="part-num" style="background:var(--blue)">1</span><h2>Cell Theory &amp; the Scientists</h2></div>
+    <p class="lead">A scientific <strong>theory</strong> is not a guess. It's an explanation backed by huge amounts of evidence, tested again and again.</p>
+
+    <h3>The three parts of cell theory</h3>
+    <ol class="tight" style="padding-left:1.25rem">
+      <li><strong>All living things are made of one or more cells.</strong></li>
+      <li><strong>The cell is the basic unit of structure and function</strong> in living things. It is the smallest unit that is still "alive."</li>
+      <li><strong>All cells come from pre-existing cells</strong>, made when existing cells divide.</li>
+    </ol>
+    <div class="callout">⚠️ <b>Watch out:</b> statements like "all cells have chlorophyll" or "all cells have a cell wall" are <em>not</em> part of cell theory. Cell theory only covers things that are true for <em>every</em> living thing.</div>
+
+    <h3>Who built the theory? (about 190 years of teamwork)</h3>
+    <ul class="timeline">
+      <li><span class="yr">1665</span><b>Robert Hooke</b> looked at thin cork and saw tiny empty boxes. He named them <b>"cells"</b> because they reminded him of the small rooms monks lived in.</li>
+      <li><span class="yr">1670s</span><b>Anton van Leeuwenhoek</b> built stronger microscopes and was the <b>first to see living cells</b> (bacteria in pond water).</li>
+      <li><span class="yr">1838</span><b>Matthias Schleiden</b> (botanist) concluded that <b>all plants</b> are made of cells.</li>
+      <li><span class="yr">1839</span><b>Theodor Schwann</b> (zoologist) concluded that <b>all animals</b> are made of cells.</li>
+      <li><span class="yr">1855</span><b>Rudolf Virchow</b> showed that <b>cells only come from other cells</b>. This completed the theory and ruled out <b>spontaneous generation</b> (life popping out of non-living matter).</li>
+    </ul>
+    <div class="callout blue">🔬 <b>The game isn't over:</b> in 2024–2025 scientists found a brand-new organelle, the <b>hemifusome</b>, using a technique that flash-freezes cells. It appears to help cells <b>sort, recycle, and get rid of materials</b>. Cell theory is still true; better tools just keep showing us more of what's <em>inside</em> cells.</div>
+  </section>
+
+  <!-- PART 2 -->
+  <section class="card" id="organelles">
+    <div class="part-head"><span class="part-num" style="background:var(--purple)">2</span><h2>Organelles: Shape = Job</h2></div>
+    <p class="lead">Organelles are the "little organs" inside a cell. Know each one's <b>job</b> AND how its <b style="color:var(--teal)">shape</b> helps it do that job. This is called the <strong>structure–function relationship</strong>.</p>
+
+    <div class="org-grid">
+      <div class="org"><span class="role">Head Coach</span><h4>Nucleus</h4>
+        <p>Holds the cell's <b>DNA</b> and controls almost everything the cell does.</p>
+        <p class="shape">Shape: round with small pores, so the DNA stays protected while instructions pass in and out.</p></div>
+      <div class="org"><span class="role">Gatekeeper</span><h4>Cell Membrane</h4>
+        <p>Flexible outer boundary that controls what enters and exits. It is <b>selectively permeable</b>, meaning picky about what gets through.</p>
+        <p class="shape">Shape: thin, flexible double layer that can bend and stretch.</p></div>
+      <div class="org"><span class="role">The Court</span><h4>Cytoplasm</h4>
+        <p>Jelly-like fluid that fills the cell and holds organelles in place. Most chemical reactions happen here.</p>
+        <p class="shape">Shape: no fixed shape. Being a fluid lets it fill every gap.</p></div>
+      <div class="org"><span class="role">Conditioning Coach</span><h4>Mitochondria</h4>
+        <p>Breaks down nutrients to release energy as <b>ATP</b>. The "powerhouse of the cell."</p>
+        <p class="shape">Shape: inner membrane folded into <b>cristae</b>. More folds mean more surface area, which means more ATP.</p></div>
+      <div class="org"><span class="role">Playmakers</span><h4>Ribosomes</h4>
+        <p><b>Build proteins.</b> Some float free in the cytoplasm; others sit on the ER.</p>
+        <p class="shape">Shape: tiny and round, so thousands fit in one cell.</p></div>
+      <div class="org"><span class="role">Hallways</span><h4>Endoplasmic Reticulum (ER)</h4>
+        <p>Network of pathways that moves proteins and materials. <b>Rough ER</b> has ribosomes; <b>smooth ER</b> has none (it makes lipids).</p>
+        <p class="shape">Shape: folded maze, which packs a lot of surface area into a small space.</p></div>
+      <div class="org"><span class="role">Equipment Manager</span><h4>Golgi Apparatus</h4>
+        <p><b>Packages, labels, and ships</b> proteins. It's the cell's post office.</p>
+        <p class="shape">Shape: stacked, flattened sacs that work like an assembly line.</p></div>
+      <div class="org"><span class="role">Storage Closet</span><h4>Vacuole</h4>
+        <p>Stores water, nutrients, and waste. Animal cells have <b>several small</b> ones.</p>
+        <p class="shape">Shape: a simple, roomy sac, which is perfect for storage.</p></div>
+      <div class="org"><span class="role">Clean-Up Crew</span><h4>Lysosome</h4>
+        <p>Uses <b>enzymes</b> to break down waste and worn-out cell parts. Found mainly in animal cells.</p>
+        <p class="shape">Shape: small and round, so it can travel anywhere and merge with waste.</p></div>
+    </div>
+
+    <div class="callout green">🔁 <b>ER + Golgi team-up:</b> proteins are built by ribosomes on the ER and travel through its hallways, then the Golgi receives them, packages them, labels them, and ships them out.</div>
+  </section>
+
+  <!-- PART 3 -->
+  <section class="card" id="plant-animal">
+    <div class="part-head"><span class="part-num" style="background:var(--green)">3</span><h2>Plant vs. Animal Cells</h2></div>
+    <p class="lead">Plant and animal cells share most organelles, but plant cells carry <b>three extras</b>.</p>
+
+    <div class="org-grid">
+      <div class="org plant"><span class="role">Stadium Walls</span><h4>Cell Wall</h4>
+        <p>Rigid layer <b>outside</b> the cell membrane, made of <b>cellulose</b>. Gives support and protection.</p>
+        <p class="shape">Shape: stiff and rectangular, so cells stack like bricks to hold the plant upright. It's why plant cells look boxy.</p></div>
+      <div class="org plant"><span class="role">Fuel Station</span><h4>Chloroplast</h4>
+        <p>Captures sunlight to make sugar through <b>photosynthesis</b>. Contains green <b>chlorophyll</b>.</p>
+        <p class="shape">Shape: flat, layered stacks like pancakes, which give more surface to catch light.</p></div>
+      <div class="org plant"><span class="role">Mega Storage</span><h4>Large Central Vacuole</h4>
+        <p>One giant vacuole that fills most of the cell.</p>
+        <p class="shape">Shape: so big that when it fills with water it pushes against the cell wall and keeps stems stiff. When it loses water, the plant <b>wilts</b>.</p></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Structure</th><th>Plant cell</th><th>Animal cell</th></tr></thead>
+        <tbody>
+          <tr><td>Nucleus, membrane, cytoplasm, mitochondria, ribosomes, ER, Golgi</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+          <tr><td>Cell wall</td><td class="yes">Yes</td><td class="no">No</td></tr>
+          <tr><td>Chloroplast</td><td class="yes">Yes</td><td class="no">No</td></tr>
+          <tr><td>Vacuole</td><td>One large central vacuole</td><td>Several small vacuoles</td></tr>
+          <tr><td>Lysosome</td><td>Not usually</td><td class="yes">Yes (mainly animal cells)</td></tr>
+          <tr><td>Shape under a microscope</td><td>Boxy / rectangular</td><td>Round / irregular</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Real cells, real life</h3>
+    <ul class="tight">
+      <li>🩸 <b>Red blood cells</b> lose their nucleus. That frees up room for more <b>hemoglobin</b> to carry oxygen, but the trade-off is that they can't divide or repair themselves.</li>
+      <li>💪 <b>Muscle cells</b> are packed with extra <b>mitochondria</b> because contracting takes lots of energy.</li>
+      <li>🧠 <b>Neurons</b> can be over a meter long, a shape stretched to carry signals far.</li>
+      <li>💊 <b>Antibiotics</b> often attack bacteria's <b>cell wall</b>. Human cells don't have one, so we're safe.</li>
+      <li>🧴 <b>Peeling skin</b> after a sunburn is dead cells being replaced by new ones.</li>
+    </ul>
+  </section>
+
+  <!-- PART 4 -->
+  <section class="card" id="size">
+    <div class="part-head"><span class="part-num" style="background:var(--orange)">4</span><h2>Cell Size &amp; Scale</h2></div>
+    <p class="lead">Cells and organelles are measured in <b>micrometers (µm)</b>. <b>1 mm = 1,000 µm</b> and <b>1 cm = 10,000 µm</b>.</p>
+
+    <h3>The size ladder (smallest → largest)</h3>
+    <div class="ladder" aria-label="Size ladder, smallest to largest">
+      <div class="rung"><span>Ribosome</span><div class="bar" style="width:6%"></div><span class="um">0.02 µm</span></div>
+      <div class="rung"><span>Mitochondrion</span><div class="bar" style="width:40%"></div><span class="um">1 µm</span></div>
+      <div class="rung"><span>Bacterium (E. coli)</span><div class="bar" style="width:46%"></div><span class="um">2 µm</span></div>
+      <div class="rung"><span>Red blood cell</span><div class="bar" style="width:58%"></div><span class="um">7.5 µm</span></div>
+      <div class="rung"><span>Human hair (width)</span><div class="bar" style="width:77%"></div><span class="um">70 µm</span></div>
+      <div class="rung"><span>Plant cell</span><div class="bar" style="width:80%"></div><span class="um">100 µm</span></div>
+      <div class="rung"><span>Grain of salt</span><div class="bar" style="width:94%"></div><span class="um">500 µm</span></div>
+    </div>
+    <p style="font-size:.85rem;color:var(--mid)">Bars use a log scale: each step is about 10× bigger. A grain of salt is about 25,000× wider than a ribosome!</p>
+
+    <h3>Using scale</h3>
+    <div class="eq">scale = model size ÷ real size<small>Convert both sizes to the SAME unit first!</small></div>
+    <div class="callout blue">
+      <b>Worked example:</b> A model of a 100 µm cell is built 1 m wide. How big is the scale?<br>
+      1 m = 1,000,000 µm → 1,000,000 ÷ 100 = <b>10,000×</b>.<br>
+      At that scale, a 5 µm chloroplast becomes 5 × 10,000 = 50,000 µm = <b>5 cm</b>, about the size of a golf ball.
+    </div>
+    <p>Why does a cell have <b>one</b> nucleus but <b>thousands</b> of ribosomes? Ribosomes are tiny, so lots of them fit, and the cell needs lots of proteins built. Size and job go together!</p>
+  </section>
+
+  <!-- PART 5 -->
+  <section class="card" id="energy">
+    <div class="part-head"><span class="part-num" style="background:var(--gold)">5</span><h2>Photosynthesis &amp; Cellular Respiration</h2></div>
+    <p class="lead">Two processes that are nearly opposite, and partners in cycling matter and energy through living things.</p>
+
+    <h3>🌱 Photosynthesis happens in the chloroplast</h3>
+    <div class="eq">Sunlight + Water + Carbon Dioxide → Glucose + Oxygen<small>6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂</small></div>
+    <ul class="tight">
+      <li><b>Chlorophyll</b> absorbs <b>red and blue</b> light and reflects <b>green</b>, which is why leaves look green.</li>
+      <li><b>Thylakoids</b> are stacked discs (in stacks called <b>grana</b>) where light is captured. The <b>stroma</b> is the fluid where sugar is made.</li>
+    </ul>
+
+    <h3>⚡ Cellular respiration happens in the mitochondria</h3>
+    <div class="eq">Glucose + Oxygen → ATP Energy + Water + Carbon Dioxide<small>C₆H₁₂O₆ + 6O₂ → ATP + 6H₂O + 6CO₂</small></div>
+    <ul class="tight">
+      <li><b>ALL living cells</b> do cellular respiration, plants included!</li>
+      <li><b>ATP</b> is the cell's energy "currency." One glucose makes about <b>36–38 ATP</b>. Used ATP becomes ADP, then gets recharged.</li>
+      <li><b>Cristae</b> (folds) give more surface area, which means more ATP.</li>
+    </ul>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>🌱 Photosynthesis</th><th>⚡ Cellular Respiration</th></tr></thead>
+        <tbody>
+          <tr><td><b>Where?</b></td><td>Chloroplast</td><td>Mitochondria</td></tr>
+          <tr><td><b>Who?</b></td><td>Plants (+ algae)</td><td>ALL living cells</td></tr>
+          <tr><td><b>Uses (reactants)</b></td><td>CO₂ + H₂O + sunlight</td><td>Glucose + O₂</td></tr>
+          <tr><td><b>Makes (products)</b></td><td>Glucose + O₂</td><td>ATP + CO₂ + H₂O</td></tr>
+          <tr><td><b>Energy</b></td><td>Stores energy</td><td>Releases energy</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green">🔁 <b>The cycle:</b> plants make glucose → animals eat plants → cells use glucose for ATP → CO₂ and H₂O are released → plants use the CO₂ again.</div>
+
+    <h3>🏐 On the court</h3>
+    <ul class="tight">
+      <li><b>Spiking</b> means muscle cells need a burst of ATP, so their mitochondria speed up respiration.</li>
+      <li><b>Breathing harder</b> is your body supplying more O₂ and removing more CO₂.</li>
+      <li><b>Burning muscles</b> happen when oxygen can't keep up: cells switch to anaerobic respiration and lactic acid builds up.</li>
+    </ul>
+  </section>
+
+  <!-- VOCAB -->
+  <section class="card" id="vocab">
+    <h2>📝 Vocabulary to Know</h2>
+    <div class="vocab">
+      <div><b>Cell theory</b>: the 3 ideas that explain cells in all living things</div>
+      <div><b>Organelle</b>: a "little organ" with a specific job inside a cell</div>
+      <div><b>Selectively permeable</b>: lets some things through, but not others</div>
+      <div><b>Spontaneous generation</b>: the old, wrong idea that life comes from non-living matter</div>
+      <div><b>Structure–function</b>: an organelle's shape matches its job</div>
+      <div><b>Photosynthesis</b>: making glucose + O₂ from sunlight, water, and CO₂</div>
+      <div><b>Cellular respiration</b>: breaking down glucose with O₂ to release ATP</div>
+      <div><b>ATP</b>: the cell's energy currency</div>
+      <div><b>Glucose</b>: sugar that stores food energy</div>
+      <div><b>Chlorophyll</b>: green pigment that absorbs light</div>
+      <div><b>Cristae</b>: folds of the mitochondria's inner membrane</div>
+      <div><b>Thylakoids / Grana</b>: flat discs in the chloroplast that capture light / stacks of them</div>
+      <div><b>Stroma</b>: fluid in the chloroplast where sugar is made</div>
+      <div><b>ADP</b>: "used" ATP after it releases energy; the cell recharges it</div>
+      <div><b>Cellulose</b>: the material a plant cell wall is made of</div>
+      <div><b>Reactants / Products</b>: what goes IN to a reaction / what comes OUT</div>
+      <div><b>Scale</b>: model size ÷ real size</div>
+      <div><b>Micrometer (µm)</b>: one-thousandth of a millimeter</div>
+    </div>
+  </section>
+
+  <!-- WRITTEN ANSWERS -->
+  <section class="card" id="written">
+    <h2>✍️ Writing Strong Answers</h2>
+    <p class="lead">You'll have two written-response questions. Your teacher grades these, and full explanations earn full points.</p>
+    <ul class="tight">
+      <li><b>Answer every part.</b> If it asks <em>where</em>, <em>what it uses</em>, and <em>what it makes</em>, write all three.</li>
+      <li><b>Connect shape to job.</b> Don't just say "mitochondria make energy." Say "its folded cristae give more surface area, <em>so</em> it can make more ATP."</li>
+      <li><b>Use your vocab words</b>: ATP, chlorophyll, selectively permeable, cristae.</li>
+      <li><b>Variables refresher:</b> the <b>independent variable</b> is what you change on purpose; the <b>dependent variable</b> is what you measure.</li>
+    </ul>
+  </section>
+
+  <!-- PRACTICE -->
+  <section class="card" id="practice">
+    <h2>🎯 Practice: Test Yourself</h2>
+    <p class="lead">Answer in your head or on paper first, then tap to check.</p>
+
+    <details><summary>1. Which part of cell theory explains why a cut on your skin can heal?</summary>
+      <p class="ans">All cells come from pre-existing cells. Your existing skin cells divide to make new ones.</p></details>
+    <details><summary>2. What did Schleiden and Schwann each conclude?</summary>
+      <p class="ans">Schleiden: all plants are made of cells. Schwann: all animals are made of cells.</p></details>
+    <details><summary>3. A cell is making lots of proteins to ship outside the cell. Name three organelles involved, in order.</summary>
+      <p class="ans">Ribosomes (build the proteins) → endoplasmic reticulum (moves them) → Golgi apparatus (packages and ships them).</p></details>
+    <details><summary>4. Why is the chloroplast shaped like a stack of flat pancakes?</summary>
+      <p class="ans">The flat, layered shape packs in as much light-catching surface as possible in a small space.</p></details>
+    <details><summary>5. You see a cell under a microscope. It is boxy and has green structures. Plant or animal? How do you know?</summary>
+      <p class="ans">Plant. The boxy shape comes from a cell wall, and the green structures are chloroplasts. Neither is in animal cells.</p></details>
+    <details><summary>6. True or false: plant cells don't need mitochondria because they have chloroplasts.</summary>
+      <p class="ans">False. Plants make glucose in chloroplasts, but ALL living cells, plant cells included, use mitochondria to turn glucose into ATP.</p></details>
+    <details><summary>7. A 10 µm nucleus is drawn at a scale of 500×. How wide is the drawing, in mm?</summary>
+      <p class="ans">10 × 500 = 5,000 µm = 5 mm.</p></details>
+    <details><summary>8. Name the reactants and products of cellular respiration.</summary>
+      <p class="ans">Reactants: glucose + oxygen. Products: ATP (energy) + water + carbon dioxide.</p></details>
+    <details><summary>9. A student tests whether the temperature of water changes how fast a plant cell's vacuole fills. Name the independent and dependent variables.</summary>
+      <p class="ans">Independent: water temperature (changed on purpose). Dependent: how fast the vacuole fills (measured).</p></details>
+
+    <h3>✅ Am I ready? Check off what you can do</h3>
+    <ul class="checklist">
+      <li><label><input type="checkbox"> State all three parts of cell theory from memory.</label></li>
+      <li><label><input type="checkbox"> Match Hooke, Leeuwenhoek, Schleiden, Schwann, and Virchow to their discoveries.</label></li>
+      <li><label><input type="checkbox"> Give the job of all 9 organelles AND explain how 2+ of their shapes help.</label></li>
+      <li><label><input type="checkbox"> Name the 3 structures only plant cells have.</label></li>
+      <li><label><input type="checkbox"> Put a ribosome, mitochondrion, red blood cell, and plant cell in size order.</label></li>
+      <li><label><input type="checkbox"> Solve a scale problem (model size ÷ real size).</label></li>
+      <li><label><input type="checkbox"> Write the word equations for photosynthesis and cellular respiration.</label></li>
+      <li><label><input type="checkbox"> Explain how photosynthesis and respiration form a cycle.</label></li>
+      <li><label><input type="checkbox"> Name the parts of a chloroplast (thylakoids, grana, stroma, chlorophyll) and what each does.</label></li>
+      <li><label><input type="checkbox"> Convert between cm, mm, and µm (1 cm = 10,000 µm; 1 mm = 1,000 µm).</label></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>YSC Science · 7th Grade Life Science · Cells Test Study Guide 🏐</footer>
+
+</body>
+</html>
