@@ -258,7 +258,7 @@ details p{margin-top:8px;font-size:14px;color:var(--ink-soft);}
       <span class="sim-title">🎢 Sim 1 — Drop Height &amp; Speed</span>
       <div class="legend">
         <span class="leg"><span class="ldot" style="background:#f06040;"></span>Gravity (down the hill)</span>
-        <span class="leg"><span class="ldot" style="background:#50a0ff;"></span>Normal force</span>
+        <span class="leg"><span class="ldot" style="background:#80d0ff;"></span>Centripetal (in the loop)</span>
         <span class="leg"><span class="ldot" style="background:#30c060;"></span>Friction</span>
       </div>
     </div>
@@ -269,8 +269,12 @@ details p{margin-top:8px;font-size:14px;color:var(--ink-soft);}
         <input type="range" id="s1h" min="1" max="10" value="5" step="0.5">
       </div>
       <div class="ctrl-group">
-        <div class="ctrl-label">🛑 Track Friction <span class="ctrl-val" id="v1f">Low</span></div>
+        <div class="ctrl-label">🛑 Track Friction <span class="ctrl-val" id="v1f">None</span></div>
         <input type="range" id="s1f" min="0" max="2" value="0" step="1">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">⚖️ Cart Mass <span class="ctrl-val" id="v1m">20 kg</span></div>
+        <input type="range" id="s1m" min="10" max="60" value="20" step="10">
       </div>
     </div>
     <div class="sim-btns">
@@ -283,14 +287,14 @@ details p{margin-top:8px;font-size:14px;color:var(--ink-soft);}
   <!-- DATA TABLE 1 -->
   <div class="card">
     <h3>📊 Data Table 1 — Drop Height vs. Speed</h3>
-    <p style="font-size:14px;">Run the sim at each height setting and record the bottom speed. Keep friction on Low for all three runs.</p>
+    <p style="font-size:14px;">Run the sim at each height setting and record the bottom speed. Keep friction on None for all three runs.</p>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>Run</th><th>Drop Height</th><th>Friction</th><th>Speed at Bottom (m/s)</th><th>Did the loop complete?</th></tr></thead>
         <tbody>
-          <tr><td>1</td><td>Low (2 m)</td><td>Low</td><td><input class="di" id="d1a" placeholder="—"></td><td><input class="di" id="d1b" placeholder="yes / no"></td></tr>
-          <tr><td>2</td><td>Medium (5 m)</td><td>Low</td><td><input class="di" id="d1c" placeholder="—"></td><td><input class="di" id="d1d" placeholder="yes / no"></td></tr>
-          <tr><td>3</td><td>High (8 m)</td><td>Low</td><td><input class="di" id="d1e" placeholder="—"></td><td><input class="di" id="d1f" placeholder="yes / no"></td></tr>
+          <tr><td>1</td><td>Low (2 m)</td><td>None</td><td><input class="di" id="d1a" placeholder="—"></td><td><input class="di" id="d1b" placeholder="yes / no"></td></tr>
+          <tr><td>2</td><td>Medium (5 m)</td><td>None</td><td><input class="di" id="d1c" placeholder="—"></td><td><input class="di" id="d1d" placeholder="yes / no"></td></tr>
+          <tr><td>3</td><td>High (8 m)</td><td>None</td><td><input class="di" id="d1e" placeholder="—"></td><td><input class="di" id="d1f" placeholder="yes / no"></td></tr>
         </tbody>
       </table>
     </div>
@@ -411,22 +415,18 @@ details p{margin-top:8px;font-size:14px;color:var(--ink-soft);}
         <div class="ctrl-label">🏔️ Drop Height <span class="ctrl-val" id="v3h">5 m</span></div>
         <input type="range" id="s3h" min="2" max="8" value="5" step="1">
       </div>
-      <div class="ctrl-group">
-        <div class="ctrl-label">⚖️ Cart Mass <span class="ctrl-val" id="v3m">20 kg</span></div>
-        <input type="range" id="s3m" min="10" max="60" value="20" step="10">
-      </div>
     </div>
     <div class="sim-btns">
       <button class="sbtn go" id="btn3">▶ Launch</button>
       <button class="sbtn reset" id="btn3r">↺ Reset</button>
     </div>
-    <div class="sim-readout" id="ro3">Set your cart mass and launch to see if it changes the speed.</div>
+    <div class="sim-readout" id="ro3">Pick a drop height and launch to see if mass changes the speed.</div>
   </div>
 
   <!-- DATA TABLE 3 -->
   <div class="card">
     <h3>📊 Data Table 3 — Mass vs. Speed</h3>
-    <p style="font-size:14px;">Keep Drop Height at Medium (5m) and Friction at Low for all runs. Change only the cart mass.</p>
+    <p style="font-size:14px;">Keep Drop Height at Medium (5 m). The 10, 20, and 40 kg carts all drop at the same time — read each cart's speed at the bottom.</p>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>Run</th><th>Cart Mass</th><th>Drop Height</th><th>Speed at Bottom (m/s)</th><th>Surprising? Y/N</th></tr></thead>
@@ -462,7 +462,7 @@ details p{margin-top:8px;font-size:14px;color:var(--ink-soft);}
   <div class="qb">
     <div class="qb-hd"><span class="q-num">Q 5</span><h4>Design Challenge — Build the Best Coaster</h4></div>
     <div class="qb-body">
-      <p>Use any simulation. Your goal: make the cart complete the loop AND travel as far as possible on the flat section after the loop. Find the combination of settings that does both.</p>
+      <p>Use <b>Simulation 1</b> — it lets you set drop height, friction, and cart mass. Your goal: make the cart complete the loop AND travel as far as possible on the 60 m flat section after the loop — without crashing. If the cart reaches the barrier at the end, it must be going <b>3 m/s or slower</b>. Find the combination of settings that does both.</p>
       <ol>
         <li>What settings did you end up with? (drop height, friction, mass)</li>
         <li>Explain your choices using at least <b>two</b> force concepts from this lab (gravity, friction, net force, inertia, Newton's laws).</li>
@@ -574,7 +574,7 @@ wire('s1f','v1f',function(v){return['None','Medium','High'][v];});
 wire('s2h','v2h',function(v){return v+' m';});
 wire('s2f','v2f',function(v){return['None','Medium','High'][v];});
 wire('s3h','v3h',function(v){return v+' m';});
-wire('s3m','v3m',function(v){return v+' kg';});
+wire('s1m','v1m',function(v){return v+' kg';});
 
 /* ══════════════════════════════════════════════════
    DRAWING HELPERS
@@ -963,14 +963,6 @@ function linePts(pts,x0,y0,x1,y1,n){
   for(var i=0;i<=n;i++){var t=i/n;pts.push([x0+t*(x1-x0),y0+t*(y1-y0)]);}
 }
 
-/* ── SIM 1 track: platform → big drop → flat → loop → run-out ──
-   Key design decisions:
-   • Loop entry/exit beziers have control points that are tangent to the circle
-     so the join is smooth — no visible kink at the junction
-   • High point counts (40-60) on curved sections so angle never jumps
-   • All segments added with no duplicate end/start point (last point of one
-     segment == first point of next — so we skip the first point on each
-     subsequent segment via splice at push time using the helper below)        */
 function appendBez(pts,x0,y0,cx0,cy0,cx1,cy1,x1,y1,n){
   // Skips i=0 to avoid duplicating the join point
   n=n||40;
@@ -989,43 +981,90 @@ function appendLine(pts,x0,y0,x1,y1,n){
   for(var i=1;i<=n;i++){var t=i/n;pts.push([x0+t*(x1-x0),y0+t*(y1-y0)]);}
 }
 
-function makeSim1Track(h){
-  var topY=GY-cl(h*(GY/11),GY*.12,GY*.72);
-  var botY=GY-16;
-  var R=62;
-  // Loop center so bottom of loop sits exactly at botY
-  var lcx=VW*.57, lcy=botY-R;
-  // Tangent point where flat meets the loop on the left: (lcx-R, lcy)
-  // At angle=PI on the circle, tangent direction is (0,-1) i.e. straight up
-  // So the bezier control point going INTO the loop must come from below
-  var pts=[];
-  // Start: push the very first point manually
-  pts.push([30,topY]);
-  appendLine(pts,30,topY,VW*.10,topY,3);
-  appendBez(pts,VW*.10,topY, VW*.115,topY, VW*.20,botY, VW*.24,botY,40);
-  appendLine(pts,VW*.24,botY, lcx-R,botY, 14);
-  // Curve up into loop — entry tangent at (lcx-R, lcy) is straight up (0,-R)
-  // so control points: from (lcx-R, botY) control=(lcx-R, lcy+R*.6), then
-  // the circle join point is (lcx-R, lcy) with control=(lcx-R, lcy-R*.1)
-  appendBez(pts, lcx-R,botY, lcx-R,botY-R*.5, lcx-R,lcy+R*.15, lcx-R,lcy, 20);
-  // Full loop (clockwise: starts at left-middle, angle=PI, goes +TAU)
-  appendArc(pts,lcx,lcy,R,Math.PI,TAU,72);
-  // Exit — from (lcx-R, lcy) tangent is down, mirror of entry
-  appendBez(pts, lcx-R,lcy, lcx-R,lcy+R*.15, lcx+R+30,botY-R*.3, lcx+R+40,botY, 20);
-  appendLine(pts,lcx+R+40,botY, VW*.98,botY, 20);
-  return{pts:pts,topY:topY,botY:botY,lcx:lcx,lcy:lcy,R:R};
+/* ══════════════════════════════════════════════════
+   PHYSICS — real units (m, m/s). Friction acts on the flat track only.
+   Sim 1 and Sim 2 share the same friction levels so their results agree.
+══════════════════════════════════════════════════ */
+var G=9.8;
+var MU=[0,.15,.35];   // None, Medium, High
+var LOOP_R=1.6;       // loop radius (m): needs a 4.0 m drop with no friction
+var PRE_LOOP=2;       // flat track before the loop (m)
+var RUN_M=60;         // flat track after the drop / loop (m)
+var SAFE_V=3;         // barrier is safe below this speed (m/s), same rule as Q7
+var TS=1.5;           // flat-track animation runs 1.5x real time
+var FLV=['None','Medium','High'];
+
+/* Cart at fractional point index fi, wheels on top of the rails */
+function cartAt(ctx,pts,fi,col,spd){
+  var n=pts.length;fi=cl(fi,0,n-1);
+  var i=Math.min(Math.floor(fi),n-2),f=fi-i;
+  var x=lr(pts[i][0],pts[i+1][0],f),y=lr(pts[i][1],pts[i+1][1],f);
+  var ia=cl(i-4,0,n-1),ib=cl(i+4,0,n-1);
+  var ang=Math.atan2(pts[ib][1]-pts[ia][1],pts[ib][0]-pts[ia][0]);
+  var cx=x+Math.sin(ang)*12,cy=y-Math.cos(ang)*12;
+  drawCart(ctx,cx,cy,ang,col,cl(spd/12,0,1));
+  return{x:cx,y:cy,ang:ang};
 }
 
-/* ── SIM 2 track: platform → drop → long flat run-out ── */
+/* Speed partway down the drop, from how far the cart has fallen */
+function dropSpeed(h,tr,fi){var y=tr.pts[Math.floor(fi)][1];return Math.sqrt(Math.max(0,2*G*h*(y-tr.topY)/(tr.botY-tr.topY)));}
+
+/* Flat-track motion with friction: x(τ)=v0τ−½aτ², stops at x=v0²/2a or at the end of the track */
+function startRun(o,v0,f){
+  var a=MU[f]*G,dStop=a>0?v0*v0/(2*a):Infinity;
+  o.tau=0;o.x=0;o.v=v0;o.vx0=v0;o.a=a;
+  o.xEnd=Math.min(dStop,RUN_M);
+  o.endV=dStop>RUN_M?Math.sqrt(Math.max(0,v0*v0-2*a*RUN_M)):null;
+}
+function stepRun(o,dt){ // returns true when the cart has stopped or reached the end
+  o.tau+=dt*TS;
+  o.x=o.vx0*o.tau-.5*o.a*o.tau*o.tau;o.v=o.vx0-o.a*o.tau;
+  if(o.x>=o.xEnd||o.v<=0){o.x=o.xEnd;o.v=o.endV||0;return true;}
+  return false;
+}
+
+function drawRuler(ctx,x0,x1,y){
+  ctx.strokeStyle='rgba(220,240,255,0.35)';ctx.lineWidth=1;
+  for(var dm=0;dm<=6;dm++){
+    var mx=x0+dm*((x1-x0)/6);
+    ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(mx,y-8);ctx.lineTo(mx,y+18);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='rgba(200,225,255,0.7)';ctx.font='10px IBM Plex Mono,monospace';ctx.textAlign='center';
+    ctx.fillText((dm*10)+'m',mx,y+30);
+  }
+}
+
+function canvasMsg(ctx,txt,col,x,y){
+  ctx.save();ctx.fillStyle=col;ctx.font='bold 15px Work Sans,sans-serif';ctx.textAlign='center';
+  ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=6;ctx.fillText(txt,x,y);ctx.restore();
+}
+
+/* ── SIM 1 track: platform → drop → short flat → loop → 60 m run-out → barrier ──
+   The loop runs counter-clockwise on screen, so the rider stays on the inside. */
+function makeSim1Track(h){
+  var topY=GY-cl(h*(GY/11),GY*.12,GY*.72);
+  var botY=GY-16,R=50,lcx=VW*.40,lcy=botY-R,runX1=VW*.95;
+  var pts=[[30,topY]];
+  appendLine(pts,30,topY,VW*.10,topY,3);
+  appendBez(pts,VW*.10,topY, VW*.115,topY, VW*.18,botY, VW*.22,botY,40);
+  var iDrop=pts.length-1;
+  appendLine(pts,VW*.22,botY,lcx,botY,12);
+  var iLoop0=pts.length-1;
+  appendArc(pts,lcx,lcy,R,Math.PI/2,-TAU,96);
+  var iLoop1=pts.length-1;
+  appendLine(pts,lcx,botY,runX1,botY,80);
+  return{pts:pts,topY:topY,botY:botY,lcx:lcx,lcy:lcy,R:R,iDrop:iDrop,iLoop0:iLoop0,iLoop1:iLoop1,runX0:lcx,runX1:runX1};
+}
+
+/* ── SIM 2 track: platform → drop → 60 m flat ── */
 function makeSim2Track(h){
   var topY=GY-cl(h*(GY/11),GY*.12,GY*.72);
   var botY=GY-16;
-  var pts=[];
-  pts.push([30,topY]);
+  var pts=[[30,topY]];
   appendLine(pts,30,topY,VW*.10,topY,3);
   appendBez(pts,VW*.10,topY, VW*.115,topY, VW*.22,botY, VW*.26,botY, 40);
+  var iDrop=pts.length-1;
   appendLine(pts,VW*.26,botY, VW*.98,botY, 60);
-  return{pts:pts,topY:topY,botY:botY,flatStart:VW*.26};
+  return{pts:pts,topY:topY,botY:botY,flatStart:VW*.26,flatEnd:VW*.98,iDrop:iDrop};
 }
 
 /* ── SIM 3: three parallel drops ── */
@@ -1040,212 +1079,177 @@ function makeSim3Drop(h,cx){
 }
 
 /* ══════════════════════════════════════════════════
-   SIM STATES
+   SIM STATES  (ph: idle → drop → … → done)
 ══════════════════════════════════════════════════ */
-var S1={run:false,t:0,done:false,failed:false};
-var S2={run:false,t:0,done:false,stopped:false,stopPt:null};
+var S1={ph:'idle'};
+var S2={ph:'idle'};
 var S3={run:false,t:0,done:false};
+function val(id){return +document.getElementById(id).value;}
 
 /* ══════════════════════════════════════════════════
-   SIM 1 — DROP HEIGHT & LOOP
+   SIM 1 — DROP HEIGHT, LOOP & RUN-OUT
 ══════════════════════════════════════════════════ */
+function vLoop(s){return Math.sqrt(Math.max(0,S1.v1*S1.v1-2*G*LOOP_R*(1-Math.cos(TAU*s))));}
+function vBack(s){return Math.sqrt(Math.max(0,2*G*LOOP_R*(Math.cos(TAU*s)-Math.cos(TAU*S1.sStop))));}
+
+function startSim1(){
+  var h=val('s1h'),f=val('s1f'),m=val('s1m');
+  var v0=Math.sqrt(2*G*h),v1sq=Math.max(0,v0*v0-2*MU[f]*G*PRE_LOOP);
+  S1={ph:'drop',t:0,fi:0,h:h,f:f,m:m,v0:v0,v1:Math.sqrt(v1sq),v:0,s:0,
+    ok:v1sq>=5*G*LOOP_R,  // speed at the top must satisfy v² ≥ gR
+    // too slow: it climbs until it stops (or loses the track just before the top), then slides back
+    sStop:Math.min(.4,Math.acos(cl(1-v1sq/(2*G*LOOP_R),-1,1))/TAU)};
+  if(S1.ok)S1.sStop=1;
+  document.getElementById('ro1').textContent='Running…';
+}
+
+function stepSim1(dt){
+  var s=S1;if(s.ph==='idle'||s.ph==='done')return;
+  var tr=makeSim1Track(s.h);
+  s.t+=dt;
+  if(s.ph==='drop'){
+    var u=Math.min(1,s.t/1.3);s.fi=tr.iDrop*u*u;s.v=dropSpeed(s.h,tr,s.fi);
+    if(u>=1){s.ph='flat';s.t=0;}
+  } else if(s.ph==='flat'){
+    var u2=Math.min(1,s.t/.35);s.fi=lr(tr.iDrop,tr.iLoop0,u2);s.v=lr(s.v0,s.v1,u2);
+    if(u2>=1){s.ph='loop';s.s=0;}
+  } else if(s.ph==='loop'){
+    s.s+=Math.max(1,vLoop(s.s))*dt*.7/(TAU*LOOP_R);
+    if(s.s>=s.sStop){s.s=s.sStop;if(s.ok){s.ph='run';startRun(s,s.v1,s.f);}else s.ph='back';}
+    s.fi=lr(tr.iLoop0,tr.iLoop1,s.s);s.v=vLoop(s.s);
+  } else if(s.ph==='back'){
+    s.s-=Math.max(1,vBack(s.s))*dt*.7/(TAU*LOOP_R);
+    if(s.s<=0){s.s=0;s.ph='done';}
+    s.fi=lr(tr.iLoop0,tr.iLoop1,s.s);s.v=vBack(s.s);
+    if(s.ph==='done')finishSim1();
+  } else if(s.ph==='run'){
+    var end=stepRun(s,dt);
+    s.fi=lr(tr.iLoop1,tr.pts.length-1,s.x/RUN_M);
+    if(end){s.ph='done';finishSim1();}
+  }
+}
+
+function finishSim1(){
+  var s=S1,html='<b>Bottom speed:</b> '+s.v0.toFixed(1)+' m/s &nbsp;·&nbsp; Loop: ';
+  if(!s.ok)html+='<b class="k-r">❌ Failed — too slow at the top, the cart fell back</b>';
+  else{
+    html+='<b class="k-gr">✅ Complete</b> &nbsp;·&nbsp; ';
+    if(s.endV==null)html+='<b>Stopped '+s.x.toFixed(1)+' m after the loop</b>';
+    else if(s.endV<=SAFE_V)html+='<b class="k-gr">Reached the barrier (60 m) at '+s.endV.toFixed(1)+' m/s — safe stop</b>';
+    else html+='<b class="k-r">💥 Hit the barrier (60 m) at '+s.endV.toFixed(1)+' m/s — crash!</b>';
+  }
+  html+=' &nbsp;·&nbsp; Friction: '+FLV[s.f]+' &nbsp;·&nbsp; Mass: '+s.m+' kg';
+  document.getElementById('ro1').innerHTML=html;
+}
+
 function drawSim1(){
   var ctx=getCtx('cv1');if(!ctx)return;
-  var h=+document.getElementById('s1h').value||5;
-  var fLvl=+document.getElementById('s1f').value||0;
+  var s=S1,live=s.ph!=='idle';
+  var h=live?s.h:val('s1h'),f=live?s.f:val('s1f');
   var tr=makeSim1Track(h);
-  var baseSpd=Math.sqrt(2*9.8*h);
-  var needSpd=Math.sqrt(2*9.8*tr.R*2.5);
-  var canLoop=baseSpd>=needSpd;
 
   drawScene(ctx);
   dimLine(ctx,VW*.06,tr.topY,tr.botY,h+'m');
+  drawRuler(ctx,tr.runX0,tr.runX1,tr.botY);
 
-  // Loop glow hint
-  ctx.save();ctx.strokeStyle='rgba(100,180,255,0.12)';ctx.lineWidth=tr.R*.5;
-  ctx.beginPath();ctx.arc(tr.lcx,tr.lcy,tr.R,0,TAU);ctx.stroke();ctx.restore();
+  // Safety barrier at the end of the run-out
+  for(var bi=0;bi<4;bi++){ctx.fillStyle=bi%2?'#ffffff':'#dd2222';ctx.fillRect(tr.runX1+6,tr.botY-36+bi*9,14,9);}
+  ctx.strokeStyle='#222';ctx.lineWidth=1.5;ctx.strokeRect(tr.runX1+6,tr.botY-36,14,36);
 
   drawTrack(ctx,tr.pts);
 
-  var n=tr.pts.length;
-
-  if(S1.run||S1.done){
-    var dropFrac=0.26;
-    var pIdx=cl(Math.floor(S1.t*(n-1)),0,n-2);
-    var ptFrac=pIdx/(n-1);
-    var curSpd;
-    if(ptFrac<dropFrac){
-      curSpd=baseSpd*Math.sqrt(Math.max(0.01,ptFrac/dropFrac));
-    } else {
-      var flatF=cl((ptFrac-dropFrac)/(1-dropFrac),0,1);
-      var frictionK=[0,.10,.28][fLvl];
-      curSpd=baseSpd*(1-frictionK*flatF);
+  if(live){
+    var c=cartAt(ctx,tr.pts,s.fi,'#dd2222',s.v);
+    if(s.ph==='drop'&&c.ang>.05){
+      var gcomp=Math.sin(c.ang)*120;
+      arrow(ctx,c.x,c.y,Math.cos(c.ang)*gcomp,Math.sin(c.ang)*gcomp,'#ff5030','gravity');
     }
-    curSpd=Math.max(0,curSpd);
-
-    var atTop=ptFrac>0.54&&ptFrac<0.64;
-    var inLoop=ptFrac>0.44&&ptFrac<0.74;
-
-    // ── Smooth angle: use span of ±4 pts to avoid jitter on tight curves ──
-    var span=4;
-    var ia=cl(pIdx-span,0,n-1), ib=cl(pIdx+span,0,n-1);
-    var ang=Math.atan2(tr.pts[ib][1]-tr.pts[ia][1], tr.pts[ib][0]-tr.pts[ia][0]);
-
-    // ── Perpendicular offset: cart rides ON TOP of the rail ──
-    // Normal = rotate tangent 90° CCW = (-sin(ang), cos(ang))
-    // We want the cart above the rail, so offset in -normal direction
-    // (the rail is below the cart; normal pointing "up" from the rail is -sin, cos)
-    var CART_OFFSET=8; // px — how far cart center sits above rail centerline
-    var nx=-Math.sin(ang), ny=Math.cos(ang);
-    // Ensure normal points away from the track center (upward in screen = negative y)
-    // On the bottom of a loop normal points down — we always want to push "inward" on loops
-    // and "upward" on straights. The sign: if ny>0 (pointing down), flip.
-    var cx2=tr.pts[pIdx][0] + nx*CART_OFFSET;
-    var cy2=tr.pts[pIdx][1] + ny*CART_OFFSET;
-
-    var earD=cl(curSpd/12,0,1); // ears fully back at 12 m/s
-    drawCart(ctx,cx2,cy2,ang,'#dd2222',earD);
-
-    // Force arrows
-    if(ptFrac<0.28){// on the drop
-      var gcomp=Math.sin(ang)*120;
-      arrow(ctx,cx2,cy2,Math.cos(ang)*gcomp,Math.sin(ang)*gcomp,'#ff5030','gravity');
+    if((s.ph==='flat'||s.ph==='run')&&f>0&&s.v>.3){
+      arrow(ctx,c.x,c.y,-Math.cos(c.ang)*f*40,-Math.sin(c.ang)*f*40,'#30cc60','friction');
     }
-    if(ptFrac>0.30&&fLvl>0){
-      arrow(ctx,cx2,cy2,-Math.cos(ang)*fLvl*40,-Math.sin(ang)*fLvl*40,'#30cc60','friction');
+    if(s.ph==='loop'&&s.ok){
+      var toCx=tr.lcx-c.x,toCy=tr.lcy-c.y,tlen=Math.hypot(toCx,toCy)||1;
+      arrow(ctx,c.x,c.y,toCx/tlen*45,toCy/tlen*45,'#80d0ff','centripetal');
     }
-    if(inLoop&&canLoop){
-      // centripetal arrow toward loop center
-      var toCx=tr.lcx-cx2,toCy=tr.lcy-cy2;
-      var tlen=Math.hypot(toCx,toCy)||1;
-      arrow(ctx,cx2,cy2,toCx/tlen*45,toCy/tlen*45,'#80d0ff','centripetal');
-    }
+    if(s.ph==='back')arrow(ctx,c.x,c.y,0,55,'#ff5030','gravity');
+    badge(ctx,cl(c.x+64,50,VW-50),cl(c.y-20,20,VH-10),s.v,s.v<1.5?'rgba(220,50,30,.95)':'rgba(30,180,80,.95)');
 
-    // Speed badge — to the right of the dog, clear of the head
-    if(ptFrac>0.27&&ptFrac<0.38){
-      badge(ctx,cx2+64,cy2-20,baseSpd,'rgba(30,180,80,0.95)');
-    }
-
-    if(!canLoop&&atTop){
-      ctx.fillStyle='rgba(220,40,30,.9)';ctx.font='bold 15px Work Sans,sans-serif';ctx.textAlign='center';
-      ctx.shadowColor='rgba(0,0,0,0.5)';ctx.shadowBlur=6;
-      ctx.fillText('⚠️ Too slow — loop not completed!',VW/2,40);ctx.shadowBlur=0;
-    }
-
-    if(S1.t>=1&&!S1.done){
-      S1.done=true;S1.run=false;
-      document.getElementById('ro1').innerHTML=
-        '<b>Bottom speed:</b> '+baseSpd.toFixed(1)+' m/s &nbsp;·&nbsp; Loop: <b class="'+(canLoop?'k-gr':'k-r')+'">'+(canLoop?'✅ Complete':'❌ Failed — not enough height')+
-        '</b>&nbsp;·&nbsp; Friction: '+['None','Medium','High'][fLvl];
-    }
+    if(!s.ok&&(s.ph==='back'||s.ph==='done'))canvasMsg(ctx,'⚠️ Too slow at the top — the cart fell back!','rgba(255,90,70,1)',VW/2,40);
+    else if(s.ph==='done'&&s.endV!=null&&s.endV>SAFE_V)canvasMsg(ctx,'💥 CRASH — too fast at the barrier!','rgba(255,90,70,1)',VW/2,40);
+    else if(s.ph==='done')canvasMsg(ctx,'✅ Loop complete — stopped safely','rgba(120,240,140,1)',VW/2,40);
   } else {
-    // Cart sitting at start
-    var sp=tr.pts[0];drawCart(ctx,sp[0],sp[1]-8,0,'#dd2222',0);
+    cartAt(ctx,tr.pts,0,'#dd2222',0);
   }
 
-  // Labels
   ctx.fillStyle='rgba(255,255,255,0.8)';ctx.font='bold 11px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=4;
   ctx.fillText('START',VW*.10,tr.topY-24);
   ctx.fillText('LOOP',tr.lcx,tr.lcy-tr.R-16);
-  ctx.fillText('FINISH',VW*.92,tr.botY-18);ctx.shadowBlur=0;
+  ctx.fillText('BARRIER',tr.runX1+13,tr.botY-44);ctx.shadowBlur=0;
 }
 
-document.getElementById('btn1').onclick=function(){
-  S1={run:true,t:0,done:false,failed:false};
-  document.getElementById('ro1').textContent='Running…';
-};
-document.getElementById('btn1r').onclick=function(){
-  S1={run:false,t:0,done:false,failed:false};
-  document.getElementById('ro1').textContent='Set your drop height and click Launch.';
-};
+function resetSim1(){S1={ph:'idle'};document.getElementById('ro1').textContent='Set your drop height and click Launch to run the simulation.';}
+document.getElementById('btn1').onclick=startSim1;
+document.getElementById('btn1r').onclick=resetSim1;
+['s1h','s1f','s1m'].forEach(function(id){document.getElementById(id).addEventListener('input',resetSim1);});
 
 /* ══════════════════════════════════════════════════
    SIM 2 — FRICTION & STOPPING DISTANCE
 ══════════════════════════════════════════════════ */
+function startSim2(){
+  var h=val('s2h');
+  S2={ph:'drop',t:0,fi:0,h:h,f:val('s2f'),v0:Math.sqrt(2*G*h),v:0};
+  document.getElementById('ro2').textContent='Running…';
+}
+
+function stepSim2(dt){
+  var s=S2;if(s.ph==='idle'||s.ph==='done')return;
+  var tr=makeSim2Track(s.h);
+  s.t+=dt;
+  if(s.ph==='drop'){
+    var u=Math.min(1,s.t/1.3);s.fi=tr.iDrop*u*u;s.v=dropSpeed(s.h,tr,s.fi);
+    if(u>=1){s.ph='run';startRun(s,s.v0,s.f);}
+  } else if(s.ph==='run'){
+    var end=stepRun(s,dt);
+    s.fi=lr(tr.iDrop,tr.pts.length-1,s.x/RUN_M);
+    if(end){
+      s.ph='done';
+      document.getElementById('ro2').innerHTML='<b>Bottom speed:</b> '+s.v0.toFixed(1)+' m/s &nbsp;·&nbsp; '+
+        (s.endV==null?'<b>Stopped at: '+s.x.toFixed(1)+' m</b>':'<b>Never stopped</b> — still moving at '+s.endV.toFixed(1)+' m/s at the end of the 60 m track')+
+        ' &nbsp;·&nbsp; Friction: '+FLV[s.f]+
+        (s.f>0?' &nbsp;·&nbsp; <span class="badge-a">Friction = unbalanced force → deceleration</span>':' &nbsp;·&nbsp; <span class="badge-p">No friction → no net force → constant speed</span>');
+    }
+  }
+}
+
 function drawSim2(){
   var ctx=getCtx('cv2');if(!ctx)return;
-  var h=+document.getElementById('s2h').value||5;
-  var fLvl=+document.getElementById('s2f').value||1;
-  var frK=[0,.22,.52][fLvl];
+  var s=S2,live=s.ph!=='idle';
+  var h=live?s.h:val('s2h'),fLvl=live?s.f:val('s2f');
   var tr=makeSim2Track(h);
-  var baseSpd=Math.sqrt(2*9.8*h);
-  var n=tr.pts.length;
+  var flatW=tr.flatEnd-tr.flatStart;
 
   drawScene(ctx);
   dimLine(ctx,VW*.06,tr.topY,tr.botY,h+'m');
 
   // Friction surface visualisation on flat
-  var flatW=VW*.98-tr.flatStart;
   if(fLvl>0){
-    var fcol=['','rgba(255,180,0,0.18)','rgba(255,60,30,0.22)'][fLvl];
-    ctx.fillStyle=fcol;ctx.fillRect(tr.flatStart,tr.botY,flatW,12);
+    ctx.fillStyle=['','rgba(255,180,0,0.18)','rgba(255,60,30,0.22)'][fLvl];ctx.fillRect(tr.flatStart,tr.botY,flatW,12);
     ctx.strokeStyle=['','rgba(255,160,0,.55)','rgba(255,50,20,.7)'][fLvl];ctx.lineWidth=1;
     for(var fx=tr.flatStart;fx<tr.flatStart+flatW;fx+=14){
       ctx.beginPath();ctx.moveTo(fx,tr.botY);ctx.lineTo(fx+7,tr.botY+12);ctx.stroke();
     }
   }
-
-  // Distance ruler
-  ctx.strokeStyle='rgba(220,240,255,0.35)';ctx.lineWidth=1;ctx.setLineDash([3,5]);
-  for(var dm=0;dm<=6;dm++){
-    var mx=tr.flatStart+dm*(flatW/6);
-    ctx.beginPath();ctx.moveTo(mx,tr.botY-8);ctx.lineTo(mx,tr.botY+18);ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle='rgba(200,225,255,0.7)';ctx.font='10px IBM Plex Mono,monospace';ctx.textAlign='center';
-    ctx.fillText((dm*10)+'m',mx,tr.botY+30);ctx.setLineDash([3,5]);
-  }
-  ctx.setLineDash([]);
-
+  drawRuler(ctx,tr.flatStart,tr.flatEnd,tr.botY);
   drawTrack(ctx,tr.pts);
 
-  if(S2.run||S2.done){
-    var pIdx2=cl(Math.floor(S2.t*(n-1)),0,n-2);
-    var ptFrac2=pIdx2/(n-1);
-    var dropFrac2=0.36;
-    var curSpd2;
-    if(ptFrac2<dropFrac2){
-      curSpd2=baseSpd*Math.sqrt(ptFrac2/dropFrac2);
-    } else {
-      var flatF2=cl((ptFrac2-dropFrac2)/(1-dropFrac2),0,1);
-      curSpd2=Math.max(0,baseSpd*(1-frK*2.2*flatF2));
-    }
-
-    // If speed hits 0, cart stops; freeze ptIdx there
-    if(S2.stopped&&S2.stopPt){
-      pIdx2=S2.stopPt;
-    } else if(curSpd2<=0&&ptFrac2>dropFrac2&&!S2.stopped){
-      S2.stopped=true;S2.stopPt=pIdx2;S2.run=false;S2.done=true;
-      var stopM=Math.round((tr.pts[pIdx2][0]-tr.flatStart)/flatW*60);
-      document.getElementById('ro2').innerHTML=
-        '<b>Bottom speed:</b> '+baseSpd.toFixed(1)+' m/s &nbsp;·&nbsp; <b>Stopped at: ~'+stopM+' m</b> &nbsp;·&nbsp; Friction: '+['None','Medium','High'][fLvl]+
-        ' &nbsp;·&nbsp; <span class="badge-a">Friction = unbalanced force → deceleration</span>';
-    }
-
-    var sp2b=4;
-    var ia2=cl(pIdx2-sp2b,0,n-1),ib2=cl(pIdx2+sp2b,0,n-1);
-    var ang2=Math.atan2(tr.pts[ib2][1]-tr.pts[ia2][1],tr.pts[ib2][0]-tr.pts[ia2][0]);
-    var nx2=-Math.sin(ang2),ny2=Math.cos(ang2);
-    var cx2b=tr.pts[pIdx2][0]+nx2*8, cy2b=tr.pts[pIdx2][1]+ny2*8;
-    var earD2=cl(curSpd2/12,0,1);
-    drawCart(ctx,cx2b,cy2b,ang2,'#1a60dd',earD2);
-
-    if(ptFrac2>dropFrac2&&fLvl>0&&curSpd2>0.5){
-      arrow(ctx,cx2b,cy2b,-frK*80,0,'#30cc60','friction');
-    }
-    badge(ctx,cx2b+64,cy2b-20,curSpd2,curSpd2<1.5?'rgba(220,50,30,.95)':'rgba(30,180,80,.95)');
-
-    if(S2.stopped){
-      ctx.fillStyle='rgba(220,40,30,.9)';ctx.font='bold 14px Work Sans,sans-serif';ctx.textAlign='center';
-      ctx.shadowColor='rgba(0,0,0,0.5)';ctx.shadowBlur=4;
-      ctx.fillText('🛑 STOPPED',cx2b,cy2b-65);ctx.shadowBlur=0;
-    }
-
-    if(S2.t>=1&&!S2.done&&!S2.stopped){
-      S2.done=true;S2.run=false;
-      document.getElementById('ro2').innerHTML='<b>Bottom speed:</b> '+baseSpd.toFixed(1)+' m/s &nbsp;·&nbsp; Friction: '+['None','Medium','High'][fLvl]+' &nbsp;·&nbsp; Cart reached the end!';
-    }
+  if(live){
+    var c=cartAt(ctx,tr.pts,s.fi,'#1a60dd',s.v);
+    if(s.ph==='run'&&fLvl>0&&s.v>.3)arrow(ctx,c.x,c.y,-fLvl*40,0,'#30cc60','friction');
+    badge(ctx,cl(c.x+64,50,VW-50),c.y-20,s.v,s.v<1.5?'rgba(220,50,30,.95)':'rgba(30,180,80,.95)');
+    if(s.ph==='done'&&s.endV==null)canvasMsg(ctx,'🛑 STOPPED',
+      'rgba(255,90,70,1)',c.x,c.y-65);
   } else {
-    var sp2=tr.pts[0];drawCart(ctx,sp2[0],sp2[1]-8,0,'#1a60dd',0);
+    cartAt(ctx,tr.pts,0,'#1a60dd',0);
   }
 
   ctx.fillStyle='rgba(255,255,255,0.8)';ctx.font='bold 11px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=4;
@@ -1254,14 +1258,10 @@ function drawSim2(){
   ctx.fillText(['🟢 No Friction','🟡 Medium Friction','🔴 High Friction'][fLvl],tr.flatStart+flatW/2,tr.botY-18);ctx.shadowBlur=0;
 }
 
-document.getElementById('btn2').onclick=function(){
-  S2={run:true,t:0,done:false,stopped:false,stopPt:null};
-  document.getElementById('ro2').textContent='Running…';
-};
-document.getElementById('btn2r').onclick=function(){
-  S2={run:false,t:0,done:false,stopped:false,stopPt:null};
-  document.getElementById('ro2').textContent='Adjust friction and see how far the cart travels.';
-};
+function resetSim2(){S2={ph:'idle'};document.getElementById('ro2').textContent='Adjust friction and see how far the cart travels on the flat section.';}
+document.getElementById('btn2').onclick=startSim2;
+document.getElementById('btn2r').onclick=resetSim2;
+['s2h','s2f'].forEach(function(id){document.getElementById(id).addEventListener('input',resetSim2);});
 
 /* ══════════════════════════════════════════════════
    SIM 3 — MASS (3 carts drop simultaneously)
@@ -1293,22 +1293,15 @@ function drawSim3(){
     ctx.fillText(massLabels[mi],cx3,tr3.topY-28);
 
     if(S3.run||S3.done){
-      var pIdx3=cl(Math.floor(ease(S3.t)*(n3-1)),0,n3-2);
-      var sp3=4;
-      var ia3=cl(pIdx3-sp3,0,n3-1),ib3=cl(pIdx3+sp3,0,n3-1);
-      var ang3=Math.atan2(tr3.pts[ib3][1]-tr3.pts[ia3][1],tr3.pts[ib3][0]-tr3.pts[ia3][0]);
-      var nx3=-Math.sin(ang3),ny3=Math.cos(ang3);
-      var cx3b=tr3.pts[pIdx3][0]+nx3*8, cy3b=tr3.pts[pIdx3][1]+ny3*8;
-      var earD3=cl(curSpd3/12,0,1);
-      drawCart(ctx,cx3b,cy3b,ang3,cartColors[mi],earD3);
-
-      var ptFrac3=pIdx3/(n3-1);
+      var fi3=ease(S3.t)*(n3-1);
+      var ptFrac3=fi3/(n3-1);
       var curSpd3=ptFrac3<0.85?spd*Math.sqrt(ptFrac3/.85):spd;
+      var c3=cartAt(ctx,tr3.pts,fi3,cartColors[mi],curSpd3);
       if(ptFrac3>.82){
-        badge(ctx,cx3b+62,cy3b-20,spd,cartColors[mi]);
+        badge(ctx,c3.x+62,c3.y-20,spd,cartColors[mi]);
       }
     } else {
-      var sp3=tr3.pts[0];drawCart(ctx,sp3[0],sp3[1]-8,0,cartColors[mi],0);
+      cartAt(ctx,tr3.pts,0,cartColors[mi],0);
     }
   });
 
@@ -1323,10 +1316,12 @@ document.getElementById('btn3').onclick=function(){
   S3={run:true,t:0,done:false};
   document.getElementById('ro3').textContent='Watch all three carts drop at the same time…';
 };
-document.getElementById('btn3r').onclick=function(){
+function resetSim3(){
   S3={run:false,t:0,done:false};
-  document.getElementById('ro3').textContent='Set cart mass and launch to see if it changes the speed.';
-};
+  document.getElementById('ro3').textContent='Pick a drop height and launch to see if mass changes the speed.';
+}
+document.getElementById('btn3r').onclick=resetSim3;
+document.getElementById('s3h').addEventListener('input',resetSim3);
 
 /* ══════════════════════════════════════════════════
    MAIN LOOP
@@ -1334,8 +1329,8 @@ document.getElementById('btn3r').onclick=function(){
 var prevT=0;
 (function loop(ts){
   var dt=prevT?Math.min(0.05,(ts-prevT)/1000):0.016;prevT=ts;
-  if(S1.run)S1.t=Math.min(S1.t+dt*.22,1);
-  if(S2.run)S2.t=Math.min(S2.t+dt*.20,1);
+  stepSim1(dt);
+  stepSim2(dt);
   if(S3.run)S3.t=Math.min(S3.t+dt*.24,1);
 
   // Only draw canvases that are visible
@@ -1365,7 +1360,8 @@ var prevT=0;
 window.hnt=function(btn){
   var b=btn.nextElementSibling;
   b.classList.toggle('show');
-  btn.textContent=b.classList.contains('show')?'💡 Hide hint':'💡 Need a hint?';
+  btn.dataset.lbl=btn.dataset.lbl||btn.textContent; // keep each button's own label
+  btn.textContent=b.classList.contains('show')?'💡 Hide hint':btn.dataset.lbl;
 };
 
 })();
