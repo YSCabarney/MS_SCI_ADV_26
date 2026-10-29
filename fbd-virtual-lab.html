@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Lab: Newton's Laws</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#F4F5F7; --card:#FFFFFF; --ink:#141821; --soft:#465064; --muted:#7A8296; --line:#DCE0E8; --sunk:#ECEEF3;
+    --accent:#2B59C3; --accent-soft:#E3EAFA; --good:#1E8E5A; --good-soft:#DFF3E8; --bad:#C2412D; --bad-soft:#FBE3DE; --warn-soft:#FBF0D9;
+    --fg:#D63E2A; --fn:#2B59C3; --fa:#1E8E5A; --ff:#C47F0E; --ft:#7A4FCF; --fair:#0E95A1; --net:#141821;
+    --display:'Space Grotesk',system-ui,sans-serif; --body:'Source Sans 3',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F1218; --card:#181C25; --ink:#EEF1F7; --soft:#B8C0D2; --muted:#8890A5; --line:#2B3140; --sunk:#1F2430;
+      --accent:#7FA2F5; --accent-soft:#1D2A47; --good:#4FCB8C; --good-soft:#14301F; --bad:#F2846F; --bad-soft:#3A1E19; --warn-soft:#3A2F14;
+      --fg:#FF7A63; --fn:#7FA2F5; --fa:#4FCB8C; --ff:#F2B54A; --ft:#B293F5; --fair:#4FD2DC; --net:#EEF1F7;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F1218; --card:#181C25; --ink:#EEF1F7; --soft:#B8C0D2; --muted:#8890A5; --line:#2B3140; --sunk:#1F2430;
+    --accent:#7FA2F5; --accent-soft:#1D2A47; --good:#4FCB8C; --good-soft:#14301F; --bad:#F2846F; --bad-soft:#3A1E19; --warn-soft:#3A2F14;
+    --fg:#FF7A63; --fn:#7FA2F5; --fa:#4FCB8C; --ff:#F2B54A; --ft:#B293F5; --fair:#4FD2DC; --net:#EEF1F7;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;padding-inline:16px;}
+  .wrap{max-width:900px;margin:0 auto;padding-block:28px 90px;}
+  h1,h2,h3,h4{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em;}
+  p{margin:0;color:var(--soft);}
+  p b,li b,td b{color:var(--ink);}
+  ul,ol{margin:0;padding-left:22px;color:var(--soft);}
+  li{margin-bottom:5px;}
+  a{color:var(--accent);}
+  sub{font-size:.72em;}
+  .mono{font-family:var(--mono);}
+
+  .hero{position:relative;border-radius:20px;padding:30px 28px;background:var(--card);border:1px solid var(--line);overflow:hidden;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:24px 24px;background-position:-1px -1px;}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,var(--card) 45%,transparent 100%);pointer-events:none;}
+  .hero > *{position:relative;z-index:1;}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;}
+  .hero h1{font-size:clamp(30px,6vw,46px);line-height:1.05;margin:10px 0 10px;}
+  .hero p{max-width:60ch;font-size:18px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .chip{font-family:var(--mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:6px 11px;color:var(--soft);}
+
+  nav.steps-nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);margin:18px -16px 0;padding:10px 16px;border-bottom:1px solid var(--line);}
+  nav.steps-nav ol{list-style:none;display:flex;gap:6px;padding:0;margin:0;overflow-x:auto;scrollbar-width:none;}
+  nav.steps-nav li{margin:0;flex:none;}
+  nav.steps-nav a{display:flex;align-items:center;gap:7px;text-decoration:none;font-size:14px;font-weight:600;color:var(--soft);padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);white-space:nowrap;}
+  nav.steps-nav a span{font-family:var(--mono);font-size:11px;width:20px;height:20px;border-radius:50%;background:var(--sunk);display:flex;align-items:center;justify-content:center;}
+  nav.steps-nav a.on{border-color:var(--accent);color:var(--accent);}
+  nav.steps-nav a.on span{background:var(--accent);color:#fff;}
+
+  section.step{margin-top:56px;display:flex;flex-direction:column;gap:16px;scroll-margin-top:70px;}
+  .step-head{display:flex;gap:14px;align-items:flex-start;}
+  .step-num{flex:none;width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;font-family:var(--display);font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;}
+  .step-head h2{font-size:clamp(24px,4.4vw,32px);line-height:1.15;}
+  .step-head p{margin-top:4px;}
+  h3{font-size:20px;}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+  .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+  .note{border-radius:12px;padding:14px 18px;background:var(--accent-soft);color:var(--ink);font-size:16px;}
+  .note b{color:var(--ink);}
+  .note.warn{background:var(--warn-soft);} .note.good{background:var(--good-soft);} .note.bad{background:var(--bad-soft);}
+  .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .eq{font-family:var(--mono);font-size:17px;background:var(--sunk);border-radius:10px;padding:10px 14px;color:var(--ink);text-align:center;}
+  .eq.big{font-size:22px;padding:14px;}
+  .def{border-left:4px solid var(--accent);padding:4px 0 4px 14px;}
+  .def b{color:var(--ink);}
+
+  figure.viz{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  figure.viz canvas{display:block;width:100%;height:auto;}
+  figure.viz figcaption{padding:10px 16px;font-size:15px;color:var(--soft);border-top:1px solid var(--line);}
+  .ctrl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);background:var(--sunk);}
+  .ctrl label{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--ink);font-weight:600;}
+  .ctrl input[type=range]{width:150px;accent-color:var(--accent);}
+  .ctrl output{font-family:var(--mono);font-size:14px;min-width:56px;color:var(--ink);}
+  .btn{font:600 15px var(--body);border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 14px;cursor:pointer;}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);}
+  .seg button{font:600 14px var(--body);border:0;background:transparent;color:var(--soft);padding:7px 12px;cursor:pointer;}
+  .seg button.on{background:var(--ink);color:var(--bg);}
+  .readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;padding:12px 16px;border-top:1px solid var(--line);}
+  .readout div{background:var(--sunk);border-radius:10px;padding:8px 12px;}
+  .readout span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+  .readout b{font-family:var(--mono);font-size:17px;color:var(--ink);}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px;}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:14.5px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--ink);}
+  .legend i{width:22px;height:4px;border-radius:2px;display:inline-block;}
+
+  table{width:100%;border-collapse:collapse;font-size:15px;}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;color:var(--soft);vertical-align:top;}
+  th{background:var(--sunk);color:var(--ink);font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
+  .tscroll{overflow-x:auto;border-radius:12px;border:1px solid var(--line);background:var(--card);}
+  .tscroll table th:first-child,.tscroll table td:first-child{border-left:0;} .tscroll table th:last-child,.tscroll table td:last-child{border-right:0;}
+  .tscroll table tr:first-child th{border-top:0;} .tscroll table tr:last-child td{border-bottom:0;}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;}
+  details summary{cursor:pointer;font-weight:700;color:var(--ink);}
+  details[open] summary{margin-bottom:10px;}
+  details > *+*{margin-top:8px;}
+
+  .sol{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px;align-items:baseline;}
+  .sol .k{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .sol .v{color:var(--ink);}
+
+  .quiz{display:flex;flex-direction:column;gap:8px;}
+  .opt{display:flex;gap:10px;align-items:center;text-align:left;font:500 16px var(--body);color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;}
+  .opt b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--sunk);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;}
+  .opt.right{border-color:var(--good);background:var(--good-soft);} .opt.wrong{border-color:var(--bad);background:var(--bad-soft);}
+  .feedback{font-size:15.5px;border-radius:10px;padding:10px 14px;display:none;}
+  .feedback.show{display:block;} .feedback.ok{background:var(--good-soft);color:var(--ink);} .feedback.no{background:var(--bad-soft);color:var(--ink);}
+
+  .prob{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;}
+  .prob-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .prob-n{font-family:var(--mono);font-size:12px;font-weight:700;color:#fff;background:var(--ink);border-radius:6px;padding:2px 8px;}
+  .lvl{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .prob-q{color:var(--ink);font-size:17px;}
+  .ans-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .ans-row input{font:600 17px var(--mono);width:130px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);}
+  .ans-row .unit{font-family:var(--mono);color:var(--soft);}
+  .fbd-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;}
+  .fbd-opt{border:1.5px solid var(--line);border-radius:12px;background:var(--card);padding:6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 14px var(--body);color:var(--ink);}
+  .fbd-opt canvas{width:100%;height:auto;display:block;}
+  .fbd-opt.right{border-color:var(--good);background:var(--good-soft);} .fbd-opt.wrong{border-color:var(--bad);background:var(--bad-soft);}
+
+  .steplist{counter-reset:s;list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
+  .steplist li{counter-increment:s;position:relative;padding:10px 14px 10px 48px;background:var(--card);border:1px solid var(--line);border-radius:10px;margin:0;color:var(--soft);}
+  .steplist li::before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:8px;background:var(--accent);color:#fff;font:700 13px var(--mono);display:flex;align-items:center;justify-content:center;}
+  .checkpoint{border:2px dashed var(--accent);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;background:var(--card);}
+  .checkpoint > .tag{color:var(--accent);}
+  .footer{text-align:center;color:var(--muted);font-size:14px;margin-top:60px;}
+  .pace{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:18px;}
+  .pace div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px;color:var(--soft);}
+  .pace b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);}
+
+  .next-step{align-self:flex-end;font-weight:700;text-decoration:none;background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:10px 16px;}
+  .doc-btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;padding:12px 18px;font-size:16px;}
+  .part{display:inline-flex;align-items:center;gap:10px;}
+  .stepper{display:inline-flex;align-items:center;gap:6px;}
+  .stepper button{width:40px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 14px var(--mono);cursor:pointer;}
+  .stepper button:disabled,.seg button:disabled{opacity:.45;cursor:not-allowed;}
+  .stepper b{font-family:var(--mono);font-size:16px;min-width:64px;text-align:center;color:var(--fa);}
+  .loglist td{font-family:var(--mono);font-size:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="kicker">Physics · Virtual Lab · Week 1</span>
+  <h1>Newton's Laws &amp; Free Body Diagrams</h1>
+  <p>Two virtual experiments. In <b>Part 1</b> you'll find the mass of a mystery crate using nothing but forces and a stopwatch. In <b>Part 2</b> you'll ride an elevator and explain why the scale lies.</p>
+  <div class="chips"><span class="chip">≈ 90 minutes total</span><span class="chip">work at your own pace</span><span class="chip">g = 9.8 m/s²</span></div>
+  <div style="margin-top:18px"><a class="doc-btn" href="https://docs.google.com/document/d/1sb7vRR5sppplXVmhQ9i6NLBNAf4JU8iXwzHC2crpTu4/copy" target="_blank" rel="noopener">📄 Make a copy of the Lab Doc</a></div>
+</header>
+
+<nav class="steps-nav" aria-label="Lab parts">
+  <ol>
+    <li><a href="#prep"><span>0</span>Before You Start</a></li>
+    <li><a href="#p1"><span>1</span>Mystery Crate</a></li>
+    <li><a href="#p2"><span>2</span>Elevator Scale</a></li>
+    <li><a href="#wrap"><span>✓</span>Conclusion</a></li>
+  </ol>
+</nav>
+
+<!-- ============ PREP ============ -->
+<section class="step" id="prep">
+  <div class="step-head"><div class="step-num">0</div><div><h2>Before You Start</h2><p>10 minutes of setup.</p></div></div>
+  <div class="card">
+    <h3>What you need</h3>
+    <ol class="steplist">
+      <li><b>Your copy of the Lab Doc.</b> Click the blue button above, then rename the copy with your name. All answers go there.</li>
+      <li><b>Google Sheets</b> open in another tab (for the Part 1 graph).</li>
+      <li><b>A calculator.</b></li>
+      <li><b>Your crate letter</b> from your teacher. If you didn't get one, use the first letter of your last name: A–H → <b>A</b>, I–P → <b>B</b>, Q–Z → <b>C</b>.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>Objectives</h3>
+    <ul>
+      <li>Draw accurate free body diagrams for horizontal and vertical situations.</li>
+      <li>Use ΣF = ma to connect the net force to the acceleration.</li>
+      <li>Use a graph to find an unknown mass experimentally.</li>
+    </ul>
+  </div>
+  <div class="note"><b>First:</b> answer the 3 <b>Pre-Lab Questions</b> at the top of your Lab Doc. Need a refresher? Check Steps 3–5 of the <a href="fbd-intro.html">Forces &amp; FBDs page</a>.</div>
+  <a class="next-step" href="#p1">Next: Part 1 · Mystery Crate →</a>
+</section>
+
+<!-- ============ PART 1 ============ -->
+<section class="step" id="p1">
+  <div class="step-head"><div class="step-num">1</div><div><h2>Part 1: The Mystery Crate</h2><p>Find the mass using Newton's second law. ≈ 45 min</p></div></div>
+
+  <div class="card">
+    <span class="tag">The story</span>
+    <p>A shipping company lost the labels on three crates. There's no scale big enough, but they <i>do</i> have a force sensor, a photogate timer, and a long smooth floor. Your job is to find your crate's mass using physics.</p>
+  </div>
+
+  <div class="card">
+    <h3>The plan</h3>
+    <p>Push the crate with a known force and time how long it takes to travel 4.00 m from rest. Then:</p>
+    <div class="grid2">
+      <div class="eq">acceleration: a = 2d ÷ t²</div>
+      <div class="eq">net force: F<sub>net</sub> = F<sub>a</sub> − F<sub>f</sub></div>
+    </div>
+    <p>Repeat with 5 different forces and graph <b>F<sub>net</sub> (y)</b> vs. <b>a (x)</b>. Since ΣF = m·a, the graph is a straight line, and its <b>slope is the mass</b>.</p>
+    <details><summary>Where does a = 2d ÷ t² come from?</summary><p>For an object that starts from rest with constant acceleration, d = ½·a·t². Solve for a: <b>a = 2d ÷ t²</b>.</p></details>
+  </div>
+
+  <div class="card">
+    <h3>Step 1 · Draw the FBD first</h3>
+    <p>In your Lab Doc (section 1A), draw the FBD of the crate <b>while it slides</b>. There are 4 forces. Check yourself against the live FBD in the simulation <i>after</i> you've drawn yours.</p>
+  </div>
+
+  <div class="card">
+    <h3>Step 2 · Collect data</h3>
+    <ol class="steplist">
+      <li>Pick <b>your crate letter</b> under the simulation. Write the <b>friction</b> value in your Lab Doc.</li>
+      <li>Set the applied force to <b>40 N</b> with the − / + buttons, then press <b>▶ Run</b>.</li>
+      <li>Record the <b>stopwatch time</b> when the crate crosses the photogate (also listed in the run log).</li>
+      <li>Repeat for <b>60, 80, 100, and 120 N</b>.</li>
+      <li>Try <b>20 N</b> once, just to see what happens. (You'll need it for Question 5.)</li>
+    </ol>
+  </div>
+
+  <figure class="viz"><canvas id="c-crate" role="img" aria-label="Crate pushed across a floor toward a photogate, with a live free body diagram"></canvas>
+    <div class="ctrl">
+      <span class="part">Crate <span class="seg" id="cr-crate"><button data-v="A" class="on">A</button><button data-v="B">B</button><button data-v="C">C</button></span></span>
+      <span class="part">Applied force <span class="stepper"><button data-df="-10">−10</button><b id="cr-f"></b><button data-df="10">+10</button></span></span>
+      <button class="btn primary" id="cr-run">▶ Run</button>
+    </div>
+    <div class="readout"><div><span>Crate</span><b id="cr-name">A</b></div><div><span>Mass</span><b>???</b></div><div><span>Friction (sensor)</span><b id="cr-fr"></b></div><div><span>Time to 4.00 m</span><b id="cr-t">—</b></div></div>
+    <figcaption>The worker pushes through a small <b>force sensor</b> (the gray box), so you always know F<sub>a</sub>. The crate starts at rest with its front edge on the START line. The stopwatch stops when the front edge reaches the photogate at 4.00 m. The live FBD shows the forces on the crate during each run.</figcaption></figure>
+
+  <div class="card">
+    <h3>Run log</h3>
+    <div class="tscroll"><table class="loglist"><thead><tr><th>Crate</th><th>Applied force</th><th>Friction</th><th>Time to gate</th></tr></thead><tbody id="cr-log"><tr><td colspan="4">Your runs will appear here.</td></tr></tbody></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Step 3 · Calculate</h3>
+    <p>For each trial, find <b>a</b> and <b>F<sub>net</sub></b>. Here's a worked example with practice numbers (a different crate, not yours):</p>
+    <div class="sol">
+      <span class="k">Given</span><span class="v">F<sub>a</sub> = 50 N, F<sub>f</sub> = 20 N, d = 4.00 m, t = 2.53 s</span>
+      <span class="k">a = 2d ÷ t²</span><span class="v">2(4.00) ÷ (2.53)² = 8.00 ÷ 6.40 = <b>1.25 m/s²</b></span>
+      <span class="k">F<sub>net</sub></span><span class="v">50 − 20 = <b>30 N</b></span>
+      <span class="k">Check</span><span class="v">m = F<sub>net</sub> ÷ a = 30 ÷ 1.25 = 24 kg (from one trial; the graph uses all five)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Step 4 · Graph in Google Sheets</h3>
+    <ol class="steplist">
+      <li>Column A: <b>Acceleration (m/s²)</b>. Column B: <b>Net force (N)</b>. Enter your 5 trials.</li>
+      <li>Select both columns → <b>Insert → Chart → Scatter chart</b>. Make sure acceleration is on the x-axis.</li>
+      <li>Chart editor → Customize → Series → check <b>Trendline</b>, set Label to <b>Use equation</b>.</li>
+      <li>Add a title and axis labels with units. Paste the graph into your Lab Doc.</li>
+      <li>The <b>slope</b> is your crate's mass in kg (because N ÷ (m/s²) = kg).</li>
+    </ol>
+  </div>
+  <div class="note"><b>Then:</b> answer Part 1 Questions 4–7 in your Lab Doc.</div>
+  <a class="next-step" href="#p2">Next: Part 2 · Elevator Scale →</a>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="step" id="p2">
+  <div class="step-head"><div class="step-num">2</div><div><h2>Part 2: The Elevator Scale</h2><p>Vertical forces and the "lying" scale. ≈ 30 min</p></div></div>
+
+  <div class="card">
+    <span class="tag">The story</span>
+    <p>A 55 kg student stands on a bathroom scale in an elevator and rides from the lobby up several floors. A scale doesn't measure weight directly. It measures how hard it has to <b>push up</b> on you: the <b>normal force</b>. Watch what happens to that number.</p>
+  </div>
+
+  <div class="card">
+    <h3>Procedure</h3>
+    <ol class="steplist">
+      <li>Press <b>▶ Play</b> and watch the whole 12-second ride once. Check <b>slow motion</b> if it's too fast.</li>
+      <li>Use the <b>−0.5 s / +0.5 s</b> buttons to stop at exactly <b>0, 2, 4, 8, 10, and 12 s</b>. Record the velocity at each time in the table in your Lab Doc.</li>
+      <li>In each interval, pause in the <b>middle</b> (for example, at 3 s) and record the <b>scale reading</b>.</li>
+      <li>Calculate the acceleration for each interval: <b>a = Δv ÷ Δt</b> (up = +).</li>
+      <li>Predict the scale reading with ΣF<sub>y</sub> = ma: <b>F<sub>N</sub> − mg = ma → F<sub>N</sub> = m(g + a)</b>. Compare it to what the scale showed.</li>
+    </ol>
+  </div>
+
+  <figure class="viz"><canvas id="c-elev" role="img" aria-label="Elevator ride with a student on a scale, velocity readout, and free body diagram"></canvas>
+    <div class="ctrl">
+      <button class="btn primary" id="el-play">▶ Play</button>
+      <button class="btn" id="el-back">−0.5 s</button><button class="btn" id="el-fwd">+0.5 s</button><button class="btn" id="el-reset">↺ Reset</button>
+      <label><input type="checkbox" id="el-slow"> slow motion</label>
+    </div>
+    <div class="readout"><div><span>Time</span><b id="el-t">0.0 s</b></div><div><span>Velocity (+ = up)</span><b id="el-v">+0.0 m/s</b></div><div><span>Scale reading</span><b id="el-fn">539 N</b></div><div><span>Student mass</span><b>55 kg</b></div></div>
+    <figcaption>The FBD and the scale update as the elevator moves. The small graph traces the velocity over the whole ride.</figcaption></figure>
+
+  <div class="card">
+    <h3>Think about it while you work</h3>
+    <ul>
+      <li>When is the scale reading <b>bigger</b> than mg? When is it <b>smaller</b>?</li>
+      <li>Does a big <i>velocity</i> change the scale reading, or does only <i>acceleration</i> change it?</li>
+    </ul>
+  </div>
+  <div class="note"><b>Then:</b> draw the two FBDs (section 2B) and answer Part 2 Questions 8–11 in your Lab Doc.</div>
+  <a class="next-step" href="#wrap">Next: Conclusion →</a>
+</section>
+
+<!-- ============ WRAP ============ -->
+<section class="step" id="wrap">
+  <div class="step-head"><div class="step-num">✓</div><div><h2>Conclusion &amp; Turn In</h2></div></div>
+  <div class="card">
+    <h3>Write your conclusion (Claim · Evidence · Reasoning)</h3>
+    <ul>
+      <li><b>Claim:</b> How does the net force on an object relate to its acceleration?</li>
+      <li><b>Evidence:</b> At least two numbers from Part 1 and one from Part 2.</li>
+      <li><b>Reasoning:</b> Explain using Newton's second law and your FBDs.</li>
+    </ul>
+  </div>
+  <div class="note good"><b>Checklist before you submit:</b> Pre-lab answered · FBD drawn · 5 trials with calculations · graph with trendline and your crate's mass · elevator table complete · 2 elevator FBDs · Questions 4–11 · conclusion.</div>
+  <p>Bring questions to our weekly Zoom. We'll compare everyone's crate masses as a class!</p>
+</section>
+
+<p class="footer">Physics · Forces Unit · Virtual Lab</p>
+</div>
+<script>
+/* FBD kit: shared canvas helpers for the intro site and the virtual lab */
+(function(){
+  var TAU=Math.PI*2, C={};
+  function readColors(){var s=getComputedStyle(document.documentElement);function g(n){return s.getPropertyValue(n).trim();}
+    Object.assign(C,{bg:g('--bg'),card:g('--card'),ink:g('--ink'),soft:g('--soft'),muted:g('--muted'),line:g('--line'),sunk:g('--sunk'),
+       accent:g('--accent'),accentSoft:g('--accent-soft'),good:g('--good'),bad:g('--bad'),
+       Fg:g('--fg'),FN:g('--fn'),Fa:g('--fa'),Ff:g('--ff'),FT:g('--ft'),Fair:g('--fair'),net:g('--net')});return C;}
+  var FORCES={Fg:{sym:'F_g',name:'Weight (gravity)'},FN:{sym:'F_N',name:'Normal force'},Fa:{sym:'F_a',name:'Applied force'},
+    Ff:{sym:'F_f',name:'Friction'},FT:{sym:'F_T',name:'Tension'},Fair:{sym:'F_air',name:'Air resistance'},net:{sym:'ΣF',name:'Net force'}};
+  var DIR={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+
+  /* canvas setup: logical W×H, crisp on any screen, redraws on resize + theme change */
+  var all=[];
+  function setup(canvas,W,H,draw){
+    var v={canvas:canvas,W:W,H:H,k:1,draw:draw};
+    canvas.style.aspectRatio=W+'/'+H;
+    v.redraw=function(){var w=canvas.clientWidth;if(!w)return;readColors();var d=canvas.width/W;var ctx=canvas.getContext('2d');ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,W,H);v.k=Math.max(1,Math.min(2.4,W/w));v.draw(ctx,v);};
+    v.resize=function(){var w=canvas.clientWidth;if(!w)return;var dpr=window.devicePixelRatio||1;canvas.width=Math.round(w*dpr);canvas.height=Math.round(w*H/W*dpr);v.redraw();};
+    new ResizeObserver(v.resize).observe(canvas);
+    all.push(v);return v;
+  }
+  var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',function(){all.forEach(function(v){v.redraw();});});
+
+  /* animation loop helper */
+  function animate(step,done){var last=0,on=true;function f(ts){if(!on)return;var dt=last?Math.min(.05,(ts-last)/1000):1/60;last=ts;if(step(dt)===false){on=false;if(done)done();return;}requestAnimationFrame(f);}requestAnimationFrame(f);return {stop:function(){on=false;}};}
+
+  /* text with subscripts: "F_g = 19.6 N" -> F with subscript g */
+  function rich(ctx,str,x,y,o){o=o||{};var size=(o.size||14)*(o.k||1),w=o.weight||700,fam=o.mono?'"JetBrains Mono",monospace':'"Source Sans 3",system-ui,sans-serif';
+    var parts=[],re=/([A-Za-zΣ])_([A-Za-z0-9]+)/g,last=0,m;
+    while((m=re.exec(str))){if(m.index>last)parts.push({t:str.slice(last,m.index)});parts.push({t:m[1]});parts.push({t:m[2],sub:true});last=re.lastIndex;}
+    if(last<str.length)parts.push({t:str.slice(last)});
+    var tw=0;parts.forEach(function(p){ctx.font=w+' '+(p.sub?size*.7:size)+'px '+fam;p.w=ctx.measureText(p.t).width;tw+=p.w;});
+    var sx=o.align==='center'?x-tw/2:o.align==='right'?x-tw:x;
+    if(o.bg){ctx.fillStyle=o.bg;var pad=4*(o.k||1);roundRect(ctx,sx-pad,y-size*.62-pad,tw+pad*2,size*1.35+pad*1.5,5*(o.k||1));ctx.fill();}
+    ctx.fillStyle=o.color||C.ink;ctx.textBaseline='middle';ctx.textAlign='left';
+    parts.forEach(function(p){ctx.font=w+' '+(p.sub?size*.7:size)+'px '+fam;ctx.fillText(p.t,sx,y+(p.sub?size*.28:0));sx+=p.w;});
+    return tw;
+  }
+  function text(ctx,str,x,y,o){o=o||{};var size=(o.size||13)*(o.k||1);ctx.font=(o.weight||600)+' '+size+'px '+(o.mono===false?'"Source Sans 3",sans-serif':'"JetBrains Mono",monospace');
+    ctx.fillStyle=o.color||C.muted;ctx.textAlign=o.align||'left';ctx.textBaseline=o.base||'middle';ctx.fillText(str,x,y);}
+  function roundRect(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  function arrow(ctx,x1,y1,x2,y2,col,width,o){o=o||{};var dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy);if(L<1)return;var ux=dx/L,uy=dy/L,hl=Math.min(o.head||(10+width*1.6),L*.55),hw=hl*.55;
+    ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=width;ctx.lineCap='round';if(o.dash)ctx.setLineDash(o.dash);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2-ux*hl*.85,y2-uy*hl*.85);ctx.stroke();ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-ux*hl-uy*hw,y2-uy*hl+ux*hw);ctx.lineTo(x2-ux*hl+uy*hw,y2-uy*hl-ux*hw);ctx.closePath();ctx.fill();}
+
+  /* free body diagram: forces = [{key:'Fg',dir:'down',mag:19.6,label:'F_g = 19.6 N'}] */
+  function fbd(ctx,cx,cy,forces,o){o=o||{};var k=o.k||1,maxLen=o.maxLen||90;
+    var maxMag=0;forces.forEach(function(f){if(f.mag>maxMag)maxMag=f.mag;});
+    var scale=o.scale||(maxMag?maxLen/maxMag:1);
+    var groups={};forces.forEach(function(f){if(f.mag&&f.offset==null){(groups[f.dir]=groups[f.dir]||[]).push(f);}});
+    Object.keys(groups).forEach(function(d){var gp=groups[d];if(gp.length>1)gp.forEach(function(f,i){f._off=(i-(gp.length-1)/2)*20;});});
+    if(o.axes!==false){ctx.strokeStyle=C.line;ctx.lineWidth=1.2;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(cx-maxLen-30,cy);ctx.lineTo(cx+maxLen+30,cy);ctx.moveTo(cx,cy-maxLen-30);ctx.lineTo(cx,cy+maxLen+30);ctx.stroke();ctx.setLineDash([]);
+      text(ctx,'+x',cx+maxLen+34,cy+12,{k:k,size:11,align:'left'});text(ctx,'+y',cx+12,cy-maxLen-26,{k:k,size:11,align:'left'});}
+    forces.forEach(function(f){if(!f.mag)return;var d=DIR[f.dir],off=f.offset!=null?f.offset:(f._off||0),len=Math.max(18,f.mag*scale),sx=cx+(d[1]?off:0),sy=cy+(d[0]?off:0),ex=sx+d[0]*len,ey=sy+d[1]*len,col=C[f.key]||C.ink;
+      arrow(ctx,sx,sy,ex,ey,col,f.key==='net'?4:3.5,{dash:f.key==='net'?[7,5]:null});
+      if(o.labels!==false&&f.label){var lx,ly,al;
+        if(d[0]){lx=ex+d[0]*8;ly=ey;al=d[0]<0?'right':'left';if(o.labelAbove||f.offset==null&&!f._off){ly=ey-14;lx=ex-d[0]*4;}}
+        else{al=off<0?'right':'left';lx=ex+(off<0?-12:12);ly=ey+d[1]*10;}
+        rich(ctx,f.label,lx,ly,{k:k,size:o.labelSize||14,color:col,align:al,bg:o.labelBg?C.card:null});}
+    });
+    if(o.box){ctx.fillStyle=C.sunk;ctx.strokeStyle=C.ink;ctx.lineWidth=2;roundRect(ctx,cx-14,cy-14,28,28,5);ctx.fill();ctx.stroke();}
+    ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(cx,cy,o.dot||6,0,TAU);ctx.fill();
+    forces.forEach(function(f){delete f._off;});
+  }
+  function F(key,dir,mag,showVal){var s=FORCES[key].sym;return {key:key,dir:dir,mag:mag,label:showVal===false?s:s+' = '+fmt(mag)+' N'};}
+  function fmt(n,d){if(d==null)d=(Math.abs(n)>=100||Math.abs(n-Math.round(n))<1e-9)?0:1;var s=(Math.round(n*Math.pow(10,d))/Math.pow(10,d)).toFixed(d);if(/\.0$/.test(s)&&Math.abs(n)>=100)s=s.slice(0,-2);return s;}
+
+  /* ---------- scene pieces ---------- */
+  function ground(ctx,y,x0,x1,type){x0=x0==null?0:x0;var W=ctx.canvas.width;x1=x1==null?2000:x1;
+    ctx.fillStyle=type==='ice'?'rgba(120,180,230,.22)':type==='wood'?'rgba(190,140,80,.20)':C.sunk;ctx.fillRect(x0,y,x1-x0,400);
+    ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();
+    ctx.strokeStyle=C.line;ctx.lineWidth=1.5;for(var x=x0+6;x<x1;x+=16){ctx.beginPath();ctx.moveTo(x,y+4);ctx.lineTo(x-8,y+14);ctx.stroke();}}
+  function crate(ctx,x,y,w,h,lab,k){ctx.fillStyle='#C99A5B';ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;roundRect(ctx,x-w/2,y-h,w,h,4);ctx.fill();ctx.stroke();
+    ctx.strokeStyle='rgba(0,0,0,.28)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-w/2+6,y-h+6);ctx.lineTo(x+w/2-6,y-6);ctx.moveTo(x+w/2-6,y-h+6);ctx.lineTo(x-w/2+6,y-6);ctx.stroke();
+    ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=2;ctx.strokeRect(x-w/2+6,y-h+6,w-12,h-12);
+    if(lab){ctx.fillStyle='#FFFFFF';roundRect(ctx,x-w*.32,y-h/2-11*(k||1),w*.64,22*(k||1),4);ctx.fill();text(ctx,lab,x,y-h/2,{k:k,size:12,color:'#141821',align:'center',weight:700});}}
+  function table(ctx,x,y,w){ctx.fillStyle='#A8794A';ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;roundRect(ctx,x-w/2,y,w,12,3);ctx.fill();ctx.stroke();
+    [x-w/2+14,x+w/2-26].forEach(function(lx){roundRect(ctx,lx,y+12,12,70,2);ctx.fill();ctx.stroke();});}
+  function book(ctx,x,y){ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.fillStyle='#2B59C3';roundRect(ctx,x-46,y-20,92,20,3);ctx.fill();ctx.stroke();ctx.fillStyle='#F4EBD9';ctx.fillRect(x-40,y-16,82,12);ctx.fillStyle='#D63E2A';ctx.fillRect(x-46,y-20,10,20);}
+  function ceiling(ctx,y,x0,x1){ctx.fillStyle=C.sunk;ctx.fillRect(x0,y-30,x1-x0,30);ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();
+    ctx.strokeStyle=C.line;ctx.lineWidth=1.5;for(var x=x0+6;x<x1;x+=16){ctx.beginPath();ctx.moveTo(x,y-4);ctx.lineTo(x-8,y-14);ctx.stroke();}}
+  function lamp(ctx,x,y){ctx.fillStyle='#F2B54A';ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(x-12,y);ctx.lineTo(x+12,y);ctx.lineTo(x+40,y+42);ctx.lineTo(x-40,y+42);ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.fillStyle='rgba(255,220,120,.35)';ctx.beginPath();ctx.moveTo(x-40,y+42);ctx.lineTo(x+40,y+42);ctx.lineTo(x+70,y+110);ctx.lineTo(x-70,y+110);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#FFF4CC';ctx.beginPath();ctx.arc(x,y+44,9,0,Math.PI);ctx.fill();ctx.stroke();}
+  /* person: feet at (x,y). pose: 'stand' | 'push' (facing right, arms forward) | 'pushL' (facing left). reach = hand distance in front (px, unscaled) */
+  function person(ctx,x,y,s,col,pose,reach){s=s||1;col=col||'#2B59C3';pose=pose||'stand';
+    var dir=pose==='pushL'?-1:1,push=pose!=='stand',skin='#E8B98F',hair='#3A2A1E',pants='#2F3542',shoe='#15181F';
+    ctx.save();ctx.translate(x,y);ctx.scale(dir*s,s);ctx.lineCap='round';ctx.lineJoin='round';
+    /* legs */
+    ctx.strokeStyle=pants;ctx.lineWidth=11;ctx.beginPath();
+    if(push){ctx.moveTo(-3,-50);ctx.lineTo(-18,-6);ctx.moveTo(5,-50);ctx.lineTo(12,-28);ctx.lineTo(10,-6);}else{ctx.moveTo(-6,-50);ctx.lineTo(-7,-6);ctx.moveTo(6,-50);ctx.lineTo(7,-6);}
+    ctx.stroke();
+    ctx.fillStyle=shoe;[[push?-18:-7],[push?10:7]].forEach(function(p){ctx.beginPath();ctx.ellipse(p[0]+4,-4,10,5,0,0,TAU);ctx.fill();});
+    /* upper body (leans forward when pushing) */
+    ctx.save();ctx.translate(0,-50);if(push)ctx.rotate(.28);
+    var r=reach==null?44:reach;
+    /* back arm */
+    ctx.strokeStyle=shade(col,-.25);ctx.lineWidth=9;ctx.beginPath();
+    if(push){ctx.moveTo(-2,-42);ctx.lineTo(r*.55,-34);ctx.lineTo(r,-30);}else{ctx.moveTo(-14,-42);ctx.lineTo(-18,-6);}ctx.stroke();
+    /* torso */
+    ctx.fillStyle=col;ctx.strokeStyle=C.ink;ctx.lineWidth=2;roundRect(ctx,-15,-54,30,56,10);ctx.fill();ctx.stroke();
+    ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-6,-52);ctx.lineTo(0,-46);ctx.lineTo(6,-52);ctx.stroke();
+    /* front arm */
+    ctx.strokeStyle=col;ctx.lineWidth=9;ctx.beginPath();
+    if(push){ctx.moveTo(4,-44);ctx.lineTo(r*.6,-36);ctx.lineTo(r,-34);}else{ctx.moveTo(14,-42);ctx.lineTo(18,-6);}ctx.stroke();
+    ctx.fillStyle=skin;ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;
+    if(push){[[r,-30],[r,-34]].forEach(function(h){ctx.beginPath();ctx.arc(h[0]+2,h[1],5,0,TAU);ctx.fill();ctx.stroke();});}else{[[-18,-4],[18,-4]].forEach(function(h){ctx.beginPath();ctx.arc(h[0],h[1],5,0,TAU);ctx.fill();ctx.stroke();});}
+    /* head */
+    ctx.fillStyle=skin;ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.arc(push?4:0,-70,14,0,TAU);ctx.fill();ctx.stroke();
+    ctx.fillStyle=hair;ctx.beginPath();ctx.arc(push?2:0,-73,14.5,Math.PI*1.02,Math.PI*1.98);ctx.fill();
+    if(push){ctx.beginPath();ctx.arc(-8,-70,6,Math.PI*.5,Math.PI*1.5);ctx.fill();}
+    ctx.fillStyle=C.ink;if(push){ctx.beginPath();ctx.arc(11,-70,1.8,0,TAU);ctx.fill();}else{ctx.beginPath();ctx.arc(-5,-69,1.8,0,TAU);ctx.arc(5,-69,1.8,0,TAU);ctx.fill();}
+    ctx.restore();ctx.restore();}
+  function shade(hex,amt){if(!/^#/.test(hex))return hex;var n=parseInt(hex.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255;function f(v){return Math.max(0,Math.min(255,Math.round(v+(amt<0?v*amt:(255-v)*amt))));}return 'rgb('+f(r)+','+f(g)+','+f(b)+')';}
+  function bathScale(ctx,x,y,w,reading,k){ctx.fillStyle='#DDE1E8';ctx.strokeStyle=C.ink;ctx.lineWidth=2;roundRect(ctx,x-w/2,y-12,w,12,4);ctx.fill();ctx.stroke();
+    if(reading!=null){ctx.fillStyle='#141821';roundRect(ctx,x-30*(k||1),y-11,60*(k||1),9,2);ctx.fill();}}
+  function strobe(ctx,xs,y,k){xs.forEach(function(x){ctx.fillStyle=C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(x,y,4.5,0,TAU);ctx.fill();ctx.stroke();});}
+  function pill(ctx,str,x,y,bg,fg,k){k=k||1;ctx.font='700 '+(12*k)+'px "JetBrains Mono",monospace';var w=ctx.measureText(str).width+18*k,h=22*k;ctx.fillStyle=bg;roundRect(ctx,x-w/2,y-h/2,w,h,h/2);ctx.fill();ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(str,x,y+1);}
+
+  readColors();
+  window.Kit={C:C,readColors:readColors,FORCES:FORCES,setup:setup,animate:animate,rich:rich,text:text,roundRect:roundRect,arrow:arrow,fbd:fbd,F:F,fmt:fmt,
+    ground:ground,crate:crate,table:table,book:book,ceiling:ceiling,lamp:lamp,person:person,bathScale:bathScale,strobe:strobe,pill:pill};
+})();
+</script>
+<script>
+/* Intro site interactives */
+(function(){
+  var K=window.Kit, C=K.C, g=9.8, $=function(s,r){return (r||document).querySelector(s);}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+  function ease(t){t=Math.max(0,Math.min(1,t));return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+
+  /* ---------- sticky nav highlight ---------- */
+  var links=$$('nav.steps-nav a');
+  if(links.length){var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var i=secs.indexOf(e.target);links.forEach(function(a,j){a.classList.toggle('on',j===i);});}});},{rootMargin:'-30% 0px -60% 0px'});
+    secs.forEach(function(s){if(s)io.observe(s);});}
+
+  /* ---------- generic multiple choice ---------- */
+  $$('.quiz[data-answer]').forEach(function(q){var ans=+q.dataset.answer,fb=$('.feedback',q);
+    $$('.opt',q).forEach(function(b,i){b.onclick=function(){$$('.opt',q).forEach(function(o,j){o.classList.remove('right','wrong');if(j===ans)o.classList.add(i===ans?'right':'');});
+      if(i!==ans)b.classList.add('wrong');fb.className='feedback show '+(i===ans?'ok':'no');fb.innerHTML=(i===ans?'✓ ':'✗ ')+(i===ans?q.dataset.ok:q.dataset.no);};});});
+
+  /* ---------- scalar or vector sorter ---------- */
+  var sorter=$('#sorter');
+  if(sorter){var states=['?','Scalar','Vector'];
+    $$('.sv',sorter).forEach(function(b){b.dataset.s=0;b.querySelector('i').textContent='?';b.onclick=function(){b.dataset.s=(+b.dataset.s+1)%3;b.querySelector('i').textContent=states[b.dataset.s];b.classList.remove('right','wrong');};});
+    $('#sorter-check').onclick=function(){var n=0,tot=0;$$('.sv',sorter).forEach(function(b){tot++;var ok=(b.dataset.ans==='v'&&b.dataset.s==2)||(b.dataset.ans==='s'&&b.dataset.s==1);if(ok)n++;b.classList.toggle('right',ok);b.classList.toggle('wrong',!ok);});
+      var fb=$('#sorter-fb');fb.className='feedback show '+(n===tot?'ok':'no');fb.innerHTML=n===tot?'✓ All '+tot+' correct! Quantities with a direction are vectors.':n+' of '+tot+' correct. For each red one, ask: "Does it make sense to say which way?"';};}
+
+  /* ---------- vector anatomy ---------- */
+  var an=$('#c-anatomy');
+  if(an)K.setup(an,720,200,function(ctx,v){var k=v.k;
+    K.arrow(ctx,110,110,470,110,C.Fa,6,{head:26});
+    ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(110,110,6,0,7);ctx.fill();
+    K.text(ctx,'TAIL (start)',110,150,{k:k,align:'center',color:C.soft});K.text(ctx,'HEAD',470,150,{k:k,align:'center',color:C.soft});
+    ctx.strokeStyle=C.muted;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(110,70);ctx.lineTo(470,70);ctx.moveTo(110,62);ctx.lineTo(110,78);ctx.moveTo(470,62);ctx.lineTo(470,78);ctx.stroke();
+    K.rich(ctx,'Length = magnitude: 50 N',290,52,{k:k,size:15,align:'center',color:C.ink});
+    K.rich(ctx,'Direction:',500,98,{k:k,size:14,color:C.Fa});K.rich(ctx,'to the right (+x)',500,122,{k:k,size:14,color:C.Fa});
+  });
+
+  /* ---------- vector adder ---------- */
+  var addC=$('#c-add');
+  if(addC){var st={a:5,b:-3,axis:'h',p:1};
+    var view=K.setup(addC,720,320,function(ctx,v){var k=v.k,hz=st.axis==='h',u=hz?18:10,ox=hz?360:300,oy=hz?170:160,R=st.a+st.b;
+      function P(n,lane){if(!hz)lane={'-60':-150,'-25':-60,'28':40,'20':40,'140':150,'70':150}[lane];return hz?[ox+n*u,oy+lane]:[ox+lane,oy-n*u];}
+      ctx.strokeStyle=C.line;ctx.lineWidth=1.5;ctx.beginPath();
+      if(hz){ctx.moveTo(20,oy+70);ctx.lineTo(700,oy+70);}else{ctx.moveTo(ox+150,oy-16*u-6);ctx.lineTo(ox+150,oy+16*u+6);}ctx.stroke();
+      for(var i=-16;i<=16;i++){var q=hz?P(i,70):P(i,140);ctx.strokeStyle=i===0?C.ink:C.line;ctx.lineWidth=i===0?2:1.2;ctx.beginPath();
+        if(hz){ctx.moveTo(q[0],q[1]-(i%5?5:9));ctx.lineTo(q[0],q[1]+(i%5?5:9));}else{ctx.moveTo(q[0]-(i%5?5:9),q[1]);ctx.lineTo(q[0]+(i%5?5:9),q[1]);}ctx.stroke();
+        if(i%4===0)K.text(ctx,String(i),hz?q[0]:q[0]+24,hz?q[1]+22:q[1],{k:k,size:11,align:'center'});}
+      var p=ease(st.p);
+      var a0=P(0,-60),a1=P(st.a,-60);K.arrow(ctx,a0[0],a0[1],a1[0],a1[1],C.Fa,5);
+      if(hz)K.rich(ctx,'A = '+(st.a>0?'+':'')+st.a,a1[0],a1[1]-20,{k:k,size:15,color:C.Fa,align:'center'});else K.rich(ctx,'A = '+(st.a>0?'+':'')+st.a,a1[0]-14,a1[1],{k:k,size:15,color:C.Fa,align:'right'});
+      var b0=P(st.a*p,-25),b1=P(st.a*p+st.b,-25);
+      if(p>.98){ctx.strokeStyle=C.muted;ctx.lineWidth=1.5;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(a1[0],a1[1]);ctx.lineTo(b0[0],b0[1]);ctx.stroke();ctx.setLineDash([]);}
+      K.arrow(ctx,b0[0],b0[1],b1[0],b1[1],C.FT,5);
+      if(hz)K.rich(ctx,'B = '+(st.b>0?'+':'')+st.b,b1[0],b1[1]+20,{k:k,size:15,color:C.FT,align:'center'});else K.rich(ctx,'B = '+(st.b>0?'+':'')+st.b,b1[0]+12,b1[1],{k:k,size:15,color:C.FT});
+      if(st.p>=1){var r0=P(0,hz?28:20),r1=P(R,hz?28:20);K.arrow(ctx,r0[0],r0[1],r1[0],r1[1],C.net,4,{dash:[8,5]});
+        if(hz)K.rich(ctx,'R = A + B = '+(R>0?'+':'')+R,Math.max(r1[0],r0[0])+14,r1[1],{k:k,size:16,color:C.ink});else K.rich(ctx,'R = '+(R>0?'+':'')+R,r1[0]+14,r1[1],{k:k,size:16,color:C.ink});}
+      K.text(ctx,hz?'right = +   left = −':'up = +   down = −',20,24,{k:k,size:12,color:C.soft});
+    });
+    var oa=$('#add-a'),ob=$('#add-b');
+    function sync(){$('#add-a-o').textContent=(st.a>0?'+':'')+st.a;$('#add-b-o').textContent=(st.b>0?'+':'')+st.b;view.redraw();}
+    oa.oninput=function(){st.a=+oa.value;st.p=1;sync();};ob.oninput=function(){st.b=+ob.value;st.p=1;sync();};
+    $$('#add-axis button').forEach(function(b){b.onclick=function(){st.axis=b.dataset.v;$$('#add-axis button').forEach(function(x){x.classList.toggle('on',x===b);});st.p=1;view.redraw();};});
+    $('#add-play').onclick=function(){st.p=0;K.animate(function(dt){st.p+=dt/1.2;view.redraw();if(st.p>=1){st.p=1;view.redraw();return false;}});};
+    sync();}
+
+  /* ---------- weight / spring scale ---------- */
+  var wc=$('#c-weight');
+  if(wc){var ws={m:1.5,name:'textbook'},shown=1.5;
+    var wv=K.setup(wc,720,300,function(ctx,v){var k=v.k,W=ws.m*g,ext=26+Math.sqrt(W)*4;
+      K.ceiling(ctx,40,180,420);
+      ctx.fillStyle=C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;K.roundRect(ctx,270,48,60,40,8);ctx.fill();ctx.stroke();
+      ctx.strokeStyle=C.soft;ctx.lineWidth=2;ctx.beginPath();var y0=88,y1=88+ext,n=12;ctx.moveTo(300,y0);
+      for(var i=1;i<=n;i++){ctx.lineTo(300+(i%2?14:-14),y0+(y1-y0)*i/(n+.5));}ctx.lineTo(300,y1);ctx.stroke();
+      var bw=70+Math.min(50,Math.sqrt(ws.m)*7),bh=40+Math.min(26,Math.sqrt(ws.m)*4);
+      ctx.fillStyle=C.accentSoft;ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;K.roundRect(ctx,300-bw/2,y1,bw,bh,8);ctx.fill();ctx.stroke();
+      K.text(ctx,ws.m+' kg',300,y1+bh/2,{k:k,size:13,align:'center',color:C.ink,weight:700});
+      K.arrow(ctx,300+bw/2+22,y1+bh/2,300+bw/2+22,Math.min(292,y1+bh/2+24+Math.sqrt(W)*3),C.Fg,4);
+      K.rich(ctx,'F_g',300+bw/2+34,y1+bh/2+30,{k:k,size:15,color:C.Fg});
+      ctx.fillStyle=C.sunk;K.roundRect(ctx,470,70,220,150,14);ctx.fill();
+      K.text(ctx,'SCALE READS',580,96,{k:k,size:11,align:'center'});
+      K.text(ctx,K.fmt(W,1)+' N',580,140,{k:k,size:30,align:'center',color:C.Fg,weight:700});
+      K.text(ctx,'F_g = m × g',580,180,{k:k,size:13,align:'center',color:C.soft});
+      K.text(ctx,ws.m+' × 9.8 = '+K.fmt(W,1),580,202,{k:k,size:13,align:'center',color:C.soft});
+    });
+    var ms=$('#w-mass');function upd(){$('#w-mass-o').textContent=ws.m+' kg';wv.redraw();}
+    ms.oninput=function(){ws.m=+ms.value;upd();};
+    $$('#w-presets button').forEach(function(b){b.onclick=function(){ws.m=+b.dataset.m;ms.value=ws.m;upd();};});upd();}
+
+  /* ---------- 1 newton definition ---------- */
+  var nc=$('#c-newton');
+  if(nc){var ns={t:0,run:false};
+    var nv=K.setup(nc,720,210,function(ctx,v){var k=v.k,x=0.5*1*ns.t*ns.t,px=70+x*60,vel=ns.t;
+      K.ground(ctx,150,0,720,'ice');
+      for(var s=0;s<=Math.floor(ns.t+1e-6);s++){var xs=70+0.5*s*s*60;K.strobe(ctx,[xs],168,k);K.text(ctx,s+' s',xs,186,{k:k,size:10,align:'center'});}
+      K.crate(ctx,px,150,60,50,'1 kg',k);
+      if(ns.t<4) {K.arrow(ctx,px-80,125,px-32,125,C.Fa,4);K.rich(ctx,'1 N',px-82,106,{k:k,size:14,color:C.Fa});}
+      K.text(ctx,'time '+ns.t.toFixed(1)+' s   ·   velocity '+vel.toFixed(1)+' m/s',20,24,{k:k,size:13,color:C.ink});
+      K.text(ctx,'the velocity goes up 1 m/s every second → a = 1 m/s²',20,48,{k:k,size:12,color:C.soft});
+    });
+    $('#newton-play').onclick=function(){ns.t=0;K.animate(function(dt){ns.t=Math.min(4,ns.t+dt);nv.redraw();return ns.t<4;});};}
+
+  /* ---------- Law 1 ---------- */
+  var l1=$('#c-law1');
+  if(l1){var s1={t:0,surf:'ice'};
+    function x1(t){var v0=3;if(s1.surf==='ice')return v0*t;var a=1.8,ts=v0/a;return t<ts?v0*t-.5*a*t*t:v0*ts-.5*a*ts*ts;}
+    function v1(t){if(s1.surf==='ice')return 3;return Math.max(0,3-1.8*t);}
+    var lv1=K.setup(l1,720,240,function(ctx,v){var k=v.k,px=60+x1(s1.t)*62;
+      K.ground(ctx,170,0,720,s1.surf==='ice'?'ice':'wood');
+      if(s1.t<.3){K.arrow(ctx,px-110,150,px-32,150,C.Fa,4);K.text(ctx,'push, then let go',Math.max(8,px-112),130,{k:k,size:11,color:C.Fa});}
+      ctx.fillStyle='#141821';ctx.beginPath();ctx.ellipse(px,162,26,8,0,0,7);ctx.fill();ctx.fillRect(px-26,154,52,8);ctx.fillStyle='#3B4150';ctx.beginPath();ctx.ellipse(px,154,26,8,0,0,7);ctx.fill();
+      K.text(ctx,(s1.surf==='ice'?'ICE (no friction)':'ROUGH FLOOR (friction)')+'   ·   v = '+v1(s1.t).toFixed(1)+' m/s',20,24,{k:k,size:13,color:C.ink});
+      var forces=[K.F('Fg','down',20,false),K.F('FN','up',20,false)];if(s1.surf!=='ice'&&v1(s1.t)>0)forces.push(K.F('Ff','left',14,false));
+      ctx.fillStyle=C.sunk;K.roundRect(ctx,560,30,150,142,10);ctx.fill();K.text(ctx,'FBD after the push',635,44,{k:k,size:10,align:'center'});
+      K.fbd(ctx,635,114,forces,{k:k,maxLen:34,axes:false,labelSize:12});
+    });
+    $$('#law1-surf button').forEach(function(b){b.onclick=function(){s1.surf=b.dataset.v;$$('#law1-surf button').forEach(function(x){x.classList.toggle('on',x===b);});s1.t=0;lv1.redraw();};});
+    $('#law1-play').onclick=function(){s1.t=0;K.animate(function(dt){s1.t+=dt;lv1.redraw();return s1.t<2.4;});};}
+
+  /* ---------- Law 2 ---------- */
+  var l2=$('#c-law2');
+  if(l2){var s2={t:0};
+    var lv2=K.setup(l2,720,250,function(ctx,v){var k=v.k;
+      [{m:1,y:105},{m:3,y:215}].forEach(function(c){var a=6/c.m,x=.5*a*s2.t*s2.t,px=110+x*55;
+        K.ground(ctx,c.y,0,720,'ice');K.crate(ctx,px,c.y,c.m===1?50:70,c.m===1?40:56,c.m+' kg',k);
+        K.arrow(ctx,px-(c.m===1?25:35)-60,c.y-24,px-(c.m===1?25:35)-4,c.y-24,C.Fa,4);K.rich(ctx,'6 N',px-(c.m===1?25:35)-70,c.y-42,{k:k,size:13,color:C.Fa});
+        K.text(ctx,'a = 6 N ÷ '+c.m+' kg = '+a+' m/s²',700,c.y-60,{k:k,size:13,align:'right',color:C.ink});});
+    });
+    $('#law2-play').onclick=function(){s2.t=0;K.animate(function(dt){s2.t+=dt;lv2.redraw();return s2.t<1.45;});};}
+
+  /* ---------- Law 3 ---------- */
+  var l3=$('#c-law3');
+  if(l3){var s3={t:0};
+    var lv3=K.setup(l3,720,260,function(ctx,v){var k=v.k,t=s3.t,push=.5,F=150;
+      function pos(m,dir){var a=F/m;if(t<push)return dir*.5*a*t*t;var vf=a*push;return dir*(.5*a*push*push+vf*(t-push));}
+      var xl=330+pos(50,-1)*60,xr=390+pos(75,1)*60;
+      K.ground(ctx,210,0,720,'ice');K.person(ctx,xl,210,1,'#D63E2A',t<push?'push':'stand',22);K.person(ctx,xr,210,1.12,'#2B59C3',t<push?'pushL':'stand',19);
+      K.text(ctx,'50 kg',xl,228,{k:k,size:12,align:'center',color:C.ink});K.text(ctx,'75 kg',xr,228,{k:k,size:12,align:'center',color:C.ink});
+      if(t<push){K.arrow(ctx,xl+14,120,xl-60,120,C.Fa,4);K.rich(ctx,'150 N',xl-62,100,{k:k,size:13,color:C.Fa,align:'right'});
+        K.arrow(ctx,xr-14,120,xr+60,120,C.Fa,4);K.rich(ctx,'150 N',xr+62,100,{k:k,size:13,color:C.Fa});
+        K.pill(ctx,'PUSH!',360,36,C.Fa,'#fff',k);}
+      else{K.text(ctx,'← v = 1.5 m/s',xl,30,{k:k,size:13,align:'center',color:C.ink});K.text(ctx,'v = 1.0 m/s →',xr,30,{k:k,size:13,align:'center',color:C.ink});}
+    });
+    $('#law3-play').onclick=function(){s3.t=0;K.animate(function(dt){s3.t+=dt;lv3.redraw();return s3.t<2.6;});};}
+
+  /* ---------- FBD step-by-step ---------- */
+  var fs=$('#c-steps');
+  if(fs){var SC={
+      book:{steps:[
+        '<b>Step 1 · Pick ONE object.</b> We only care about the forces <i>on the book</i>, not on the table.',
+        '<b>Step 2 · Shrink it to a dot.</b> On a free body diagram, the whole object becomes one dot. Every force arrow starts at the dot.',
+        '<b>Step 3 · Gravity always acts.</b> Every object near Earth has weight, F<sub>g</sub> = mg = (2.0 kg)(9.8 m/s²) = <b>19.6 N</b>, pointing straight down.',
+        '<b>Step 4 · What is touching it?</b> Only the table. A surface pushes <i>perpendicular</i> to itself, so the table pushes up: the <b>normal force</b> F<sub>N</sub>.',
+        '<b>Step 5 · Anything else?</b> Nothing pushes or pulls it sideways, so there is no applied force and no friction.',
+        '<b>Step 6 · Check.</b> The book isn\'t moving, so a = 0 and ΣF must be 0. Up = down → <b>F<sub>N</sub> = F<sub>g</sub> = 19.6 N</b>. The arrows are the same length.'],
+        forces:[['Fg','down',19.6],['FN','up',19.6]],at:[0,0,1,2,2,2]},
+      pull:{steps:[
+        '<b>Step 1 · Pick ONE object:</b> the 10 kg box. A rope pulls it to the right across the floor.',
+        '<b>Step 2 · Shrink it to a dot.</b> All arrows start at the dot.',
+        '<b>Step 3 · Gravity:</b> F<sub>g</sub> = (10 kg)(9.8 m/s²) = <b>98 N</b> down.',
+        '<b>Step 4 · What is touching it?</b> The floor pushes up (normal force, <b>98 N</b>) and the rope pulls right (tension, <b>40 N</b>).',
+        '<b>Step 5 · Friction:</b> the box slides along the floor, so friction acts <i>opposite</i> the motion: <b>25 N</b> to the left.',
+        '<b>Step 6 · Check.</b> Vertical: 98 − 98 = 0 (no vertical motion ✓). Horizontal: ΣF<sub>x</sub> = 40 − 25 = <b>15 N right</b>, so a = 15 ÷ 10 = <b>1.5 m/s²</b> to the right. The dashed arrow is the net force.'],
+        forces:[['Fg','down',98],['FN','up',98],['FT','right',40],['Ff','left',25]],at:[0,0,1,3,4,4],net:15}
+    };
+    var cur={sc:'book',i:0};
+    var fv=K.setup(fs,760,320,function(ctx,v){var k=v.k,s=SC[cur.sc],i=cur.i;
+      ctx.fillStyle=C.sunk;ctx.fillRect(380,0,380,320);
+      K.text(ctx,'THE SITUATION',20,22,{k:k,size:11});K.text(ctx,'FREE BODY DIAGRAM',400,22,{k:k,size:11});
+      var fade=i>=1?.35:1;ctx.globalAlpha=1;
+      if(cur.sc==='book'){K.table(ctx,190,200,260);ctx.globalAlpha=fade;K.book(ctx,190,200);ctx.globalAlpha=1;
+        if(i===0){ctx.strokeStyle=C.accent;ctx.lineWidth=2.5;ctx.setLineDash([6,4]);K.roundRect(ctx,136,172,108,36,8);ctx.stroke();ctx.setLineDash([]);}}
+      else{K.ground(ctx,230,0,380);ctx.globalAlpha=fade;K.crate(ctx,170,230,90,70,'10 kg',k);ctx.globalAlpha=1;
+        ctx.strokeStyle='#8A6A3A';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(215,195);ctx.lineTo(360,195);ctx.stroke();K.arrow(ctx,300,175,350,175,C.FT,3);
+        if(i===0){ctx.strokeStyle=C.accent;ctx.lineWidth=2.5;ctx.setLineDash([6,4]);K.roundRect(ctx,118,152,104,86,8);ctx.stroke();ctx.setLineDash([]);}}
+      if(i>=1){var fl=[],need;
+        if(cur.sc==='book')need={1:0,2:1,3:2,4:2,5:2}[i];else need={1:0,2:1,3:3,4:4,5:4}[i];
+        s.forces.slice(0,need).forEach(function(f){fl.push(K.F(f[0],f[1],f[2]));});
+        if(i===5&&s.net)fl.push({key:'net',dir:'right',mag:s.net,label:'ΣF = 15 N',offset:46});
+        K.fbd(ctx,570,170,fl,{k:k,maxLen:96,labelSize:13});}
+      if(i===0)K.pill(ctx,'tap Next →',570,170,C.accent,'#fff',k);
+    });
+    function show(){$('#steps-text').innerHTML=SC[cur.sc].steps[cur.i];$('#steps-count').textContent='Step '+(cur.i+1)+' of 6';$('#steps-back').disabled=cur.i===0;$('#steps-next').disabled=cur.i===5;fv.redraw();}
+    $('#steps-next').onclick=function(){cur.i=Math.min(5,cur.i+1);show();};$('#steps-back').onclick=function(){cur.i=Math.max(0,cur.i-1);show();};
+    $$('#steps-sc button').forEach(function(b){b.onclick=function(){cur.sc=b.dataset.v;cur.i=0;$$('#steps-sc button').forEach(function(x){x.classList.toggle('on',x===b);});show();};});
+    show();}
+
+  /* ---------- net force sandbox ---------- */
+  var sb=$('#c-sandbox');
+  if(sb){var S={m:10,R:60,L:20,f:15,T:0,t:0,x:0,y:0,vx:0,vy:0,run:false};
+    function solve(){var Fg=S.m*g,app=S.R-S.L,FN=Math.max(0,Fg-S.T),onGround=S.T<=Fg+1e-9,fr=0,stat=false;
+      if(onGround&&S.y<=0){if(Math.abs(app)<=S.f&&S.vx===0){fr=-app;stat=true;}else{var dir=S.vx!==0?Math.sign(S.vx):Math.sign(app);fr=-dir*S.f;}}else{FN=0;}
+      var Fx=app+fr,Fy=S.T+FN-Fg;if(Math.abs(Fy)<1e-9)Fy=0;return {Fg:Fg,FN:FN,fr:fr,stat:stat,Fx:Fx,Fy:Fy,ax:Fx/S.m,ay:Fy/S.m};}
+    var sv=K.setup(sb,760,330,function(ctx,v){var k=v.k,r=solve(),px=190+S.x*28,py=250-S.y*28;
+      ctx.fillStyle=C.sunk;ctx.fillRect(400,0,360,330);
+      K.ground(ctx,250,0,400);
+      if(S.T>0){ctx.strokeStyle='#8A6A3A';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(px,py-60);ctx.lineTo(px,0);ctx.stroke();}
+      K.crate(ctx,px,py,80,60,S.m+' kg',k);
+      K.text(ctx,'ΣFx = '+K.fmt(r.Fx,1)+' N   ΣFy = '+K.fmt(r.Fy,1)+' N',20,22,{k:k,size:13,color:C.ink});
+      K.text(ctx,(Math.abs(r.Fx)<1e-6&&Math.abs(r.Fy)<1e-6)?'BALANCED → a = 0':'UNBALANCED → accelerates',20,44,{k:k,size:12,color:(Math.abs(r.Fx)<1e-6&&Math.abs(r.Fy)<1e-6)?C.good:C.bad});
+      var fl=[K.F('Fg','down',r.Fg)];if(r.FN>0)fl.push(K.F('FN','up',r.FN));if(S.T>0)fl.push(K.F('FT','up',S.T));
+      if(S.R>0)fl.push(K.F('Fa','right',S.R));if(S.L>0)fl.push(K.F('Fa','left',S.L));if(Math.abs(r.fr)>1e-9)fl.push(K.F('Ff',r.fr>0?'right':'left',Math.abs(r.fr)));
+      if(S.T>0&&r.FN>0){fl.forEach(function(f){if(f.key==='FT')f.offset=14;if(f.key==='FN')f.offset=-14;});}
+      K.text(ctx,'FREE BODY DIAGRAM',420,22,{k:k,size:11});
+      K.fbd(ctx,580,175,fl,{k:k,maxLen:100,labelSize:12});
+      if(r.stat&&S.R+S.L>0)K.text(ctx,'static friction matches the push',580,312,{k:k,size:11,align:'center',color:C.Ff});
+    });
+    function out(){$('#sb-m-o').textContent=S.m+' kg';$('#sb-r-o').textContent=S.R+' N';$('#sb-l-o').textContent=S.L+' N';$('#sb-f-o').textContent=S.f+' N';$('#sb-t-o').textContent=S.T+' N';
+      var r=solve();$('#sb-ax').textContent=K.fmt(r.ax,2)+' m/s²';$('#sb-ay').textContent=K.fmt(r.ay,2)+' m/s²';$('#sb-fg').textContent=K.fmt(r.Fg,1)+' N';$('#sb-fn').textContent=K.fmt(r.FN,1)+' N';sv.redraw();}
+    [['#sb-m','m'],['#sb-r','R'],['#sb-l','L'],['#sb-f','f'],['#sb-t','T']].forEach(function(p){var el=$(p[0]);el.value=S[p[1]];el.oninput=function(){S[p[1]]=+el.value;S.x=S.y=S.vx=S.vy=0;out();};});
+    $('#sb-play').onclick=function(){S.x=S.y=S.vx=S.vy=0;var t=0;K.animate(function(dt){t+=dt;var r=solve();S.vx+=r.ax*dt;S.vy+=r.ay*dt;S.x+=S.vx*dt;S.y=Math.max(0,Math.min(5,S.y+S.vy*dt));if(S.y===0&&S.vy<0)S.vy=0;S.x=Math.max(-6,Math.min(6.5,S.x));sv.redraw();return t<2.5;},function(){});};
+    $('#sb-reset').onclick=function(){S.x=S.y=S.vx=S.vy=0;out();};
+    out();}
+
+  /* ---------- worked examples ---------- */
+  var EX={
+    book:{forces:[['Fg','down',19.6],['FN','up',19.6]],draw:function(ctx,k,t){K.table(ctx,180,190,260);K.book(ctx,180,190);}},
+    lamp:{forces:[['Fg','down',29.4],['FT','up',29.4]],draw:function(ctx,k,t){K.ceiling(ctx,40,60,320);ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(190,40);ctx.lineTo(190,120);ctx.stroke();K.lamp(ctx,190,120);}},
+    steady:{dur:3,forces:[['Fg','down',196],['FN','up',196],['Fa','right',60],['Ff','left',60]],
+      draw:function(ctx,k,t){var x=30+1.0*t*35;K.ground(ctx,240,0,380,'wood');var dots=[];for(var s=0;s<=Math.floor(t*2+1e-6);s++)dots.push(30+1.0*(s/2)*35+60);K.strobe(ctx,dots,258,k);
+        K.person(ctx,x-23,240,.85,'#1E8E5A','push');K.crate(ctx,x+60,240,80,64,'20 kg',k);K.text(ctx,'v = 1.0 m/s (constant)',20,22,{k:k,size:12,color:C.ink});}},
+    speedup:{dur:2.6,net:40,forces:[['Fg','down',196],['FN','up',196],['Fa','right',100],['Ff','left',60]],
+      draw:function(ctx,k,t){var x=30+.5*2*t*t*35;K.ground(ctx,240,0,380,'wood');var dots=[];for(var s=0;s<=Math.floor(t*2+1e-6);s++){var ts=s/2;dots.push(30+.5*2*ts*ts*35+60);}K.strobe(ctx,dots,258,k);
+        K.person(ctx,x-23,240,.85,'#1E8E5A','push');K.crate(ctx,x+60,240,80,64,'20 kg',k);K.text(ctx,'v = '+(2*t).toFixed(1)+' m/s (speeding up)',20,22,{k:k,size:12,color:C.ink});}},
+    elevator:{dur:2.4,net:90,netDir:'up',forces:[['Fg','down',588],['FN','up',678]],
+      draw:function(ctx,k,t){var y=.5*1.5*t*t*28;ctx.fillStyle=C.sunk;ctx.fillRect(110,0,160,300);ctx.strokeStyle=C.line;ctx.lineWidth=2;for(var s=-1;s<6;s++){var yy=((s*70+y)%420)-60;ctx.beginPath();ctx.moveTo(110,yy);ctx.lineTo(270,yy);ctx.stroke();}
+        ctx.strokeStyle=C.ink;ctx.lineWidth=3;ctx.strokeRect(120,60,140,200);ctx.beginPath();ctx.moveTo(190,60);ctx.lineTo(190,0);ctx.stroke();
+        K.bathScale(ctx,190,258,80);K.person(ctx,190,246,.95,'#7A4FCF');
+        K.pill(ctx,'scale reads 678 N',190,284,C.FN,'#fff',k);K.text(ctx,'a = 1.5 m/s² ↑',20,22,{k:k,size:12,color:C.ink});K.text(ctx,'v = '+(1.5*t).toFixed(1)+' m/s ↑',20,44,{k:k,size:12,color:C.ink});}},
+    skydiver:{dur:2.5,phases:{fall:{forces:[['Fg','down',686],['Fair','up',300]],net:386,netDir:'down',a:5.5},terminal:{forces:[['Fg','down',686],['Fair','up',686]],net:0,a:0}},
+      draw:function(ctx,k,t,ph){var v=ph==='fall'?10+5.5*t:55,off=ph==='fall'?(10*t+.5*5.5*t*t)*14:55*t*3;
+        ctx.fillStyle='rgba(120,180,230,.18)';ctx.fillRect(0,0,380,300);
+        for(var i=0;i<6;i++){var cy=((i*90-off)%540+540)%540-60,cx=(i*137)%330+20;ctx.fillStyle=C.card;ctx.globalAlpha=.85;ctx.beginPath();ctx.arc(cx,cy,22,0,7);ctx.arc(cx+26,cy+6,18,0,7);ctx.arc(cx-22,cy+8,16,0,7);ctx.fill();ctx.globalAlpha=1;}
+        var streak=Math.min(80,v*1.3);ctx.strokeStyle=C.muted;ctx.lineWidth=2;ctx.lineCap='round';ctx.globalAlpha=.55;[-40,-14,14,40].forEach(function(dx,i){var sy=150-62-((off*.6+i*17)%20);ctx.beginPath();ctx.moveTo(190+dx,sy);ctx.lineTo(190+dx,sy-streak);ctx.stroke();});ctx.globalAlpha=1;
+        ctx.save();ctx.translate(190,150);ctx.lineCap='round';ctx.lineJoin='round';
+        ctx.strokeStyle='#B83222';ctx.lineWidth=10;ctx.beginPath();ctx.moveTo(-26,-6);ctx.lineTo(-46,-20);ctx.lineTo(-58,-38);ctx.moveTo(26,-6);ctx.lineTo(46,-20);ctx.lineTo(58,-38);ctx.stroke();
+        ctx.strokeStyle='#2F3542';ctx.lineWidth=11;ctx.beginPath();ctx.moveTo(-10,10);ctx.lineTo(-22,34);ctx.lineTo(-30,18);ctx.moveTo(10,10);ctx.lineTo(22,34);ctx.lineTo(30,18);ctx.stroke();
+        ctx.fillStyle='#D63E2A';ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;K.roundRect(ctx,-24,-26,48,44,14);ctx.fill();ctx.stroke();
+        ctx.fillStyle='#F2B54A';K.roundRect(ctx,-14,-20,28,26,6);ctx.fill();ctx.stroke();
+        ctx.fillStyle='#E8B98F';[[-58,-40],[58,-40]].forEach(function(h){ctx.beginPath();ctx.arc(h[0],h[1],5.5,0,7);ctx.fill();ctx.stroke();});
+        ctx.fillStyle='#2B59C3';ctx.beginPath();ctx.arc(0,-40,14,0,7);ctx.fill();ctx.stroke();ctx.fillStyle='#BFE3F2';K.roundRect(ctx,-9,-44,18,8,3);ctx.fill();ctx.stroke();
+        ctx.restore();
+        K.text(ctx,'streak lines show how fast she falls',190,286,{k:k,size:10,align:'center'});
+        K.text(ctx,'v = '+v.toFixed(0)+' m/s ↓'+(ph==='fall'?' (speeding up)':' (constant)'),20,22,{k:k,size:12,color:C.ink});}}
+  };
+  $$('.example[data-ex]').forEach(function(el){var ex=EX[el.dataset.ex],cv=$('canvas',el),st={t:0,ph:'fall'},play=$('.ex-play',el);
+    var v=K.setup(cv,760,300,function(ctx,vw){var k=vw.k;ctx.fillStyle=C.sunk;ctx.fillRect(380,0,380,300);
+      ctx.save();ctx.beginPath();ctx.rect(0,0,380,300);ctx.clip();ex.draw(ctx,k,st.t,st.ph);ctx.restore();
+      K.text(ctx,'FREE BODY DIAGRAM',400,22,{k:k,size:11});
+      var src=ex.phases?ex.phases[st.ph]:ex,fl=src.forces.map(function(f){return K.F(f[0],f[1],f[2]);});
+      if(src.net)fl.push({key:'net',dir:src.netDir||'right',mag:src.net,label:'ΣF = '+src.net+' N',offset:(src.netDir==='up'||src.netDir==='down')?48:46});
+      K.fbd(ctx,580,155,fl,{k:k,maxLen:92,labelSize:12.5});});
+    if(play)play.onclick=function(){st.t=0;K.animate(function(dt){st.t+=dt;v.redraw();return st.t<ex.dur;});};
+    $$('.ex-phase button',el).forEach(function(b){b.onclick=function(){st.ph=b.dataset.v;st.t=0;$$('.ex-phase button',el).forEach(function(x){x.classList.toggle('on',x===b);});
+      $$('[data-phase]',el).forEach(function(p){p.hidden=p.dataset.phase!==st.ph;});v.redraw();};});
+  });
+
+  /* ---------- practice: numeric ---------- */
+  $$('.prob[data-ans]').forEach(function(p){var inp=$('input',p),fb=$('.feedback',p),ans=+p.dataset.ans,tol=+(p.dataset.tol||.03);
+    function check(){var raw=inp.value.trim().replace(/[−–—]/g,'-').replace(/,/g,'').replace(/[^\d.\-+]/g,'');var val=parseFloat(raw);
+      if(isNaN(val)){fb.className='feedback show no';fb.innerHTML='Type a number first.';return;}
+      var ok=Math.abs(val-ans)<=Math.max(Math.abs(ans)*tol,.051);
+      if(!ok&&p.dataset.sign==='1'&&Math.abs(Math.abs(val)-Math.abs(ans))<=Math.max(Math.abs(ans)*tol,.051)){fb.className='feedback show no';fb.innerHTML='✗ Right size, wrong sign. Check the direction: '+(p.dataset.signhint||'which way is positive?');return;}
+      fb.className='feedback show '+(ok?'ok':'no');fb.innerHTML=ok?'✓ Correct! '+(p.dataset.ok||''):'✗ Not yet. Hint: '+p.dataset.hint;}
+    $('.check',p).onclick=check;inp.onkeydown=function(e){if(e.key==='Enter')check();};});
+
+  /* ---------- practice: pick the FBD ---------- */
+  $$('.fbd-opts[data-answer]').forEach(function(box){var ans=+box.dataset.answer,fb=box.parentNode.querySelector('.feedback');
+    $$('.fbd-opt',box).forEach(function(o,i){var cv=$('canvas',o),forces=JSON.parse(o.dataset.forces);
+      K.setup(cv,200,180,function(ctx,v){K.fbd(ctx,100,92,forces.map(function(f){return K.F(f[0],f[1],f[2],false);}),{k:v.k,maxLen:58,axes:false,labelSize:13});});
+      o.onclick=function(){$$('.fbd-opt',box).forEach(function(x){x.classList.remove('right','wrong');});o.classList.add(i===ans?'right':'wrong');
+        fb.className='feedback show '+(i===ans?'ok':'no');fb.innerHTML=(i===ans?'✓ ':'✗ ')+(i===ans?box.dataset.ok:box.dataset.no);};});});
+})();
+</script>
+<script>
+/* Virtual lab simulations: Mystery Crate + Elevator Scale */
+(function(){
+  var K=window.Kit,C=K.C,g=9.8,$=function(s,r){return (r||document).querySelector(s);},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+  /* ================= PART 1: MYSTERY CRATE ================= */
+  var CRATES={A:{m:12,fk:17.6,fs:21.2},B:{m:16,fk:23.5,fs:28.2},C:{m:20,fk:29.4,fs:35.3}};
+  var cc=$('#c-crate');
+  if(cc){var X0=215,PX=125,GATE=4.0;
+    var S={crate:'A',F:40,x:0,v:0,t:0,run:false,done:false,stuck:false,time:null,noise:0};
+    function forces(){var c=CRATES[S.crate],Fg=c.m*g,fr;
+      if(S.stuck)return {Fg:Fg,fr:S.F,net:0};
+      if(!S.run&&!S.done)return {Fg:Fg,fr:0,net:0};
+      fr=c.fk;return {Fg:Fg,fr:fr,net:S.F-fr};}
+    var view=K.setup(cc,860,380,function(ctx,v){var k=v.k,c=CRATES[S.crate],px=X0+S.x*PX,fo=forces();
+      K.ground(ctx,300,0,860,'wood');
+      for(var m=0;m<=5;m++){var tx=X0+m*PX;ctx.strokeStyle=C.muted;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(tx,300);ctx.lineTo(tx,312);ctx.stroke();K.text(ctx,m+'.00 m',tx,326,{k:k,size:11,align:'center'});}
+      var gx=X0+GATE*PX;ctx.fillStyle=C.ink;K.roundRect(ctx,gx-6,200,12,100,3);ctx.fill();ctx.strokeStyle=C.bad;ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(gx,200);ctx.lineTo(gx,300);ctx.stroke();ctx.setLineDash([]);
+      K.text(ctx,'PHOTOGATE',gx,190,{k:k,size:11,align:'center',color:C.ink});
+      ctx.strokeStyle=C.good;ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(X0,220);ctx.lineTo(X0,300);ctx.stroke();ctx.setLineDash([]);K.text(ctx,'START',X0,346,{k:k,size:11,align:'center',color:C.good});
+      var cw=96,ch=66,cxm=px-cw/2,sx=px-cw;
+      K.crate(ctx,cxm,300,cw,ch,'Crate '+S.crate,k);
+      K.person(ctx,sx-75,300,.8,'#1E8E5A','push');
+      ctx.fillStyle=C.sunk;ctx.strokeStyle=C.Fa;ctx.lineWidth=2;K.roundRect(ctx,sx-34,236,30,20,5);ctx.fill();ctx.stroke();ctx.fillStyle=C.Fa;ctx.fillRect(sx-4,243,4,6);
+      var pushing=S.run||S.done||S.stuck;
+      if(S.F>0)K.rich(ctx,(pushing?'F_a = ':'set: ')+S.F+' N',sx+4,222,{k:k,size:13,color:C.Fa,align:'left'});
+      ctx.fillStyle=C.card;ctx.strokeStyle=C.line;ctx.lineWidth=1.5;K.roundRect(ctx,560,6,286,170,12);ctx.fill();ctx.stroke();
+      K.text(ctx,'LIVE FBD · crate',574,24,{k:k,size:10});
+      var fl=[K.F('Fg','down',fo.Fg,false),K.F('FN','up',fo.Fg,false)];if(S.F>0&&(S.run||S.done||S.stuck))fl.push(K.F('Fa','right',S.F,false));if(fo.fr>0)fl.push(K.F('Ff','left',fo.fr,false));
+      K.fbd(ctx,700,104,fl,{k:k,maxLen:50,axes:false,labelSize:12});
+      var msg;if(S.stuck)msg='Did not move: static friction = push';else if(S.done)msg='Crossed the gate!';else if(S.run)msg='Sliding…';else msg='Set a force and press Run.';
+      K.text(ctx,msg,20,24,{k:k,size:13,color:S.stuck?C.bad:C.ink});
+      K.text(ctx,'stopwatch: '+(S.time!=null?S.time.toFixed(2):S.run?S.t.toFixed(2):'0.00')+' s',20,48,{k:k,size:13,color:C.ink});
+    });
+    function readout(){$('#cr-f').textContent=S.F+' N';$('#cr-fr').textContent=CRATES[S.crate].fk+' N';$('#cr-t').textContent=S.time!=null?S.time.toFixed(2)+' s':(S.stuck?'no motion':'—');view.redraw();}
+    function reset(){S.x=0;S.v=0;S.t=0;S.run=false;S.done=false;S.stuck=false;S.time=null;readout();}
+    $$('#cr-crate button').forEach(function(b){b.onclick=function(){S.crate=b.dataset.v;$$('#cr-crate button').forEach(function(x){x.classList.toggle('on',x===b);});$('#cr-name').textContent=b.dataset.v;reset();};});
+    $$('[data-df]').forEach(function(b){b.onclick=function(){S.F=Math.max(0,Math.min(150,S.F+(+b.dataset.df)));reset();};});
+    /* lock every control while the crate slides, so a mid-run click can't log the old time under new settings */
+    function lock(on){$$('#cr-run,#cr-crate button,[data-df]').forEach(function(b){b.disabled=on;});}
+    $('#cr-run').onclick=function(){reset();var c=CRATES[S.crate];
+      if(S.F<=c.fs){S.stuck=true;readout();logRun(null);return;}
+      S.run=true;var a=(S.F-c.fk)/c.m,tGate=Math.sqrt(2*GATE/a),noise=(Math.round((Math.random()*2-1)*1)/100);lock(true);
+      K.animate(function(dt){S.t+=dt;S.x=.5*a*S.t*S.t;
+        if(S.time==null&&S.x>=GATE){S.time=Math.max(.01,tGate+noise);S.done=true;}
+        if(S.x>=4.9){S.x=4.9;S.run=false;S.done=true;readout();lock(false);logRun(S.time);return false;}
+        readout();});
+    };
+    var log=[];
+    function logRun(t){log.unshift({crate:S.crate,F:S.F,t:t});var tb=$('#cr-log');if(!tb)return;
+      tb.innerHTML=log.slice(0,12).map(function(r){return '<tr><td>'+r.crate+'</td><td>'+r.F+' N</td><td>'+CRATES[r.crate].fk+' N</td><td>'+(r.t==null?'did not move':r.t.toFixed(2)+' s')+'</td></tr>';}).join('');}
+    readout();}
+
+  /* ================= PART 2: ELEVATOR SCALE ================= */
+  var ec=$('#c-elev');
+  if(ec){var M=55,PH=[{t0:0,t1:2,a:0},{t0:2,t1:4,a:2},{t0:4,t1:8,a:0},{t0:8,t1:10,a:-2},{t0:10,t1:12,a:0}],END=12;
+    var E={t:0,run:false};
+    function state(t){var v=0,y=0;PH.forEach(function(p){var dt=Math.max(0,Math.min(t,p.t1)-p.t0);if(dt>0){y+=v*dt+.5*p.a*dt*dt;v+=p.a*dt;}});
+      var a=0;PH.forEach(function(p){if(t>=p.t0&&t<p.t1)a=p.a;});if(t>=END)a=0;return {v:v,y:y,a:a,FN:M*(g+a)};}
+    var ev=K.setup(ec,860,380,function(ctx,v){var k=v.k,s=state(E.t);
+      var shaftX=150,shaftW=220;ctx.fillStyle=C.sunk;ctx.fillRect(shaftX,0,shaftW,380);
+      ctx.strokeStyle=C.line;ctx.lineWidth=2;var off=(s.y*40)%120;for(var i=-1;i<5;i++){var yy=i*120+off;ctx.beginPath();ctx.moveTo(shaftX,yy);ctx.lineTo(shaftX+shaftW,yy);ctx.stroke();}
+      var floor=1+Math.floor(s.y/3.5+.001);K.pill(ctx,'FLOOR '+floor,shaftX+shaftW/2,24,C.ink,C.bg,k);
+      var bx=shaftX+20,by=60,bw=shaftW-40,bh=280;ctx.fillStyle=C.card;ctx.strokeStyle=C.ink;ctx.lineWidth=3;K.roundRect(ctx,bx,by,bw,bh,6);ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.moveTo(bx+bw/2,by);ctx.lineTo(bx+bw/2,0);ctx.stroke();
+      K.bathScale(ctx,bx+bw/2,by+bh-4,100);K.person(ctx,bx+bw/2,by+bh-16,1.25,'#2B59C3');
+      ctx.fillStyle='#141821';K.roundRect(ctx,bx+bw/2-46,by+bh+10,92,30,6);ctx.fill();
+      K.text(ctx,Math.round(s.FN)+' N',bx+bw/2,by+bh+25,{k:k,size:15,align:'center',color:'#7CF5B0',weight:700});
+      ctx.fillStyle=C.card;ctx.strokeStyle=C.line;ctx.lineWidth=1.5;K.roundRect(ctx,430,20,410,340,14);ctx.fill();ctx.stroke();
+      /* on narrow screens these overlap, and the readout boxes under the canvas show the same numbers */
+      if(k<1.5){
+        K.text(ctx,'TIME',454,52,{k:k,size:11});K.text(ctx,E.t.toFixed(1)+' s',454,80,{k:k,size:24,color:C.ink,weight:700});
+        K.text(ctx,'VELOCITY (+ = up)',644,52,{k:k,size:11});K.text(ctx,(s.v>=0?'+':'')+s.v.toFixed(1)+' m/s',644,80,{k:k,size:24,color:C.ink,weight:700});
+        K.text(ctx,'SCALE READING',454,122,{k:k,size:11});K.text(ctx,Math.round(s.FN)+' N',454,150,{k:k,size:24,color:C.FN,weight:700});
+        K.text(ctx,'STUDENT MASS',644,122,{k:k,size:11});K.text(ctx,M+' kg',644,150,{k:k,size:24,color:C.ink,weight:700});
+        K.text(ctx,'FBD · student',454,192,{k:k,size:11});}
+      K.fbd(ctx,560,272,[K.F('FN','up',s.FN,true),K.F('Fg','down',M*g,true)],{k:k,maxLen:62,axes:false,labelSize:12});
+      var gx=670,gw=150,gy=200,gh=130;ctx.strokeStyle=C.line;ctx.lineWidth=1.5;ctx.strokeRect(gx,gy,gw,gh);K.text(ctx,k<1.5?'velocity vs. time':'v vs. t',gx,gy-10,{k:k,size:10});
+      ctx.strokeStyle=C.accent;ctx.lineWidth=2.5;ctx.beginPath();for(var tt=0;tt<=E.t+1e-9;tt+=.05){var vv=state(tt).v,xx=gx+tt/END*gw,yv=gy+gh-(vv/5)*gh*.85-6;tt===0?ctx.moveTo(xx,yv):ctx.lineTo(xx,yv);}ctx.stroke();
+      K.text(ctx,'0',gx-8,gy+gh-6,{k:k,size:9,align:'right'});K.text(ctx,'12 s',gx+gw,gy+gh+12,{k:k,size:9,align:'right'});
+    });
+    var anim=null;
+    function draw(){ev.redraw();var s=state(E.t);$('#el-t').textContent=E.t.toFixed(1)+' s';$('#el-v').textContent=(s.v>=0?'+':'')+s.v.toFixed(1)+' m/s';$('#el-fn').textContent=Math.round(s.FN)+' N';
+      $('#el-play').textContent=E.run?'❚❚ Pause':(E.t>=END?'↺ Replay':'▶ Play');}
+    $('#el-play').onclick=function(){if(E.run){E.run=false;if(anim)anim.stop();draw();return;}if(E.t>=END)E.t=0;E.run=true;draw();
+      anim=K.animate(function(dt){E.t=Math.min(END,E.t+dt*($('#el-slow').checked?.5:1));if(E.t>=END){E.run=false;draw();return false;}draw();});};
+    $('#el-back').onclick=function(){E.t=Math.max(0,Math.round((E.t-.5)*2)/2);draw();};
+    $('#el-fwd').onclick=function(){E.t=Math.min(END,Math.round((E.t+.5)*2)/2);draw();};
+    $('#el-reset').onclick=function(){E.run=false;if(anim)anim.stop();E.t=0;draw();};
+    draw();}
+})();
+</script>
+</body>
+</html>
