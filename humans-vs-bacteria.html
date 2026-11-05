@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Humans vs. Bacteria | YSC Science</title>
+<style>
+  /* ── Reset & base ─────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal:   #0d9488;
+    --teal-d: #0f766e;
+    --teal-l: #ccfbf1;
+    --slate:  #1e293b;
+    --gray:   #64748b;
+    --light:  #f8fafc;
+    --white:  #ffffff;
+    --amber:  #d97706;
+    --amber-l:#fef3c7;
+    --red:    #dc2626;
+    --red-l:  #fee2e2;
+    --green-l:#dcfce7;
+    --green:  #16a34a;
+  }
+  body {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--light);
+    color: var(--slate);
+    line-height: 1.65;
+  }
+
+  /* ── Nav ──────────────────────────────────────────────────── */
+  nav {
+    background: var(--slate);
+    position: sticky; top: 0; z-index: 100;
+    display: flex; flex-wrap: wrap; gap: .25rem;
+    padding: .5rem 1rem;
+  }
+  nav a {
+    color: #94a3b8; text-decoration: none;
+    font-size: .78rem; padding: .2rem .55rem;
+    border-radius: 4px; white-space: nowrap;
+  }
+  nav a:hover { background: var(--teal); color: #fff; }
+
+  /* ── Page shell ───────────────────────────────────────────── */
+  .page { max-width: 900px; margin: 0 auto; padding: 0 1rem 4rem; }
+
+  /* ── Hero ─────────────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--slate) 0%, #1e3a5f 100%);
+    color: #fff; padding: 2.5rem 1.5rem; border-radius: 0 0 1rem 1rem;
+    margin-bottom: 2rem;
+  }
+  .hero .kicker { font-size: .78rem; letter-spacing: .08em; color: #94a3b8; margin-bottom: .4rem; }
+  .hero h1 { font-size: 2.4rem; line-height: 1.15; margin-bottom: .6rem; }
+  .hero h1 em { color: var(--teal); font-style: normal; }
+  .hero .dq {
+    background: rgba(13,148,136,.18); border-left: 4px solid var(--teal);
+    padding: .6rem 1rem; border-radius: 0 .4rem .4rem 0;
+    font-size: 1rem; font-style: italic; color: #e2e8f0; margin-top: .8rem;
+  }
+  .hero .meta { font-size: .82rem; color: #94a3b8; margin-top: 1rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+  /* ── Section headers ──────────────────────────────────────── */
+  .section-label {
+    font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+    color: var(--teal); text-transform: uppercase; margin-bottom: .3rem;
+  }
+  h2 { font-size: 1.5rem; color: var(--slate); margin-bottom: 1rem; }
+  h3 { font-size: 1.1rem; color: var(--slate); margin-bottom: .4rem; }
+
+  /* ── Cards ────────────────────────────────────────────────── */
+  .card {
+    background: var(--white); border-radius: .6rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    padding: 1.2rem 1.4rem; margin-bottom: 1.2rem;
+  }
+  .card.teal-left { border-left: 4px solid var(--teal); }
+  .card.amber-left { border-left: 4px solid var(--amber); }
+  .card.red-left   { border-left: 4px solid var(--red); }
+
+  /* ── NEWS CARD ────────────────────────────────────────────── */
+  .news-card {
+    background: var(--amber-l);
+    border: 2px solid var(--amber);
+    border-radius: .6rem; padding: 1.2rem 1.4rem;
+    margin-bottom: 1.4rem;
+  }
+  .news-card .news-kicker {
+    display: inline-block;
+    background: var(--amber); color: #fff;
+    font-size: .7rem; font-weight: 700; letter-spacing: .07em;
+    text-transform: uppercase; padding: .15rem .5rem; border-radius: 3px;
+    margin-bottom: .6rem;
+  }
+  .news-card h3 { font-size: 1.05rem; margin-bottom: .5rem; color: var(--slate); }
+  .news-card p  { font-size: .93rem; color: var(--slate); line-height: 1.6; margin-bottom: .5rem; }
+  .news-card .quote {
+    background: var(--white); border-left: 4px solid var(--amber);
+    padding: .6rem 1rem; border-radius: 0 .4rem .4rem 0;
+    font-style: italic; font-size: .93rem; margin: .7rem 0;
+  }
+  .news-card .source {
+    font-size: .78rem; color: var(--gray); margin-top: .4rem;
+  }
+  .news-card .source a { color: var(--teal); }
+
+  /* ── Callout / fun fact ───────────────────────────────────── */
+  .callout {
+    background: var(--teal-l); border-radius: .5rem;
+    padding: .9rem 1.1rem; margin-bottom: 1.1rem;
+    border-left: 4px solid var(--teal);
+  }
+  .callout strong { color: var(--teal-d); }
+
+  /* ── Unit map ─────────────────────────────────────────────── */
+  .unit-map { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
+  .stop-card {
+    background: var(--white); border: 1px solid #e2e8f0;
+    border-radius: .5rem; padding: .9rem 1rem;
+    text-decoration: none; color: var(--slate);
+    display: block; transition: box-shadow .15s;
+  }
+  .stop-card:hover { box-shadow: 0 4px 12px rgba(13,148,136,.2); border-color: var(--teal); }
+  .stop-card .emoji { font-size: 1.3rem; margin-bottom: .3rem; }
+  .stop-card .stop-title { font-weight: 700; font-size: .92rem; }
+  .stop-card .stop-sub   { font-size: .8rem; color: var(--gray); }
+
+  /* ── Big ideas ────────────────────────────────────────────── */
+  .idea { margin-bottom: 2rem; }
+  .idea-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2rem; height: 2rem; background: var(--teal); color: #fff;
+    border-radius: 50%; font-weight: 700; font-size: .9rem; margin-bottom: .5rem;
+  }
+
+  /* ── Diagram (bacterium) ──────────────────────────────────── */
+  .diagram-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; margin: .8rem 0; }
+  .diagram-labels { display: grid; grid-template-columns: auto 1fr; gap: .3rem .6rem; font-size: .88rem; }
+  .dlabel { font-weight: 600; color: var(--teal); }
+  .bacterium-fig {
+    background: var(--teal-l); border-radius: .6rem;
+    padding: 1rem; min-width: 220px; flex: 1;
+    font-size: .85rem; color: var(--slate);
+    border: 1px dashed var(--teal);
+  }
+
+  /* ── VISTA table ──────────────────────────────────────────── */
+  table { border-collapse: collapse; width: 100%; margin: .6rem 0; }
+  th { background: var(--teal); color: #fff; padding: .4rem .7rem; font-size: .88rem; text-align: left; }
+  td { padding: .4rem .7rem; font-size: .88rem; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: var(--light); }
+
+  /* ── Vocab ────────────────────────────────────────────────── */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: .7rem; }
+  .vocab-card {
+    background: var(--white); border: 1px solid #e2e8f0; border-radius: .5rem;
+    padding: .8rem 1rem;
+  }
+  .vocab-card .term { font-weight: 700; color: var(--teal); font-size: .92rem; }
+  .vocab-card .badge {
+    display: inline-block; font-size: .67rem; font-weight: 700; padding: .1rem .35rem;
+    border-radius: 3px; margin-bottom: .3rem; vertical-align: middle;
+  }
+  .badge-new  { background: var(--teal);  color: #fff; }
+  .badge-rev  { background: var(--gray);  color: #fff; }
+  .vocab-card .def  { font-size: .82rem; color: var(--slate); line-height: 1.5; }
+  .vocab-card .ex   { font-size: .77rem; color: var(--gray); margin-top: .2rem; font-style: italic; }
+
+  /* ── Videos ───────────────────────────────────────────────── */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: .8rem; }
+  .video-card {
+    background: var(--white); border: 1px solid #e2e8f0; border-radius: .5rem;
+    padding: .9rem 1rem; text-decoration: none; color: var(--slate);
+    display: flex; flex-direction: column; gap: .2rem;
+    transition: box-shadow .15s;
+  }
+  .video-card:hover { box-shadow: 0 4px 10px rgba(13,148,136,.15); border-color: var(--teal); }
+  .video-card .play { font-size: 1rem; }
+  .video-card .vtitle { font-weight: 700; font-size: .88rem; }
+  .video-card .vdesc  { font-size: .8rem; color: var(--gray); }
+  .video-card .vstop  { font-size: .73rem; color: var(--teal); font-weight: 600; margin-top: auto; }
+  .stop-bar { height: 3px; border-radius: 2px; background: var(--teal-l); margin-top: .5rem; }
+  .stop-bar span { display: block; height: 100%; background: var(--teal); border-radius: 2px; }
+
+  /* ── Sims ─────────────────────────────────────────────────── */
+  .sim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: .7rem; }
+  .sim-card {
+    background: var(--white); border: 1px solid #e2e8f0; border-radius: .5rem;
+    padding: .8rem 1rem; text-decoration: none; color: var(--slate);
+    display: flex; flex-direction: column; gap: .3rem;
+  }
+  .sim-card:hover { border-color: var(--teal); }
+  .sim-card .sim-emoji { font-size: 1.4rem; }
+  .sim-card .sim-title { font-weight: 700; font-size: .9rem; }
+  .sim-card .sim-desc  { font-size: .8rem; color: var(--gray); }
+
+  /* ── Assignments ──────────────────────────────────────────── */
+  .assign-list { display: flex; flex-direction: column; gap: .8rem; }
+  .assign-card {
+    background: var(--white); border: 1px solid #e2e8f0; border-radius: .5rem;
+    padding: .9rem 1.1rem; display: flex; align-items: flex-start; gap: 1rem;
+  }
+  .assign-num {
+    min-width: 2rem; height: 2rem; background: var(--teal); color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .9rem; flex-shrink: 0; margin-top: .1rem;
+  }
+  .assign-body { flex: 1; }
+  .assign-body h3 { font-size: .95rem; margin-bottom: .2rem; }
+  .assign-body p  { font-size: .82rem; color: var(--gray); margin-bottom: .4rem; }
+  .assign-links { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: .25rem .7rem; border-radius: .3rem;
+    font-size: .78rem; font-weight: 600; text-decoration: none;
+    background: var(--teal); color: #fff;
+  }
+  .btn-outline {
+    background: transparent; border: 1.5px solid var(--teal); color: var(--teal);
+  }
+  .btn:hover, .btn-outline:hover { opacity: .85; }
+
+  /* ── Stats ────────────────────────────────────────────────── */
+  .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: .8rem; margin-bottom: 1.2rem; }
+  .stat-card {
+    background: var(--white); border: 1px solid #e2e8f0; border-radius: .5rem;
+    padding: 1rem; text-align: center;
+  }
+  .stat-num  { font-size: 1.8rem; font-weight: 800; color: var(--teal); line-height: 1.1; }
+  .stat-desc { font-size: .82rem; color: var(--gray); margin-top: .3rem; line-height: 1.4; }
+  .stat-src  { font-size: .72rem; color: var(--teal); margin-top: .3rem; }
+
+  /* ── Athletes ─────────────────────────────────────────────── */
+  .athletes { background: var(--white); border-radius: .6rem; padding: 1.2rem 1.4rem; border: 1px solid #e2e8f0; }
+  .athletes ul { margin-left: 1.2rem; margin-top: .4rem; }
+  .athletes li { font-size: .9rem; margin-bottom: .3rem; }
+
+  /* ── Footer ───────────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid #e2e8f0; padding-top: 1rem; margin-top: 2rem;
+    font-size: .78rem; color: var(--gray); line-height: 1.6;
+  }
+  footer a { color: var(--teal); }
+
+  /* ── Helpers ──────────────────────────────────────────────── */
+  section { margin-bottom: 2.5rem; }
+  img { max-width: 100%; border-radius: .4rem; margin: .6rem 0; }
+  .img-credit { font-size: .73rem; color: var(--gray); }
+  ul, ol { margin-left: 1.3rem; }
+  li { margin-bottom: .2rem; }
+  p { margin-bottom: .6rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#start">Start</a>
+  <a href="#news">In the News</a>
+  <a href="#connect">Connect</a>
+  <a href="#map">Unit Map</a>
+  <a href="#ideas">Big Ideas</a>
+  <a href="#real">Real World</a>
+  <a href="#sports">Athletes</a>
+  <a href="#vocab">Vocab</a>
+  <a href="#videos">Videos</a>
+  <a href="#sims">Simulations</a>
+  <a href="#work">Assignments</a>
+</nav>
+
+<div class="page">
+
+<!-- ── HERO ───────────────────────────────────────────────────────────────── -->
+<section id="start" class="hero">
+  <p class="kicker">7th Grade Life Science · New Unit</p>
+  <h1>Humans <em>vs.</em> Bacteria</h1>
+  <p>Bacteria are everywhere: in the soil, in the ocean, on your soccer ball, and inside you. Most of them are harmless or helpful. A few can make us very sick. And some are learning to beat our best medicines.</p>
+  <div class="dq">Our Unit Question — Why are bacterial diseases coming back, and how can we stop the next outbreak?</div>
+  <div class="meta">
+    <span>≈ 6–7 weeks</span>
+    <span>8 activities</span>
+    <span>Final mission: Stop a cholera outbreak</span>
+  </div>
+</section>
+
+<!-- ── IN THE NEWS ─────────────────────────────────────────────────────────── -->
+<section id="news">
+  <div class="section-label">📰 In the News — October 2025</div>
+  <h2>NASA Found a Bacterium That Plays Dead — and Maybe Sent It to Mars</h2>
+
+  <div class="news-card">
+    <span class="news-kicker">Breaking Science</span>
+    <h3>The Bacterium That Fooled NASA for 18 Years</h3>
+
+    <p>When engineers built NASA's Phoenix Mars lander in 2007, they did it inside one of the cleanest rooms on Earth — a place blasted with UV lights, biocidal chemicals, and dry heat designed to wipe out every living thing. They thought it worked. They were wrong.</p>
+
+    <p>Scientists later found a brand-new bacterium hiding in that clean room: <em>Tersicoccus phoenicis</em> (ter-SIH-coe-cus FEE-nix-iss). Even stranger, they found the exact same unknown species in a second clean room 2,500 miles away in South America. Nobody could explain how it survived — until now.</p>
+
+    <div class="quote">
+      "It is not dead. It was playing dead. It is only dormant."
+      <br><span style="font-size:.85rem; color:#64748b;">— Madhan Tirumalai, microbiologist, University of Houston (2025)</span>
+    </div>
+
+    <p>In 2025, researchers at the University of Houston published the answer: <em>T. phoenicis</em> can shut its entire metabolism down — entering a state so deep that standard tests read it as dead. Standard sterilization checks look for signs of life. If the bacterium shows none, it passes inspection. But it was just waiting.</p>
+
+    <p>When scientists added a specific protein called Rpf (found on human skin), the bacteria immediately woke up and started growing. Here is what makes this really unsettling: the Phoenix lander was launched to Mars in 2007. If any of these dormant bacteria were clinging to it, they may have landed on Mars — meaning we might have accidentally contaminated the planet we were trying to study for alien life.</p>
+
+    <p><strong>Why this matters beyond space:</strong> The same survival trick could be happening in hospital clean rooms, food processing plants, and pharmaceutical labs right now — in bacteria we haven't detected yet. Scientists aren't sure if any of these hidden bacteria are dangerous, but as one researcher said: <em>"What's unknown is scarier than what's known."</em></p>
+
+    <p class="source">
+      Source: Robin George Andrews, <a href="https://www.nationalgeographic.com/science/article/clean-room-bacteria-nasa-spacecraft-dormant" target="_blank">National Geographic</a>, October 24, 2025
+    </p>
+  </div>
+
+  <div class="callout">
+    <strong>Connect to this unit:</strong> This story is a perfect preview of everything we'll study. <em>T. phoenicis</em> is a prokaryote (Stop 1). It survived because of adaptations that evolved under pressure (Stop 3). And the reason scientists worry about it reaching Mars comes down to one fact: bacteria can survive in conditions that would kill almost anything else. That's what makes them powerful — and sometimes dangerous.
+  </div>
+</section>
+
+<!-- ── CONNECT ─────────────────────────────────────────────────────────────── -->
+<section id="connect">
+  <div class="section-label">Before we start</div>
+  <h2>You already know more than you think</h2>
+  <p>Remember our cells units? A bacterium is <strong>one single cell</strong>, so everything you learned about cell parts and cell transport is about to come back. Here's how:</p>
+
+  <div class="card teal-left">
+    <div class="section-label">From: Cell Theory</div>
+    <h3>All living things are made of cells</h3>
+    <p>A bacterium is a whole living thing made of just <strong>one cell</strong>. It eats, grows, and reproduces all by itself.</p>
+  </div>
+
+  <div class="card teal-left">
+    <div class="section-label">From: Organelles</div>
+    <h3>Bacteria have no nucleus</h3>
+    <p>Their DNA floats in the cytoplasm. They still have a <strong>cell membrane</strong>, <strong>ribosomes</strong>, and a tough <strong>cell wall</strong>, like the plant cells we studied.</p>
+  </div>
+
+  <div class="card teal-left">
+    <div class="section-label">From: Cell Transport</div>
+    <h3>Osmosis can pop a bacterium</h3>
+    <p>Penicillin breaks the cell wall. Water rushes in by <strong>osmosis</strong> and the cell bursts. Some superbugs use <strong>active transport</strong> pumps to push medicine back out!</p>
+  </div>
+
+  <div class="card teal-left">
+    <div class="section-label">Fun fact</div>
+    <h3>Your mitochondria used to be bacteria</h3>
+    <p>Scientists think that over a billion years ago, a bacterium moved into a bigger cell and never left. Today we call it the <strong>mitochondrion</strong>.</p>
+  </div>
+</section>
+
+<!-- ── UNIT MAP ─────────────────────────────────────────────────────────────── -->
+<section id="map">
+  <div class="section-label">Unit storyline</div>
+  <h2>Unit Map</h2>
+  <p>Each stop answers part of our big question. Click a stop to jump to its big ideas.</p>
+  <div class="unit-map">
+    <a href="#i1" class="stop-card"><div class="emoji">🦠</div><div class="stop-title">Meet the Microbes</div><div class="stop-sub">What are bacteria, and how are they different from our cells?</div></a>
+    <a href="#i2" class="stop-card"><div class="emoji">🐀</div><div class="stop-title">Plague!</div><div class="stop-sub">How do diseases spread? Why did some people survive the Black Death?</div></a>
+    <a href="#i3" class="stop-card"><div class="emoji">🐭</div><div class="stop-title">Survival of the Fittest</div><div class="stop-sub">How do populations change over time?</div></a>
+    <a href="#i4" class="stop-card"><div class="emoji">💊</div><div class="stop-title">Superbugs</div><div class="stop-sub">Why aren't antibiotics working as well as they used to?</div></a>
+    <a href="#i5" class="stop-card"><div class="emoji">🏡</div><div class="stop-title">Your Home Team</div><div class="stop-sub">How do helpful bacteria keep us healthy?</div></a>
+    <a href="#i6" class="stop-card"><div class="emoji">🤝</div><div class="stop-title">Team Bacteria</div><div class="stop-sub">How do bacteria talk and work together?</div></a>
+    <a href="#i7" class="stop-card"><div class="emoji">🚰</div><div class="stop-title">Final Mission</div><div class="stop-sub">What's the best way to stop a cholera outbreak?</div></a>
+  </div>
+</section>
+
+<!-- ── BIG IDEAS ───────────────────────────────────────────────────────────── -->
+<section id="ideas">
+  <div class="section-label">Notes</div>
+  <h2>Big Ideas</h2>
+
+  <!-- Stop 1 -->
+  <div class="idea" id="i1">
+    <div class="idea-num">1</div>
+    <h3>Meet the Microbes — What are bacteria, and how are they different from our cells?</h3>
+    <p><strong>Bacteria</strong> are tiny, single-celled living things. They are <strong>prokaryotes</strong>: cells with <strong>no nucleus</strong> and no membrane-bound organelles. Your cells are <strong>eukaryotes</strong>: they have a nucleus and organelles like mitochondria.</p>
+    <div class="bacterium-fig">
+      <strong>Parts of a bacterium:</strong>
+      <div class="diagram-labels" style="margin-top:.5rem;">
+        <span class="dlabel">Pili</span><span>tiny hairs for gripping surfaces</span>
+        <span class="dlabel">Cell wall</span><span>tough outer layer for protection</span>
+        <span class="dlabel">Cell membrane</span><span>controls what enters and exits</span>
+        <span class="dlabel">DNA</span><span>floats free — no nucleus!</span>
+        <span class="dlabel">Ribosomes</span><span>build proteins</span>
+        <span class="dlabel">Flagellum</span><span>tail for swimming</span>
+      </div>
+      <p style="margin-top:.6rem; font-size:.8rem; color:#64748b;">Real size: about 1–2 micrometers. 500 bacteria could line up across the head of a pin.</p>
+    </div>
+    <ul>
+      <li><strong>Reproduce fast:</strong> some bacteria split in two (<strong>binary fission</strong>) every 20 minutes. One cell can become millions overnight.</li>
+      <li><strong>Helpful:</strong> digest your food, make vitamins, make yogurt and cheese.</li>
+      <li><strong>Harmful:</strong> a few cause diseases like strep throat, cholera, and the plague. These are called <strong>pathogens</strong>.</li>
+      <li><strong>Neutral:</strong> most just live their lives and don't affect us at all.</li>
+    </ul>
+    <div class="callout" style="margin-top:.8rem;">
+      <strong>Connect:</strong> Ribosomes still build proteins and the cell membrane still controls what goes in and out, just like in the cells from our last unit.
+    </div>
+  </div>
+
+  <!-- Stop 2 -->
+  <div class="idea" id="i2">
+    <div class="idea-num">2</div>
+    <h3>Plague! How Disease Spreads</h3>
+    <p>From <strong>1347 to 1351</strong>, the <strong>Black Death</strong> swept across Europe, Asia, and North Africa. It killed an estimated <strong>25–50 million people in Europe</strong> — roughly <strong>1 out of every 3 people</strong>. It was caused by the bacterium <em>Yersinia pestis</em>, carried by fleas that lived on rats.</p>
+    <p><strong>Infectious diseases</strong> spread from person to person (or animal to person). Three things make them spread faster:</p>
+    <ol>
+      <li><strong>Crowding (population density):</strong> more people packed together means more contact.</li>
+      <li><strong>Mixing:</strong> people traveling and meeting new groups (trade ships carried plague fleas port to port).</li>
+      <li><strong>Poor hygiene:</strong> dirty water, no hand washing, and trash attract germs and rats.</li>
+    </ol>
+    <p>But not everyone who caught it died. People have <strong>variations</strong> in their immune systems. Scientists studying old skeletons found that people with certain immune system genes were more likely to survive — and they passed those genes to their kids.</p>
+  </div>
+
+  <!-- Stop 3 -->
+  <div class="idea" id="i3">
+    <div class="idea-num">3</div>
+    <h3>Survival of the Fittest: Natural Selection</h3>
+    <p><strong>Natural selection</strong> is how a population changes over many generations. Living things with traits that help them survive live longer, have more babies, and pass those traits on. Remember it with <strong>VISTA</strong>:</p>
+    <table>
+      <tr><th>Letter</th><th>Stands for</th><th>In the mouse example</th></tr>
+      <tr><td><strong>V</strong></td><td>Variation</td><td>Mice come in light and dark fur</td></tr>
+      <tr><td><strong>I</strong></td><td>Inheritance</td><td>Fur color is passed from parents to kids</td></tr>
+      <tr><td><strong>S</strong></td><td>Selection</td><td>Light mice get eaten more on dark lava rock</td></tr>
+      <tr><td><strong>T</strong></td><td>Time</td><td>Over many generations, more dark mice survive</td></tr>
+      <tr><td><strong>A</strong></td><td>Adaptation</td><td>Dark fur is now an adaptation in this habitat</td></tr>
+    </table>
+    <div class="callout"><strong>Important!</strong> Individuals do <em>not</em> change on purpose. The <strong>population</strong> changes because survivors pass on their traits. New variations come from random <strong>mutations</strong> (small changes in DNA).</div>
+  </div>
+
+  <!-- Stop 4 -->
+  <div class="idea" id="i4">
+    <div class="idea-num">4</div>
+    <h3>Superbugs: Antibiotic Resistance</h3>
+    <p>In <strong>1928</strong>, Alexander Fleming noticed mold killing bacteria in a dish. That mold made <strong>penicillin</strong>, the first antibiotic. Antibiotics have saved hundreds of millions of lives. But bacteria are evolving. <strong>Antibiotic resistance</strong> is natural selection happening fast:</p>
+    <ol>
+      <li>In a group of bacteria, a few randomly have a mutation that helps them survive the medicine.</li>
+      <li>The antibiotic kills the weak bacteria. The <strong>resistant</strong> ones survive.</li>
+      <li>The survivors reproduce every 20 minutes and pass on resistance.</li>
+      <li>Soon the whole population is resistant: a <strong>superbug</strong>.</li>
+    </ol>
+    <div class="callout"><strong>Antibiotics do NOT work on viruses</strong> (like colds or flu). Taking them when you don't need them just gives bacteria more practice at becoming resistant.</div>
+    <p>How antibiotics attack cell parts you know: 🧱 Cell wall breakers (penicillin) → water rushes in by osmosis and the bacterium bursts. ⚙️ Ribosome blockers → the cell can't make proteins. 🚪 Superbug trick: pump proteins use active transport to shove medicine back out!</p>
+    <div class="card amber-left" style="margin-top:.8rem;">
+      <h3>New weapon: bacteriophages</h3>
+      <p><strong>Bacteriophages</strong> ("phages") are viruses that only attack bacteria. In <strong>2016</strong>, doctors saved a man dying from a superbug infection by giving him phages when no antibiotic worked. This is called <strong>phage therapy</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Stop 5 -->
+  <div class="idea" id="i5">
+    <div class="idea-num">5</div>
+    <h3>Your Body's Home Team: The Microbiome</h3>
+    <p>Your <strong>microbiome</strong> is all the tiny living things that live in and on you, mostly in your gut. You carry about <strong>38 trillion bacteria</strong> — about the same as the number of human cells in your body!</p>
+    <p>Think of your gut like a <strong>soccer team</strong>:</p>
+    <ul>
+      <li><strong>Defense:</strong> good bacteria take up all the space and food, so harmful bacteria can't move in.</li>
+      <li><strong>Midfield:</strong> they break down fiber and make vitamins like vitamin K.</li>
+      <li><strong>Coaching:</strong> they help train your immune system.</li>
+    </ul>
+    <div class="callout"><strong>Connect:</strong> Living things that depend on each other in a way that helps both is called <strong>mutualism</strong>. You give gut bacteria a warm home and food; they digest food and protect you.</div>
+  </div>
+
+  <!-- Stop 6 -->
+  <div class="idea" id="i6">
+    <div class="idea-num">6</div>
+    <h3>Team Bacteria: Talking and Working Together</h3>
+    <p>Many bacteria build a <strong>biofilm</strong>: a slimy "fort" of bacteria glued together. The plaque on your teeth in the morning is a biofilm! Biofilms can make bacteria up to 1,000 times harder to kill with antibiotics.</p>
+    <p>How do they coordinate? They "talk" with chemical signals — this is called <strong>quorum sensing</strong>. Each bacterium releases a little signal. When enough bacteria are present, the signal gets strong and they all act at once.</p>
+    <div class="callout"><strong>New idea:</strong> Scientists like Dr. Bonnie Bassler are designing medicines that block the signals, so bacteria never "hear" each other and never launch their attack.</div>
+  </div>
+
+  <!-- Stop 7 -->
+  <div class="idea" id="i7">
+    <div class="idea-num">7</div>
+    <h3>Final Mission: Stop the Outbreak</h3>
+    <p><strong>Cholera</strong> is caused by <em>Vibrio cholerae</em>. It spreads through water or food contaminated with sewage. In 1854 London, doctor <strong>John Snow</strong> mapped cholera deaths and traced them to one water pump. When the pump handle was removed, cases dropped — one of the first uses of data to stop an outbreak.</p>
+    <p>For your final mission, choose the <strong>best strategy</strong> and defend it with a <strong>claim, evidence, and reasoning</strong>:</p>
+    <ul>
+      <li>🚰 Clean water, sanitation & hygiene</li>
+      <li>💊 Smarter antibiotic use</li>
+      <li>🦠 Phage therapy</li>
+      <li>🏡 Protect the microbiome</li>
+      <li>📡 Block bacteria's signals</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── REAL WORLD ───────────────────────────────────────────────────────────── -->
+<section id="real">
+  <div class="section-label">This is happening now</div>
+  <h2>Real-World Data</h2>
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num">4.7M</div>
+      <div class="stat-desc">deaths worldwide linked to antibiotic-resistant bacteria in 2021</div>
+      <div class="stat-src"><a href="https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance" target="_blank">WHO</a></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1 in 6</div>
+      <div class="stat-desc">lab-confirmed bacterial infections worldwide were resistant to antibiotics in 2023</div>
+      <div class="stat-src"><a href="https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance" target="_blank">WHO</a></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">9.7M</div>
+      <div class="stat-desc">infections a year in the U.S. are caused by drug-resistant germs, with ~50,800 deaths</div>
+      <div class="stat-src"><a href="https://www.cdc.gov/antimicrobial-resistance/data-research/threats/index.html" target="_blank">CDC</a></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1.3–4M</div>
+      <div class="stat-desc">cholera cases worldwide every year, almost all from unsafe water</div>
+      <div class="stat-src"><a href="https://www.who.int/news-room/fact-sheets/detail/cholera" target="_blank">WHO</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Why is this a big deal?</h3>
+    <p>For about 100 years, deaths from infectious diseases went <strong>down</strong> thanks to clean water, vaccines, and antibiotics. Now superbugs, crowded cities, and fast travel are pushing some of those diseases back <strong>up</strong>. That's the puzzle this whole unit is about.</p>
+  </div>
+</section>
+
+<!-- ── ATHLETES ─────────────────────────────────────────────────────────────── -->
+<section id="sports">
+  <div class="section-label">For our athletes ⚽🏐</div>
+  <h2>Superbugs in the Locker Room</h2>
+  <div class="athletes">
+    <h3>MRSA and athletes</h3>
+    <p><strong>MRSA</strong> is a staph bacterium resistant to many common antibiotics. The CDC says it can spread among athletes through close contact, shared towels and gear, and turf burns or scrapes.</p>
+    <h3 style="margin-top:.8rem;">CDC game plan for athletes</h3>
+    <ul>
+      <li>Wash hands before and after practice and games.</li>
+      <li>Shower right after exercise. Don't share towels, bar soap, or razors.</li>
+      <li>Wash and fully dry your uniform after every use.</li>
+      <li>Cover cuts and turf burns with a clean bandage until healed.</li>
+      <li>Tell a parent or coach right away about red, warm, swollen, or painful skin spots.</li>
+    </ul>
+    <p style="margin-top:.6rem;"><a href="https://www.cdc.gov/mrsa/prevention/athletes.html" target="_blank" class="btn">CDC: MRSA Prevention for Athletes →</a></p>
+  </div>
+</section>
+
+<!-- ── VOCAB ───────────────────────────────────────────────────────────────── -->
+<section id="vocab">
+  <div class="section-label">Word wall</div>
+  <h2>Unit Vocabulary</h2>
+  <p>Make an index card for each <strong>new</strong> word (term on the front, definition + a drawing on the back). <strong>Review</strong> words are from our cells units.</p>
+  <div class="vocab-grid">
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 1</span><div class="term">Bacteria</div><div class="def">Tiny single-celled living things with no nucleus.</div><div class="ex">E. coli in your gut</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 1</span><div class="term">Prokaryote</div><div class="def">A cell with no nucleus and no membrane-covered organelles. All bacteria are prokaryotes.</div><div class="ex">Opposite: eukaryote (your cells)</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 1</span><div class="term">Pathogen</div><div class="def">A germ (like a bacterium or virus) that causes disease.</div><div class="ex">Vibrio cholerae causes cholera</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 1</span><div class="term">Binary Fission</div><div class="def">How bacteria reproduce: one cell copies its DNA and splits into two identical cells.</div><div class="ex">Can happen every ~20 minutes</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 1</span><div class="term">Dormancy</div><div class="def">A state of deep "sleep" where a living thing shuts down its metabolism but stays alive — like T. phoenicis playing dead in NASA's clean rooms.</div><div class="ex">NEW! From the NASA story</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 2</span><div class="term">Infectious Disease</div><div class="def">A disease that can spread from one person or animal to another.</div><div class="ex">The plague, strep throat</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 2</span><div class="term">Transmission</div><div class="def">How a disease spreads (touch, air, water, food, or bites from animals like fleas).</div><div class="ex">Black Death: flea bites</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 2</span><div class="term">Immune System</div><div class="def">The body system that defends you from pathogens. White blood cells are its soldiers.</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 3</span><div class="term">Variation</div><div class="def">Differences in traits between individuals of the same species.</div><div class="ex">Light vs. dark fur in pocket mice</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 3</span><div class="term">Mutation</div><div class="def">A random change in an organism's DNA. The source of new variations.</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 3</span><div class="term">Natural Selection</div><div class="def">The process where organisms with helpful traits survive and reproduce more, so those traits become more common over time.</div><div class="ex">Remember VISTA</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 3</span><div class="term">Adaptation</div><div class="def">An inherited trait that helps an organism survive and reproduce in its environment.</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 4</span><div class="term">Antibiotic</div><div class="def">A medicine that kills bacteria or stops them from growing. Does NOT work on viruses.</div><div class="ex">First one: penicillin (1928)</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 4</span><div class="term">Antibiotic Resistance</div><div class="def">When bacteria evolve so an antibiotic can no longer kill them.</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 4</span><div class="term">Bacteriophage</div><div class="def">A virus that infects and destroys only bacteria. Used in phage therapy.</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 5</span><div class="term">Microbiome</div><div class="def">All the microorganisms (mostly bacteria) living in and on your body.</div><div class="ex">~38 trillion bacteria</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 5</span><div class="term">Biodiversity</div><div class="def">The number of different kinds of living things in an ecosystem. More diversity = more stable.</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 5</span><div class="term">Mutualism</div><div class="def">A relationship where two different organisms both benefit.</div><div class="ex">You and your gut bacteria</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 6</span><div class="term">Biofilm</div><div class="def">A slimy layer of bacteria stuck together on a surface that protects them.</div><div class="ex">Plaque on your teeth</div></div>
+    <div class="vocab-card"><span class="badge badge-new">New · Stop 6</span><div class="term">Quorum Sensing</div><div class="def">How bacteria "talk": they release chemical signals and act together once there are enough of them.</div></div>
+    <div class="vocab-card"><span class="badge badge-rev">Review · Cells</span><div class="term">Cell Wall</div><div class="def">A stiff outer layer outside the cell membrane. Plants and bacteria have one; animals don't.</div></div>
+    <div class="vocab-card"><span class="badge badge-rev">Review · Cells</span><div class="term">Ribosome</div><div class="def">The organelle that builds proteins. Some antibiotics jam bacterial ribosomes.</div></div>
+    <div class="vocab-card"><span class="badge badge-rev">Review · Transport</span><div class="term">Osmosis</div><div class="def">Diffusion of water across a membrane. Without its wall, a bacterium swells and bursts.</div></div>
+    <div class="vocab-card"><span class="badge badge-rev">Review · Transport</span><div class="term">Active Transport</div><div class="def">Moving materials across a membrane using energy. Superbugs pump antibiotics out this way.</div></div>
+    <div class="vocab-card"><span class="badge badge-rev">Review · Transport</span><div class="term">Endocytosis</div><div class="def">A cell wraps its membrane around something to bring it inside. White blood cells "eat" bacteria this way.</div></div>
+  </div>
+</section>
+
+<!-- ── VIDEOS ───────────────────────────────────────────────────────────────── -->
+<section id="videos">
+  <div class="section-label">Watch & learn</div>
+  <h2>Videos &amp; Shows</h2>
+
+  <div class="news-card" style="margin-bottom:1.2rem;">
+    <span class="news-kicker">🎬 Start Here — Stop 1</span>
+    <h3>Harvard Medical School: Evolution of Bacteria on a "Mega-Plate"</h3>
+    <p>Watch bacteria evolve resistance in real time on a giant petri dish. Only 2 minutes — and it will change how you think about what bacteria are capable of. This is a perfect opener for Stop 1: before you learn what a bacterium <em>is</em>, see what one can <em>do</em>.</p>
+    <p><a href="https://www.youtube.com/watch?v=plVk4NVIUh8" target="_blank" class="btn">▶ Watch on YouTube</a></p>
+  </div>
+
+  <div class="video-grid">
+    <a href="https://www.youtube.com/watch?v=zQGOcOUBi6s" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">Kurzgesagt — The Immune System Explained: Bacteria Infection</div><div class="vdesc">What happens when bacteria get through a cut in your skin. Watch for white blood cells "eating" bacteria.</div><div class="vstop">Stop 2 · Plague!</div></a>
+    <a href="https://www.youtube.com/watch?v=ySClB6-OH-Q" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">TED-Ed — The Past, Present, and Future of the Bubonic Plague</div><div class="vdesc">How the plague spread, and what scientists learned from old skeletons.</div><div class="vstop">Stop 2 · Plague!</div></a>
+    <a href="https://www.youtube.com/watch?v=7VM9YxmULuo" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">Amoeba Sisters — Natural Selection</div><div class="vdesc">Clear explanation of natural selection, including antibiotic-resistant bacteria.</div><div class="vstop">Stop 3 · Survival of the Fittest</div></a>
+    <a href="https://www.biointeractive.org/classroom-resources/making-fittest-natural-selection-and-adaptation" target="_blank" class="video-card"><span class="play">▶ HHMI</span><div class="vtitle">The Making of the Fittest: Rock Pocket Mouse</div><div class="vdesc">Short film about the desert mice whose fur color evolved to match lava rock.</div><div class="vstop">Stop 3 · Survival of the Fittest</div></a>
+    <a href="https://www.youtube.com/watch?v=plVk4NVIUh8" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">Harvard Medical School — Evolution of Bacteria on a Mega-Plate</div><div class="vdesc">Watch bacteria evolve resistance in real time in a giant petri dish. Only 2 minutes!</div><div class="vstop">Stop 1 &amp; Stop 4 · Superbugs</div></a>
+    <a href="https://www.youtube.com/watch?v=znnp-Ivj2ek" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">TED-Ed — What Causes Antibiotic Resistance?</div><div class="vdesc">Animated explanation of how bacteria become superbugs.</div><div class="vstop">Stop 4 · Superbugs</div></a>
+    <a href="https://www.youtube.com/watch?v=xZbcwi7SfZE" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">Kurzgesagt — The Antibiotic Apocalypse Explained</div><div class="vdesc">Why scientists are worried about superbugs, and how resistance spreads.</div><div class="vstop">Stop 4 · Superbugs</div></a>
+    <a href="https://www.youtube.com/watch?v=YI3tsmFsrOg" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">Kurzgesagt — The Deadliest Being on Planet Earth: The Bacteriophage</div><div class="vdesc">Meet the viruses that hunt bacteria, and could replace antibiotics.</div><div class="vstop">Stop 4 · Superbugs</div></a>
+    <a href="https://www.youtube.com/watch?v=VzPD009qTN4" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">Kurzgesagt — How Bacteria Rule Over Your Body: The Microbiome</div><div class="vdesc">The trillions of bacteria in your gut and what they do for you.</div><div class="vstop">Stop 5 · Your Home Team</div></a>
+    <a href="https://www.youtube.com/watch?v=pHLP5CZMnL4" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">TED-Ed — The Microbial Jungles All Over the Place (and You)</div><div class="vdesc">Beautiful close-up footage of bacteria colonies and biofilms.</div><div class="vstop">Stop 5–6</div></a>
+    <a href="https://www.youtube.com/watch?v=twxPyvdc-EE" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">SciShow — Biofilm: A New (Gross) Thing to Worry About</div><div class="vdesc">What biofilms are and why they make infections hard to treat.</div><div class="vstop">Stop 6 · Team Bacteria</div></a>
+    <a href="https://www.ted.com/talks/bonnie_bassler_how_bacteria_talk" target="_blank" class="video-card"><span class="play">▶ TED</span><div class="vtitle">Bonnie Bassler — How Bacteria "Talk"</div><div class="vdesc">The scientist who studies quorum sensing explains how bacteria communicate. (Teacher will play clips.)</div><div class="vstop">Stop 6 · Team Bacteria</div></a>
+    <a href="https://www.youtube.com/watch?v=Q8iDcLTD9wQ" target="_blank" class="video-card"><span class="play">▶ YouTube</span><div class="vtitle">BBC Earth — Whales' Bubble Net Fishing</div><div class="vdesc">Humpback whales working as a team to catch fish. Cooperation in action!</div><div class="vstop">Stop 6 · Team Bacteria</div></a>
+  </div>
+
+  <div class="card" style="margin-top:1.2rem;">
+    <div class="section-label">Documentary (your teacher may show clips in class)</div>
+    <h3>PBS Frontline — The Trouble with Antibiotics (2014)</h3>
+    <p>How antibiotics used on farm animals may be helping superbugs spread. Watching more at home? Ask a parent first.</p>
+    <p><a href="https://www.pbs.org/wgbh/frontline/documentary/trouble-with-antibiotics/" target="_blank" class="btn">Watch on PBS →</a></p>
+  </div>
+</section>
+
+<!-- ── SIMULATIONS ──────────────────────────────────────────────────────────── -->
+<section id="sims">
+  <div class="section-label">Try it yourself</div>
+  <h2>Online Simulations</h2>
+  <div class="sim-grid">
+    <a href="https://yscabarney.github.io/MS_SCI_ADV_26/superbug-sim.html" target="_blank" class="sim-card"><div class="sim-emoji">💊</div><div class="sim-title">Superbug Showdown</div><div class="sim-desc">Our class sim. Give a patient antibiotics and watch what happens when they skip doses or stop early.</div></a>
+    <a href="https://simulations.newvisions.org/disease_transmission.html" target="_blank" class="sim-card"><div class="sim-emoji">🐀</div><div class="sim-title">Disease Spread Simulation</div><div class="sim-desc">Pick a disease (even the bubonic plague!), change how crowded the town is, and watch it spread.</div></a>
+    <a href="https://phet.colorado.edu/en/simulations/natural-selection" target="_blank" class="sim-card"><div class="sim-emoji">🐰</div><div class="sim-title">PhET: Natural Selection</div><div class="sim-desc">Add wolves, change the environment, and add mutations to a bunny population.</div></a>
+    <a href="https://www.biointeractive.org/classroom-resources/color-variation-over-time-rock-pocket-mouse-populations" target="_blank" class="sim-card"><div class="sim-emoji">🐭</div><div class="sim-title">HHMI: Rock Pocket Mice</div><div class="sim-desc">Real data on how fur color changed in desert mice over time.</div></a>
+    <a href="https://learn.genetics.utah.edu/content/microbiome/" target="_blank" class="sim-card"><div class="sim-emoji">🧬</div><div class="sim-title">Learn.Genetics: Microbiome</div><div class="sim-desc">Interactive pages from the University of Utah about the bacteria living in and on you.</div></a>
+    <a href="https://ncase.me/trust/" target="_blank" class="sim-card"><div class="sim-emoji">🤝</div><div class="sim-title">The Evolution of Trust</div><div class="sim-desc">A game about when cooperating pays off and when cheating wins. (Optional challenge.)</div></a>
+  </div>
+</section>
+
+<!-- ── ASSIGNMENTS ──────────────────────────────────────────────────────────── -->
+<section id="work">
+  <div class="section-label">Your work</div>
+  <h2>Assignments</h2>
+  <p>Open each worksheet when your teacher assigns it. You can print it or fill it in on your device.</p>
+  <div class="assign-list">
+
+    <div class="assign-card">
+      <div class="assign-num">1</div>
+      <div class="assign-body">
+        <h3>Outbreak Detectives</h3>
+        <p>Superbug teaser, the data story, and start our Driving Question Board.</p>
+        <div class="assign-links">
+          <a href="https://docs.google.com/document/d/1arO-wblmXBql79_JmcedfUOGgWTl-F6uTsy76QpMeOY/copy" target="_blank" class="btn">Google Doc</a>
+          <a href="https://yscabarney.github.io/MS_SCI_ADV_26/hvb-1-outbreak-detectives.pdf" target="_blank" class="btn btn-outline">Open PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="assign-card">
+      <div class="assign-num">2</div>
+      <div class="assign-body">
+        <h3>Meet the Microbes</h3>
+        <p>Label a bacterium, compare it to our cells, and explore the NASA "playing dead" bacteria story — then connect it back to cell structure and transport.</p>
+        <div class="assign-links">
+          <a href="https://yscabarney.github.io/MS_SCI_ADV_26/hvb-2-meet-the-microbes.pdf" target="_blank" class="btn">Open PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="assign-card">
+      <div class="assign-num">3</div>
+      <div class="assign-body">
+        <h3>Plague! How Disease Spreads</h3>
+        <p>Run the disease spread sim, collect data, and explain why some people survived.</p>
+        <div class="assign-links">
+          <a href="https://yscabarney.github.io/MS_SCI_ADV_26/hvb-3-plague-disease-spread.pdf" target="_blank" class="btn">Open PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="assign-card">
+      <div class="assign-num">4</div>
+      <div class="assign-body">
+        <h3>Survival of the Fittest</h3>
+        <p>Rock pocket mouse data, the PhET bunny sim, and the VISTA organizer.</p>
+        <div class="assign-links">
+          <a href="https://yscabarney.github.io/MS_SCI_ADV_26/hvb-4-survival-of-the-fittest.pdf" target="_blank" class="btn">Open PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="assign-card">
+      <div class="assign-num">5</div>
+      <div class="assign-body">
+        <h3>Superbug Showdown</h3>
+        <p>Run the antibiotic resistance sim, graph your results, and write a CER.</p>
+        <div class="assign-links">
+          <a href="https://yscabarney.github.io/MS_SCI_ADV_26/hvb-5-superbug-showdown.pdf" target="_blank" class="btn">Open PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="assign-card">
+      <div class="assign-num">6</div>
+      <div class="assign-body">
+        <h3>Your Body's Home Team</h3>
+        <p>Compare microbiomes, connect your gut to an ecosystem, and judge a claim.</p>
+        <div class="assign-links">
+          <a href="https://yscabarney.github.io/MS_SCI_ADV_26/hvb-6-home-team-microbiome.pdf" target="_blank" class="btn">Open PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="assign-card">
+      <div class="assign-num">7</div>
+      <div class="assign-body">
+        <h3>Team Bacteria</h3>
+        <p>Biofilms, quorum sensing, and teamwork in nature.</p>
+        <div class="assign-links">
+          <a href="https://yscabarney.github.io/MS_SCI_ADV_26/hvb-7-team-bacteria.pdf" target="_blank" class="btn">Open PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="assign-card">
+      <div class="assign-num">8</div>
+      <div class="assign-body">
+        <h3>Final Mission: Stop the Outbreak</h3>
+        <p>Pick the best plan to stop cholera and defend it with evidence. Includes the rubric.</p>
+        <div class="assign-links">
+          <a href="https://yscabarney.github.io/MS_SCI_ADV_26/hvb-8-final-mission.pdf" target="_blank" class="btn">Open PDF</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  Adapted for 7th grade from the New Visions for Public Schools Biology unit <em>Humans vs. Bacteria</em>, used under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>. Photos from Wikimedia Commons. Data from the <a href="https://www.who.int/" target="_blank">World Health Organization</a> and <a href="https://www.cdc.gov/" target="_blank">CDC</a>. NASA news: Robin George Andrews, <a href="https://www.nationalgeographic.com/science/article/clean-room-bacteria-nasa-spacecraft-dormant" target="_blank">National Geographic</a>, October 2025. Videos belong to their creators.
+</footer>
+
+</div><!-- .page -->
+</body>
+</html>
