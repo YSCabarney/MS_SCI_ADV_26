@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Machine Files | YSC Science</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#faf7f0; --surface:#ffffff; --surface-2:#f1ece0; --ink:#1c2138; --ink-soft:#454b6b;
+    --muted:#767c99; --line:#e4ddc9; --accent:#ef6c2c; --accent-soft:#ffe4d1; --teal:#127a67;
+    --teal-soft:#d9f0e7; --gold:#c98a1f; --gold-soft:#f7e6c2; --berry:#b0306a; --berry-soft:#f9dde9;
+    --sky:#2f7fd6; --sky-soft:#dcebfb; --card:#fffdf7;
+    --shadow:0 1px 2px rgba(28,33,56,.06),0 8px 20px -14px rgba(28,33,56,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+      --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+      --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --berry:#f07aae; --berry-soft:#3a1d2b;
+      --sky:#6aa9f0; --sky-soft:#1a2a40; --card:#20243a;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+    --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac;
+    --teal-soft:#16332c; --gold:#f0bd63; --gold-soft:#3a2f16; --berry:#f07aae; --berry-soft:#3a1d2b;
+    --sky:#6aa9f0; --sky-soft:#1a2a40; --card:#20243a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:70px;}
+  body{background:var(--bg); color:var(--ink); font-family:'Work Sans',system-ui,sans-serif; margin:0; padding-inline:16px; padding-block:0 40px;}
+  .wrap{max-width:900px; margin:0 auto; display:flex; flex-direction:column; gap:34px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; text-wrap:balance; margin:0;}
+  p{line-height:1.6; color:var(--ink-soft); margin:0;}
+  ul,ol{margin:0; padding-left:20px; color:var(--ink-soft); line-height:1.6; font-size:14.5px;}
+  li b, p b{color:var(--ink);}
+  a{color:var(--accent);}
+  img{max-width:100%; display:block;}
+
+  /* sticky nav */
+  nav.top{position:sticky; top:0; z-index:20; background:color-mix(in srgb,var(--bg) 92%,transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); margin-inline:-16px; padding:10px 16px;}
+  nav.top .inner{max-width:900px; margin:0 auto; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;}
+  nav.top .inner::-webkit-scrollbar{display:none;}
+  nav.top a{flex:none; font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; text-decoration:none; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:6px 11px;}
+  nav.top a:hover{color:var(--accent); border-color:var(--accent);}
+
+  .masthead{margin-top:22px; background:linear-gradient(135deg,#1c2138 0%,#2a2f52 60%,#1f4a48 100%); border-radius:20px; padding:26px; color:#f4f1ff; box-shadow:var(--shadow); display:grid; grid-template-columns:1.4fr 1fr; gap:22px; align-items:center;}
+  .masthead .tag{display:inline-flex; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; margin-bottom:12px;}
+  .masthead h1{font-size:clamp(30px,6vw,46px); color:#fff; font-weight:900; line-height:1.02;}
+  .masthead h1 em{font-style:normal; color:#ffb48a;}
+  .masthead p{color:#d7d9f2; margin-top:10px; font-size:15px;}
+  .masthead .dq{margin-top:14px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:12px; padding:12px 14px; font-family:'Fraunces',serif; font-size:17px; color:#fff; line-height:1.35;}
+  .masthead .dq small{display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#ffb48a; margin-bottom:4px;}
+  .masthead figure{margin:0;}
+  .masthead figure img{border-radius:14px; aspect-ratio:1/1; object-fit:cover; width:100%; border:2px solid rgba(255,255,255,.2);}
+  .masthead figcaption{font-size:11px; color:#aeb2d6; margin-top:6px; line-height:1.4;}
+  .masthead figcaption a{color:#cfd2ee;}
+  .meta-row{display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;}
+  .meta-chip{font-family:'IBM Plex Mono',monospace; font-size:11px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:6px 10px; color:#e9e9ff;}
+  @media (max-width:680px){ .masthead{grid-template-columns:1fr;} .masthead figure{max-width:260px;} }
+
+  section{display:flex; flex-direction:column; gap:14px;}
+  .section-head{border-bottom:2px solid var(--line); padding-bottom:8px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .section-head h2{font-size:24px; font-weight:700;}
+  .kicker{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.12em; font-weight:600;}
+  .lede{font-size:15.5px;}
+
+  .callout{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;}
+  .callout.teal{border-left-color:var(--teal);} .callout.gold{border-left-color:var(--gold);} .callout.berry{border-left-color:var(--berry);} .callout.sky{border-left-color:var(--sky);}
+  .callout h3{font-size:17px;}
+  .callout p,.callout li{font-size:14.5px;}
+
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px;}
+  .card h3{font-size:18px;}
+  .grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px;}
+  .grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;}
+
+  /* connect-to-past */
+  .bridge{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;}
+  .bridge .b{border-radius:14px; padding:14px 16px; border:1px solid var(--line); box-shadow:var(--shadow); display:flex; flex-direction:column; gap:6px;}
+  .bridge .b .then{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:600;}
+  .bridge .b h3{font-size:16px;}
+  .bridge .b p{font-size:13.5px;}
+  .b.a{background:var(--accent-soft); border-color:var(--accent);} .b.a .then{color:var(--accent);}
+  .b.t{background:var(--teal-soft); border-color:var(--teal);} .b.t .then{color:var(--teal);}
+  .b.g{background:var(--gold-soft); border-color:var(--gold);} .b.g .then{color:var(--gold);}
+  .b.s{background:var(--sky-soft); border-color:var(--sky);} .b.s .then{color:var(--sky);}
+
+  /* storyline */
+  .road{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; counter-reset:stop;}
+  .stop{counter-increment:stop; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow:var(--shadow); text-decoration:none; color:inherit; display:flex; flex-direction:column; gap:6px; position:relative; transition:transform .15s,border-color .15s;}
+  .stop:hover{transform:translateY(-2px); border-color:var(--accent);}
+  .stop::before{content:"Stop " counter(stop); font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); font-weight:600;}
+  .stop .ic{font-size:26px; line-height:1;}
+  .stop h3{font-size:15.5px;}
+  .stop p{font-size:12.5px; line-height:1.45;}
+
+  /* big idea blocks */
+  .idea{background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:14px;}
+  .idea-head{display:flex; gap:12px; align-items:flex-start;}
+  .idea-head .num{flex:none; width:42px; height:42px; border-radius:12px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:900; font-size:20px;}
+  .idea-head h3{font-size:22px;}
+  .idea-head .q{font-size:14px; color:var(--muted); margin-top:3px; font-style:italic;}
+  .idea p, .idea li{font-size:14.5px;}
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
+  @media (max-width:700px){ .split{grid-template-columns:1fr;} }
+  figure.photo{margin:0; display:flex; flex-direction:column; gap:6px;}
+  figure.photo img{border-radius:12px; width:100%; aspect-ratio:4/3; object-fit:cover; border:1px solid var(--line); background:var(--surface-2);}
+  figure.photo figcaption{font-size:11.5px; color:var(--muted); line-height:1.4;}
+  .diagram{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px;}
+  .diagram svg{width:100%; height:auto; display:block;}
+  .diagram .cap{font-size:12px; color:var(--muted); text-align:center; margin-top:4px;}
+  .link-back{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.06em; background:var(--teal-soft); color:var(--teal); border-radius:8px; padding:8px 10px; line-height:1.5;}
+  .link-back b{color:var(--teal);}
+
+  .stat-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px;}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow:var(--shadow);}
+  .stat .n{font-family:'Fraunces',serif; font-weight:900; font-size:28px; color:var(--accent); line-height:1;}
+  .stat .l{font-size:13px; color:var(--ink-soft); margin-top:6px; line-height:1.45;}
+  .stat a{font-size:11.5px;}
+
+  .steps{counter-reset:step; display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .steps li{counter-increment:step; background:var(--surface-2); border-radius:10px; padding:10px 14px 10px 46px; position:relative; font-size:14px; color:var(--ink-soft);}
+  .steps li::before{content:counter(step); position:absolute; left:12px; top:10px; font-family:'IBM Plex Mono',monospace; font-weight:600; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12.5px;}
+
+  /* vocab */
+  .vocab-tools{display:flex; gap:8px; flex-wrap:wrap;}
+  .vocab-tools button{font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); border-radius:999px; padding:6px 12px; cursor:pointer;}
+  .vocab-tools button.on{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+  .vocab{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px;}
+  .word{background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--accent); border-radius:12px; padding:12px 14px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:5px;}
+  .word[data-g="old"]{border-top-color:var(--teal);}
+  .word h4{margin:0; font-family:'Fraunces',serif; font-size:17px;}
+  .word .d{font-size:13.5px; color:var(--ink-soft); line-height:1.5;}
+  .word .c{font-size:12px; color:var(--muted); line-height:1.45;}
+  .word .tagx{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
+  .word.hide{display:none;}
+
+  /* media */
+  .media{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px;}
+  .vid{background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; text-decoration:none; color:inherit; transition:transform .15s,border-color .15s;}
+  .vid:hover{transform:translateY(-2px); border-color:var(--accent);}
+  .vid .thumb{aspect-ratio:16/9; background:var(--surface-2) center/cover no-repeat; position:relative;}
+  .vid .thumb .play{position:absolute; inset:auto 10px 10px auto; background:rgba(0,0,0,.72); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:11px; border-radius:6px; padding:3px 7px;}
+  .vid .body{padding:12px 14px; display:flex; flex-direction:column; gap:5px;}
+  .vid .who{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--accent); text-transform:uppercase; letter-spacing:.08em;}
+  .vid h4{margin:0; font-family:'Fraunces',serif; font-size:16px; line-height:1.25;}
+  .vid p{font-size:13px; line-height:1.45;}
+  .vid .when{font-size:11.5px; color:var(--teal); font-weight:600;}
+  .show{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--berry); border-radius:12px; padding:14px 16px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:5px;}
+  .show .where{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--berry); font-weight:600;}
+  .show h4{margin:0; font-family:'Fraunces',serif; font-size:16px;}
+  .show p{font-size:13px;}
+
+  /* assignments */
+  .tasks{display:flex; flex-direction:column; gap:8px;}
+  .task{display:grid; grid-template-columns:54px 1fr auto; gap:12px; align-items:center; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; box-shadow:var(--shadow);}
+  .task .n{font-family:'Fraunces',serif; font-weight:900; font-size:22px; color:var(--accent); text-align:center;}
+  .task h4{margin:0; font-family:'Fraunces',serif; font-size:16px;}
+  .task p{font-size:13px;}
+  .task a.btn{font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; text-decoration:none; background:var(--ink); color:var(--bg); border-radius:8px; padding:8px 12px; white-space:nowrap;}
+  .btnstack{display:flex; flex-direction:column; gap:6px;}
+  .btnstack a.btn{text-align:center;}
+  @media (max-width:560px){ .btnstack{grid-column:2; flex-direction:row;} .task{grid-template-columns:40px 1fr;} .task a.btn{grid-column:2; justify-self:start;} }
+
+  .sim{display:flex; gap:12px; align-items:flex-start;}
+  .sim .ic{font-size:26px; flex:none;}
+  footer{font-size:12px; color:var(--muted); line-height:1.6; border-top:1px solid var(--line); padding-top:14px;}
+  footer a{color:var(--muted);}
+  .totop{font-size:12px; text-align:right;}
+</style>
+<style>
+  .masthead{background:linear-gradient(135deg,#1c2138 0%,#2a2f52 55%,#6a4520 100%);}
+  .review{display:flex; flex-direction:column; gap:8px;}
+  .review details{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; box-shadow:var(--shadow);}
+  .review summary{cursor:pointer; font-weight:600; font-size:14.5px; color:var(--ink); list-style:none;}
+  .review summary::before{content:"▸ "; color:var(--accent);}
+  .review details[open] summary::before{content:"▾ ";}
+  .review .ans{margin-top:8px; font-size:14px; color:var(--ink-soft); background:var(--teal-soft); border-radius:8px; padding:8px 10px;}
+  .formulas{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:10px;}
+  .fcard{background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--accent); border-radius:12px; padding:12px 14px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:6px;}
+  .fcard .eq{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:15px; color:var(--ink); background:var(--surface-2); border-radius:8px; padding:8px 10px;}
+  .fcard p{font-size:13px;}
+  .fcard .ex{font-size:12.5px; color:var(--muted); line-height:1.5;}
+  .machines{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px;}
+  .mcard{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:6px;}
+  .mcard svg{width:100%; height:auto; background:var(--card); border-radius:10px;}
+  .mcard h4{margin:0; font-family:'Fraunces',serif; font-size:17px;}
+  .mcard p{font-size:13px; line-height:1.5;}
+  .mcard .ma{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--accent); font-weight:600;}
+  table.t{width:100%; border-collapse:collapse; font-size:14px; background:var(--surface); border-radius:12px; overflow:hidden; box-shadow:var(--shadow);}
+  table.t th, table.t td{padding:9px 11px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; color:var(--ink-soft);}
+  table.t th{background:var(--surface-2); color:var(--ink); font-size:13px;}
+  table.t td b{color:var(--ink);}
+  .tablewrap{overflow-x:auto;}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Unit sections">
+  <div class="inner">
+    <a href="#start">Start</a>
+    <a href="#map">Case Map</a>
+    <a href="#lookback">Look Back</a>
+    <a href="#ideas">Big Ideas</a>
+    <a href="#formulas">Formulas</a>
+    <a href="#real">Real World</a>
+    <a href="#sports">Athletes</a>
+    <a href="#vocab">Vocab</a>
+    <a href="#videos">Videos</a>
+    <a href="#sims">Simulations</a>
+    <a href="#work">Assignments</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<header class="masthead" id="start">
+  <div>
+    <span class="tag">Motion Investigation Bureau · New Case File</span>
+    <h1>The <em>Machine</em> Files</h1>
+    <p>You've learned how forces change motion. Now the Bureau has a new kind of case: how do people move things that are WAY too heavy to lift? The answer is hiding in ramps, levers, pulleys, and wheels, and inside your own arms and legs.</p>
+    <div class="dq"><small>Our Unit Question</small>How can a person move something much heavier than they could ever lift?</div>
+    <div class="meta-row">
+      <span class="meta-chip">≈ 6–7 weeks</span>
+      <span class="meta-chip">8 case files</span>
+      <span class="meta-chip">Final challenge: design a machine to lift the load</span>
+    </div>
+  </div>
+  <figure>
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kheops-Pyramid.jpg?width=700" alt="The Great Pyramid of Giza">
+    <figcaption>The Great Pyramid of Giza was built about 4,500 years ago, with no engines, cranes, or trucks. It's made of about 2.3 million stone blocks that average about 2,300 kg (2.3 metric tons) each. How? Image via <a href="https://commons.wikimedia.org/wiki/File:Kheops-Pyramid.jpg">Wikimedia Commons</a></figcaption>
+  </figure>
+</header>
+
+
+<!-- MAP -->
+<section id="map">
+  <div class="section-head"><span class="kicker">Unit storyline</span><h2>Case Map</h2></div>
+  <p>Each case answers part of the unit question. Click a case to jump to its big idea.</p>
+  <div class="road" style="counter-reset:stop 7">
+    <a class="stop" href="#i1"><span class="ic">🏜️</span><h3>The Pyramid Problem</h3><p>How did people move 2,300 kg stones by hand?</p></a>
+    <a class="stop" href="#i2"><span class="ic">🏋️</span><h3>What Counts as Work?</h3><p>When does a force actually do work?</p></a>
+    <a class="stop" href="#i3"><span class="ic">🛝</span><h3>Ramps, Wedges &amp; Screws</h3><p>How does a slope make lifting easier?</p></a>
+    <a class="stop" href="#i4"><span class="ic">⚖️</span><h3>Levers That Lift</h3><p>Where should the fulcrum go?</p></a>
+    <a class="stop" href="#i5"><span class="ic">🪝</span><h3>Pulleys &amp; Wheels</h3><p>How do ropes and wheels multiply force?</p></a>
+    <a class="stop" href="#i6"><span class="ic">🧪</span><h3>No Free Lunch</h3><p>Can a machine save you work?</p></a>
+    <a class="stop" href="#i7"><span class="ic">🚲</span><h3>Compound Machines</h3><p>What happens when machines team up?</p></a>
+    <a class="stop" href="#i8"><span class="ic">🏗️</span><h3>Lift the Load</h3><p>Design your own machine for a real job.</p></a>
+  </div>
+</section>
+<style>.road .stop::before{content:"Case 0" counter(stop);} .road .stop:nth-child(n+3)::before{content:"Case " counter(stop);}</style>
+
+<!-- LOOK BACK -->
+<section id="lookback">
+  <div class="section-head"><span class="kicker">Tools you'll need</span><h2>Look Back: What You Already Know</h2></div>
+  <p class="lede">Every machine in this unit runs on ideas from <b>The Motion Files</b>, <b>Force Face-Off</b>, the <b>Coaster Lab</b>, and <b>Newton's laws</b>. Here's how the old ideas connect to the new ones.</p>
+  <div class="bridge">
+    <div class="b t"><span class="then">From: Force Face-Off</span><h3>Forces are measured in newtons (N)</h3><p>A soccer ball weighs about 4 N; a volleyball about 3 N. Now: machines change <b>how many newtons</b> you need to push or pull.</p></div>
+    <div class="b a"><span class="then">From: The Motion Files</span><h3>Distance = how far something moves</h3><p>Now: <b>work</b> = force × distance. Machines let you use less force, but you have to move a <b>longer distance</b>.</p></div>
+    <div class="b g"><span class="then">From: Coaster Lab</span><h3>Friction fights motion</h3><p>Now: friction is why no machine is perfect. Some of your work always gets "lost" to friction. We'll measure how much with <b>efficiency</b>.</p></div>
+    <div class="b s"><span class="then">From: Newton's Laws</span><h3>Balanced forces = steady motion</h3><p>Now: when you pull a box up a ramp at a steady speed, the forces on it are <b>balanced</b>. Every rope you pull also pulls back on you (3rd Law).</p></div>
+  </div>
+  <h3 style="font-size:18px;margin-top:6px">Quick check: tap each question to see the answer</h3>
+  <div class="review">
+    <details><summary>1. About how much does a soccer ball weigh in newtons? A volleyball?</summary><div class="ans">A soccer ball is about <b>4 N</b> and a volleyball is about <b>3 N</b>. A quick rule: weight in newtons ≈ mass in kg × 10.</div></details>
+    <details><summary>2. Team A pulls a cart with 70 N to the right. Team B pulls with 40 N to the left. What's the net force, and what happens?</summary><div class="ans">70 N − 40 N = <b>30 N to the right</b>. The forces are <b>unbalanced</b>, so the cart speeds up (accelerates) toward Team A. (Newton's 2nd Law.)</div></details>
+    <details><summary>3. A worker pulls a crate up a ramp at a steady speed. Are the forces on the crate balanced or unbalanced?</summary><div class="ans"><b>Balanced!</b> Its speed and direction aren't changing, so the net force is 0 N. (Newton's 1st Law: moving doesn't mean unbalanced.)</div></details>
+    <details><summary>4. Which way does friction push?</summary><div class="ans">Always <b>opposite</b> the direction of motion. It's why the coaster cart was slower at the last speed trap.</div></details>
+    <details><summary>5. You walk 5 m across the gym and 5 m back. What's your distance? Your displacement?</summary><div class="ans">Distance = <b>10 m</b> (the whole path). Displacement = <b>0 m</b> (you ended where you started). For work, we use the distance an object moves in the direction of the force.</div></details>
+    <details><summary>6. When you push down on the floor to jump, what pushes you up?</summary><div class="ans">The <b>floor</b> pushes back up on you just as hard (Newton's 3rd Law). In this unit, when you pull down on a rope, the rope pulls back up on your hands.</div></details>
+  </div>
+</section>
+
+<!-- BIG IDEAS -->
+<section id="ideas">
+  <div class="section-head"><span class="kicker">Notes</span><h2>Big Ideas</h2></div>
+
+  <!-- 1 -->
+  <article class="idea" id="i1">
+    <div class="idea-head"><div class="num">08</div><div><h3>The Pyramid Problem</h3><div class="q">How did people move 2,300 kg stones by hand?</div></div></div>
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p>An average block has a mass of about 2,300 kg, so it weighs about <b>23,000 N</b>. That's about as heavy as a big pickup truck. One person can pull about 250 N for a long time. Lifting that stone straight up would take almost <b>100 people</b> pulling on it at once, and they couldn't all fit around one block.</p>
+        <p>Egyptian workers didn't have engines, but they did have <b>simple machines</b>: ramps, levers, and sledges (big sleds). They also had a clever trick for <b>friction</b>.</p>
+        <div class="callout gold"><h3>The wet sand trick</h3><p>An ancient Egyptian tomb painting shows a giant statue being dragged on a sled while one worker pours <b>water</b> on the sand in front of it. In 2014, physicists at the University of Amsterdam tested it: the right amount of water made the sand firmer and cut the pulling force <b>about in half</b>.</p><p><a href="https://iop.uva.nl/content/news/2014/00/prl-egyptian-pyramids.html" target="_blank" rel="noopener">Read the University of Amsterdam report →</a></p></div>
+      </div>
+      <div class="diagram">
+        <svg viewBox="0 0 400 270" role="img" aria-label="Pulling force needed for a sled on dry sand versus wet sand">
+          <g font-family="Work Sans, sans-serif">
+            <text x="10" y="22" font-size="14" font-weight="700" fill="#1c2138">Dragging a sled on sand</text>
+            <rect x="10" y="40" width="380" height="90" rx="10" fill="#f7e6c2"/>
+            <rect x="40" y="70" width="80" height="44" rx="6" fill="#8a5a2b"/><rect x="34" y="112" width="92" height="8" rx="3" fill="#5b4a3a"/>
+            <path d="M120 120 q30 -14 40 0" fill="#d6b06a"/>
+            <line x1="128" y1="92" x2="300" y2="92" stroke="#ef6c2c" stroke-width="10" marker-end="url(#a1)"/>
+            <text x="135" y="64" font-size="13" font-weight="700" fill="#c4521b">DRY sand: big pull</text>
+            <rect x="10" y="150" width="380" height="90" rx="10" fill="#dcebfb"/>
+            <rect x="40" y="180" width="80" height="44" rx="6" fill="#8a5a2b"/><rect x="34" y="222" width="92" height="8" rx="3" fill="#5b4a3a"/>
+            <line x1="128" y1="202" x2="214" y2="202" stroke="#127a67" stroke-width="10" marker-end="url(#a2)"/>
+            <text x="135" y="174" font-size="13" font-weight="700" fill="#127a67">WET sand: about half the pull</text>
+            <text x="300" y="214" font-size="22">💧</text>
+            <text x="10" y="262" font-size="11.5" fill="#767c99">Dry sand piles up in front of the sled. Damp sand stays firm.</text>
+            <defs><marker id="a1" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#ef6c2c"/></marker><marker id="a2" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#127a67"/></marker></defs>
+          </g>
+        </svg>
+        <div class="cap">Same sled, same weight. Less friction means less pulling force.</div>
+      </div>
+    </div>
+    <div class="link-back"><b>Connect:</b> This is the Friction Finish Line all over again. More friction = more force needed. Engineers still work to reduce friction today.</div>
+  </article>
+
+  <!-- 2 -->
+  <article class="idea" id="i2">
+    <div class="idea-head"><div class="num">09</div><div><h3>What Counts as Work?</h3><div class="q">When does a force actually do work?</div></div></div>
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p>In science, <b>work</b> has a special meaning: work happens when a <b>force moves an object</b> in the direction of the force.</p>
+        <div class="fcard" style="border-top-color:var(--teal)"><div class="eq">Work = Force × Distance</div><p><b>W = F × d</b>. Force in newtons (N) × distance in meters (m) = work in <b>joules (J)</b>.</p><p class="ex">Example: you lift a 40 N gear bag 1.5 m onto a shelf. W = 40 N × 1.5 m = <b>60 J</b>.</p></div>
+        <ul>
+          <li><b>Work ✔</b> Lifting a volleyball cart, kicking a ball, pulling a sled.</li>
+          <li><b>No work ✘</b> Pushing hard on a wall that doesn't move (distance = 0).</li>
+          <li><b>No work ✘</b> Holding a heavy box perfectly still. Your arms get tired, but the box doesn't move, so no work is done <i>on the box</i>.</li>
+        </ul>
+        <p><b>Power</b> is how fast work gets done: power = work ÷ time, measured in <b>watts (W)</b>. Running up the stairs takes the same work as walking, but more power.</p>
+      </div>
+      <div class="diagram">
+        <svg viewBox="0 0 400 250" role="img" aria-label="Lifting a box does work; holding it still does not">
+          <g font-family="Work Sans, sans-serif">
+            <rect x="10" y="10" width="185" height="210" rx="12" fill="#d9f0e7"/>
+            <text x="102" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="#127a67">WORK ✔</text>
+            <rect x="72" y="150" width="60" height="44" rx="5" fill="#8a5a2b" opacity=".35" stroke-dasharray="4 3" stroke="#8a5a2b"/>
+            <rect x="72" y="70" width="60" height="44" rx="5" fill="#8a5a2b"/>
+            <line x1="102" y1="140" x2="102" y2="120" stroke="#ef6c2c" stroke-width="4" marker-end="url(#a3)"/>
+            <line x1="150" y1="172" x2="150" y2="92" stroke="#1c2138" stroke-width="2" stroke-dasharray="3 3"/>
+            <text x="156" y="136" font-size="12" fill="#1c2138">moves</text>
+            <text x="102" y="212" text-anchor="middle" font-size="12" fill="#454b6b">force UP, box moves UP</text>
+            <rect x="205" y="10" width="185" height="210" rx="12" fill="#f9dde9"/>
+            <text x="297" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="#b0306a">NO WORK ✘</text>
+            <rect x="267" y="100" width="60" height="44" rx="5" fill="#8a5a2b"/>
+            <line x1="297" y1="190" x2="297" y2="150" stroke="#ef6c2c" stroke-width="4" marker-end="url(#a3)"/>
+            <text x="297" y="212" text-anchor="middle" font-size="12" fill="#454b6b">force UP, box doesn't move</text>
+            <defs><marker id="a3" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#ef6c2c"/></marker></defs>
+          </g>
+        </svg>
+        <div class="cap">No movement = no work, no matter how hard you push.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="idea" id="i3">
+    <div class="idea-head"><div class="num">10</div><div><h3>Ramps, Wedges &amp; Screws</h3><div class="q">How does a slope make lifting easier?</div></div></div>
+    <p><b>Simple machines</b> make work easier by changing the <b>size</b> or <b>direction</b> of a force. They <b>never</b> reduce the total work. Instead, they trade <b>less force</b> for <b>more distance</b>.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 760 230" role="img" aria-label="Lifting 400 N straight up 1 meter versus pushing 100 N along a 4 meter ramp: same 400 joules of work">
+        <g font-family="Work Sans, sans-serif">
+          <text x="20" y="24" font-size="14" font-weight="700" fill="#1c2138">Option A: lift straight up</text>
+          <rect x="20" y="190" width="300" height="10" fill="#f1ece0"/><rect x="200" y="110" width="120" height="80" fill="#e4ddc9"/>
+          <rect x="120" y="70" width="46" height="36" rx="4" fill="#8a5a2b"/><text x="143" y="93" text-anchor="middle" font-size="11" fill="#fff">400 N</text>
+          <line x1="143" y1="185" x2="143" y2="112" stroke="#ef6c2c" stroke-width="4" marker-end="url(#a4)"/>
+          <text x="24" y="150" font-size="12.5" fill="#c4521b" font-weight="700">Force: 400 N</text><text x="24" y="166" font-size="12.5" fill="#1c2138">Distance: 1 m</text>
+          <text x="20" y="222" font-size="13" font-weight="700" fill="#127a67">Work = 400 N × 1 m = 400 J</text>
+          <text x="400" y="24" font-size="14" font-weight="700" fill="#1c2138">Option B: push up a ramp</text>
+          <rect x="400" y="190" width="340" height="10" fill="#f1ece0"/><polygon points="420,190 700,190 700,110" fill="#fffdf7" stroke="#1c2138" stroke-width="2"/><rect x="700" y="110" width="40" height="80" fill="#e4ddc9"/>
+          <g transform="translate(560,150) rotate(-16)"><rect x="-23" y="-34" width="46" height="34" rx="4" fill="#8a5a2b"/><text x="0" y="-13" text-anchor="middle" font-size="11" fill="#fff">400 N</text><line x1="26" y1="-17" x2="70" y2="-17" stroke="#ef6c2c" stroke-width="4" marker-end="url(#a4)"/></g>
+          <text x="440" y="70" font-size="12.5" fill="#c4521b" font-weight="700">Force: 100 N</text><text x="440" y="86" font-size="12.5" fill="#1c2138">Distance: 4 m</text>
+          <text x="400" y="222" font-size="13" font-weight="700" fill="#127a67">Work = 100 N × 4 m = 400 J</text>
+          <text x="706" y="155" font-size="11" fill="#454b6b">1 m</text>
+          <defs><marker id="a4" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#ef6c2c"/></marker></defs>
+        </g>
+      </svg>
+      <div class="cap">Same work either way. The ramp lets you use ¼ of the force, but you push 4 times as far. (Ideal ramp, no friction.)</div>
+    </div>
+    <div class="grid3">
+      <div class="callout"><h3>Inclined plane</h3><p>A flat sloped surface: ramps, slides, loading docks.</p><p class="ma" style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--accent);font-weight:600">Ideal MA = length ÷ height</p></div>
+      <div class="callout teal"><h3>Wedge</h3><p>Two ramps back-to-back that <b>split or push apart</b>: axe, knife, doorstop, your front teeth, a zipper.</p></div>
+      <div class="callout gold"><h3>Screw</h3><p>A ramp <b>wrapped around a cylinder</b>: jar lids, bolts, spiral staircases, parking garage ramps.</p></div>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="idea" id="i4">
+    <div class="idea-head"><div class="num">11</div><div><h3>Levers That Lift</h3><div class="q">Where should the fulcrum go?</div></div></div>
+    <p>A <b>lever</b> is a stiff bar that turns around a fixed point called the <b>fulcrum</b>. You push on one spot (the <b>effort</b>) to move something at another spot (the <b>load</b>). The longer your <b>effort arm</b> compared to the <b>load arm</b>, the less force you need.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 780 210" role="img" aria-label="Three classes of levers">
+        <g font-family="Work Sans, sans-serif">
+          <defs><marker id="a5" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#ef6c2c"/></marker></defs>
+          <g transform="translate(15,0)">
+            <text x="110" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1c2138">Class 1</text><text x="110" y="40" text-anchor="middle" font-size="11.5" fill="#767c99">Fulcrum in the middle</text>
+            <line x1="20" y1="110" x2="220" y2="110" stroke="#1c2138" stroke-width="7" stroke-linecap="round"/>
+            <polygon points="90,113 75,145 105,145" fill="#c98a1f"/><rect x="22" y="78" width="36" height="28" rx="3" fill="#8a5a2b"/>
+            <line x1="210" y1="60" x2="210" y2="102" stroke="#ef6c2c" stroke-width="4" marker-end="url(#a5)"/>
+            <text x="40" y="168" text-anchor="middle" font-size="11.5" fill="#1c2138">load</text><text x="90" y="168" text-anchor="middle" font-size="11.5" fill="#c98a1f" font-weight="700">fulcrum</text><text x="210" y="168" text-anchor="middle" font-size="11.5" fill="#ef6c2c">effort</text>
+            <text x="110" y="195" text-anchor="middle" font-size="12" fill="#454b6b">seesaw · crowbar · scissors</text>
+          </g>
+          <g transform="translate(275,0)">
+            <text x="110" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1c2138">Class 2</text><text x="110" y="40" text-anchor="middle" font-size="11.5" fill="#767c99">Load in the middle</text>
+            <line x1="20" y1="110" x2="220" y2="110" stroke="#1c2138" stroke-width="7" stroke-linecap="round"/>
+            <polygon points="22,113 7,145 37,145" fill="#c98a1f"/><rect x="92" y="78" width="36" height="28" rx="3" fill="#8a5a2b"/>
+            <line x1="210" y1="160" x2="210" y2="118" stroke="#ef6c2c" stroke-width="4" marker-end="url(#a5)"/>
+            <text x="22" y="168" text-anchor="middle" font-size="11.5" fill="#c98a1f" font-weight="700">fulcrum</text><text x="110" y="168" text-anchor="middle" font-size="11.5" fill="#1c2138">load</text><text x="180" y="178" text-anchor="middle" font-size="11.5" fill="#ef6c2c">effort</text>
+            <text x="110" y="198" text-anchor="middle" font-size="12" fill="#454b6b">wheelbarrow · bottle opener · tiptoes</text>
+          </g>
+          <g transform="translate(535,0)">
+            <text x="110" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1c2138">Class 3</text><text x="110" y="40" text-anchor="middle" font-size="11.5" fill="#767c99">Effort in the middle</text>
+            <line x1="20" y1="110" x2="220" y2="110" stroke="#1c2138" stroke-width="7" stroke-linecap="round"/>
+            <polygon points="22,113 7,145 37,145" fill="#c98a1f"/><rect x="184" y="78" width="36" height="28" rx="3" fill="#8a5a2b"/>
+            <line x1="100" y1="160" x2="100" y2="118" stroke="#ef6c2c" stroke-width="4" marker-end="url(#a5)"/>
+            <text x="22" y="168" text-anchor="middle" font-size="11.5" fill="#c98a1f" font-weight="700">fulcrum</text><text x="120" y="178" text-anchor="middle" font-size="11.5" fill="#ef6c2c">effort</text><text x="202" y="168" text-anchor="middle" font-size="11.5" fill="#1c2138">load</text>
+            <text x="110" y="198" text-anchor="middle" font-size="12" fill="#454b6b">your forearm · a kicking leg · broom</text>
+          </g>
+        </g>
+      </svg>
+      <div class="cap">Memory trick <b>"F-L-E, 1-2-3"</b>: what's in the middle? <b>F</b>ulcrum = Class 1, <b>L</b>oad = Class 2, <b>E</b>ffort = Class 3.</div>
+    </div>
+    <div class="split">
+      <div class="callout"><h3>Lever math</h3><p><b>Ideal MA = effort arm ÷ load arm</b></p><p>Effort arm 3 m, load arm 1 m → MA = 3, so a 300 N load needs only 100 N of effort.</p><p>Class 3 levers have an MA <b>less than 1</b>: you push harder, but the load moves farther and <b>faster</b>. That's great for kicking and swinging!</p></div>
+      <figure class="photo">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Archimedes%20lever%20(Small).jpg?width=700" alt="Old engraving of Archimedes using a long lever to move the Earth" style="aspect-ratio:16/10">
+        <figcaption>Archimedes, a Greek scientist from about 2,250 years ago, is said to have claimed: "Give me a place to stand, and I will move the Earth." This old engraving shows the idea. Image via <a href="https://commons.wikimedia.org/wiki/File:Archimedes_lever_(Small).jpg">Wikimedia Commons</a></figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <!-- 5 -->
+  <article class="idea" id="i5">
+    <div class="idea-head"><div class="num">12</div><div><h3>Pulleys &amp; Wheels</h3><div class="q">How do ropes and wheels multiply force?</div></div></div>
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p>A <b>pulley</b> is a wheel with a rope around it.</p>
+        <ul>
+          <li><b>Fixed pulley</b> (attached at the top): changes the <b>direction</b> of your force. You pull down to lift up. MA = 1. Example: a flagpole.</li>
+          <li><b>Movable pulley</b> (attached to the load): two ropes share the weight. MA = 2.</li>
+          <li><b>Block and tackle</b> (several pulleys): <b>MA = the number of ropes holding up the load</b>. Cranes use these.</li>
+        </ul>
+        <p>Catch: with 4 ropes holding the load, you need ¼ of the force, but you must pull <b>4 times as much rope</b>.</p>
+        <div class="callout gold"><h3>Wheel-and-axle</h3><p>A big wheel attached to a small rod (the axle). The wheel and axle turn together. Examples: doorknobs, screwdrivers, steering wheels, bike pedals, and the <b>crank that tightens a volleyball net</b>.</p><p><b>Ideal MA = wheel radius ÷ axle radius.</b></p></div>
+      </div>
+      <figure class="photo">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Palans.jpg?width=700" alt="A block and tackle with rope running through two wooden pulley blocks">
+        <figcaption>A real block and tackle. Count the ropes running between the two blocks: that number is the mechanical advantage. Image via <a href="https://commons.wikimedia.org/wiki/File:Palans.jpg">Wikimedia Commons</a></figcaption>
+      </figure>
+    </div>
+    <div class="link-back"><b>Connect:</b> Newton's 3rd Law. When you pull down on the rope, the rope pulls up on your hands just as hard. That's why you can feel the load "fighting back."</div>
+  </article>
+
+  <!-- 6 -->
+  <article class="idea" id="i6">
+    <div class="idea-head"><div class="num">13</div><div><h3>No Free Lunch: Mechanical Advantage &amp; Efficiency</h3><div class="q">Can a machine save you work?</div></div></div>
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p><b>Mechanical advantage (MA)</b> tells you how many times a machine multiplies your force: <b>MA = load ÷ effort</b>. MA of 4 means your 100 N can move a 400 N load.</p>
+        <p>But machines can't make extra work out of nothing. In a perfect machine, <b>work in = work out</b>. In real machines, <b>friction</b> turns some of your work into heat, so <b>work out is always less than work in</b>.</p>
+        <p><b>Efficiency</b> = work out ÷ work in × 100%. It's a percent, like the ones you calculated in the Coaster Lab.</p>
+      </div>
+      <div class="diagram">
+        <svg viewBox="0 0 380 220" role="img" aria-label="Bar showing work in split into useful work out and work lost to friction">
+          <g font-family="Work Sans, sans-serif">
+            <text x="10" y="24" font-size="14" font-weight="700" fill="#1c2138">Where does your work go?</text>
+            <text x="10" y="60" font-size="12" fill="#454b6b">Work in: 500 J</text>
+            <rect x="10" y="68" width="360" height="34" rx="6" fill="#ef6c2c"/>
+            <text x="10" y="130" font-size="12" fill="#454b6b">Work out: 400 J (useful)</text>
+            <rect x="10" y="138" width="288" height="34" rx="6" fill="#127a67"/><rect x="298" y="138" width="72" height="34" rx="6" fill="#c98a1f"/>
+            <text x="304" y="160" font-size="11" fill="#fff" font-weight="700">friction</text><text x="304" y="190" font-size="11" fill="#454b6b">100 J → heat</text>
+            <text x="10" y="210" font-size="13" font-weight="700" fill="#127a67">Efficiency = 400 ÷ 500 × 100 = 80%</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </article>
+
+  <!-- 7 -->
+  <article class="idea" id="i7">
+    <div class="idea-head"><div class="num">14</div><div><h3>Compound Machines</h3><div class="q">What happens when machines team up?</div></div></div>
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p>A <b>compound machine</b> is two or more simple machines working together. A <b>bicycle</b> uses pedals and gears (wheel-and-axle), brake handles (levers), and screws holding it together. <b>Scissors</b> are two levers with wedge-shaped blades.</p>
+        <p>A <b>Rube Goldberg machine</b> uses a long chain of simple machines to do a simple job the hard way, like pouring cereal with 20 steps. Each step is Newton's laws in action: an <b>unbalanced force</b> starts something moving, and it hits the next thing.</p>
+        <p>A <b>tower crane</b> combines a lever (the long arm balanced by heavy counterweights) with a block-and-tackle pulley to lift steel beams to the top of skyscrapers.</p>
+      </div>
+      <figure class="photo">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tower%20crane%20rising%20at%20hollywoodHUB%20construction%20site%2C%20Portland%2C%20Oregon.jpg?width=700" alt="Yellow tower crane at a construction site">
+        <figcaption>A tower crane: a giant lever plus a pulley system. Image via <a href="https://commons.wikimedia.org/wiki/File:Tower_crane_rising_at_hollywoodHUB_construction_site,_Portland,_Oregon.jpg">Wikimedia Commons</a></figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <!-- 8 -->
+  <article class="idea" id="i8">
+    <div class="idea-head"><div class="num">15</div><div><h3>Final Challenge: Lift the Load</h3><div class="q">Can you design a machine for a real job?</div></div></div>
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p>The gym is hosting a tournament. Your team needs to move a <b>900 N equipment cart</b> (nets, poles, and balls) onto a stage <b>0.75 m</b> high. The student doing the job can safely push or pull only <b>150 N</b>.</p>
+        <p>Like real engineers, you'll work with <b>criteria</b> (what the design must do) and <b>constraints</b> (limits like space and safety). You'll choose a ramp, a pulley system, or a combination, do the math, and defend your design with evidence.</p>
+      </div>
+      <figure class="photo">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mincon%20building%20ramp%20Edward%20St%20Brisbane%20P1360247.jpg?width=700" alt="An accessible ramp with handrails beside steps outside a building">
+        <figcaption>Ramps for wheelchair users follow a real engineering rule: the U.S. ADA standards allow a slope no steeper than 1 : 12 (1 m up for every 12 m across the floor). Image via <a href="https://commons.wikimedia.org/wiki/File:Mincon_building_ramp_Edward_St_Brisbane_P1360247.jpg">Wikimedia Commons</a></figcaption>
+      </figure>
+    </div>
+  </article>
+  <p class="totop"><a href="#start">↑ Back to top</a></p>
+</section>
+
+<!-- FORMULAS -->
+<section id="formulas">
+  <div class="section-head"><span class="kicker">Keep this open</span><h2>Formula Card</h2></div>
+  <p>Same routine as the Motion Files: <b>write the formula → plug in numbers → answer with units</b>.</p>
+  <div class="formulas">
+    <div class="fcard"><div class="eq">W = F × d</div><p><b>Work</b> (J) = force (N) × distance (m)</p><p class="ex">50 N × 3 m = 150 J</p></div>
+    <div class="fcard"><div class="eq">P = W ÷ t</div><p><b>Power</b> (watts) = work (J) ÷ time (s). Here W means work; the unit for power, the watt, is also written W.</p><p class="ex">600 J ÷ 4 s = 150 W</p></div>
+    <div class="fcard"><div class="eq">MA = load ÷ effort</div><p><b>Mechanical advantage</b> (no units)</p><p class="ex">800 N ÷ 200 N = 4</p></div>
+    <div class="fcard"><div class="eq">Efficiency = W<sub>out</sub> ÷ W<sub>in</sub> × 100</div><p>Work out ÷ work in, as a percent</p><p class="ex">300 J ÷ 400 J × 100 = 75%</p></div>
+    <div class="fcard" style="border-top-color:var(--teal)"><div class="eq">Ramp: MA = L ÷ h</div><p>Ramp length ÷ height (ideal)</p><p class="ex">6 m ramp, 1.5 m high → MA = 4</p></div>
+    <div class="fcard" style="border-top-color:var(--teal)"><div class="eq">Lever: MA = effort arm ÷ load arm</div><p>Distances measured from the fulcrum (ideal)</p><p class="ex">2 m ÷ 0.5 m = 4</p></div>
+    <div class="fcard" style="border-top-color:var(--teal)"><div class="eq">Pulley: MA = # ropes holding load</div><p>Count the ropes that hold up the moving pulley (ideal)</p><p class="ex">3 ropes → MA = 3</p></div>
+    <div class="fcard" style="border-top-color:var(--teal)"><div class="eq">Wheel-and-axle: MA = R ÷ r</div><p>Wheel radius ÷ axle radius (ideal)</p><p class="ex">15 cm ÷ 3 cm = 5</p></div>
+    <div class="fcard" style="border-top-color:var(--gold)"><div class="eq">Weight (N) ≈ mass (kg) × 10</div><p>Change kilograms into newtons (the exact number is 9.8)</p><p class="ex">40 kg cart → about 400 N</p></div>
+  </div>
+</section>
+
+<!-- REAL WORLD -->
+<section id="real">
+  <div class="section-head"><span class="kicker">Machines everywhere</span><h2>Real-World Engineering</h2></div>
+  <div class="stat-row">
+    <div class="stat"><div class="n">½</div><div class="l">The pulling force for a sled on properly wet sand, compared with dry sand (University of Amsterdam, 2014).<br><a href="https://www.livescience.com/45285-how-egyptians-moved-pyramid-stones.html" target="_blank" rel="noopener">Live Science article</a></div></div>
+    <div class="stat"><div class="n">1 : 12</div><div class="l">The steepest slope allowed for most wheelchair ramps under U.S. ADA rules. That's an ideal MA of 12!<br><a href="https://www.ada.gov/law-and-regs/design-standards/2010-stds/" target="_blank" rel="noopener">ADA design standards</a></div></div>
+    <div class="stat"><div class="n">2.3 million</div><div class="l">Stone blocks in the Great Pyramid, each averaging about 2,300 kg, moved without engines.<br><a href="https://www.pbs.org/video/decoding-the-great-pyramid-4eeiz9/" target="_blank" rel="noopener">PBS NOVA</a></div></div>
+    <div class="stat"><div class="n">6</div><div class="l">Simple machines: inclined plane, wedge, screw, lever, pulley, and wheel-and-axle. Every machine you use is built from these.</div></div>
+  </div>
+  <div class="callout gold"><h3>Engineers use simple machines every day</h3><p>Construction cranes, car jacks, elevators, wheelchair ramps, staplers, can openers, and bikes are all built from simple machines. Engineers choose the machine that gives the right <b>mechanical advantage</b> for the job, then design to cut <b>friction</b> so less work is wasted.</p></div>
+</section>
+
+<!-- SPORTS -->
+<section id="sports">
+  <div class="section-head"><span class="kicker">For our athletes ⚽🏐</span><h2>Your Body Is a Machine</h2></div>
+  <div class="tablewrap">
+    <table class="t">
+      <tr><th>Move</th><th>Lever class</th><th>Fulcrum · Effort · Load</th><th>What it's good for</th></tr>
+      <tr><td><b>Nodding your head</b> (heading a ball)</td><td>Class 1</td><td>Fulcrum: top of the spine · Effort: neck muscles · Load: weight of your head</td><td>Balance and control</td></tr>
+      <tr><td><b>Rising onto your toes</b> (blocking at the net)</td><td>Class 2</td><td>Fulcrum: ball of the foot · Load: your body weight · Effort: calf muscle on the heel</td><td>Force: lifting your whole body</td></tr>
+      <tr><td><b>Kicking a soccer ball</b></td><td>Class 3</td><td>Fulcrum: knee · Effort: thigh muscles near the knee · Load: lower leg and foot</td><td>Speed: your foot moves much farther and faster than the muscle</td></tr>
+      <tr><td><b>Bump or spike in volleyball</b></td><td>Class 3</td><td>Fulcrum: shoulder or elbow · Effort: arm muscles · Load: arm and hand</td><td>Speed: a fast hand means a fast ball</td></tr>
+    </table>
+  </div>
+  <div class="callout teal"><h3>Why is your body full of class 3 levers?</h3><p>They have an MA <b>less than 1</b>: your muscles pull harder than the force at your foot or hand. In return, your foot moves much <b>farther in the same time</b>, so it moves <b>faster</b> (remember speed = distance ÷ time). A faster foot means a faster shot. Also check out the <b>volleyball net crank</b> next time you set up: it's a wheel-and-axle that lets you pull the net tight.</p></div>
+</section>
+
+<!-- VOCAB -->
+<section id="vocab">
+  <div class="section-head"><span class="kicker">Word wall</span><h2>Unit Vocabulary</h2></div>
+  <p>Make an index card for each <b style="color:var(--accent)">new</b> word. <b style="color:var(--teal)">Review</b> words are from the Motion &amp; Forces unit.</p>
+  <div class="vocab-tools" role="group" aria-label="Filter vocabulary">
+    <button class="on" data-f="all">All words</button>
+    <button data-f="new">New words</button>
+    <button data-f="old">Review words</button>
+  </div>
+  <div class="vocab" id="vocabGrid">
+    <div class="word" data-g="new"><span class="tagx">New · Case 09</span><h4>Work</h4><div class="d">What happens when a force moves an object in the direction of the force. W = F × d.</div><div class="c">No movement = no work</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 09</span><h4>Joule (J)</h4><div class="d">The unit of work and energy. 1 J = 1 N × 1 m.</div><div class="c">Lifting a small apple 1 m ≈ 1 J</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 09</span><h4>Power</h4><div class="d">How fast work is done. Power = work ÷ time, measured in watts (W).</div><div class="c">Sprinting up stairs = more power than walking</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 10</span><h4>Simple Machine</h4><div class="d">A basic device that makes work easier by changing the size or direction of a force.</div><div class="c">There are 6 of them</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 10</span><h4>Effort Force</h4><div class="d">The force YOU put into a machine (also called input force).</div><div class="c">Your push on the crowbar</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 10</span><h4>Load</h4><div class="d">The object the machine moves, or the force the machine puts out (output force).</div><div class="c">The crate on the ramp</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 10</span><h4>Mechanical Advantage (MA)</h4><div class="d">How many times a machine multiplies your force. MA = load ÷ effort.</div><div class="c">MA 4 → 100 N lifts 400 N</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 10</span><h4>Inclined Plane</h4><div class="d">A flat, sloped surface used to raise a load with less force.</div><div class="c">Ramp, slide, loading dock</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 10</span><h4>Wedge</h4><div class="d">Two inclined planes back-to-back that split or push things apart.</div><div class="c">Axe, knife, doorstop, front teeth</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 10</span><h4>Screw</h4><div class="d">An inclined plane wrapped around a cylinder.</div><div class="c">Jar lid, bolt, spiral staircase</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 11</span><h4>Lever</h4><div class="d">A stiff bar that turns around a fixed point (the fulcrum).</div><div class="c">Seesaw, crowbar, your forearm</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 11</span><h4>Fulcrum</h4><div class="d">The fixed point a lever turns around.</div><div class="c">The middle of a seesaw</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 11</span><h4>Effort Arm / Load Arm</h4><div class="d">The distance from the fulcrum to the effort force / to the load.</div><div class="c">Longer effort arm = less force</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 12</span><h4>Pulley</h4><div class="d">A wheel with a rope around it. Fixed pulleys change direction; movable pulleys share the load.</div><div class="c">Flagpole, crane, window blinds</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 12</span><h4>Wheel-and-Axle</h4><div class="d">A large wheel attached to a smaller rod (axle) so they turn together.</div><div class="c">Doorknob, steering wheel, net crank</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 13</span><h4>Efficiency</h4><div class="d">How much of the work you put in comes out as useful work. Work out ÷ work in × 100%.</div><div class="c">Always less than 100% because of friction</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 14</span><h4>Compound Machine</h4><div class="d">Two or more simple machines working together.</div><div class="c">Bicycle, scissors, crane</div></div>
+    <div class="word" data-g="new"><span class="tagx">New · Case 15</span><h4>Criteria &amp; Constraints</h4><div class="d">Criteria: what a design must do to succeed. Constraints: limits the design must stay within.</div><div class="c">"Must lift 900 N" vs. "ramp no longer than 6 m"</div></div>
+    <div class="word" data-g="old"><span class="tagx">Review · Forces</span><h4>Force (N)</h4><div class="d">A push or a pull, measured in newtons.</div><div class="c">Soccer ball weighs about 4 N</div></div>
+    <div class="word" data-g="old"><span class="tagx">Review · Forces</span><h4>Net Force</h4><div class="d">The force left over after forces work against each other.</div><div class="c">Balanced = 0 N, unbalanced = not 0</div></div>
+    <div class="word" data-g="old"><span class="tagx">Review · Forces</span><h4>Friction</h4><div class="d">A force that rubs against motion and pushes opposite the direction of motion.</div><div class="c">Why no machine is 100% efficient</div></div>
+    <div class="word" data-g="old"><span class="tagx">Review · Forces</span><h4>Inertia (1st Law)</h4><div class="d">Things keep doing what they're doing until an unbalanced force changes them.</div><div class="c">Steady motion = balanced forces</div></div>
+    <div class="word" data-g="old"><span class="tagx">Review · Forces</span><h4>Newton's 3rd Law</h4><div class="d">Every push or pull gets pushed or pulled back just as hard, in the opposite direction.</div><div class="c">The rope pulls back on your hands</div></div>
+    <div class="word" data-g="old"><span class="tagx">Review · Motion</span><h4>Distance</h4><div class="d">The total length of the path traveled.</div><div class="c">Used in W = F × d</div></div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section id="videos">
+  <div class="section-head"><span class="kicker">Watch &amp; learn</span><h2>Videos &amp; Shows</h2></div>
+  <p>Click a card to open the video. The green line tells you which case it goes with.</p>
+  <div class="media">
+    <a class="vid" href="https://www.youtube.com/watch?v=dW4tHKLcbdM" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/dW4tHKLcbdM/hqdefault.jpg)"><span class="play">▶ 0:11 + 0:14</span></div><div class="body"><span class="who">University of Amsterdam lab (FOM)</span><h4>Wet Sand vs. Dry Sand: The Real Experiment</h4><p>Watch a sled on wet sand, then <a href="https://www.youtube.com/watch?v=3vpBQ6Rw0PM" target="_blank" rel="noopener">the same sled on dry sand</a>. See the difference?</p><span class="when">Case 08 · The Pyramid Problem</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=TRNS9FfUCu0" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/TRNS9FfUCu0/hqdefault.jpg)"><span class="play">▶ 1:59</span></div><div class="body"><span class="who">MooMooMath and Science</span><h4>What Is Work?</h4><p>Quick explanation of when work happens and when it doesn't.</p><span class="when">Case 09 · What Counts as Work?</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=YSgSfFtvWN0" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/YSgSfFtvWN0/hqdefault.jpg)"><span class="play">▶ 3:48</span></div><div class="body"><span class="who">MooMooMath and Science</span><h4>How to Calculate Work Done</h4><p>Step-by-step W = F × d examples.</p><span class="when">Case 09 · What Counts as Work?</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=fJBlEPOj4Fk" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/fJBlEPOj4Fk/hqdefault.jpg)"><span class="play">▶ 5:33</span></div><div class="body"><span class="who">TED-Ed</span><h4>How Did They Build the Great Pyramid of Giza?</h4><p>The workers, ramps, and tools behind the pyramid. Save it for Case 10, after you've tried to solve the mystery yourself.</p><span class="when">Case 10 · Watch at the start of Ramps</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=-p_x2YmKHs8" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/-p_x2YmKHs8/hqdefault.jpg)"><span class="play">▶ 1:31</span></div><div class="body"><span class="who">Next Generation Science</span><h4>Simple Machines: Inclined Planes</h4><p>A quick look at how ramps make lifting easier.</p><span class="when">Case 10 · Ramps, Wedges &amp; Screws</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=WI8j3UlR-SE" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/WI8j3UlR-SE/hqdefault.jpg)"><span class="play">▶ 6:43</span></div><div class="body"><span class="who">The Organic Chemistry Tutor</span><h4>The Inclined Plane &amp; Ramps</h4><p>Worked examples of ramp mechanical advantage and effort force.</p><span class="when">Case 10 · Ramps, Wedges &amp; Screws</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=z-MOrUvjNm8" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/z-MOrUvjNm8/hqdefault.jpg)"><span class="play">▶ 1:51 + 1:42</span></div><div class="body"><span class="who">Next Generation Science</span><h4>Wedges and Screws</h4><p>Two short clips: wedges, then <a href="https://www.youtube.com/watch?v=h3AfKj37mbo" target="_blank" rel="noopener">screws</a>.</p><span class="when">Case 10 · Ramps, Wedges &amp; Screws</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=YlYEi0PgG1g" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/YlYEi0PgG1g/hqdefault.jpg)"><span class="play">▶ 4:46</span></div><div class="body"><span class="who">TED-Ed</span><h4>The Mighty Mathematics of the Lever</h4><p>Archimedes, seesaws, and why a long lever beats strong muscles.</p><span class="when">Case 11 · Levers That Lift</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=5M98hS8M9hI" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/5M98hS8M9hI/hqdefault.jpg)"><span class="play">▶ 1:52</span></div><div class="body"><span class="who">MooMooMath and Science</span><h4>1st, 2nd, and 3rd Class Levers</h4><p>A fast way to tell the three classes apart.</p><span class="when">Case 11 · Levers That Lift</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=zW6JXKTQ_M0" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/zW6JXKTQ_M0/hqdefault.jpg)"><span class="play">▶ 2:31</span></div><div class="body"><span class="who">Visible Body</span><h4>Biomechanics and Levers in the Body</h4><p>Your bones and muscles as levers, with 3D anatomy.</p><span class="when">Case 11 · Athletes</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=ebwdFQB-5Fg" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/ebwdFQB-5Fg/hqdefault.jpg)"><span class="play">▶ 6:13</span></div><div class="body"><span class="who">Homemade Science with Bruce Yeany</span><h4>Pulleys: Lifting Our Principal</h4><p>Students use pulleys to lift their principal. Count the ropes!</p><span class="when">Case 12 · Pulleys &amp; Wheels</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=Ub36hxr0eeg" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/Ub36hxr0eeg/hqdefault.jpg)"><span class="play">▶ 1:28</span></div><div class="body"><span class="who">Flinn Scientific</span><h4>Mechanical Advantage of Pulleys</h4><p>A spring scale shows the force drop as pulleys are added.</p><span class="when">Case 12 · Pulleys &amp; Wheels</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=XZPjCBgpaPA" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/XZPjCBgpaPA/hqdefault.jpg)"><span class="play">▶ 3:14</span></div><div class="body"><span class="who">Lumina Learning</span><h4>Wheel and Axle Explained</h4><p>Doorknobs, steering wheels, and why the big wheel matters.</p><span class="when">Case 12 · Pulleys &amp; Wheels</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=YhOT5GYUZJw" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/YhOT5GYUZJw/hqdefault.jpg)"><span class="play">▶ 4:44</span></div><div class="body"><span class="who">GCN Tech</span><h4>How Do Bike Gears Work?</h4><p>A compound machine you already use.</p><span class="when">Case 14 · Compound Machines</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=qybUFnY7Y8w" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/qybUFnY7Y8w/hqdefault.jpg)"><span class="play">▶ 3:54</span></div><div class="body"><span class="who">OK Go</span><h4>This Too Shall Pass (Rube Goldberg Machine)</h4><p>A famous music video built as one giant chain reaction. Spot the simple machines!</p><span class="when">Case 14 · Compound Machines</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=4jruLdkHhi4" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/4jruLdkHhi4/hqdefault.jpg)"><span class="play">▶ 2:16</span></div><div class="body"><span class="who">Joseph's Machines</span><h4>The Lunch Feeding Contraption</h4><p>A homemade Rube Goldberg machine built from everyday stuff.</p><span class="when">Case 14 · Compound Machines</span></div></a>
+    <a class="vid" href="https://www.youtube.com/watch?v=oSyC8pxJdeQ" target="_blank" rel="noopener"><div class="thumb" style="background-image:url(https://i.ytimg.com/vi/oSyC8pxJdeQ/hqdefault.jpg)"><span class="play">▶ 10:50</span></div><div class="body"><span class="who">Art of Engineering</span><h4>How Tower Cranes Build Themselves</h4><p>Levers, pulleys, and counterweights on a giant scale. (Optional.)</p><span class="when">Case 14–15 · Engineering</span></div></a>
+  </div>
+
+  <h3 style="font-size:19px;margin-top:8px">Documentaries (your teacher may show clips in class)</h3>
+  <div class="grid2">
+    <div class="show"><span class="where">PBS NOVA · Free online</span><h4>Decoding the Great Pyramid (2019)</h4><p>Archaeologists use new evidence to figure out how the Great Pyramid was built and who built it. Watching at home? Ask a parent first.</p><a href="https://www.pbs.org/video/decoding-the-great-pyramid-4eeiz9/" target="_blank" rel="noopener">Watch on PBS →</a></div>
+    <div class="show"><span class="where">Documentary · Rated G</span><h4>Dream Big: Engineering Our World (2017)</h4><p>A 42-minute film about engineers around the world, from bridges to robots. Ask your teacher where it's streaming now.</p></div>
+  </div>
+</section>
+
+<!-- SIMS -->
+<section id="sims">
+  <div class="section-head"><span class="kicker">Try it yourself</span><h2>Online Simulations</h2></div>
+  <div class="grid2">
+    <div class="card sim"><span class="ic">🛠️</span><div><h3>Machine Lab</h3><p>Our class sim. Build a ramp, lever, or pulley and see how much force you need to lift anything from a volleyball to a pyramid block.</p><p><a href="machine-lab.html" target="_blank" rel="noopener">Open Machine Lab →</a></p></div></div>
+    <div class="card sim"><span class="ic">⚖️</span><div><h3>PhET: Balancing Act</h3><p>Balance bricks and people on a seesaw lever. Find the rule for where to put the weights.</p><p><a href="https://phet.colorado.edu/en/simulations/balancing-act" target="_blank" rel="noopener">Open PhET simulation →</a></p></div></div>
+    <div class="card sim"><span class="ic">🪢</span><div><h3>PhET: Forces and Motion: Basics</h3><p>Review net force with tug-of-war, then push a crate with and without friction.</p><p><a href="https://phet.colorado.edu/en/simulations/forces-and-motion-basics" target="_blank" rel="noopener">Open PhET simulation →</a></p></div></div>
+  </div>
+</section>
+
+<!-- ASSIGNMENTS -->
+<section id="work">
+  <div class="section-head"><span class="kicker">Your work</span><h2>Assignments</h2></div>
+  <p>Open each case file when your teacher assigns it. <b>Google Doc</b> makes your own copy to type in. <b>Open PDF</b> is the version to print.</p>
+  <div class="tasks">
+    <div class="task"><div class="n">08</div><div><h4>The Pyramid Problem</h4><p>The pyramid mystery, wet sand evidence, a Machine Lab test, our Driving Question Board, and a quick forces review.</p></div><div class="btnstack"><a class="btn" href="https://docs.google.com/document/d/1rxOBmac6PmM4QAZ4UrRZWxKO5l-9S-AxSBGQbm0Mbdc/copy" target="_blank" rel="noopener">Google Doc</a><a class="btn" href="mach-1-pyramid-problem.pdf" target="_blank" rel="noopener">Open PDF</a></div></div>
+    <div class="task"><div class="n">09</div><div><h4>What Counts as Work?</h4><p>Work or not work? Calculate work and power with sports examples.</p></div><div class="btnstack"><a class="btn" href="https://docs.google.com/document/d/1SQu4QrJwfujDDwU96p0r1xy8hpAmfbpn1vJ6dbRSkuU/copy" target="_blank" rel="noopener">Google Doc</a><a class="btn" href="mach-2-what-counts-as-work.pdf" target="_blank" rel="noopener">Open PDF</a></div></div>
+    <div class="task"><div class="n">10</div><div><h4>Ramps, Wedges &amp; Screws</h4><p>Ramp trials in Machine Lab, the ADA ramp rule, and wedge/screw hunt.</p></div><div class="btnstack"><a class="btn" href="https://docs.google.com/document/d/1YaZAsKwO9CXE_F16T4DGKEJ6H04zczDXCV8qH5AwDuw/copy" target="_blank" rel="noopener">Google Doc</a><a class="btn" href="mach-3-ramps-wedges-screws.pdf" target="_blank" rel="noopener">Open PDF</a></div></div>
+    <div class="task"><div class="n">11</div><div><h4>Levers That Lift</h4><p>Lever classes, PhET Balancing Act, and the levers in your body.</p></div><div class="btnstack"><a class="btn" href="https://docs.google.com/document/d/1UT6BrPXOSGhL5fFaZqYjUhV9s70lbyEl49ukXqeb90s/copy" target="_blank" rel="noopener">Google Doc</a><a class="btn" href="mach-4-levers.pdf" target="_blank" rel="noopener">Open PDF</a></div></div>
+    <div class="task"><div class="n">12</div><div><h4>Pulleys &amp; Wheels</h4><p>Count the ropes, pulley trials, and wheel-and-axle math.</p></div><div class="btnstack"><a class="btn" href="https://docs.google.com/document/d/1FFu7_qmSpNNwgIv435c_F5Gxm1s7Si-LBnS-bX-HTIw/copy" target="_blank" rel="noopener">Google Doc</a><a class="btn" href="mach-5-pulleys-wheels.pdf" target="_blank" rel="noopener">Open PDF</a></div></div>
+    <div class="task"><div class="n">13</div><div><h4>No Free Lunch</h4><p>Efficiency and friction in Machine Lab, with a CER.</p></div><div class="btnstack"><a class="btn" href="https://docs.google.com/document/d/1WUHGlJ45vtj5L7o9szE83b4geb90nWLsXCBYug4rkYY/copy" target="_blank" rel="noopener">Google Doc</a><a class="btn" href="mach-6-no-free-lunch.pdf" target="_blank" rel="noopener">Open PDF</a></div></div>
+    <div class="task"><div class="n">14</div><div><h4>Compound Machines</h4><p>Take apart a bike on paper and trace Newton's laws through a Rube Goldberg machine.</p></div><div class="btnstack"><a class="btn" href="https://docs.google.com/document/d/1P0wvNseeULvFEjiMj45ZVR5s4vxfokmovJ_5UwbQZrA/copy" target="_blank" rel="noopener">Google Doc</a><a class="btn" href="mach-7-compound-machines.pdf" target="_blank" rel="noopener">Open PDF</a></div></div>
+    <div class="task"><div class="n">15</div><div><h4>Final Challenge: Lift the Load</h4><p>Design a machine for the tournament cart, do the math, and pitch it. Includes the rubric.</p></div><div class="btnstack"><a class="btn" href="https://docs.google.com/document/d/1WIkck0-DUL_hw_PfLt-QBU4oE-wJsv5eTE5fKz2Euyo/copy" target="_blank" rel="noopener">Google Doc</a><a class="btn" href="mach-8-lift-the-load.pdf" target="_blank" rel="noopener">Open PDF</a></div></div>
+  </div>
+</section>
+
+<footer>
+  Inspired by the TeachEngineering <a href="https://www.teachengineering.org/curricular-units/cub_simp_machines_curricularunit">Simple Machines</a> unit (University of Colorado Boulder). Photos from Wikimedia Commons (credits under each image). Videos belong to their creators.
+</footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.vocab-tools button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.vocab-tools button').forEach(b=>b.classList.toggle('on',b===btn));
+      const f=btn.dataset.f;
+      document.querySelectorAll('#vocabGrid .word').forEach(w=>w.classList.toggle('hide',f!=='all'&&w.dataset.g!==f));
+    });
+  });
+</script>
+</body>
+</html>
