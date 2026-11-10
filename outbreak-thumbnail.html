@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outbreak! — Click to Play</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  width:960px;height:540px;overflow:hidden;
+  background:#ffe066;
+  font-family:'Nunito',sans-serif;
+  position:relative;
+  cursor:pointer;
+}
+/* sun rays */
+body::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-conic-gradient(from 0deg at 50% 50%,#ffd700 0deg 10deg,#ffe066 10deg 20deg);
+  opacity:.5;z-index:0;
+}
+a{display:block;width:100%;height:100%;position:relative;z-index:1;text-decoration:none}
+
+/* grass strip bottom */
+.grass{
+  position:absolute;bottom:0;left:0;right:0;height:140px;
+  background:#4caf22;
+  border-top:6px solid #fff9;
+  z-index:2;
+}
+.grass::before{
+  content:'';position:absolute;top:-18px;left:0;right:0;height:18px;
+  background:repeating-linear-gradient(90deg,#4caf22 0px,#4caf22 24px,#5ec92e 24px,#5ec92e 48px);
+}
+
+/* person grid on grass */
+.people{
+  position:absolute;bottom:18px;left:60px;right:60px;
+  display:flex;justify-content:center;gap:14px;
+  z-index:3;
+}
+.person{
+  width:72px;height:88px;
+  border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:3px solid #2e7d0a44;
+  font-size:2.4rem;line-height:1;
+  position:relative;
+}
+.person-name{font-size:11px;font-weight:800;color:#1a1a0a;margin-top:3px}
+.p-healthy{background:#a0d84a}
+.p-sick{background:#ff6b35;border-color:#cc2200;animation:throb 1.2s ease-in-out infinite}
+.p-immune{background:#82caff;border-color:#1565c0}
+.p-recovered{background:#69f04e;border-color:#1b5e20}
+@keyframes throb{0%,100%{box-shadow:0 0 0 0 #ff000044}50%{box-shadow:0 0 0 8px #ff000022}}
+
+/* BIG TITLE */
+.title{
+  position:absolute;top:38px;left:0;right:0;
+  text-align:center;z-index:3;
+  font-family:'Fredoka One',cursive;
+  font-size:7rem;
+  color:#f9c10b;
+  text-shadow:4px 4px 0 #e6a800,8px 8px 0 #000;
+  line-height:1;
+  letter-spacing:2px;
+}
+.title span{color:#ff5252;text-shadow:4px 4px 0 #b71c1c,8px 8px 0 #000}
+
+/* SUBTITLE */
+.sub{
+  position:absolute;top:170px;left:0;right:0;
+  text-align:center;z-index:3;
+  font-family:'Fredoka One',cursive;
+  font-size:1.5rem;
+  color:#1a1a0a;
+  text-shadow:2px 2px 0 #fff8;
+  letter-spacing:1px;
+}
+
+/* PLAY BUTTON */
+.play-btn{
+  position:absolute;top:220px;left:50%;transform:translateX(-50%);
+  z-index:4;
+  background:#1a1a0a;
+  border:5px solid #f9c10b;
+  border-radius:16px;
+  padding:14px 48px;
+  font-family:'Fredoka One',cursive;
+  font-size:2rem;
+  color:#f9c10b;
+  text-shadow:2px 2px 0 #000;
+  letter-spacing:2px;
+  white-space:nowrap;
+  transition:transform .15s;
+}
+.play-btn::before{content:'▶  '}
+
+/* CORNER BADGE */
+.badge{
+  position:absolute;top:20px;right:28px;z-index:4;
+  background:#ff5252;
+  border:4px solid #fff;
+  border-radius:50%;
+  width:90px;height:90px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Fredoka One',cursive;
+  color:#fff;
+  text-shadow:1px 1px 0 #000;
+  font-size:.85rem;
+  text-align:center;
+  line-height:1.2;
+  transform:rotate(8deg);
+}
+.badge span{font-size:1.5rem;display:block}
+</style>
+</head>
+<body>
+<a href="https://yscabarney.github.io/MS_SCI_ADV_26/outbreak-pvz.html" target="_blank">
+
+  <div class="title">OUT<span>BREAK</span>!</div>
+  <div class="sub">One infected person. A town of 25. How fast does it spread?</div>
+
+  <div class="play-btn">Click to Play</div>
+
+  <div class="badge"><span>🧟</span>7th Grade<br>Life Science</div>
+
+  <div class="grass">
+    <div class="people">
+      <div class="person p-healthy"><div>🧍</div><div class="person-name">Luci</div></div>
+      <div class="person p-sick"><div>🤒</div><div class="person-name">Savannah</div></div>
+      <div class="person p-healthy"><div>🧍</div><div class="person-name">Zara</div></div>
+      <div class="person p-immune"><div>🛡️</div><div class="person-name">Mia</div></div>
+      <div class="person p-sick"><div>🤒</div><div class="person-name">Cora</div></div>
+      <div class="person p-recovered"><div>😮‍💨</div><div class="person-name">Lily</div></div>
+      <div class="person p-healthy"><div>🧍</div><div class="person-name">Jade</div></div>
+      <div class="person p-sick"><div>🤒</div><div class="person-name">Luna</div></div>
+      <div class="person p-immune"><div>🛡️</div><div class="person-name">Ava</div></div>
+      <div class="person p-healthy"><div>🧍</div><div class="person-name">Nora</div></div>
+    </div>
+  </div>
+
+</a>
+</body>
+</html>
