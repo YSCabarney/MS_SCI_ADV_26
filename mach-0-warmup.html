@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Machine Files · Warm-Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0e1420;
+  --bg2:     #131927;
+  --bg3:     #1a2235;
+  --sand:    #c9a96e;
+  --sand2:   #e8c98a;
+  --stone:   #8a9bb0;
+  --ink:     #eef1f7;
+  --ink2:    #b8c4d4;
+  --line:    #2a3650;
+  --teal:    #3ecfb0;
+  --red:     #e05a4e;
+  --serif:   'Fraunces', Georgia, serif;
+  --sans:    'Work Sans', system-ui, sans-serif;
+  --mono:    'IBM Plex Mono', monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f5f0e8; --bg2: #ede6d8; --bg3: #ffffff;
+    --sand: #9a6f1a; --sand2: #7a5200;
+    --stone: #5a6a7a; --ink: #1a2235; --ink2: #3a4a5a;
+    --line: #d4c8b0; --teal: #0a8a70; --red: #c03028;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 0.6rem 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.nav-logo {
+  font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+  color: var(--sand); letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.nav-steps {
+  display: flex; gap: 0.25rem; overflow-x: auto; scrollbar-width: none;
+}
+.nav-steps::-webkit-scrollbar { display: none; }
+.nav-step {
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--stone); white-space: nowrap;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: color 0.15s, border-color 0.15s;
+}
+.nav-step:hover { color: var(--sand); border-color: var(--sand); }
+
+/* ── SECTIONS ── */
+.panel {
+  min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 4rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.inner { max-width: 720px; }
+
+/* ── STEP LABEL ── */
+.step-label {
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
+  color: var(--sand); letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.step-label::after {
+  content: ''; flex: 1; max-width: 60px;
+  height: 1px; background: var(--sand); opacity: 0.4;
+}
+
+/* ── TYPOGRAPHY ── */
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  font-weight: 900; line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700; line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+h3 {
+  font-family: var(--serif);
+  font-size: 1.25rem; font-weight: 700;
+  color: var(--sand);
+  margin-bottom: 0.5rem;
+}
+p { color: var(--ink2); margin-bottom: 0.85rem; max-width: 60ch; }
+p:last-child { margin-bottom: 0; }
+strong { color: var(--ink); }
+a { color: var(--sand); }
+
+/* ── PANEL 1: PAINTING ── */
+#painting {
+  background: #080c14;
+  padding-top: 0; padding-bottom: 0;
+  justify-content: flex-start;
+}
+.painting-img-wrap {
+  width: 100%; max-height: 55svh; overflow: hidden;
+  position: relative;
+}
+.painting-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 20%;
+  display: block;
+  filter: sepia(20%) brightness(0.85);
+}
+.painting-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(transparent, rgba(8,12,20,0.95));
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--stone);
+}
+.painting-question {
+  padding: 2.5rem 1.5rem 3rem;
+  max-width: 720px;
+}
+
+/* ── INFERENCE BOX ── */
+.inference-box {
+  background: var(--bg3);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--sand);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.5rem;
+}
+.inference-box .ib-label {
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
+  color: var(--sand); margin-bottom: 0.6rem;
+}
+.inference-prompt {
+  font-size: 1.05rem; font-weight: 500;
+  color: var(--ink); line-height: 1.5;
+}
+
+/* ── REVEAL BUTTON ── */
+.reveal-btn {
+  margin-top: 1.75rem;
+  background: none;
+  border: 1.5px solid var(--sand);
+  color: var(--sand);
+  font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: background 0.15s, color 0.15s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.reveal-btn:hover { background: var(--sand); color: #0e1420; }
+.reveal-content {
+  display: none;
+  margin-top: 1.5rem;
+  animation: fadeIn 0.3s ease;
+}
+.reveal-content.open { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ── SCIENCE CARDS ── */
+.sci-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.sci-card {
+  background: var(--bg3);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+}
+.sci-card .sc-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.sci-card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; }
+.sci-card p { font-size: 0.875rem; margin: 0; }
+
+/* ── COMPARE ── */
+.compare {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1rem; margin-top: 1.5rem;
+}
+.compare-box {
+  border-radius: 9px; padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+}
+.compare-label {
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.dry { border-color: rgba(224,90,78,0.3); background: rgba(224,90,78,0.05); }
+.dry .compare-label { color: var(--red); }
+.wet { border-color: rgba(62,207,176,0.3); background: rgba(62,207,176,0.05); }
+.wet .compare-label { color: var(--teal); }
+.compare-box p { font-size: 0.875rem; margin: 0; }
+
+/* ── SOURCE CHIP ── */
+.source-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: rgba(201,169,110,0.1);
+  border: 1px solid rgba(201,169,110,0.25);
+  border-radius: 20px;
+  padding: 0.3rem 0.75rem;
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--sand); text-decoration: none;
+  margin-bottom: 1.25rem;
+  transition: background 0.15s;
+}
+.source-chip:hover { background: rgba(201,169,110,0.2); }
+
+/* ── MACHINE DEFINITION ── */
+.machine-def {
+  background: var(--bg3);
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+.machine-def .big-def {
+  font-family: var(--serif);
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: var(--sand2);
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+.machine-examples {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-top: 1rem;
+}
+.me-pill {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem; color: var(--ink2);
+}
+
+/* ── THREE RULES ── */
+.rules { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.rule {
+  display: flex; gap: 0.9rem; align-items: flex-start;
+  background: var(--bg3); border: 1px solid var(--line);
+  border-radius: 8px; padding: 0.9rem 1.1rem;
+}
+.rule-n {
+  font-family: var(--mono); font-size: 1.1rem; font-weight: 600;
+  color: var(--sand); flex-shrink: 0; min-width: 1.5rem;
+  line-height: 1;
+  margin-top: 2px;
+}
+.rule p { font-size: 0.9rem; margin: 0; }
+
+/* ── VIDEO PANEL ── */
+#video { background: #060910; }
+.video-wrap {
+  position: relative; width: 100%;
+  padding-bottom: 56.25%;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--line);
+  margin-top: 1.5rem;
+}
+.video-wrap iframe {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%; border: none;
+}
+.video-task {
+  margin-top: 1.25rem;
+  background: var(--bg3);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--teal);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+.video-task .vt-label {
+  font-family: var(--mono); font-size: 0.68rem;
+  color: var(--teal); font-weight: 600; margin-bottom: 0.4rem;
+}
+.video-task p { font-size: 0.9rem; margin: 0; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 2rem 1.5rem;
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--stone);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+footer a { color: var(--stone); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 540px) {
+  .compare { grid-template-columns: 1fr; }
+  .sci-cards { grid-template-columns: 1fr; }
+  h1 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">The Machine Files · Warm-Up</div>
+  <div class="nav-steps">
+    <a class="nav-step" href="#painting">01 · Look</a>
+    <a class="nav-step" href="#friction">02 · The Science</a>
+    <a class="nav-step" href="#machine">03 · What's a Machine?</a>
+    <a class="nav-step" href="#video">04 · OK Go</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     01 — TOMB PAINTING
+══════════════════════════════════ -->
+<section class="panel" id="painting" style="padding:0; justify-content:flex-start; min-height:100svh; display:flex; flex-direction:column;">
+  <div class="painting-img-wrap" style="flex:0 0 auto; max-height:58svh;">
+    <img
+      src="https://iop.uva.nl/binaries/_ht_1702868621721/1360x0-jpg/content/gallery/onderzoek/iop/wandtekening-tombe-djehoetihotep.jpg"
+      alt="Wall painting from the tomb of Djehutihotep showing a giant statue on a sledge being pulled by workers while a figure pours liquid in front"
+    >
+    <div class="painting-caption">
+      Wall painting from the tomb of Djehutihotep, Egypt · approx. 1900 BCE · Source: Al-Ahram Weekly via University of Amsterdam
+    </div>
+  </div>
+
+  <div class="painting-question" style="flex:1;">
+    <div class="step-label">01 · Look First</div>
+    <h2 style="max-width:18ch;">What is happening in this picture?</h2>
+    <p>This is a 3,900-year-old painting from the wall of an Egyptian tomb. Look carefully before you read anything else.</p>
+
+    <div class="inference-box">
+      <div class="ib-label">Your inference — before we discuss</div>
+      <div class="inference-prompt">
+        There is one person doing something that none of the other workers are doing.
+        Who is it, what are they doing, and <em>why do you think they are doing it?</em>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleReveal('r1', this)">
+      <span>▶</span> Show what's really going on
+    </button>
+
+    <div class="reveal-content" id="r1">
+      <div class="inference-box" style="border-left-color: var(--teal);">
+        <div class="ib-label" style="color:var(--teal);">What's actually happening</div>
+        <p style="color:var(--ink); margin:0; font-size:0.95rem; line-height:1.6;">
+          The figure at the front of the sledge is <strong>pouring water onto the sand</strong> just ahead of it.
+          The Egyptians figured out that wet sand is easier to slide a heavy load across than dry sand —
+          and this single painting sat in a museum for over a century before anyone understood <em>why</em> it worked.
+          In 2014, physicists at the University of Amsterdam finally ran the experiment and published the answer.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     02 — THE SCIENCE
+══════════════════════════════════ -->
+<section class="panel" id="friction">
+  <div class="inner">
+    <div class="step-label">02 · The Science</div>
+    <h2>Why does wet sand work?</h2>
+
+    <a class="source-chip" href="https://iop.uva.nl/content/news/2014/00/prl-egyptian-pyramids.html" target="_blank" rel="noopener">
+      📄 University of Amsterdam · Physical Review Letters · 2014
+    </a>
+
+    <p>
+      Physicists built a miniature Egyptian sledge in a lab and dragged it across sand
+      while measuring exactly how much force it took. Here's what they found:
+    </p>
+
+    <div class="compare">
+      <div class="compare-box dry">
+        <div class="compare-label">Dry sand — harder</div>
+        <p>Sand <strong>piles up in front of the sledge</strong> as it moves. The sled is constantly pushing sand out of the way. That takes force.</p>
+      </div>
+      <div class="compare-box wet">
+        <div class="compare-label">Wet sand — easier</div>
+        <p>Water creates <strong>capillary bridges</strong> — tiny droplets that glue sand grains together. The sand gets stiffer, the pile doesn't form, and the sled glides.</p>
+      </div>
+    </div>
+
+    <div class="sci-cards" style="margin-top:1.5rem;">
+      <div class="sci-card">
+        <div class="sc-icon">⚗️</div>
+        <h3>What they measured</h3>
+        <p>The right amount of water made wet sand <strong>twice as stiff</strong> as dry sand — and cut the pulling force needed <strong>in half</strong>.</p>
+      </div>
+      <div class="sci-card">
+        <div class="sc-icon">👷</div>
+        <h3>What that meant</h3>
+        <p>Half the force needed = half the workers. For one 23,000 N block, that's the difference between 92 people and 46 people.</p>
+      </div>
+      <div class="sci-card">
+        <div class="sc-icon">🌍</div>
+        <h3>Why it still matters</h3>
+        <p>About <strong>10% of the world's energy</strong> goes into moving granular materials like sand, concrete, and coal. This research helps engineers do that more efficiently.</p>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleReveal('r2', this)" style="margin-top:1.75rem;">
+      <span>▶</span> So what force did the water actually reduce?
+    </button>
+    <div class="reveal-content" id="r2">
+      <div class="inference-box" style="border-left-color:var(--teal);">
+        <div class="ib-label" style="color:var(--teal);">The answer</div>
+        <p style="color:var(--ink); margin:0; font-size:0.95rem; line-height:1.6;">
+          <strong>Friction</strong> — specifically, the friction between the sledge runners and the sand surface.
+          The water didn't change gravity (the block still weighed 23,000 N).
+          It didn't change the number of workers.
+          It changed how much the surface resisted the motion of the sled.
+          Less friction = less force needed to move the same load.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     03 — WHAT'S A MACHINE?
+══════════════════════════════════ -->
+<section class="panel" id="machine">
+  <div class="inner">
+    <div class="step-label">03 · The Big Idea</div>
+    <h2>So is wet sand a machine?</h2>
+
+    <p>That depends on what a machine actually is. Here's the definition that matters for this unit:</p>
+
+    <div class="machine-def">
+      <div class="big-def">"A machine is any device that changes the size or direction of a force."</div>
+      <p style="font-size:0.9rem; margin:0; color:var(--ink2);">
+        It doesn't have to have moving parts. It doesn't have to have a motor.
+        It just has to let you do something with less force, or in a different direction,
+        than you could do without it.
+      </p>
+    </div>
+
+    <div class="rules" style="margin-top:1.75rem;">
+      <div class="rule">
+        <div class="rule-n">1</div>
+        <p><strong>Machines trade force for distance.</strong> You can lift something heavy with a small force — but you have to push or pull over a longer distance. There is no free lunch.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-n">2</div>
+        <p><strong>Machines don't create energy.</strong> They just redirect it. The work going in always equals the work coming out (in a perfect machine). Real machines lose some to friction.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-n">3</div>
+        <p><strong>Six simple machines cover almost everything.</strong> Ramp, wedge, screw, lever, wheel-and-axle, pulley. The Egyptians used at least two of them.</p>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleReveal('r3', this)" style="margin-top:1.75rem;">
+      <span>▶</span> So does wet sand count as a machine?
+    </button>
+    <div class="reveal-content" id="r3">
+      <div class="inference-box" style="border-left-color: var(--sand);">
+        <div class="ib-label">The honest answer</div>
+        <p style="color:var(--ink); margin:0 0 0.6rem; font-size:0.95rem; line-height:1.6;">
+          <strong>Not exactly</strong> — but it does the same job. It reduces friction, which reduces the force needed.
+          A ramp is a machine because it lets you apply less force over a longer distance to reach the same height.
+          Wet sand lets you apply less force over the same distance by reducing what works against you.
+        </p>
+        <p style="color:var(--ink2); margin:0; font-size:0.875rem; line-height:1.6;">
+          The Egyptians were doing physics 4,000 years before Newton wrote it down.
+          They didn't have the vocabulary. They just had the tomb painting.
+        </p>
+      </div>
+    </div>
+
+    <div class="machine-examples" style="margin-top:1.75rem;">
+      <span style="font-family:var(--mono);font-size:0.68rem;color:var(--stone);width:100%;margin-bottom:0.25rem;">Simple machines you already know:</span>
+      <span class="me-pill">🛝 Ramp</span>
+      <span class="me-pill">🪓 Wedge</span>
+      <span class="me-pill">🔩 Screw</span>
+      <span class="me-pill">⚖️ Lever</span>
+      <span class="me-pill">🚲 Wheel & axle</span>
+      <span class="me-pill">🪝 Pulley</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     04 — OK GO
+══════════════════════════════════ -->
+<section class="panel" id="video">
+  <div class="inner">
+    <div class="step-label">04 · Now Watch This</div>
+    <h2>One giant chain reaction.</h2>
+    <p>
+      OK Go built this entire music video as a single Rube Goldberg machine —
+      hundreds of simple machines chained together so that each one triggers the next.
+      It took 85 takes to get one clean run.
+    </p>
+
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/qybUFnY7Y8w"
+        title="OK Go – This Too Shall Pass (Rube Goldberg Machine version)"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="video-task">
+      <div class="vt-label">While you watch</div>
+      <p>
+        Count how many of the six simple machines you can spot —
+        ramp, wedge, screw, lever, wheel-and-axle, or pulley.
+        Drop your count in the chat when the video ends.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Tomb painting: Al-Ahram Weekly via <a href="https://iop.uva.nl/content/news/2014/00/prl-egyptian-pyramids.html" target="_blank" rel="noopener">University of Amsterdam / IoP</a> ·
+  Research: Bonn et al., <em>Physical Review Letters</em> 112, 175502 (2014) ·
+  Video: OK Go, <em>This Too Shall Pass</em> (State Farm Sessions) ·
+  <a href="https://yscabarney.github.io/MS_SCI_ADV_26/machine-files.html">← Back to unit page</a>
+</footer>
+
+<script>
+function toggleReveal(id, btn) {
+  const box = document.getElementById(id);
+  const isOpen = box.classList.toggle('open');
+  const arrow = btn.querySelector('span');
+  arrow.textContent = isOpen ? '▼' : '▶';
+  if (isOpen) {
+    btn.style.borderColor = 'var(--teal)';
+    btn.style.color = 'var(--teal)';
+  } else {
+    btn.style.borderColor = 'var(--sand)';
+    btn.style.color = 'var(--sand)';
+  }
+}
+</script>
+</body>
+</html>
