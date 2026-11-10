@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Lab | YSC Science</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#faf7f0; --surface:#ffffff; --surface-2:#f1ece0; --ink:#1c2138; --ink-soft:#454b6b;
+    --muted:#767c99; --line:#e4ddc9; --accent:#ef6c2c; --accent-soft:#ffe4d1; --teal:#127a67; --teal-soft:#d9f0e7;
+    --gold:#c98a1f; --gold-soft:#f7e6c2; --sky:#2f7fd6; --sky-soft:#dcebfb; --load:#8a5a2b; --rope:#5b4a3a;
+    --shadow:0 1px 2px rgba(28,33,56,.06),0 8px 20px -14px rgba(28,33,56,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+      --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac; --teal-soft:#16332c;
+      --gold:#f0bd63; --gold-soft:#3a2f16; --sky:#6aa9f0; --sky-soft:#1a2a40; --load:#c98a55; --rope:#c9b8a5;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141e; --surface:#1b1e2c; --surface-2:#212539; --ink:#eef0f8; --ink-soft:#c7cbe4;
+    --muted:#9298bb; --line:#323756; --accent:#ff8a4c; --accent-soft:#3a2a1f; --teal:#3ecdac; --teal-soft:#16332c;
+    --gold:#f0bd63; --gold-soft:#3a2f16; --sky:#6aa9f0; --sky-soft:#1a2a40; --load:#c98a55; --rope:#c9b8a5;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'Work Sans',system-ui,sans-serif; margin:0; padding:22px 16px 40px;}
+  .wrap{max-width:960px; margin:0 auto; display:flex; flex-direction:column; gap:16px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; margin:0;}
+  p{margin:0; line-height:1.55; color:var(--ink-soft);}
+  a{color:var(--accent);}
+  .masthead{background:linear-gradient(135deg,#1c2138,#2a2f52 60%,#5a3a1a); border-radius:18px; padding:22px; color:#fff; box-shadow:var(--shadow);}
+  .masthead .tag{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,255,255,.12); padding:5px 10px; border-radius:999px; display:inline-block; margin-bottom:10px;}
+  .masthead h1{font-size:clamp(26px,6vw,38px); font-weight:900;}
+  .masthead p{color:#dcdcf2; margin-top:6px; font-size:14.5px;}
+  .masthead a{color:#ffb48a;}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:var(--shadow);}
+  .tabs{display:flex; gap:6px; flex-wrap:wrap;}
+  .tabs button{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:9px 16px; cursor:pointer;}
+  .tabs button.on{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+  .main{display:grid; grid-template-columns:1.25fr 1fr; gap:16px;}
+  @media (max-width:800px){ .main{grid-template-columns:1fr;} }
+  .stage{background:var(--sky-soft); border-radius:12px; overflow:hidden;}
+  .stage svg{width:100%; height:auto; display:block;}
+  .controls{display:flex; flex-direction:column; gap:12px;}
+  .ctl label{display:flex; justify-content:space-between; font-size:13.5px; font-weight:600; color:var(--ink);}
+  .ctl label span{font-family:'IBM Plex Mono',monospace; color:var(--accent);}
+  .ctl input[type=range]{width:100%; accent-color:var(--accent);}
+  .ctl select{width:100%; font:inherit; font-size:14px; padding:7px 9px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
+  .ctl .hint{font-size:12px; color:var(--muted); margin-top:2px;}
+  .seg{display:flex; gap:4px; flex-wrap:wrap;}
+  .seg button{flex:1; font:inherit; font-size:12.5px; font-weight:600; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px; padding:7px 6px; cursor:pointer;}
+  .seg button.on{border-color:var(--accent); background:var(--accent-soft);}
+  .readouts{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+  @media (max-width:640px){ .readouts{grid-template-columns:repeat(2,1fr);} }
+  .ro{background:var(--surface-2); border-radius:10px; padding:9px 10px;}
+  .ro .k{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
+  .ro .v{font-family:'Fraunces',serif; font-weight:700; font-size:20px; margin-top:2px;}
+  .ro .f{font-size:11px; color:var(--muted); margin-top:2px; font-family:'IBM Plex Mono',monospace;}
+  .ro.hot{background:var(--accent-soft);} .ro.cool{background:var(--teal-soft);}
+  .people{font-size:14px; padding:10px 12px; border-radius:10px; background:var(--gold-soft); color:var(--ink);}
+  .btns{display:flex; gap:6px; flex-wrap:wrap;}
+  .btns button{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:12px; border:none; border-radius:9px; padding:9px 12px; cursor:pointer; background:var(--ink); color:var(--bg);}
+  .btns button.hot{background:var(--accent); color:#fff;}
+  .btns button.alt{background:var(--surface-2); color:var(--ink);}
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  th,td{padding:6px 7px; text-align:center; border-bottom:1px solid var(--line);}
+  th{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);}
+  .tablewrap{overflow-x:auto;}
+  .how ol{margin:6px 0 0; padding-left:20px; color:var(--ink-soft); font-size:14px; line-height:1.6;}
+  .formula{font-family:'IBM Plex Mono',monospace; font-size:12.5px; background:var(--surface-2); border-radius:8px; padding:8px 10px; color:var(--ink); line-height:1.6;}
+  .small{font-size:12px; color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <span class="tag">Motion Investigation Bureau · The Machine Files</span>
+    <h1>Machine Lab</h1>
+    <p>Pick a machine, pick a load, and find out how much force YOU need to move it, and how far you'll have to push or pull. <a href="machine-files.html">← Back to unit page</a></p>
+  </header>
+
+  <div class="card how">
+    <h3 style="font-size:17px">How to use it</h3>
+    <ol>
+      <li>Choose a machine tab: <b>Ramp</b>, <b>Lever</b>, or <b>Pulley</b>.</li>
+      <li>Choose a <b>load</b> and move the sliders.</li>
+      <li>Click <b>▶ Move it!</b> to watch the load move. Compare how far the load moves with how far your effort moves.</li>
+      <li>Click <b>＋ Record trial</b> to save the numbers in the data table. Copy them onto your worksheet.</li>
+    </ol>
+  </div>
+
+  <div class="tabs" id="tabs" role="tablist">
+    <button class="on" data-m="ramp">🛝 Ramp (inclined plane)</button>
+    <button data-m="lever">⚖️ Lever</button>
+    <button data-m="pulley">🪝 Pulley</button>
+  </div>
+
+  <div class="main">
+    <div class="card">
+      <div class="stage"><svg id="stage" viewBox="0 0 600 380" aria-label="Machine drawing"></svg></div>
+      <div class="btns" style="margin-top:10px">
+        <button class="hot" id="go">▶ Move it!</button>
+        <button id="rec">＋ Record trial</button>
+        <button class="alt" id="clear">Clear table</button>
+      </div>
+    </div>
+    <div class="card controls" id="controls"></div>
+  </div>
+
+  <div class="readouts" id="readouts"></div>
+  <div class="people" id="people"></div>
+
+  <div class="card">
+    <h3 style="font-size:16px;margin-bottom:8px">Data Table</h3>
+    <div class="tablewrap"><table><thead><tr><th>#</th><th>Machine</th><th>Settings</th><th>Load (N)</th><th>Effort (N)</th><th>Effort distance (m)</th><th>Load distance (m)</th><th>Work in (J)</th><th>Work out (J)</th><th>MA</th><th>Efficiency</th></tr></thead><tbody id="tbody"><tr><td colspan="11" class="small">Click ＋ Record trial to save a row.</td></tr></tbody></table></div>
+  </div>
+
+  <div class="card">
+    <h3 style="font-size:16px;margin-bottom:8px">The math behind the lab</h3>
+    <div class="formula">
+      Work = force × distance &nbsp;(joules, J)<br>
+      Work out = load × load distance &nbsp;·&nbsp; Work in = effort × effort distance<br>
+      Mechanical advantage (MA) = load ÷ effort<br>
+      Efficiency = work out ÷ work in × 100%
+    </div>
+    <p class="small" style="margin-top:8px">This is a simplified model built for class. Weights use 1 kg ≈ 10 N. Friction settings are rough classroom values: the "wet sand" setting is based on a 2014 University of Amsterdam experiment that found damp sand cut the pulling force on a sled about in half.</p>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const PERSON=250; // N one person can pull steadily (classroom estimate)
+const LOADS=[["Volleyball (3 N)",3],["Team water cooler (200 N)",200],["Ball cart full of volleyballs (400 N)",400],["Stack of gym mats (500 N)",500],["Tournament equipment cart (900 N)",900],["Wheelchair + rider (1,000 N)",1000],["Pyramid block (23,000 N)",23000]];
+let mode='ramp', anim=0, animT=null, rows=[];
+const S={ramp:{load:400,h:1,L:4,fr:'off'}, lever:{load:400,cls:1,x:1}, pulley:{load:400,n:2,h:1,fr:'off'}};
+const FRICTION={off:["None (ideal)",0],smooth:["Smooth (wheels)",0.05],wet:["Wet sand sled",0.25],dry:["Dry sand sled",0.5]};
+
+function fmt(v,d=0){ if(!isFinite(v)) return '–'; return Number(v).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:0}); }
+
+function calc(){
+  const s=S[mode]; let r={};
+  if(mode==='ramp'){
+    const mu=FRICTION[s.fr][1], cos=Math.sqrt(Math.max(s.L*s.L-s.h*s.h,0))/s.L;
+    r.effort=s.load*s.h/s.L + mu*s.load*cos; r.dIn=s.L; r.dOut=s.h; r.ima=s.L/s.h;
+    r.settings=`h ${s.h} m, L ${s.L} m, ${FRICTION[s.fr][0]}`;
+  } else if(mode==='lever'){
+    const BAR=4; let la,ea;
+    if(s.cls===1){ la=s.x; ea=BAR-s.x; } else if(s.cls===2){ la=s.x; ea=BAR; } else { la=BAR; ea=s.x; }
+    r.la=la; r.ea=ea; r.effort=s.load*la/ea; r.dOut=0.25; r.dIn=0.25*ea/la; r.ima=ea/la;
+    r.settings=`Class ${s.cls}, load arm ${fmt(la,1)} m, effort arm ${fmt(ea,1)} m`;
+  } else {
+    const eff=s.fr==='on'?Math.pow(0.95,s.n):1;
+    r.effort=s.load/s.n/eff; r.dIn=s.n*s.h; r.dOut=s.h; r.ima=s.n;
+    r.settings=`${s.n} rope${s.n>1?'s':''} holding load, lift ${s.h} m, friction ${s.fr==='on'?'On':'Off'}`;
+  }
+  r.load=s.load; r.wOut=s.load*r.dOut; r.wIn=r.effort*r.dIn; r.ma=s.load/r.effort; r.eff=100*r.wOut/r.wIn;
+  return r;
+}
+
+function controls(){
+  const s=S[mode]; let h='';
+  h+=`<div class="ctl"><label>Load</label><select id="cLoad">${LOADS.map(([n,v])=>`<option value="${v}" ${v===s.load?'selected':''}>${n}</option>`).join('')}</select></div>`;
+  if(mode==='ramp'){
+    h+=`<div class="ctl"><label>Ramp height <span>${s.h} m</span></label><input type="range" id="cH" min="0.5" max="3" step="0.25" value="${s.h}"><div class="hint">How high the load ends up.</div></div>`;
+    h+=`<div class="ctl"><label>Ramp length <span>${s.L} m</span></label><input type="range" id="cL" min="${s.h}" max="15" step="0.25" value="${s.L}"><div class="hint">How far you push along the slope. Can't be shorter than the height.</div></div>`;
+    h+=`<div class="ctl"><label>Friction</label><div class="seg" id="cFr">${Object.entries(FRICTION).map(([k,[n]])=>`<button data-v="${k}" class="${k===s.fr?'on':''}">${n}</button>`).join('')}</div></div>`;
+  } else if(mode==='lever'){
+    h+=`<div class="ctl"><label>Lever class</label><div class="seg" id="cCls">${[1,2,3].map(c=>`<button data-v="${c}" class="${c===s.cls?'on':''}">Class ${c}</button>`).join('')}</div><div class="hint">${['','Fulcrum in the middle (seesaw, crowbar)','Load in the middle (wheelbarrow, standing on your toes)','Effort in the middle (your arm, a kicking leg)'][s.cls]}</div></div>`;
+    const lbl=s.cls===1?'Fulcrum distance from load':s.cls===2?'Load distance from fulcrum':'Effort distance from fulcrum';
+    h+=`<div class="ctl"><label>${lbl} <span>${s.x} m</span></label><input type="range" id="cX" min="0.25" max="3.75" step="0.25" value="${s.x}"><div class="hint">The bar is 4 m long.</div></div>`;
+  } else {
+    h+=`<div class="ctl"><label>Ropes holding up the load <span>${s.n}</span></label><input type="range" id="cN" min="1" max="6" step="1" value="${s.n}"><div class="hint">1 = one fixed pulley. 2 or more = a block and tackle.</div></div>`;
+    h+=`<div class="ctl"><label>Lift height <span>${s.h} m</span></label><input type="range" id="cH" min="0.5" max="3" step="0.25" value="${s.h}"></div>`;
+    h+=`<div class="ctl"><label>Pulley friction</label><div class="seg" id="cFr"><button data-v="off" class="${s.fr==='off'?'on':''}">Off (ideal)</button><button data-v="on" class="${s.fr==='on'?'on':''}">On (5% lost per pulley)</button></div></div>`;
+  }
+  $('controls').innerHTML=h;
+  $('cLoad').onchange=e=>{s.load=+e.target.value; update();};
+  if($('cH')) $('cH').oninput=e=>{s.h=+e.target.value; if(mode==='ramp'&&s.L<s.h)s.L=s.h; controls(); update();};
+  if($('cL')) $('cL').oninput=e=>{s.L=+e.target.value; update(); e.target.previousElementSibling.querySelector('span').textContent=s.L+' m';};
+  if($('cX')) $('cX').oninput=e=>{s.x=+e.target.value; update(); e.target.previousElementSibling.querySelector('span').textContent=s.x+' m';};
+  if($('cN')) $('cN').oninput=e=>{s.n=+e.target.value; update(); e.target.previousElementSibling.querySelector('span').textContent=s.n;};
+  ['cFr','cCls'].forEach(id=>{ if($(id)) $(id).onclick=e=>{const b=e.target.closest('button'); if(!b)return; if(id==='cFr')s.fr=b.dataset.v; else s.cls=+b.dataset.v; controls(); update();}; });
+}
+
+function readouts(r){
+  const items=[["Effort force",fmt(r.effort,r.effort<10?1:0)+' N','what YOU push/pull','hot'],["Mechanical advantage",fmt(r.ma,2),'load ÷ effort',''],
+    ["Effort distance",fmt(r.dIn,2)+' m','how far you push/pull',''],["Load distance",fmt(r.dOut,2)+' m','how far the load moves',''],
+    ["Work in",fmt(r.wIn,0)+' J','effort × effort distance',''],["Work out",fmt(r.wOut,0)+' J','load × load distance',''],
+    ["Efficiency",fmt(r.eff,0)+'%','work out ÷ work in','cool'],["Load",fmt(r.load)+' N','weight being moved','']];
+  $('readouts').innerHTML=items.map(([k,v,f,c])=>`<div class="ro ${c}"><div class="k">${k}</div><div class="v">${v}</div><div class="f">${f}</div></div>`).join('');
+  const ppl=Math.ceil(r.effort/PERSON);
+  $('people').innerHTML = r.effort<=PERSON
+    ? `💪 <b>One person can do this.</b> A person can pull about ${PERSON} N for a long time, and you only need ${fmt(r.effort,0)} N.`
+    : `👥 <b>You'd need about ${fmt(ppl)} people</b> pulling ${PERSON} N each to supply ${fmt(r.effort,0)} N. ${r.load>=23000?'That\'s the pyramid problem! ':''}Can you change the machine so fewer people are needed?`;
+}
+
+/* ---------- drawings ---------- */
+function drawRamp(r,t){
+  const s=S.ramp, ink=css('--ink'), ground=css('--surface-2'), load=css('--load'), acc=css('--accent');
+  const x0=60, yb=320, scale=Math.min(480/Math.sqrt(Math.max(s.L*s.L-s.h*s.h,0.01)), 230/s.h, 120);
+  const run=Math.sqrt(Math.max(s.L*s.L-s.h*s.h,0))*scale, rise=s.h*scale;
+  const x1=x0+run, y1=yb-rise, ang=Math.atan2(rise,run);
+  const px=x0+(x1-x0)*t, py=yb+(y1-yb)*t;
+  const fr={off:'',smooth:'',wet:'#7fa7c9',dry:'#e3c27a'}[s.fr];
+  let g=`<rect x="0" y="${yb}" width="600" height="60" fill="${ground}"/>`;
+  g+=`<polygon points="${x0},${yb} ${x1},${yb} ${x1},${y1}" fill="${fr||css('--surface')}" stroke="${ink}" stroke-width="2.5"/>`;
+  g+=`<rect x="${x1}" y="${y1}" width="${Math.max(600-x1,0)}" height="${rise}" fill="${css('--surface')}" stroke="${ink}" stroke-width="2"/>`;
+  g+=`<g transform="translate(${px},${py}) rotate(${-ang*180/Math.PI})"><rect x="-22" y="-34" width="44" height="34" rx="4" fill="${load}"/><text x="0" y="-12" text-anchor="middle" font-size="11" fill="#fff" font-family="IBM Plex Mono">${fmt(s.load)} N</text>
+     <line x1="24" y1="-17" x2="70" y2="-17" stroke="${acc}" stroke-width="4" marker-end="url(#ah)"/><text x="48" y="-24" font-size="11" fill="${acc}" font-weight="700" font-family="IBM Plex Mono">${fmt(r.effort,0)} N</text></g>`;
+  g+=`<text x="${x1+8}" y="${(yb+y1)/2}" font-size="12" fill="${ink}" font-family="IBM Plex Mono">h = ${s.h} m</text>`;
+  g+=`<text x="${(x0+x1)/2-30}" y="${(yb+y1)/2-14}" font-size="12" fill="${ink}" font-family="IBM Plex Mono" transform="rotate(${-ang*180/Math.PI} ${(x0+x1)/2} ${(yb+y1)/2})">L = ${s.L} m</text>`;
+  if(fr) g+=`<text x="${x0}" y="${yb+40}" font-size="12" fill="${ink}">${s.fr==='wet'?'💧 wet sand':'🏜️ dry sand'} under the sled</text>`;
+  return g;
+}
+function drawLever(r,t){
+  const s=S.lever, ink=css('--ink'), load=css('--load'), acc=css('--accent'), BAR=4, X0=80, W=440, k=W/BAR, cy=230;
+  let fx,lx,ex;
+  if(s.cls===1){ lx=0; fx=s.x; ex=BAR; } else if(s.cls===2){ fx=0; lx=s.x; ex=BAR; } else { fx=0; ex=s.x; lx=BAR; }
+  const tilt=t*0.25;
+  // Class 1: effort end goes down so the load end rises. Class 2/3: the far end rises.
+  const rot=(d)=>{ const dx=(d-fx)*k; const a = (s.cls===1)? tilt : -tilt; return [X0+fx*k+dx*Math.cos(a), cy + dx*Math.sin(a)]; };
+  const A=rot(0), B=rot(BAR), L=rot(lx), E=rot(ex), F=[X0+fx*k,cy];
+  let g=`<rect x="0" y="300" width="600" height="80" fill="${css('--surface-2')}"/>`;
+  g+=`<polygon points="${F[0]},${cy+4} ${F[0]-22},300 ${F[0]+22},300" fill="${css('--gold')}" stroke="${ink}" stroke-width="2"/><text x="${F[0]}" y="322" text-anchor="middle" font-size="12" fill="${ink}" font-weight="700">fulcrum</text>`;
+  g+=`<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="${ink}" stroke-width="9" stroke-linecap="round"/>`;
+  g+=`<rect x="${L[0]-24}" y="${L[1]-44}" width="48" height="40" rx="4" fill="${load}"/><text x="${L[0]}" y="${L[1]-20}" text-anchor="middle" font-size="11" fill="#fff" font-family="IBM Plex Mono">${fmt(s.load)} N</text><text x="${L[0]}" y="${L[1]-52}" text-anchor="middle" font-size="12" fill="${ink}" font-weight="700">load</text>`;
+  const dir=(s.cls===1)?1:-1; // class1 push down; class2/3 push up
+  const ey1=E[1]+(dir>0?-70:70), ey2=E[1]+(dir>0?-8:8);
+  g+=`<line x1="${E[0]}" y1="${ey1}" x2="${E[0]}" y2="${ey2}" stroke="${acc}" stroke-width="4" marker-end="url(#ah)"/><text x="${E[0]>440?E[0]-8:E[0]+6}" text-anchor="${E[0]>440?'end':'start'}" y="${(ey1+ey2)/2}" font-size="12" fill="${acc}" font-weight="700" font-family="IBM Plex Mono">effort ${fmt(r.effort,r.effort<10?1:0)} N</text>`;
+  const yl=338; g+=`<g font-family="IBM Plex Mono" font-size="11" fill="${ink}">`;
+  g+=`<line x1="${X0+Math.min(fx,lx)*k}" x2="${X0+Math.max(fx,lx)*k}" y1="${yl-8}" y2="${yl-8}" stroke="${load}" stroke-width="3"/><text x="${X0+(fx+lx)/2*k}" y="${yl+6}" text-anchor="middle">load arm ${fmt(r.la,2)} m</text>`;
+  g+=`<line x1="${X0+Math.min(fx,ex)*k}" x2="${X0+Math.max(fx,ex)*k}" y1="${yl+16}" y2="${yl+16}" stroke="${acc}" stroke-width="3"/><text x="${X0+(fx+ex)/2*k}" y="${yl+30}" text-anchor="middle">effort arm ${fmt(r.ea,2)} m</text></g>`;
+  return g;
+}
+function drawPulley(r,t){
+  const s=S.pulley, ink=css('--ink'), rope=css('--rope'), load=css('--load'), acc=css('--accent'), n=s.n;
+  const topY=40, baseLoadY=290, lift=Math.min(150, s.h*55)*t, loadY=baseLoadY-lift;
+  let g=`<rect x="0" y="0" width="600" height="18" fill="${css('--surface-2')}"/><line x1="0" y1="18" x2="600" y2="18" stroke="${ink}" stroke-width="2"/>`;
+  g+=`<rect x="0" y="340" width="600" height="40" fill="${css('--surface-2')}"/>`;
+  const cx=260, spacing=22, segs=[];
+  if(n===1){
+    g+=`<line x1="${cx}" y1="18" x2="${cx}" y2="${topY}" stroke="${ink}" stroke-width="3"/><circle cx="${cx}" cy="${topY+16}" r="18" fill="${css('--surface')}" stroke="${ink}" stroke-width="3"/>`;
+    g+=`<line x1="${cx-18}" y1="${topY+16}" x2="${cx-18}" y2="${loadY}" stroke="${rope}" stroke-width="3"/>`;
+    const handY=240+lift; g+=`<line x1="${cx+18}" y1="${topY+16}" x2="${cx+18}" y2="${handY}" stroke="${rope}" stroke-width="3"/>`;
+    g+=`<line x1="${cx+18}" y1="${handY}" x2="${cx+18}" y2="${handY+50}" stroke="${acc}" stroke-width="4" marker-end="url(#ah)"/><text x="${cx+28}" y="${handY+30}" font-size="12" fill="${acc}" font-weight="700" font-family="IBM Plex Mono">${fmt(r.effort,0)} N</text>`;
+    g+=`<rect x="${cx-48}" y="${loadY}" width="60" height="44" rx="4" fill="${load}"/><text x="${cx-18}" y="${loadY+26}" text-anchor="middle" font-size="11" fill="#fff" font-family="IBM Plex Mono">${fmt(s.load)} N</text>`;
+  } else {
+    const w=(n)*spacing, left=cx-w/2;
+    g+=`<rect x="${left-14}" y="${topY}" width="${w+28}" height="30" rx="15" fill="${css('--surface')}" stroke="${ink}" stroke-width="3"/><line x1="${cx}" y1="18" x2="${cx}" y2="${topY}" stroke="${ink}" stroke-width="3"/>`;
+    const blockY=loadY-46;
+    g+=`<rect x="${left-14}" y="${blockY}" width="${w+28}" height="30" rx="15" fill="${css('--surface')}" stroke="${ink}" stroke-width="3"/><line x1="${cx}" y1="${blockY+30}" x2="${cx}" y2="${loadY}" stroke="${ink}" stroke-width="3"/>`;
+    for(let i=0;i<n;i++){ const x=left+i*spacing+spacing/2; g+=`<line x1="${x}" y1="${topY+30}" x2="${x}" y2="${blockY}" stroke="${rope}" stroke-width="3"/>`; }
+    const fx=left+n*spacing+12, handY=230+lift*n*0.35;
+    g+=`<line x1="${left+(n-1)*spacing+spacing/2}" y1="${topY+15}" x2="${fx}" y2="${topY+15}" stroke="${rope}" stroke-width="3"/><line x1="${fx}" y1="${topY+15}" x2="${fx}" y2="${Math.min(handY,330)}" stroke="${rope}" stroke-width="3"/>`;
+    g+=`<line x1="${fx}" y1="${Math.min(handY,330)-50}" x2="${fx}" y2="${Math.min(handY,330)}" stroke="${acc}" stroke-width="4" marker-end="url(#ah)"/><text x="${fx+8}" y="${Math.min(handY,330)-20}" font-size="12" fill="${acc}" font-weight="700" font-family="IBM Plex Mono">${fmt(r.effort,0)} N</text>`;
+    g+=`<rect x="${cx-34}" y="${loadY}" width="68" height="44" rx="4" fill="${load}"/><text x="${cx}" y="${loadY+26}" text-anchor="middle" font-size="11" fill="#fff" font-family="IBM Plex Mono">${fmt(s.load)} N</text>`;
+    g+=`<text x="40" y="120" font-size="13" fill="${ink}" font-weight="700">${n} ropes hold</text><text x="40" y="138" font-size="13" fill="${ink}" font-weight="700">up the load</text>`;
+  }
+  g+=`<text x="430" y="300" font-size="12" fill="${ink}" font-family="IBM Plex Mono">lift: ${s.h} m</text><text x="430" y="318" font-size="12" fill="${acc}" font-family="IBM Plex Mono">rope pulled: ${fmt(r.dIn,2)} m</text>`;
+  return g;
+}
+function draw(t){
+  const r=calc();
+  const defs=`<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${css('--accent')}"/></marker></defs>`;
+  $('stage').innerHTML=defs+(mode==='ramp'?drawRamp(r,t):mode==='lever'?drawLever(r,t):drawPulley(r,t));
+}
+function update(){ cancelAnimationFrame(animT); anim=0; const r=calc(); readouts(r); draw(0); }
+$('go').onclick=()=>{ cancelAnimationFrame(animT); const t0=performance.now(); const step=now=>{ anim=Math.min((now-t0)/1800,1); draw(anim); if(anim<1) animT=requestAnimationFrame(step); }; animT=requestAnimationFrame(step); };
+$('rec').onclick=()=>{ const r=calc(); rows.push({m:mode,...r}); renderTable(); };
+$('clear').onclick=()=>{ rows=[]; renderTable(); };
+function renderTable(){
+  const name={ramp:'Ramp',lever:'Lever',pulley:'Pulley'};
+  $('tbody').innerHTML=rows.length?rows.map((r,i)=>`<tr><td>${i+1}</td><td>${name[r.m]}</td><td style="text-align:left">${r.settings}</td><td>${fmt(r.load)}</td><td>${fmt(r.effort,1)}</td><td>${fmt(r.dIn,2)}</td><td>${fmt(r.dOut,2)}</td><td>${fmt(r.wIn,0)}</td><td>${fmt(r.wOut,0)}</td><td>${fmt(r.ma,2)}</td><td>${fmt(r.eff,0)}%</td></tr>`).join(''):'<tr><td colspan="11" class="small">Click ＋ Record trial to save a row.</td></tr>';
+}
+$('tabs').onclick=e=>{const b=e.target.closest('button'); if(!b)return; mode=b.dataset.m; document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b)); controls(); update();};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',update);
+controls(); update();
+</script>
+</body>
+</html>
