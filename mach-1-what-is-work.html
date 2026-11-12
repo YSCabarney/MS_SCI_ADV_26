@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case 09 · What Counts as Work? | The Machine Files</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #0b1118;
+  --bg2:    #111822;
+  --bg3:    #18222e;
+  --bg4:    #1e2d3d;
+  --gold:   #e8c56a;
+  --gold2:  #f5d98a;
+  --teal:   #38c4b0;
+  --slate:  #7a9bb8;
+  --ink:    #e8f0f8;
+  --ink2:   #9ab0c8;
+  --line:   #243040;
+  --red:    #e06060;
+  --green:  #4abb80;
+  --serif:  'Fraunces', Georgia, serif;
+  --sans:   'Work Sans', system-ui, sans-serif;
+  --mono:   'IBM Plex Mono', monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:#f4f7fa; --bg2:#e8edf4; --bg3:#ffffff; --bg4:#dde5ef;
+    --gold:#8a6200; --gold2:#6a4800;
+    --teal:#0a7a6a; --slate:#4a6a8a;
+    --ink:#0b1118; --ink2:#3a5068;
+    --line:#c8d4e0; --red:#c03030; --green:#1a8a50;
+  }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.6rem 1.25rem;
+  overflow-x:auto;white-space:nowrap;scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none;}
+.nav-case{font-family:var(--mono);font-size:0.68rem;color:var(--gold);font-weight:600;flex-shrink:0;}
+.nav-links{display:flex;gap:0.1rem;}
+.nav-link{
+  font-family:var(--mono);font-size:0.62rem;color:var(--slate);
+  text-decoration:none;padding:0.25rem 0.55rem;border-radius:4px;
+  transition:color 0.15s,background 0.15s;
+}
+.nav-link:hover{color:var(--gold);background:rgba(232,197,106,0.08);}
+.nav-back{
+  margin-left:auto;font-family:var(--mono);font-size:0.62rem;
+  color:var(--slate);text-decoration:none;flex-shrink:0;
+  padding:0.25rem 0.6rem;border:1px solid var(--line);border-radius:4px;
+  transition:border-color 0.15s,color 0.15s;
+}
+.nav-back:hover{border-color:var(--gold);color:var(--gold);}
+
+/* HERO */
+.hero{
+  padding:3.5rem 1.5rem 2.5rem;
+  border-bottom:1px solid var(--line);
+  max-width:800px;
+}
+.hero-eye{
+  font-family:var(--mono);font-size:0.68rem;color:var(--gold);
+  letter-spacing:0.08em;margin-bottom:1rem;
+}
+.hero h1{
+  font-family:var(--serif);
+  font-size:clamp(2.4rem,7vw,4.2rem);
+  font-weight:900;line-height:1.02;
+  color:var(--ink);margin-bottom:1rem;
+}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-sub{color:var(--ink2);font-size:1rem;max-width:52ch;margin-bottom:1.5rem;}
+.hero-formula{
+  display:inline-block;
+  font-family:var(--mono);font-size:1.15rem;font-weight:600;
+  color:var(--gold2);
+  background:rgba(232,197,106,0.08);
+  border:1px solid rgba(232,197,106,0.2);
+  border-radius:8px;padding:0.6rem 1.1rem;
+}
+
+/* SECTIONS */
+.section{
+  padding:3rem 1.5rem;
+  border-bottom:1px solid var(--line);
+  max-width:800px;
+}
+.sec-label{
+  font-family:var(--mono);font-size:0.68rem;color:var(--gold);
+  letter-spacing:0.08em;margin-bottom:1rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.sec-label::after{content:'';flex:1;max-width:48px;height:1px;background:var(--gold);opacity:0.3;}
+h2{
+  font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.2rem);
+  font-weight:700;line-height:1.1;color:var(--ink);margin-bottom:0.75rem;
+}
+h3{font-family:var(--serif);font-size:1.15rem;font-weight:700;color:var(--gold);margin-bottom:0.4rem;}
+p{color:var(--ink2);margin-bottom:0.85rem;max-width:62ch;}
+p:last-child{margin-bottom:0;}
+strong{color:var(--ink);}
+a{color:var(--gold);}
+
+/* OK GO discussion */
+.discussion-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:0.75rem;margin-top:1.25rem;
+}
+.dq{
+  background:var(--bg3);border:1px solid var(--line);
+  border-radius:9px;padding:1rem 1.1rem;
+}
+.dq-num{
+  font-family:var(--mono);font-size:0.68rem;font-weight:600;
+  color:var(--slate);margin-bottom:0.4rem;
+}
+.dq p{font-size:0.9rem;color:var(--ink);margin:0;line-height:1.5;}
+
+/* WORK / NOT WORK cards */
+.work-compare{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1rem;margin:1.25rem 0;
+}
+.wc-col{border-radius:10px;padding:1.1rem 1.2rem;border:1px solid;}
+.wc-yes{border-color:rgba(74,187,128,0.35);background:rgba(74,187,128,0.06);}
+.wc-no {border-color:rgba(224,96,96,0.35); background:rgba(224,96,96,0.06);}
+.wc-head{
+  font-family:var(--mono);font-size:0.72rem;font-weight:600;
+  margin-bottom:0.75rem;
+  display:flex;align-items:center;gap:0.4rem;
+}
+.wc-yes .wc-head{color:var(--green);}
+.wc-no  .wc-head{color:var(--red);}
+.work-item{
+  display:flex;gap:0.5rem;align-items:flex-start;
+  margin-bottom:0.55rem;font-size:0.875rem;color:var(--ink2);
+}
+.work-item:last-child{margin-bottom:0;}
+.wi-icon{flex-shrink:0;font-size:0.95rem;margin-top:1px;}
+
+/* RULE BOX */
+.rule-box{
+  background:var(--bg3);border:1px solid var(--line);
+  border-left:3px solid var(--gold);
+  border-radius:8px;padding:1.1rem 1.3rem;
+  margin:1.25rem 0;
+}
+.rule-box p{font-size:0.95rem;color:var(--ink);margin:0;}
+
+/* FORMULA BLOCK */
+.formula-block{
+  background:var(--bg4);border:1px solid var(--line);
+  border-radius:10px;padding:1.25rem 1.4rem;
+  margin:1.25rem 0;
+}
+.formula-big{
+  font-family:var(--mono);font-size:1.3rem;font-weight:600;
+  color:var(--gold2);margin-bottom:0.6rem;
+}
+.formula-parts{
+  display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:0.75rem;
+}
+.fp{
+  background:var(--bg);border:1px solid var(--line);
+  border-radius:6px;padding:0.3rem 0.7rem;
+  font-family:var(--mono);font-size:0.72rem;color:var(--slate);
+}
+
+/* WORKED EXAMPLE */
+.example{
+  background:var(--bg3);border:1px solid var(--line);
+  border-radius:9px;padding:1rem 1.2rem;margin:0.75rem 0;
+}
+.example-label{
+  font-family:var(--mono);font-size:0.65rem;color:var(--teal);
+  font-weight:600;margin-bottom:0.5rem;
+}
+.example-steps{display:flex;flex-direction:column;gap:0.3rem;}
+.ex-step{
+  display:flex;gap:0.6rem;align-items:baseline;
+  font-size:0.875rem;color:var(--ink2);
+}
+.ex-n{
+  font-family:var(--mono);font-size:0.68rem;color:var(--slate);
+  flex-shrink:0;min-width:1.2rem;
+}
+.ex-ans{color:var(--gold2);font-weight:600;}
+
+/* QUICK CHECK */
+.qc-wrap{margin-top:1.5rem;display:flex;flex-direction:column;gap:0.6rem;}
+.qc{
+  background:var(--bg3);border:1px solid var(--line);border-radius:8px;overflow:hidden;
+}
+.qc-q{
+  padding:0.8rem 1rem;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.9rem;font-weight:500;color:var(--ink);
+  user-select:none;transition:background 0.12s;
+}
+.qc-q:hover{background:var(--bg4);}
+.qc-arrow{
+  font-family:var(--mono);font-size:0.75rem;color:var(--gold);
+  flex-shrink:0;margin-left:0.75rem;transition:transform 0.2s;
+}
+.qc-a{
+  display:none;padding:0.75rem 1rem 0.9rem;
+  border-top:1px solid var(--line);
+  font-size:0.875rem;color:var(--ink2);line-height:1.6;
+}
+.qc-a.open{display:block;}
+.qc-arrow.open{transform:rotate(90deg);}
+
+/* JOULE STORY */
+.joule-card{
+  background:var(--bg3);border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;margin-top:1.25rem;
+}
+.joule-head{
+  background:var(--bg4);padding:1rem 1.25rem;
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:0.75rem;
+}
+.joule-portrait{font-size:2.5rem;flex-shrink:0;}
+.joule-name{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--ink);}
+.joule-dates{font-family:var(--mono);font-size:0.65rem;color:var(--slate);margin-top:0.15rem;}
+.joule-body{padding:1.1rem 1.25rem;}
+.joule-body p{font-size:0.9rem;margin-bottom:0.65rem;}
+.joule-fact{
+  display:flex;gap:0.6rem;align-items:flex-start;
+  background:rgba(232,197,106,0.07);border:1px solid rgba(232,197,106,0.2);
+  border-radius:7px;padding:0.7rem 0.9rem;margin-top:0.75rem;
+}
+.jf-icon{flex-shrink:0;font-size:1rem;margin-top:1px;}
+.jf-text{font-size:0.85rem;color:var(--ink2);}
+
+/* VOCAB TABLE */
+.vocab-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:0.75rem;margin-top:1.25rem;
+}
+.vocab-card{
+  background:var(--bg3);border:1px solid var(--line);
+  border-radius:9px;padding:0.9rem 1rem;
+}
+.vc-word{
+  font-family:var(--serif);font-size:1.05rem;font-weight:700;
+  color:var(--gold);margin-bottom:0.3rem;
+}
+.vc-def{font-size:0.85rem;color:var(--ink2);line-height:1.5;margin-bottom:0.4rem;}
+.vc-ex{
+  font-family:var(--mono);font-size:0.65rem;color:var(--slate);
+  border-top:1px solid var(--line);padding-top:0.4rem;
+}
+.vc-new{
+  font-family:var(--mono);font-size:0.6rem;font-weight:600;
+  color:var(--teal);margin-bottom:0.3rem;
+}
+
+/* HOMEWORK */
+.hw-box{
+  background:var(--bg3);border:2px solid var(--gold);
+  border-radius:12px;padding:1.5rem;margin-top:1.25rem;
+}
+.hw-title{
+  font-family:var(--serif);font-size:1.3rem;font-weight:700;
+  color:var(--gold);margin-bottom:0.75rem;
+}
+.hw-intro{font-size:0.9rem;color:var(--ink2);margin-bottom:1.25rem;}
+.card-instructions{
+  background:var(--bg4);border-radius:8px;padding:1rem 1.1rem;
+  margin-bottom:1.25rem;
+}
+.ci-label{font-family:var(--mono);font-size:0.65rem;color:var(--slate);margin-bottom:0.5rem;}
+.ci-row{
+  display:flex;gap:0.75rem;margin-bottom:0.4rem;
+  font-size:0.875rem;color:var(--ink2);
+  align-items:flex-start;
+}
+.ci-side{
+  font-family:var(--mono);font-size:0.65rem;font-weight:600;
+  color:var(--gold);flex-shrink:0;min-width:40px;margin-top:2px;
+}
+.word-list{
+  display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem;
+}
+.word-pill{
+  background:var(--bg);border:1px solid var(--line);
+  border-radius:20px;padding:0.3rem 0.8rem;
+  font-size:0.8rem;color:var(--ink2);
+}
+.word-pill.new{border-color:rgba(56,196,176,0.4);color:var(--teal);}
+
+/* FOOTER */
+footer{
+  padding:2rem 1.5rem;
+  font-family:var(--mono);font-size:0.62rem;color:var(--slate);
+  border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:1rem;align-items:center;
+}
+footer a{color:var(--slate);}
+.footer-back{
+  margin-left:auto;
+  color:var(--gold);text-decoration:none;
+  border:1px solid rgba(232,197,106,0.3);
+  border-radius:4px;padding:0.3rem 0.7rem;
+  transition:background 0.15s;
+}
+.footer-back:hover{background:rgba(232,197,106,0.08);}
+
+@media(max-width:560px){
+  .work-compare{grid-template-columns:1fr;}
+  .hero h1{font-size:2.2rem;}
+  .discussion-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-case">Case 09</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#okgo">OK Go</a>
+    <a class="nav-link" href="#work">Work</a>
+    <a class="nav-link" href="#formula">Formula</a>
+    <a class="nav-link" href="#joule">Joule</a>
+    <a class="nav-link" href="#vocab">Vocab</a>
+    <a class="nav-link" href="#hw">Homework</a>
+  </div>
+  <a class="nav-back" href="https://yscabarney.github.io/MS_SCI_ADV_26/machine-files.html">← Unit Hub</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eye">The Machine Files · Case 09 · 8th Grade Physical Science</div>
+  <h1>What Counts<br>as <em>Work?</em></h1>
+  <p class="hero-sub">In everyday life, holding a heavy box feels like work. In physics, it isn't. Today we figure out the difference — and meet the man whose name we gave to the answer.</p>
+  <div class="hero-formula">W = F &times; d &nbsp;&nbsp;(work = force &times; distance)</div>
+</div>
+
+<!-- OK GO DEBRIEF -->
+<div class="section" id="okgo">
+  <div class="sec-label">After the video</div>
+  <h2>OK Go debrief</h2>
+  <p>You just watched 85 takes worth of simple machines chained together. Before we move on, let's talk about what you saw.</p>
+
+  <div class="discussion-grid">
+    <div class="dq">
+      <div class="dq-num">Discussion 1</div>
+      <p>What was the job the Rube Goldberg machine was actually trying to do? Was it efficient?</p>
+    </div>
+    <div class="dq">
+      <div class="dq-num">Discussion 2</div>
+      <p>How many of the six simple machines did you spot? Which was the hardest to catch?</p>
+    </div>
+    <div class="dq">
+      <div class="dq-num">Discussion 3</div>
+      <p>Every step in that chain was a force moving something. If the force didn't move the object — what would have happened to the whole machine?</p>
+    </div>
+    <div class="dq">
+      <div class="dq-num">Discussion 4</div>
+      <p>That last question is a hint about today's big idea. What do you think "work" means in physics?</p>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT IS WORK -->
+<div class="section" id="work">
+  <div class="sec-label">The big idea</div>
+  <h2>Work — the physics version</h2>
+
+  <p>In physics, <strong>work</strong> has one specific meaning: a force moves an object in the direction of the force. That's it. If the object doesn't move, no work was done — no matter how hard you tried.</p>
+
+  <div class="rule-box">
+    <p>Work happens when: <strong>(1) a force is applied</strong> and <strong>(2) the object moves</strong> in the direction of that force. Both conditions must be true at the same time.</p>
+  </div>
+
+  <div class="work-compare">
+    <div class="wc-col wc-yes">
+      <div class="wc-head">&#10003; This IS work</div>
+      <div class="work-item"><span class="wi-icon">🏋️</span><span>Lifting a volleyball cart off the floor — force up, cart moves up</span></div>
+      <div class="work-item"><span class="wi-icon">⚽</span><span>Kicking a soccer ball — force forward, ball moves forward</span></div>
+      <div class="work-item"><span class="wi-icon">🛝</span><span>Pushing a crate up a ramp — force along the ramp, crate moves along the ramp</span></div>
+      <div class="work-item"><span class="wi-icon">🪝</span><span>Pulling a rope on a pulley — force down, load moves up</span></div>
+      <div class="work-item"><span class="wi-icon">🏗️</span><span>Every single step in the OK Go machine — force applied, something moved</span></div>
+    </div>
+    <div class="wc-col wc-no">
+      <div class="wc-head">&#10007; This is NOT work</div>
+      <div class="work-item"><span class="wi-icon">🧱</span><span>Pushing a wall that doesn't move — force applied, distance = 0</span></div>
+      <div class="work-item"><span class="wi-icon">📦</span><span>Holding a heavy box completely still — your arms ache, but the box doesn't move</span></div>
+      <div class="work-item"><span class="wi-icon">🎒</span><span>Carrying a backpack horizontally across the room — force is up, motion is sideways</span></div>
+      <div class="work-item"><span class="wi-icon">🚶</span><span>Walking on flat ground while holding something — same deal: upward force, sideways motion</span></div>
+    </div>
+  </div>
+
+  <div class="qc-wrap">
+    <div class="qc">
+      <div class="qc-q" onclick="toggleQC(this)">
+        <span>Wait — if carrying a backpack isn't work, then what is walking?</span>
+        <span class="qc-arrow">&#9654;</span>
+      </div>
+      <div class="qc-a">
+        Your legs are doing work when they push off the ground (force forward, body moves forward). But the work your arms do <em>holding</em> the backpack up is zero — the bag isn't moving up or down, just forward. This feels wrong because your body gets tired either way. That's because your muscles are doing biological work internally (burning energy to stay contracted), but physics only counts when a force moves an object through a distance in the direction of the force.
+      </div>
+    </div>
+    <div class="qc">
+      <div class="qc-q" onclick="toggleQC(this)">
+        <span>What about the effort force going into a machine that doesn't move the load yet?</span>
+        <span class="qc-arrow">&#9654;</span>
+      </div>
+      <div class="qc-a">
+        No movement = no work. That's why a machine jammed by too much friction does nothing useful — your effort force is applied but the load force never moves the object. The input work is "spent" entirely on overcoming friction and nothing comes out the other side. This is exactly why efficiency matters: a 0% efficient machine is just a friction converter.
+      </div>
+    </div>
+    <div class="qc">
+      <div class="qc-q" onclick="toggleQC(this)">
+        <span>What if the force and motion are in opposite directions?</span>
+        <span class="qc-arrow">&#9654;</span>
+      </div>
+      <div class="qc-a">
+        That's <strong>negative work</strong> — and friction does it constantly. When you push a crate and friction pushes back, friction is doing negative work on the crate, removing energy from it. That energy turns into heat. This is why the coaster cart was slower at the bottom than a perfect energy-conservation model would predict: friction was doing negative work on it the whole way down.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMULA -->
+<div class="section" id="formula">
+  <div class="sec-label">The math</div>
+  <h2>Calculating work</h2>
+
+  <div class="formula-block">
+    <div class="formula-big">W = F &times; d</div>
+    <p style="font-size:0.875rem;margin-bottom:0.75rem;">Work equals force times distance — but only the distance moved <em>in the direction of the force</em>.</p>
+    <div class="formula-parts">
+      <span class="fp">W = work (joules, J)</span>
+      <span class="fp">F = force (newtons, N)</span>
+      <span class="fp">d = distance (meters, m)</span>
+      <span class="fp">1 J = 1 N &times; 1 m</span>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="example-label">Worked example 1 — lifting a gear bag</div>
+    <div class="example-steps">
+      <div class="ex-step"><span class="ex-n">Given</span><span>A volleyball gear bag weighs 40 N. You lift it 1.5 m onto a shelf.</span></div>
+      <div class="ex-step"><span class="ex-n">Formula</span><span>W = F &times; d</span></div>
+      <div class="ex-step"><span class="ex-n">Plug in</span><span>W = 40 N &times; 1.5 m</span></div>
+      <div class="ex-step"><span class="ex-n">Answer</span><span class="ex-ans">W = 60 J</span></div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="example-label">Worked example 2 — pushing a crate up a ramp</div>
+    <div class="example-steps">
+      <div class="ex-step"><span class="ex-n">Given</span><span>You push with 150 N along a ramp that is 4 m long.</span></div>
+      <div class="ex-step"><span class="ex-n">Formula</span><span>W = F &times; d</span></div>
+      <div class="ex-step"><span class="ex-n">Plug in</span><span>W = 150 N &times; 4 m</span></div>
+      <div class="ex-step"><span class="ex-n">Answer</span><span class="ex-ans">W = 600 J</span></div>
+      <div class="ex-step"><span class="ex-n">Note</span><span>Lifting that same crate straight up 1 m (if it weighs 600 N) also takes 600 J. The ramp didn't save work — it just spread it over more distance.</span></div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="example-label">Now you try — Egyptian pyramid block</div>
+    <div class="example-steps">
+      <div class="ex-step"><span class="ex-n">Given</span><span>A pyramid block weighs 23,000 N. Workers drag it 10 m along a ramp using a wet-sand sled. The <strong>effort force</strong> needed is 5,750 N (wet sand, from Case 08).</span></div>
+      <div class="ex-step"><span class="ex-n">Question</span><span>How much work did the workers do dragging the sled those 10 m?</span></div>
+      <div class="ex-step"><span class="ex-n">Formula</span><span>W = F &times; d = ? N &times; ? m = ? J</span></div>
+    </div>
+    <button class="qc-q" onclick="toggleQC(this)" style="width:100%;margin-top:0.75rem;border:none;background:var(--bg4);border-radius:6px;padding:0.6rem 0.9rem;text-align:left;cursor:pointer;display:flex;justify-content:space-between;font-family:var(--sans);">
+      <span style="font-size:0.875rem;color:var(--ink);">Show the answer</span>
+      <span class="qc-arrow" style="font-family:var(--mono);font-size:0.75rem;color:var(--gold);">&#9654;</span>
+    </button>
+    <div class="qc-a" style="border-top:1px solid var(--line);padding-top:0.75rem;margin-top:0.5rem;">
+      W = 5,750 N &times; 10 m = <strong style="color:var(--gold2);">57,500 J</strong><br>
+      <span style="font-size:0.82rem;color:var(--slate);">That's 57,500 joules just to drag one block 10 meters. The Great Pyramid has 2.3 million blocks. The wet sand trick cut that number in half — which meant half the workers and roughly half the total work done by human effort.</span>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem;padding:1rem 1.2rem;background:rgba(56,196,176,0.07);border:1px solid rgba(56,196,176,0.2);border-radius:8px;">
+    <h3 style="color:var(--teal);font-size:0.95rem;margin-bottom:0.4rem;">What about power?</h3>
+    <p style="font-size:0.875rem;margin:0;color:var(--ink2);">
+      <strong style="color:var(--ink);">Power</strong> is how fast work gets done: <strong style="color:var(--teal);">Power = Work &divide; time</strong>, measured in <strong>watts (W)</strong>.
+      Running up stairs does the same work as walking, but in less time — so running takes more power. A 100-watt light bulb uses 100 joules every second. We'll calculate power in the Case 09 assignment.
+    </p>
+  </div>
+</div>
+
+<!-- JOULE ORIGIN STORY -->
+<div class="section" id="joule">
+  <div class="sec-label">The origin story</div>
+  <h2>Who was Joule?</h2>
+
+  <p>Every unit in physics is named after a real person who figured something out first. Here's the story behind the one you just used.</p>
+
+  <div class="joule-card">
+    <div class="joule-head">
+      <div class="joule-portrait">🧑‍🔬</div>
+      <div>
+        <div class="joule-name">James Prescott Joule</div>
+        <div class="joule-dates">1818 – 1889 &nbsp;&middot;&nbsp; Salford, England</div>
+      </div>
+    </div>
+    <div class="joule-body">
+      <p>Joule was the son of a brewer — his father made beer — and he spent most of his life running experiments in a lab he built inside his family's brewery. He was not a university professor. He was not wealthy. He was an obsessive measurer.</p>
+      <p>His big question: when you do work on something — when a force moves an object — where does that energy <em>go</em>? His answer, proven through years of careful experiments, is now called the <strong>law of conservation of energy</strong>: energy is never created or destroyed, only converted from one form to another.</p>
+      <p>His most famous experiment involved a bucket of water with a paddle wheel inside it. He attached falling weights to the paddle via a rope. As the weights fell, the paddle churned the water. He measured the temperature of the water before and after, extremely precisely, and found it went up. The mechanical work of the falling weights had been converted into heat in the water.</p>
+      <div class="joule-fact">
+        <div class="jf-icon">🌡️</div>
+        <div class="jf-text">Joule once spent his honeymoon measuring the temperature difference between the top and bottom of a waterfall near Chamonix, France. His wife waited at the bottom. This is a true story.</div>
+      </div>
+      <div class="joule-fact" style="margin-top:0.6rem;">
+        <div class="jf-icon">📏</div>
+        <div class="jf-text">He spent 35 years refining his measurements of what he called the "mechanical equivalent of heat." His final value in 1878 was within 1% of what modern instruments confirm today.</div>
+      </div>
+      <div class="joule-fact" style="margin-top:0.6rem;">
+        <div class="jf-icon">🍺</div>
+        <div class="jf-text">He ran most of his experiments in the family brewery. When his brother sold the building, Joule essentially lost his lab. He spent the rest of his life in a much smaller house trying to continue his work.</div>
+      </div>
+      <p style="margin-top:0.9rem;font-size:0.875rem;">In 1889, the British Association for the Advancement of Science named the unit of energy and work after him. One <strong>joule</strong> (1 J) is the energy needed to apply 1 newton of force across 1 meter. Every time you calculate W = F &times; d and write "J" at the end, you're using his name.</p>
+    </div>
+  </div>
+</div>
+
+<!-- VOCAB PREVIEW -->
+<div class="section" id="vocab">
+  <div class="sec-label">Words for today</div>
+  <h2>Vocabulary — Case 09</h2>
+  <p>These words come directly from today's lesson. You need to know all of them before the word wall homework is due.</p>
+
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="vc-new">New · Case 09</div>
+      <div class="vc-word">Work</div>
+      <div class="vc-def">What happens when a force moves an object in the direction of the force. Work = force &times; distance.</div>
+      <div class="vc-ex">No movement = no work, no matter how hard you push.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vc-new">New · Case 09</div>
+      <div class="vc-word">Joule (J)</div>
+      <div class="vc-def">The unit of work and energy. 1 J = 1 N &times; 1 m. Named after James Prescott Joule.</div>
+      <div class="vc-ex">Lifting a small apple 1 meter &asymp; 1 J.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vc-new">New · Case 09</div>
+      <div class="vc-word">Power</div>
+      <div class="vc-def">How fast work gets done. Power = work &divide; time, measured in watts (W).</div>
+      <div class="vc-ex">Sprinting up stairs = more power than walking the same stairs.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vc-new">New · Case 08–10</div>
+      <div class="vc-word">Simple Machine</div>
+      <div class="vc-def">A basic device that makes work easier by changing the size or direction of a force. There are six of them.</div>
+      <div class="vc-ex">Ramp, wedge, screw, lever, pulley, wheel-and-axle.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vc-new">New · Case 10</div>
+      <div class="vc-word">Effort Force</div>
+      <div class="vc-def">The force YOU put into a machine to make it work. Also called input force.</div>
+      <div class="vc-ex">Your push on a crowbar handle.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vc-new">New · Case 10</div>
+      <div class="vc-word">Load</div>
+      <div class="vc-def">The object the machine moves, or the force the machine puts out. Also called output force.</div>
+      <div class="vc-ex">The crate sitting on the ramp you're pushing.</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOMEWORK -->
+<div class="section" id="hw">
+  <div class="sec-label">For next class</div>
+  <h2>Homework</h2>
+
+  <div class="hw-box">
+    <div class="hw-title">Word Wall Cards</div>
+    <div class="hw-intro">Make one index card for each word below. Use the same format you've been using all year. Have them ready to hold up at the start of next class.</div>
+
+    <div class="card-instructions">
+      <div class="ci-label">Card format — same as always</div>
+      <div class="ci-row"><span class="ci-side">Front</span><span>The word, written large and clearly</span></div>
+      <div class="ci-row"><span class="ci-side">Back</span><span>Definition in <em>your own words</em> (not copied) + a sketch or diagram that shows what the word means</span></div>
+    </div>
+
+    <p style="font-size:0.875rem;color:var(--ink2);margin-bottom:1rem;">Your cards for this unit (<strong style="color:var(--teal);">teal = new this unit</strong>, grey = from the Machine Files vocab):</p>
+
+    <div class="word-list">
+      <span class="word-pill new">Work</span>
+      <span class="word-pill new">Joule (J)</span>
+      <span class="word-pill new">Power</span>
+      <span class="word-pill new">Simple Machine</span>
+      <span class="word-pill new">Effort Force</span>
+      <span class="word-pill new">Load</span>
+      <span class="word-pill new">Inclined Plane</span>
+      <span class="word-pill new">Wedge</span>
+      <span class="word-pill new">Screw</span>
+      <span class="word-pill new">Lever</span>
+      <span class="word-pill new">Fulcrum</span>
+      <span class="word-pill new">Pulley</span>
+      <span class="word-pill new">Wheel-and-Axle</span>
+      <span class="word-pill new">Mechanical Advantage</span>
+      <span class="word-pill new">Efficiency</span>
+      <span class="word-pill new">Compound Machine</span>
+    </div>
+
+    <div style="margin-top:1.25rem;padding:0.9rem 1rem;background:var(--bg);border:1px solid var(--line);border-radius:7px;">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--gold);margin-bottom:0.4rem;">Card tip — make the sketch earn its place</div>
+      <p style="font-size:0.85rem;color:var(--ink2);margin:0;">
+        The sketch should show the word in action, not just label it. For <em>Effort Force</em>, draw a hand pushing a lever and label which arrow is effort. For <em>Joule</em>, draw someone lifting something and show the calculation. For <em>Load</em>, draw what the machine is trying to move. The sketch is what makes you remember it.
+      </p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>The Machine Files &middot; Case 09 &middot; 8th Grade Physical Science &middot; YSC Academy</span>
+  <span>Unit idea: W = F &times; d &middot; Named for James Prescott Joule (1818&ndash;1889)</span>
+  <a class="footer-back" href="https://yscabarney.github.io/MS_SCI_ADV_26/machine-files.html">Back to unit hub</a>
+</footer>
+
+<script>
+function toggleQC(el) {
+  const answer = el.nextElementSibling;
+  const arrow = el.querySelector('.qc-arrow');
+  const isOpen = answer.classList.toggle('open');
+  if (arrow) arrow.classList.toggle('open', isOpen);
+}
+</script>
+</body>
+</html>
