@@ -224,28 +224,7 @@ nav::-webkit-scrollbar{display:none;}
 }
 .hint-box.open{display:block;}
 
-/* answer reveal */
-.answer-toggle{
-  margin-top:0.65rem;
-  background:none;border:1.5px solid var(--line);color:var(--slate);
-  font-family:var(--mono);font-size:0.68rem;font-weight:600;
-  padding:0.35rem 0.8rem;border-radius:6px;cursor:pointer;
-  transition:border-color 0.15s,color 0.15s;display:flex;align-items:center;gap:0.4rem;
-}
-.answer-toggle:hover{border-color:var(--gold);color:var(--gold);}
-.answer-box{
-  display:none;
-  margin-top:0.65rem;
-  background:rgba(232,197,106,0.06);
-  border:1px solid rgba(232,197,106,0.2);
-  border-radius:7px;padding:0.85rem 1rem;
-  font-size:0.875rem;color:var(--ink2);line-height:1.7;
-}
-.answer-box.open{display:block;}
-.answer-box .ans-line{margin-bottom:0.3rem;display:flex;gap:0.5rem;align-items:baseline;}
-.answer-box .ans-line:last-child{margin-bottom:0;}
-.ans-key{font-family:var(--mono);font-size:0.68rem;color:var(--gold);flex-shrink:0;min-width:5rem;}
-.ans-val{color:var(--ink);}
+/* answer reveal removed */
 
 /* DEBRIEF */
 .debrief{
@@ -391,17 +370,6 @@ footer{
       For task 4: Think about what W = F × d means. If force goes down but distance goes up, what happens to the product?
     </div>
 
-    <button class="answer-toggle" onclick="toggle('ans-a')" style="margin-top:0.5rem;">🔒 Teacher: show answers</button>
-    <div class="answer-box" id="ans-a">
-      <div class="ans-line"><span class="ans-key">Ramp 1 MA</span><span class="ans-val">60 ÷ 12 = <strong>5</strong></span></div>
-      <div class="ans-line"><span class="ans-key">Ramp 2 MA</span><span class="ans-val">20 ÷ 12 = <strong>1.67</strong></span></div>
-      <div class="ans-line"><span class="ans-key">Ramp 1 effort</span><span class="ans-val">5,000,000 ÷ 5 = <strong>1,000,000 N</strong></span></div>
-      <div class="ans-line"><span class="ans-key">Ramp 2 effort</span><span class="ans-val">5,000,000 ÷ 1.67 ≈ <strong>2,994,000 N</strong></span></div>
-      <div class="ans-line"><span class="ans-key">Work — Ramp 1</span><span class="ans-val">1,000,000 N × 60 m = <strong>60,000,000 J</strong></span></div>
-      <div class="ans-line"><span class="ans-key">Work — Ramp 2</span><span class="ans-val">2,994,000 N × 20 m = <strong>59,880,000 J ≈ 60,000,000 J</strong></span></div>
-      <div class="ans-line"><span class="ans-key">Task 3 answer</span><span class="ans-val">Gradual ramp — 1,000,000 N is safer for the engines than 2,994,000 N; less risk of overload; easier to control the speed of such a heavy load on a gentler slope.</span></div>
-      <div class="ans-line"><span class="ans-key">Task 4 insight</span><span class="ans-val">Both ramps require roughly the same total work (60,000,000 J) — machines never reduce total work, only trade force for distance. This is the core idea: a ramp makes the force smaller, but you push over a longer path.</span></div>
-    </div>
 
   </div>
 </div>
@@ -460,13 +428,6 @@ footer{
       For task 3: An MA of 30 means the crowbar's effort side needs to be 30 times longer than the load side. If the load side is about 0.4 m, how long does the crowbar need to be total? Is that realistic in tight underwater space?
     </div>
 
-    <button class="answer-toggle" onclick="toggle('ans-b')" style="margin-top:0.5rem;">🔒 Teacher: show answers</button>
-    <div class="answer-box" id="ans-b">
-      <div class="ans-line"><span class="ans-key">Task 1 — MA</span><span class="ans-val">18,000 ÷ 600 = <strong>30</strong>. The lever needs to multiply her force 30 times.</span></div>
-      <div class="ans-line"><span class="ans-key">Task 2 concept</span><span class="ans-val">On a Class 1 lever, the longer the effort arm relative to the load arm, the greater the MA. Like a seesaw — sitting farther from the middle lets you lift a heavier person.</span></div>
-      <div class="ans-line"><span class="ans-key">Task 3 — fits?</span><span class="ans-val">With MA = 30 and a load arm of ~0.4 m, the effort arm needs to be ~12 m → total bar ≈ 12.4 m. That does NOT fit in 8 m of space.</span></div>
-      <div class="ans-line"><span class="ans-key">What she can do</span><span class="ans-val">Add a second diver to increase effort force (which reduces the MA needed). Use a pulley instead. Or try to crack the door seal first to reduce the 18,000 N load.</span></div>
-    </div>
 
   </div>
 </div>
@@ -526,13 +487,6 @@ footer{
       For task 3: Plug MA = 3 back in: Effort = Load ÷ MA = 120,000 ÷ 3. Is that effort force above or below 30,000 N? If it's above, the motor can't do it alone. What could change?
     </div>
 
-    <button class="answer-toggle" onclick="toggle('ans-c')" style="margin-top:0.5rem;">🔒 Teacher: show answers</button>
-    <div class="answer-box" id="ans-c">
-      <div class="ans-line"><span class="ans-key">Task 1 — MA</span><span class="ans-val">120,000 ÷ 30,000 = <strong>4</strong>. The pulley system needs to multiply the motor's force 4 times.</span></div>
-      <div class="ans-line"><span class="ans-key">Task 2 — cable</span><span class="ans-val">80 m × 4 = <strong>320 m of cable</strong> pulled to raise the blade 80 m. Same trade-off as the ramp: less force, more distance.</span></div>
-      <div class="ans-line"><span class="ans-key">Task 3 — MA of 3</span><span class="ans-val">Effort = 120,000 ÷ 3 = 40,000 N — <strong>over the motor's 30,000 N limit</strong>. It won't work.</span></div>
-      <div class="ans-line"><span class="ans-key">What to change</span><span class="ans-val">Upgrade to a stronger motor (40,000 N+), use two cranes sharing the load, or only use the lighter pulley system for smaller blades under 90,000 N.</span></div>
-    </div>
 
   </div>
 </div>
