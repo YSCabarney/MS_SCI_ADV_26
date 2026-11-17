@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breakout Problems · The Machine Files</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #0b1118;
+  --bg2:   #111822;
+  --bg3:   #18222e;
+  --bg4:   #1e2d3d;
+  --gold:  #e8c56a;
+  --gold2: #f5d98a;
+  --teal:  #38c4b0;
+  --slate: #7a9bb8;
+  --ink:   #e8f0f8;
+  --ink2:  #9ab0c8;
+  --line:  #243040;
+  --red:   #e06060;
+  --green: #4abb80;
+  --serif: 'Fraunces', Georgia, serif;
+  --sans:  'Work Sans', system-ui, sans-serif;
+  --mono:  'IBM Plex Mono', monospace;
+  --a:     #4a9edb;
+  --b:     #c47de8;
+  --c:     #e8884a;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:#f4f7fa;--bg2:#e8edf4;--bg3:#ffffff;--bg4:#dde5ef;
+    --gold:#8a6200;--gold2:#6a4800;--teal:#0a7a6a;--slate:#4a6a8a;
+    --ink:#0b1118;--ink2:#3a5068;--line:#c8d4e0;--red:#c03030;--green:#1a8a50;
+    --a:#1a6aaa;--b:#7a2aaa;--c:#b84a0a;
+  }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;}
+
+/* NAV */
+nav{
+  position:relative;top:0;z-index:100;
+  background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.6rem 1.25rem;
+  overflow-x:auto;white-space:nowrap;scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none;}
+.nav-title{font-family:var(--mono);font-size:0.68rem;color:var(--gold);font-weight:600;flex-shrink:0;}
+.nav-sep{color:var(--line);flex-shrink:0;}
+.nav-link{font-family:var(--mono);font-size:0.62rem;color:var(--slate);text-decoration:none;padding:0.2rem 0.5rem;border-radius:4px;transition:color 0.15s;}
+.nav-link:hover{color:var(--gold);}
+.nav-back{margin-left:auto;font-family:var(--mono);font-size:0.62rem;color:var(--slate);text-decoration:none;padding:0.25rem 0.6rem;border:1px solid var(--line);border-radius:4px;flex-shrink:0;transition:border-color 0.15s,color 0.15s;}
+.nav-back:hover{border-color:var(--gold);color:var(--gold);}
+
+/* HERO */
+.hero{
+  padding:3rem 1.5rem 2rem;border-bottom:1px solid var(--line);
+  max-width:820px;
+}
+.hero-eye{font-family:var(--mono);font-size:0.68rem;color:var(--gold);letter-spacing:0.08em;margin-bottom:0.9rem;}
+.hero h1{font-family:var(--serif);font-size:clamp(2rem,6vw,3.4rem);font-weight:900;line-height:1.05;color:var(--ink);margin-bottom:0.75rem;}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-sub{color:var(--ink2);font-size:0.95rem;max-width:58ch;margin-bottom:1.25rem;}
+
+/* INSTRUCTIONS */
+.instructions{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:0.65rem;margin-bottom:2.5rem;
+}
+.inst-step{
+  background:var(--bg3);border:1px solid var(--line);border-radius:8px;
+  padding:0.8rem 0.95rem;display:flex;gap:0.6rem;align-items:flex-start;
+}
+.inst-n{
+  font-family:var(--mono);font-size:0.95rem;font-weight:600;
+  color:var(--gold);flex-shrink:0;line-height:1.2;min-width:1.2rem;
+}
+.inst-step p{font-size:0.82rem;color:var(--ink2);margin:0;line-height:1.5;}
+
+/* TIMER */
+.timer-wrap{
+  background:var(--bg3);border:1px solid var(--line);border-radius:10px;
+  padding:1rem 1.25rem;margin-bottom:2.5rem;
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+}
+#timer-display{
+  font-family:var(--mono);font-size:2rem;font-weight:600;
+  color:var(--gold2);min-width:5rem;
+}
+.timer-label{font-family:var(--mono);font-size:0.65rem;color:var(--slate);}
+.timer-btn{
+  font-family:var(--mono);font-size:0.72rem;font-weight:600;
+  padding:0.4rem 0.9rem;border-radius:6px;cursor:pointer;border:1.5px solid;
+  transition:background 0.15s,color 0.15s;
+}
+.t-start{border-color:var(--green);color:var(--green);background:none;}
+.t-start:hover{background:rgba(74,187,128,0.12);}
+.t-reset{border-color:var(--line);color:var(--slate);background:none;}
+.t-reset:hover{border-color:var(--slate);}
+#timer-status{font-family:var(--mono);font-size:0.68rem;color:var(--slate);margin-left:auto;}
+
+/* PAIR CARDS */
+.pairs{display:flex;flex-direction:column;gap:2rem;max-width:820px;padding:0 1.5rem 4rem;}
+
+.pair-card{
+  background:var(--bg3);border:1px solid var(--line);
+  border-radius:14px;overflow:hidden;
+}
+
+/* coloured top bar per pair */
+.pair-card.pair-a .pc-bar{background:var(--a);}
+.pair-card.pair-b .pc-bar{background:var(--b);}
+.pair-card.pair-c .pc-bar{background:var(--c);}
+
+.pc-bar{height:4px;}
+
+.pc-head{
+  padding:1.1rem 1.4rem 0.9rem;
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:flex-start;gap:1rem;
+}
+.pc-badge{
+  flex-shrink:0;
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+}
+.pair-a .pc-badge{background:rgba(74,158,219,0.15);}
+.pair-b .pc-badge{background:rgba(196,125,232,0.15);}
+.pair-c .pc-badge{background:rgba(232,136,74,0.15);}
+
+.pc-meta{flex:1;}
+.pc-pair-label{
+  font-family:var(--mono);font-size:0.65rem;font-weight:600;
+  margin-bottom:0.25rem;
+}
+.pair-a .pc-pair-label{color:var(--a);}
+.pair-b .pc-pair-label{color:var(--b);}
+.pair-c .pc-pair-label{color:var(--c);}
+
+.pc-title{font-family:var(--serif);font-size:1.2rem;font-weight:700;color:var(--ink);line-height:1.2;}
+.pc-machine{font-family:var(--mono);font-size:0.65rem;color:var(--slate);margin-top:0.2rem;}
+
+.pc-body{padding:1.2rem 1.4rem;}
+
+/* scenario image */
+.scenario-img{
+  width:100%;max-height:240px;object-fit:cover;border-radius:6px;
+  margin:0.75rem 0 0.3rem;display:block;
+  border:1px solid var(--line);
+}
+.scenario-credit{
+  font-family:var(--mono);font-size:0.58rem;color:var(--ink2);
+  margin-bottom:0.1rem;opacity:0.65;
+}
+
+/* scenario box */
+.scenario{
+  background:var(--bg2);border-radius:8px;padding:1rem 1.1rem;
+  margin-bottom:1.1rem;
+  border-left:3px solid;
+}
+.pair-a .scenario{border-left-color:var(--a);}
+.pair-b .scenario{border-left-color:var(--b);}
+.pair-c .scenario{border-left-color:var(--c);}
+
+.scenario-label{font-family:var(--mono);font-size:0.62rem;color:var(--slate);margin-bottom:0.4rem;font-weight:600;}
+.scenario p{font-size:0.9rem;color:var(--ink2);margin:0;line-height:1.6;}
+.scenario strong{color:var(--ink);}
+
+/* given data */
+.given{
+  background:var(--bg4);border:1px solid var(--line);
+  border-radius:8px;padding:0.85rem 1rem;margin-bottom:1.1rem;
+}
+.given-label{font-family:var(--mono);font-size:0.62rem;color:var(--slate);margin-bottom:0.5rem;font-weight:600;}
+.given-row{
+  display:flex;gap:0.5rem;align-items:baseline;
+  font-size:0.875rem;margin-bottom:0.3rem;color:var(--ink2);
+}
+.given-row:last-child{margin-bottom:0;}
+.given-key{font-family:var(--mono);font-size:0.68rem;color:var(--gold);flex-shrink:0;min-width:7rem;}
+
+/* tasks */
+.tasks{margin-top:0.25rem;}
+.task-label{font-family:var(--mono);font-size:0.62rem;color:var(--slate);margin-bottom:0.5rem;font-weight:600;}
+.task-item{
+  display:flex;gap:0.6rem;align-items:flex-start;
+  margin-bottom:0.55rem;
+}
+.task-item:last-child{margin-bottom:0;}
+.ti-n{
+  flex-shrink:0;
+  font-family:var(--mono);font-size:0.68rem;font-weight:600;
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:1px;
+}
+.pair-a .ti-n{background:rgba(74,158,219,0.15);color:var(--a);}
+.pair-b .ti-n{background:rgba(196,125,232,0.15);color:var(--b);}
+.pair-c .ti-n{background:rgba(232,136,74,0.15);color:var(--c);}
+.ti-text{font-size:0.875rem;color:var(--ink2);line-height:1.5;}
+.ti-text strong{color:var(--ink);}
+
+/* hint */
+.hint-toggle{
+  margin-top:0.9rem;
+  background:none;border:1.5px solid var(--teal);color:var(--teal);
+  font-family:var(--mono);font-size:0.68rem;font-weight:600;
+  padding:0.35rem 0.8rem;border-radius:6px;cursor:pointer;
+  transition:background 0.15s;display:flex;align-items:center;gap:0.4rem;
+}
+.hint-toggle:hover{background:rgba(56,196,176,0.09);}
+.hint-box{
+  display:none;
+  margin-top:0.65rem;
+  background:rgba(56,196,176,0.06);
+  border:1px solid rgba(56,196,176,0.2);
+  border-radius:7px;padding:0.75rem 0.9rem;
+  font-size:0.84rem;color:var(--teal);line-height:1.6;
+}
+.hint-box.open{display:block;}
+
+/* answer reveal */
+.answer-toggle{
+  margin-top:0.65rem;
+  background:none;border:1.5px solid var(--line);color:var(--slate);
+  font-family:var(--mono);font-size:0.68rem;font-weight:600;
+  padding:0.35rem 0.8rem;border-radius:6px;cursor:pointer;
+  transition:border-color 0.15s,color 0.15s;display:flex;align-items:center;gap:0.4rem;
+}
+.answer-toggle:hover{border-color:var(--gold);color:var(--gold);}
+.answer-box{
+  display:none;
+  margin-top:0.65rem;
+  background:rgba(232,197,106,0.06);
+  border:1px solid rgba(232,197,106,0.2);
+  border-radius:7px;padding:0.85rem 1rem;
+  font-size:0.875rem;color:var(--ink2);line-height:1.7;
+}
+.answer-box.open{display:block;}
+.answer-box .ans-line{margin-bottom:0.3rem;display:flex;gap:0.5rem;align-items:baseline;}
+.answer-box .ans-line:last-child{margin-bottom:0;}
+.ans-key{font-family:var(--mono);font-size:0.68rem;color:var(--gold);flex-shrink:0;min-width:5rem;}
+.ans-val{color:var(--ink);}
+
+/* DEBRIEF */
+.debrief{
+  max-width:820px;padding:2.5rem 1.5rem 4rem;
+  border-top:1px solid var(--line);
+}
+.debrief-label{font-family:var(--mono);font-size:0.68rem;color:var(--gold);letter-spacing:0.08em;margin-bottom:0.75rem;}
+.debrief h2{font-family:var(--serif);font-size:1.6rem;font-weight:700;color:var(--ink);margin-bottom:1rem;}
+.debrief-qs{display:flex;flex-direction:column;gap:0.6rem;}
+.dq{
+  background:var(--bg3);border:1px solid var(--line);border-radius:8px;
+  padding:0.85rem 1rem;
+  display:flex;gap:0.75rem;align-items:flex-start;
+  font-size:0.9rem;color:var(--ink2);
+}
+.dq-n{font-family:var(--mono);font-size:0.68rem;color:var(--gold);flex-shrink:0;min-width:1rem;margin-top:2px;}
+
+/* FOOTER */
+footer{
+  padding:1.75rem 1.5rem;
+  font-family:var(--mono);font-size:0.62rem;color:var(--slate);
+  border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:1rem;align-items:center;
+}
+.footer-back{margin-left:auto;color:var(--gold);text-decoration:none;border:1px solid rgba(232,197,106,0.3);border-radius:4px;padding:0.3rem 0.7rem;transition:background 0.15s;}
+.footer-back:hover{background:rgba(232,197,106,0.08);}
+
+@media(max-width:560px){
+  .instructions{grid-template-columns:1fr;}
+  .hero h1{font-size:2rem;}
+  .pc-head{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-title">Machine Files</div>
+  <span class="nav-sep">·</span>
+  <a class="nav-link" href="#pair-a">Pair A</a>
+  <a class="nav-link" href="#pair-b">Pair B</a>
+  <a class="nav-link" href="#pair-c">Pair C</a>
+  <a class="nav-link" href="#debrief">Debrief</a>
+  <a class="nav-back" href="https://yscabarney.github.io/MS_SCI_ADV_26/machine-files.html">← Unit Hub</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero" style="padding-left:1.5rem;padding-right:1.5rem;">
+  <div class="hero-eye">The Machine Files · Breakout Problems · 8th Grade Physical Science</div>
+  <h1>Real World.<br><em>Real Math.</em></h1>
+  <p class="hero-sub">Your pair gets one real-world problem. The formulas are right there in the problem — your job is to plug in the right numbers and think through what the answer means.</p>
+
+  <div class="instructions">
+    <div class="inst-step">
+      <div class="inst-n">1</div>
+      <p>Read the whole problem together before you start. Find the <strong>Given data</strong> box — it has the numbers and the formula you need.</p>
+    </div>
+    <div class="inst-step">
+      <div class="inst-n">2</div>
+      <p>Work through the numbered tasks <strong>in order</strong>. Each one builds on the last. Write out every step — not just the answer.</p>
+    </div>
+    <div class="inst-step">
+      <div class="inst-n">3</div>
+      <p>If you're stuck, hit the <strong>hint button</strong>. It won't give away the answer — just points you in the right direction.</p>
+    </div>
+    <div class="inst-step">
+      <div class="inst-n">4</div>
+      <p>When you come back, one person walks through the <strong>math</strong>, the other explains the <strong>last question</strong> — no numbers, just the idea.</p>
+    </div>
+  </div>
+
+  <!-- TIMER -->
+  <div class="timer-wrap">
+    <div>
+      <div class="timer-label">Breakout timer</div>
+      <div id="timer-display">10:00</div>
+    </div>
+    <button class="timer-btn t-start" onclick="startTimer()">▶ Start</button>
+    <button class="timer-btn t-reset" onclick="resetTimer()">↺ Reset</button>
+    <div id="timer-status">Ready when you are</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAIR A — RAMP / INCLINED PLANE
+     Scenario: SpaceX Starship rollout
+══════════════════════════════ -->
+<div class="pairs">
+
+<div class="pair-card pair-a" id="pair-a">
+  <div class="pc-bar"></div>
+  <div class="pc-head">
+    <div class="pc-badge">🚀</div>
+    <div class="pc-meta">
+      <div class="pc-pair-label">Pair A · Inclined Plane</div>
+      <div class="pc-title">The Starship Problem</div>
+      <div class="pc-machine">Simple machine: ramp (inclined plane) · MA = ramp length ÷ height · Effort force = Load ÷ MA</div>
+    </div>
+  </div>
+  <div class="pc-body">
+
+    <div class="scenario">
+      <div class="scenario-label">The scenario</div>
+      <p>SpaceX rolls its Starship rocket out to the launch pad using a massive transporter. Before the rocket gets upright, the transporter has to push it up a concrete ramp to reach the launch mount platform. The rocket and transporter together weigh about <strong>5,000,000 N</strong>. The launch platform is <strong>12 m</strong> above ground level. Engineers need to decide: build a steep short ramp, or a long gradual one?</p>
+      <img class="scenario-img" src="https://live.staticflickr.com/65535/53343662904_866a7993bc_o.jpg" alt="SpaceX Starbase launch tower and Starship rocket on the pad in Boca Chica, Texas" loading="lazy">
+      <p class="scenario-credit">📷 SpaceX's Starbase, Boca Chica TX — Sept 2023 (CC BY 2.0)</p>
+    </div>
+
+    <div class="given">
+      <div class="given-label">Given data</div>
+      <div class="given-row"><span class="given-key">Load weight</span><span>5,000,000 N (rocket + transporter)</span></div>
+      <div class="given-row"><span class="given-key">Platform height</span><span>12 m above ground</span></div>
+      <div class="given-row"><span class="given-key">Ramp option 1</span><span>60 m long (gradual)</span></div>
+      <div class="given-row"><span class="given-key">Ramp option 2</span><span>20 m long (steep)</span></div>
+      <div class="given-row"><span class="given-key">Formula</span><span>MA = ramp length ÷ height &nbsp;·&nbsp; Effort = Load ÷ MA</span></div>
+    </div>
+
+    <div class="tasks">
+      <div class="task-label">Your tasks</div>
+      <div class="task-item">
+        <div class="ti-n">1</div>
+        <div class="ti-text">Calculate the <strong>mechanical advantage</strong> of each ramp.</div>
+      </div>
+      <div class="task-item">
+        <div class="ti-n">2</div>
+        <div class="ti-text">Calculate the <strong>effort force</strong> the transporter's engines need to push up each ramp. (Assume no friction for this ideal calculation.)</div>
+      </div>
+      <div class="task-item">
+        <div class="ti-n">3</div>
+        <div class="ti-text">Look at the two effort forces you calculated. The gradual ramp needs less force — but it's also longer. <strong>Which ramp would you choose if you were the engineer, and why?</strong> Write at least two reasons.</div>
+      </div>
+      <div class="task-item">
+        <div class="ti-n">4</div>
+        <div class="ti-text"><strong>Think about it:</strong> A simple machine like a ramp makes the force smaller — but does it make the <em>job</em> easier in terms of total work? What do you think happens to the amount of work when you use a longer ramp vs. a shorter one?</div>
+      </div>
+    </div>
+
+    <button class="hint-toggle" onclick="toggle('hint-a')">💡 Stuck? Hint</button>
+    <div class="hint-box" id="hint-a">
+      For task 1: MA = ramp length ÷ height. A bigger number means the ramp multiplies your force more.<br><br>
+      For task 2: Effort = Load ÷ MA. The bigger the MA, the smaller the effort force needed.<br><br>
+      For task 3: Compare the two effort forces. Which one is smaller? Why would an engineer care about keeping the force low even if the ramp is longer?<br><br>
+      For task 4: Think about what W = F × d means. If force goes down but distance goes up, what happens to the product?
+    </div>
+
+    <button class="answer-toggle" onclick="toggle('ans-a')" style="margin-top:0.5rem;">🔒 Teacher: show answers</button>
+    <div class="answer-box" id="ans-a">
+      <div class="ans-line"><span class="ans-key">Ramp 1 MA</span><span class="ans-val">60 ÷ 12 = <strong>5</strong></span></div>
+      <div class="ans-line"><span class="ans-key">Ramp 2 MA</span><span class="ans-val">20 ÷ 12 = <strong>1.67</strong></span></div>
+      <div class="ans-line"><span class="ans-key">Ramp 1 effort</span><span class="ans-val">5,000,000 ÷ 5 = <strong>1,000,000 N</strong></span></div>
+      <div class="ans-line"><span class="ans-key">Ramp 2 effort</span><span class="ans-val">5,000,000 ÷ 1.67 ≈ <strong>2,994,000 N</strong></span></div>
+      <div class="ans-line"><span class="ans-key">Work — Ramp 1</span><span class="ans-val">1,000,000 N × 60 m = <strong>60,000,000 J</strong></span></div>
+      <div class="ans-line"><span class="ans-key">Work — Ramp 2</span><span class="ans-val">2,994,000 N × 20 m = <strong>59,880,000 J ≈ 60,000,000 J</strong></span></div>
+      <div class="ans-line"><span class="ans-key">Task 3 answer</span><span class="ans-val">Gradual ramp — 1,000,000 N is safer for the engines than 2,994,000 N; less risk of overload; easier to control the speed of such a heavy load on a gentler slope.</span></div>
+      <div class="ans-line"><span class="ans-key">Task 4 insight</span><span class="ans-val">Both ramps require roughly the same total work (60,000,000 J) — machines never reduce total work, only trade force for distance. This is the core idea: a ramp makes the force smaller, but you push over a longer path.</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAIR B — LEVER
+     Scenario: Prying open a shipping container during the Francis Scott Key bridge cleanup
+══════════════════════════════ -->
+<div class="pair-card pair-b" id="pair-b">
+  <div class="pc-bar"></div>
+  <div class="pc-head">
+    <div class="pc-badge">⚖️</div>
+    <div class="pc-meta">
+      <div class="pc-pair-label">Pair B · Lever</div>
+      <div class="pc-title">The Container Problem</div>
+      <div class="pc-machine">Simple machine: lever · MA = Load ÷ Effort · A longer lever arm = more mechanical advantage</div>
+    </div>
+  </div>
+  <div class="pc-body">
+
+    <div class="scenario">
+      <div class="scenario-label">The scenario</div>
+      <p>When the Francis Scott Key Bridge in Baltimore collapsed in March 2024, divers and salvage crews spent months clearing the wreckage. One common tool for prying apart crushed steel sections is a giant Class 1 lever — a massive steel crowbar with the fulcrum set on a pile of rubble. A salvage diver needs to pry open a pinned shipping container door. The door requires <strong>18,000 N</strong> of force to open. The diver can only push with <strong>600 N</strong>.</p>
+      <img class="scenario-img" src="https://api.army.mil/e2/c/images/2024/04/26/052c1511/original.jpg" alt="Crane barge Chesapeake 1000 lifting a massive steel section of the collapsed Francis Scott Key Bridge" loading="lazy">
+      <p class="scenario-credit">📷 Crane barge Chesapeake 1000 at Key Bridge salvage, April 2024 — U.S. Army (public domain)</p>
+    </div>
+
+    <div class="given">
+      <div class="given-label">Given data</div>
+      <div class="given-row"><span class="given-key">Load</span><span>18,000 N — the force needed to open the door</span></div>
+      <div class="given-row"><span class="given-key">Effort</span><span>600 N — the most the diver can push with</span></div>
+      <div class="given-row"><span class="given-key">Lever type</span><span>Class 1 — fulcrum sits between the effort and the load (like a seesaw)</span></div>
+      <div class="given-row"><span class="given-key">Formula</span><span>MA = Load ÷ Effort</span></div>
+    </div>
+
+    <div class="tasks">
+      <div class="task-label">Your tasks</div>
+      <div class="task-item">
+        <div class="ti-n">1</div>
+        <div class="ti-text">Use the formula to calculate the <strong>mechanical advantage</strong> the diver needs. What does that number mean in plain English?</div>
+      </div>
+      <div class="task-item">
+        <div class="ti-n">2</div>
+        <div class="ti-text">A higher MA means the lever is multiplying the diver's force more. To get a higher MA on a Class 1 lever, the effort end of the bar needs to be <strong>longer</strong> relative to the load end. Does that make sense based on what you've seen with seesaws or crowbars? Explain why in your own words.</div>
+      </div>
+      <div class="task-item">
+        <div class="ti-n">3</div>
+        <div class="ti-text"><strong>Think about it:</strong> The diver is 6 m underwater — she can only fit a crowbar about 8 m long in the space. Based on your answer to task 1, do you think a single crowbar will be enough to open this door? What could she change to make it work?</div>
+      </div>
+    </div>
+
+    <button class="hint-toggle" onclick="toggle('hint-b')">💡 Stuck? Hint</button>
+    <div class="hint-box" id="hint-b">
+      For task 1: MA = Load ÷ Effort. Plug in 18,000 and 600. The answer tells you how many times the lever needs to multiply the force — if MA = 5, it turns your 600 N into 3,000 N at the other end.<br><br>
+      For task 2: Think of a seesaw. Where do you sit to lift someone heavier than you? The farther you are from the middle (the fulcrum), the more force advantage you have. A longer effort arm = more MA.<br><br>
+      For task 3: An MA of 30 means the crowbar's effort side needs to be 30 times longer than the load side. If the load side is about 0.4 m, how long does the crowbar need to be total? Is that realistic in tight underwater space?
+    </div>
+
+    <button class="answer-toggle" onclick="toggle('ans-b')" style="margin-top:0.5rem;">🔒 Teacher: show answers</button>
+    <div class="answer-box" id="ans-b">
+      <div class="ans-line"><span class="ans-key">Task 1 — MA</span><span class="ans-val">18,000 ÷ 600 = <strong>30</strong>. The lever needs to multiply her force 30 times.</span></div>
+      <div class="ans-line"><span class="ans-key">Task 2 concept</span><span class="ans-val">On a Class 1 lever, the longer the effort arm relative to the load arm, the greater the MA. Like a seesaw — sitting farther from the middle lets you lift a heavier person.</span></div>
+      <div class="ans-line"><span class="ans-key">Task 3 — fits?</span><span class="ans-val">With MA = 30 and a load arm of ~0.4 m, the effort arm needs to be ~12 m → total bar ≈ 12.4 m. That does NOT fit in 8 m of space.</span></div>
+      <div class="ans-line"><span class="ans-key">What she can do</span><span class="ans-val">Add a second diver to increase effort force (which reduces the MA needed). Use a pulley instead. Or try to crack the door seal first to reduce the 18,000 N load.</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAIR C — PULLEY
+     Scenario: Raising a wind turbine blade
+══════════════════════════════ -->
+<div class="pair-card pair-c" id="pair-c">
+  <div class="pc-bar"></div>
+  <div class="pc-head">
+    <div class="pc-badge">🌬️</div>
+    <div class="pc-meta">
+      <div class="pc-pair-label">Pair C · Pulley</div>
+      <div class="pc-title">The Wind Turbine Problem</div>
+      <div class="pc-machine">Simple machine: pulley · MA = Load ÷ Effort · More pulleys = more MA = less force needed</div>
+    </div>
+  </div>
+  <div class="pc-body">
+
+    <div class="scenario">
+      <div class="scenario-label">The scenario</div>
+      <p>The US reached a record 150 gigawatts of installed wind power in 2024. Installing one offshore wind turbine means lifting a single blade — which weighs about <strong>120,000 N</strong> — straight up to a height of <strong>80 m</strong> above the ship deck. The crane on the installation ship uses a pulley system to do this. Here's the problem: the crane's motor can only pull with <strong>30,000 N</strong> of force — nowhere near enough to lift the blade directly.</p>
+      <img class="scenario-img" src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Coastal_Virginia_Offshore_Wind_18.jpg" alt="Offshore wind turbine installation at the Coastal Virginia Offshore Wind project" loading="lazy">
+      <p class="scenario-credit">📷 Coastal Virginia Offshore Wind installation — BOEM/Stephen Boutwell (CC BY-SA 2.0)</p>
+    </div>
+
+    <div class="given">
+      <div class="given-label">Given data</div>
+      <div class="given-row"><span class="given-key">Blade weight</span><span>120,000 N (the load)</span></div>
+      <div class="given-row"><span class="given-key">Lift height</span><span>80 m</span></div>
+      <div class="given-row"><span class="given-key">Motor max pull</span><span>30,000 N (the effort)</span></div>
+      <div class="given-row"><span class="given-key">Formula</span><span>MA = Load ÷ Effort</span></div>
+      <div class="given-row"><span class="given-key">Key idea</span><span>Adding more pulleys increases MA — but the cable gets pulled through a longer distance</span></div>
+    </div>
+
+    <div class="tasks">
+      <div class="task-label">Your tasks</div>
+      <div class="task-item">
+        <div class="ti-n">1</div>
+        <div class="ti-text">Use the formula to calculate the <strong>mechanical advantage</strong> the pulley system needs so the motor can lift the blade without being overloaded.</div>
+      </div>
+      <div class="task-item">
+        <div class="ti-n">2</div>
+        <div class="ti-text">Here's the trade-off with pulleys: every time you double the MA, the motor has to pull twice as much cable. If the blade needs to go up <strong>80 m</strong>, how many meters of cable does the motor actually have to pull through? (Hint: multiply the lift height by the MA.)</div>
+      </div>
+      <div class="task-item">
+        <div class="ti-n">3</div>
+        <div class="ti-text"><strong>Think about it:</strong> The crane company wants to use fewer pulleys to save weight on the ship. If they only get an MA of 3 instead of 4, what effort force would the motor need? Can the motor handle it? What would the company need to change to make a 3-pulley system work?</div>
+      </div>
+    </div>
+
+    <button class="hint-toggle" onclick="toggle('hint-c')">💡 Stuck? Hint</button>
+    <div class="hint-box" id="hint-c">
+      For task 1: MA = Load ÷ Effort = 120,000 ÷ 30,000. What do you get? That's how many times the pulley system needs to multiply the motor's force.<br><br>
+      For task 2: If the blade goes up 80 m and the MA is 4, the cable has to travel 4 × 80 m. That's the trade-off — less force means more cable distance.<br><br>
+      For task 3: Plug MA = 3 back in: Effort = Load ÷ MA = 120,000 ÷ 3. Is that effort force above or below 30,000 N? If it's above, the motor can't do it alone. What could change?
+    </div>
+
+    <button class="answer-toggle" onclick="toggle('ans-c')" style="margin-top:0.5rem;">🔒 Teacher: show answers</button>
+    <div class="answer-box" id="ans-c">
+      <div class="ans-line"><span class="ans-key">Task 1 — MA</span><span class="ans-val">120,000 ÷ 30,000 = <strong>4</strong>. The pulley system needs to multiply the motor's force 4 times.</span></div>
+      <div class="ans-line"><span class="ans-key">Task 2 — cable</span><span class="ans-val">80 m × 4 = <strong>320 m of cable</strong> pulled to raise the blade 80 m. Same trade-off as the ramp: less force, more distance.</span></div>
+      <div class="ans-line"><span class="ans-key">Task 3 — MA of 3</span><span class="ans-val">Effort = 120,000 ÷ 3 = 40,000 N — <strong>over the motor's 30,000 N limit</strong>. It won't work.</span></div>
+      <div class="ans-line"><span class="ans-key">What to change</span><span class="ans-val">Upgrade to a stronger motor (40,000 N+), use two cranes sharing the load, or only use the lighter pulley system for smaller blades under 90,000 N.</span></div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- end .pairs -->
+
+<!-- DEBRIEF -->
+<div class="debrief" id="debrief">
+  <div class="debrief-label">Back together</div>
+  <h2>Class debrief</h2>
+  <div class="debrief-qs">
+    <div class="dq">
+      <div class="dq-n">1</div>
+      <div>Each pair used a different machine — a ramp, a lever, and a pulley. What did all three have in common? What does that tell you about what simple machines actually do?</div>
+    </div>
+    <div class="dq">
+      <div class="dq-n">2</div>
+      <div>In every problem, getting a higher mechanical advantage came with a cost. What was the cost in your problem? Is that trade-off worth it — why or why not?</div>
+    </div>
+    <div class="dq">
+      <div class="dq-n">3</div>
+      <div>The wind turbine crane had to pull 320 m of cable to lift a blade just 80 m. Does that mean the pulley made the job harder? Or easier? Explain.</div>
+    </div>
+    <div class="dq">
+      <div class="dq-n">4</div>
+      <div>Think back to the word wall homework you did. Which vocabulary word showed up in every single problem today — and what does it mean in your own words?</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>The Machine Files · Breakout Problems · 8th Grade Physical Science · YSC Academy</span>
+  <span>Scenarios: SpaceX Starship rollout · Francis Scott Key Bridge salvage (2024) · US offshore wind record (2024)</span>
+  <a class="footer-back" href="https://yscabarney.github.io/MS_SCI_ADV_26/machine-files.html">Back to unit hub</a>
+</footer>
+
+<script>
+// TOGGLE
+function toggle(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// TIMER
+let totalSeconds = 600;
+let remaining = 600;
+let interval = null;
+let running = false;
+
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+function startTimer() {
+  if (running) {
+    clearInterval(interval);
+    running = false;
+    document.querySelector('.t-start').textContent = '▶ Resume';
+    document.getElementById('timer-status').textContent = 'Paused';
+    return;
+  }
+  if (remaining <= 0) return;
+  running = true;
+  document.querySelector('.t-start').textContent = '⏸ Pause';
+  document.getElementById('timer-status').textContent = 'Running…';
+  interval = setInterval(() => {
+    remaining--;
+    document.getElementById('timer-display').textContent = fmt(remaining);
+    if (remaining <= 60) {
+      document.getElementById('timer-display').style.color = 'var(--red)';
+      document.getElementById('timer-status').textContent = '⚠ 1 minute left';
+    }
+    if (remaining <= 0) {
+      clearInterval(interval);
+      running = false;
+      document.getElementById('timer-display').textContent = '00:00';
+      document.getElementById('timer-status').textContent = '⏱ Time — come back together!';
+      document.querySelector('.t-start').textContent = '▶ Start';
+    }
+  }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(interval);
+  running = false;
+  remaining = totalSeconds;
+  document.getElementById('timer-display').textContent = fmt(remaining);
+  document.getElementById('timer-display').style.color = 'var(--gold2)';
+  document.getElementById('timer-status').textContent = 'Ready when you are';
+  document.querySelector('.t-start').textContent = '▶ Start';
+}
+</script>
+</body>
+</html>
