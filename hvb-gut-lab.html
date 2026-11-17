@@ -84,6 +84,24 @@ body{font-family:'Work Sans',sans-serif;font-size:16px;line-height:1.65;
 .driver-icon{font-size:28px;flex-shrink:0;}
 .driver strong{display:block;font-size:15px;margin-bottom:2px;}
 
+/* ── Gut team card images ── */
+.gt-img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #111;
+  display: block;
+  margin-bottom: 2px;
+}
+.gt-img-caption {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
 /* ── Gut team cards ── */
 .gut-team-grid {
   display: grid;
@@ -322,6 +340,11 @@ strong{font-weight:700;}
   <div class="gut-team-grid">
 
     <div class="gt-card good">
+      <img class="gt-img"
+        src="https://commons.wikimedia.org/wiki/Special:FilePath/Lactobacillus_acidophilus_SEM.jpg?width=320"
+        alt="Lactobacillus acidophilus under scanning electron microscope"
+        onerror="this.style.display='none'">
+      <div class="gt-img-caption">SEM image — Lactobacillus acidophilus · CDC / Wikimedia Commons (public domain)</div>
       <div class="gt-top">
         <span class="gt-emoji">🛡️</span>
         <div>
@@ -335,6 +358,11 @@ strong{font-weight:700;}
     </div>
 
     <div class="gt-card good">
+      <img class="gt-img"
+        src="https://commons.wikimedia.org/wiki/Special:FilePath/Bifidobacterium_longum.jpg?width=320"
+        alt="Bifidobacterium longum under microscope"
+        onerror="this.style.display='none'">
+      <div class="gt-img-caption">Bifidobacterium longum · Wikimedia Commons (CC BY-SA)</div>
       <div class="gt-top">
         <span class="gt-emoji">⚙️</span>
         <div>
@@ -348,6 +376,11 @@ strong{font-weight:700;}
     </div>
 
     <div class="gt-card good">
+      <img class="gt-img"
+        src="https://commons.wikimedia.org/wiki/Special:FilePath/Bacteroides_fragilis.jpg?width=320"
+        alt="Bacteroides fragilis Gram stain microscope image"
+        onerror="this.style.display='none'">
+      <div class="gt-img-caption">Bacteroides fragilis Gram stain · CDC / Wikimedia Commons (public domain)</div>
       <div class="gt-top">
         <span class="gt-emoji">🧠</span>
         <div>
@@ -361,6 +394,11 @@ strong{font-weight:700;}
     </div>
 
     <div class="gt-card bad">
+      <img class="gt-img"
+        src="https://commons.wikimedia.org/wiki/Special:FilePath/Clostridium_perfringens_01.png?width=320"
+        alt="Clostridium perfringens under microscope"
+        onerror="this.style.display='none'">
+      <div class="gt-img-caption">C. perfringens Gram stain · CDC / Wikimedia Commons (public domain)</div>
       <div class="gt-top">
         <span class="gt-emoji">⚠️</span>
         <div>
@@ -374,6 +412,11 @@ strong{font-weight:700;}
     </div>
 
     <div class="gt-card bad">
+      <img class="gt-img"
+        src="https://commons.wikimedia.org/wiki/Special:FilePath/Bacillus_subtilis_Gram.jpg?width=320"
+        alt="Firmicutes representative bacterium under microscope"
+        onerror="this.style.display='none'">
+      <div class="gt-img-caption">Firmicutes member (Bacillus subtilis) · Wikimedia Commons (CC BY-SA)</div>
       <div class="gt-top">
         <span class="gt-emoji">📉</span>
         <div>
