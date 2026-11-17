@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiny but Mighty | HVB Activity · YSC Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ── CSS Custom Properties ── */
+:root {
+  --bg:          #f8faf8;
+  --bg-card:     #ffffff;
+  --bg-card2:    #f0f7f0;
+  --text:        #1a2a1a;
+  --text-muted:  #4a6050;
+  --green-dark:  #1a4a2e;
+  --green-mid:   #2d6a4f;
+  --green-light: #d8f0e0;
+  --teal:        #0d7a6e;
+  --teal-light:  #e0f4f2;
+  --gold:        #c8900a;
+  --gold-light:  #fff8e1;
+  --gold-btn:    #f0a800;
+  --coral:       #d94f3a;
+  --coral-light: #fff0ee;
+  --purple:      #6b4fa0;
+  --purple-light:#f0ebff;
+  --border:      #c8dfc8;
+  --shadow:      0 2px 12px rgba(0,0,0,0.08);
+  --radius:      12px;
+  --progress-h:  6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:          #0f1a0f;
+    --bg-card:     #1a2a1a;
+    --bg-card2:    #162216;
+    --text:        #e8f5e9;
+    --text-muted:  #8ab898;
+    --green-dark:  #2d6a4f;
+    --green-mid:   #3d8a6f;
+    --green-light: #1a3a2a;
+    --teal-light:  #0d2a28;
+    --gold-light:  #2a2000;
+    --coral-light: #2a0f0a;
+    --purple-light:#1a1030;
+    --border:      #2a4a3a;
+  }
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* ── Progress Bar ── */
+#progress-bar-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--green-dark);
+  height: var(--progress-h);
+}
+#progress-bar {
+  height: 100%;
+  background: var(--gold-btn);
+  width: 0%;
+  transition: width 0.4s ease;
+}
+#progress-label {
+  position: sticky;
+  top: var(--progress-h);
+  z-index: 99;
+  background: var(--green-dark);
+  color: #c8e6c9;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 3px 16px 4px;
+  letter-spacing: 0.05em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#timer-display { color: var(--gold-btn); font-weight: 600; }
+
+/* ── Masthead ── */
+.masthead {
+  background: linear-gradient(135deg, #1a4a2e 0%, #2d6a4f 50%, #0d7a6e 100%);
+  color: white;
+  padding: 36px 24px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.masthead::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.05) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(13,122,110,0.3) 0%, transparent 50%);
+  pointer-events: none;
+}
+.masthead-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #a5d6b0;
+  margin-bottom: 10px;
+}
+.masthead h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.masthead h1 em { font-style: italic; color: #a5d6b0; }
+.masthead-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,0.8);
+  max-width: 540px;
+  margin: 0 auto 18px;
+}
+.masthead-chips {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.chip {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: #c8e6c9;
+}
+
+/* ── Main Content ── */
+.main { max-width: 820px; margin: 0 auto; padding: 28px 20px 60px; }
+
+/* ── Section headers ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 36px 0 16px;
+}
+.section-badge {
+  background: var(--green-dark);
+  color: white;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(18px, 3vw, 24px);
+  font-weight: 700;
+  color: var(--green-dark);
+}
+@media (prefers-color-scheme: dark) {
+  .section-title { color: #a5d6b0; }
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.card-teal { border-left: 4px solid var(--teal); }
+.card-gold { border-left: 4px solid var(--gold); }
+.card-coral { border-left: 4px solid var(--coral); }
+.card-purple { border-left: 4px solid var(--purple); }
+
+/* ── Q blocks ── */
+.q-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}
+.q-header {
+  background: var(--green-dark);
+  color: white;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.q-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+.q-text {
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  flex: 1;
+}
+.answer-chip {
+  background: var(--gold-btn);
+  color: #1a1a00;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.q-body { padding: 14px 18px 16px; }
+.q-hint-btn {
+  background: none;
+  border: 1.5px solid var(--teal);
+  color: var(--teal);
+  border-radius: 8px;
+  padding: 5px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-family: 'Work Sans', sans-serif;
+  transition: background 0.2s;
+}
+.q-hint-btn:hover { background: var(--teal-light); }
+.q-hint {
+  display: none;
+  background: var(--teal-light);
+  border: 1px solid var(--teal);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--text);
+}
+.q-hint.open { display: block; }
+
+/* ── Callout boxes ── */
+.callout {
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.callout-teal { background: var(--teal-light); border-left: 4px solid var(--teal); }
+.callout-gold { background: var(--gold-light); border-left: 4px solid var(--gold); }
+.callout-coral { background: var(--coral-light); border-left: 4px solid var(--coral); }
+.callout-purple { background: var(--purple-light); border-left: 4px solid var(--purple); }
+.callout-green { background: var(--green-light); border-left: 4px solid var(--green-mid); }
+.callout strong { font-weight: 700; }
+
+/* ── Video card ── */
+.video-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.video-header {
+  background: linear-gradient(90deg, var(--green-dark), var(--green-mid));
+  color: white;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.video-embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+.video-embed iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+.video-note {
+  padding: 12px 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--bg-card2);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* ── The Binary Fission Simulator ── */
+#sim-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.sim-header {
+  background: linear-gradient(90deg, var(--green-dark), var(--teal));
+  color: white;
+  padding: 14px 20px;
+}
+.sim-header h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+.sim-header p { font-size: 13px; opacity: 0.85; }
+.sim-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 14px 20px;
+  background: var(--bg-card2);
+  border-bottom: 1px solid var(--border);
+}
+.sim-btn {
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.sim-btn:hover { background: var(--green-mid); }
+.sim-btn:active { transform: scale(0.97); }
+.sim-btn.secondary {
+  background: none;
+  border: 2px solid var(--green-dark);
+  color: var(--green-dark);
+}
+@media (prefers-color-scheme: dark) {
+  .sim-btn.secondary { border-color: #a5d6b0; color: #a5d6b0; }
+}
+.sim-btn.secondary:hover { background: var(--green-light); }
+.sim-speed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.sim-speed select {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+#sim-canvas-wrap {
+  background: #0a1a0a;
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+}
+#sim-canvas {
+  display: block;
+  width: 100%;
+  height: 320px;
+}
+.sim-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.sim-stat {
+  background: var(--bg-card);
+  padding: 12px 16px;
+  text-align: center;
+}
+.sim-stat-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--green-mid);
+  display: block;
+  line-height: 1.2;
+}
+@media (prefers-color-scheme: dark) {
+  .sim-stat-val { color: #a5d6b0; }
+}
+.sim-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+.sim-log {
+  padding: 12px 20px;
+  background: var(--bg-card2);
+  border-top: 1px solid var(--border);
+  min-height: 44px;
+}
+.sim-log p {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.sim-log p.milestone {
+  color: var(--gold);
+  font-weight: 600;
+  animation: flashin 0.4s ease;
+}
+@keyframes flashin {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sim-log p.info { color: var(--teal); }
+
+/* ── Doubling Table ── */
+.doubling-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.doubling-table th {
+  background: var(--green-dark);
+  color: white;
+  padding: 8px 14px;
+  text-align: left;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+.doubling-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.doubling-table tr:nth-child(even) td { background: var(--bg-card2); }
+.doubling-table td.highlight {
+  color: var(--coral);
+  font-weight: 600;
+}
+.doubling-table tr.active-row td {
+  background: var(--gold-light);
+  font-weight: 700;
+}
+
+/* ── Microbiome Map ── */
+.microbiome-zones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin: 16px 0;
+}
+.zone-card {
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+}
+.zone-icon { font-size: 28px; margin-bottom: 6px; }
+.zone-name {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--green-dark);
+}
+@media (prefers-color-scheme: dark) { .zone-name { color: #a5d6b0; } }
+.zone-desc { font-size: 13px; color: var(--text-muted); }
+
+/* ── Volleyball connection ── */
+.vb-callout {
+  background: linear-gradient(135deg, #1a4a2e 0%, #0d7a6e 100%);
+  color: white;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 20px 0;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.vb-icon { font-size: 36px; flex-shrink: 0; }
+.vb-callout h4 {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+.vb-callout p { font-size: 14px; opacity: 0.9; line-height: 1.6; }
+
+/* ── News card ── */
+.news-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 16px 0;
+  box-shadow: var(--shadow);
+  display: flex;
+}
+.news-stripe {
+  width: 6px;
+  background: linear-gradient(to bottom, var(--teal), var(--purple));
+  flex-shrink: 0;
+}
+.news-body { padding: 16px 18px; flex: 1; }
+.news-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 4px;
+}
+.news-headline {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.news-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+/* ── Exit ticket ── */
+.exit-ticket {
+  background: linear-gradient(135deg, #1a4a2e, #2d6a4f);
+  color: white;
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-top: 32px;
+}
+.exit-ticket h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+.exit-ticket p { font-size: 14px; opacity: 0.85; margin-bottom: 14px; }
+.exit-q {
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  border-left: 3px solid var(--gold-btn);
+}
+
+/* ── Word wall reminder ── */
+.word-wall {
+  background: var(--gold-light);
+  border: 2px dashed var(--gold);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.word-wall h4 {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.ww-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ww-term {
+  background: var(--bg-card);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* ── Utility ── */
+p { margin-bottom: 10px; }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 700; }
+em { font-style: italic; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.mt-sm { margin-top: 8px; }
+.mt-md { margin-top: 16px; }
+ul.clean { padding-left: 20px; }
+ul.clean li { margin-bottom: 6px; font-size: 14.5px; }
+</style>
+</head>
+<body>
+
+<!-- ── Progress bar ── -->
+<div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+<div id="progress-label">
+  <span>HUMANS VS. BACTERIA · ACTIVITY 4 · TINY BUT MIGHTY</span>
+  <span id="timer-display">⏱ 0:00</span>
+</div>
+
+<!-- ── Masthead ── -->
+<header class="masthead">
+  <p class="masthead-eyebrow">Humans vs. Bacteria · Activity 4 · Stop 1 &amp; Stop 5</p>
+  <h1>Tiny but <em>Mighty</em></h1>
+  <p class="masthead-sub">How does one bacterium become millions — and why are the bacteria living inside you actually your teammates?</p>
+  <div class="masthead-chips">
+    <span class="chip">⏱ ~20 minutes</span>
+    <span class="chip">🖥️ Fully virtual</span>
+    <span class="chip">🦠 Binary fission + microbiome</span>
+    <span class="chip">📰 Current event: Feb 2026</span>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ══════════════════════════════════════════
+       PART 1 — BINARY FISSION
+  ═══════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-badge">PART 1 · ~10 min</span>
+    <h2 class="section-title">The Fastest Reproducer on Earth</h2>
+  </div>
+
+  <div class="card card-teal">
+    <p><strong>Here's the setup:</strong> You just found out you have strep throat. The doctor says you've had it for about 48 hours. The <em>Streptococcus</em> bacteria causing it started from just a handful of cells. Now there are likely <strong>billions</strong> in your throat.</p>
+    <p class="mt-sm">How is that even possible? The answer is <strong>binary fission</strong> — the fastest reproduction method in the living world. One cell copies its DNA and splits into two identical cells. Under the right conditions, that can happen every <strong>20 minutes</strong>.</p>
+  </div>
+
+  <!-- Q1 — prediction -->
+  <div class="q-block">
+    <div class="q-header">
+      <span class="q-num">Q1</span>
+      <span class="q-text">Before we simulate anything: if one bacterium splits every 20 minutes, how many bacteria do you think there will be after just 3 hours? Make a prediction — no math needed yet, just your gut feeling.</span>
+      <span class="answer-chip">Answer Doc → Q1</span>
+    </div>
+    <div class="q-body">
+      <p style="font-size:14px; color:var(--text-muted);">Write your prediction. We'll come back to this after the simulation.</p>
+      <button class="q-hint-btn" onclick="toggleHint(this)">💡 Need a hint?</button>
+      <div class="q-hint">Think about what happens when you double something repeatedly. Start with 1 → 2 → 4 → 8... How many times does that happen in 3 hours if each split takes 20 minutes?</div>
+    </div>
+  </div>
+
+  <!-- ── BINARY FISSION SIMULATOR ── -->
+  <div id="sim-container">
+    <div class="sim-header">
+      <h3>🦠 Binary Fission Simulator</h3>
+      <p>Watch bacteria multiply in real time. Each split takes 20 simulated minutes.</p>
+    </div>
+    <div class="sim-controls">
+      <button class="sim-btn" id="btn-play" onclick="simPlay()">▶ Start</button>
+      <button class="sim-btn secondary" id="btn-pause" onclick="simPause()" disabled>⏸ Pause</button>
+      <button class="sim-btn secondary" onclick="simReset()">↺ Reset</button>
+      <div class="sim-speed">
+        <label for="speed-select" style="font-size:13px;">Speed:</label>
+        <select id="speed-select" onchange="setSpeed(this.value)">
+          <option value="1">1×</option>
+          <option value="2" selected>2×</option>
+          <option value="4">4×</option>
+          <option value="8">8×</option>
+        </select>
+      </div>
+    </div>
+    <div id="sim-canvas-wrap">
+      <canvas id="sim-canvas"></canvas>
+    </div>
+    <div class="sim-stats">
+      <div class="sim-stat">
+        <span class="sim-stat-val" id="stat-count">1</span>
+        <div class="sim-stat-label">Bacteria</div>
+      </div>
+      <div class="sim-stat">
+        <span class="sim-stat-val" id="stat-time">0 min</span>
+        <div class="sim-stat-label">Sim. Time</div>
+      </div>
+      <div class="sim-stat">
+        <span class="sim-stat-val" id="stat-gen">0</span>
+        <div class="sim-stat-label">Generations</div>
+      </div>
+    </div>
+    <div class="sim-log">
+      <p id="sim-log-msg" class="info">▶ Press Start to begin. Watch one bacterium become millions.</p>
+    </div>
+  </div>
+
+  <!-- Doubling table -->
+  <div class="card">
+    <h4 style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:12px;">📊 The Math Behind It</h4>
+    <p style="font-size:14px; margin-bottom:12px;">Fill this in as the simulation runs — or use it to check your answers afterward.</p>
+    <table class="doubling-table">
+      <thead>
+        <tr>
+          <th>Time Elapsed</th>
+          <th>Generations</th>
+          <th>Bacteria Count</th>
+          <th>What it's like</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0 min</td><td>0</td><td>1</td><td>You, right now</td></tr>
+        <tr><td>20 min</td><td>1</td><td>2</td><td>—</td></tr>
+        <tr><td>40 min</td><td>2</td><td>4</td><td>—</td></tr>
+        <tr><td>60 min (1 hr)</td><td>3</td><td>8</td><td>—</td></tr>
+        <tr><td>120 min (2 hr)</td><td>6</td><td>64</td><td>A small classroom</td></tr>
+        <tr><td>180 min (3 hr)</td><td>9</td><td class="highlight">512</td><td>A big gym</td></tr>
+        <tr><td>480 min (8 hr)</td><td>24</td><td class="highlight">16,777,216</td><td>A large city</td></tr>
+        <tr><td>1 day (24 hr)</td><td>72</td><td class="highlight">~4.7 quintillion</td><td>More than grains of sand on Earth</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header">
+      <span class="q-num">Q2</span>
+      <span class="q-text">Look back at your prediction in Q1. Were you close, too low, or too high? Why do you think people usually underestimate exponential growth?</span>
+      <span class="answer-chip">Answer Doc → Q2</span>
+    </div>
+    <div class="q-body">
+      <p style="font-size:14px; color:var(--text-muted);">Compare your prediction to the table. Write a sentence or two explaining why exponential growth is so hard to picture.</p>
+      <button class="q-hint-btn" onclick="toggleHint(this)">💡 Need a hint?</button>
+      <div class="q-hint">Think about the first few generations — they seem slow. It's the later generations where things explode. Our brains are wired to think linearly (1, 2, 3, 4...) not exponentially (1, 2, 4, 8, 16...).</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block">
+    <div class="q-header">
+      <span class="q-num">Q3</span>
+      <span class="q-text">In binary fission, each new bacterium is an exact copy (clone) of the original. What is the ONE way new genetic variation can still appear in a bacterial population?</span>
+      <span class="answer-chip">Answer Doc → Q3</span>
+    </div>
+    <div class="q-body">
+      <p style="font-size:14px; color:var(--text-muted);">This connects to what you already know about how superbugs develop. Use your word wall if you need to.</p>
+      <button class="q-hint-btn" onclick="toggleHint(this)">💡 Need a hint?</button>
+      <div class="q-hint">The word starts with "M." A random change in DNA that happens by chance when the cell copies itself. Even 1 in a billion can be a big deal when there are <em>billions</em> of bacteria.</div>
+    </div>
+  </div>
+
+  <div class="callout callout-coral">
+    <strong>⚡ The scary math:</strong> This is exactly why antibiotics have to be taken all the way to the end. If you stop early and leave even a few hundred resistant bacteria alive, they can rebuild to billions in less than a day — except now they're all resistant to your medicine.
+  </div>
+
+  <!-- ── VIDEO ── -->
+  <div class="section-header" style="margin-top:28px;">
+    <span class="section-badge">WATCH · ~3 min</span>
+    <h2 class="section-title">The Microbiome</h2>
+  </div>
+
+  <div class="callout callout-green" style="margin-bottom:16px;">
+    <strong>Before you watch:</strong> You've been thinking about bacteria as the enemy. Now flip it. The video below is from your unit page — it covers the trillions of bacteria that are actually <em>on your team</em>. Watch for: (1) where most of them live, (2) what your team does for you, and (3) what happens when you wipe them out.
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       VIDEO — Kurzgesagt Microbiome
+  ═══════════════════════════════════════════ -->
+  <div class="video-card">
+    <div class="video-header">
+      <span>▶</span>
+      <span>Kurzgesagt — How Bacteria Rule Over Your Body: The Microbiome</span>
+    </div>
+    <div class="video-embed">
+      <iframe
+        src="https://www.youtube.com/embed/VzPD009qTN4?rel=0&modestbranding=1"
+        title="How Bacteria Rule Over Your Body – The Microbiome"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="video-note">
+      <span>📌</span>
+      <span><strong>Watch time: ~8 min</strong> — your teacher may play the full video or selected clips. Focus on the gut microbiome section (starts ~1:30) and the antibiotics section (~5:30). This video is also linked on your unit page under <em>Stop 5 · Your Home Team</em>.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PART 2 — MICROBIOME
+  ═══════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-badge">PART 2 · ~10 min</span>
+    <h2 class="section-title">Your Body's Home Team</h2>
+  </div>
+
+  <div class="card card-purple">
+    <p>You have <strong>~38 trillion bacteria</strong> living in and on your body — roughly the same number as your own human cells. Most of them live in your gut (your intestines). Together, they make up your <strong>microbiome</strong>.</p>
+    <p class="mt-sm">And right now, in February 2026, scientists just made a major discovery about bacteria in your gut that most of us didn't even know existed.</p>
+  </div>
+
+  <!-- Current event -->
+  <div class="news-card">
+    <div class="news-stripe"></div>
+    <div class="news-body">
+      <div class="news-label">📰 Current Event · February 2026 · University of Cambridge</div>
+      <div class="news-headline">Scientists Discover "Hidden" Gut Bacteria Linked to Good Health</div>
+      <div class="news-text">
+        <p>Researchers at Cambridge analyzed over <strong>11,000 human gut samples from people in 39 countries</strong>. They found a previously overlooked group of bacteria — called <strong>CAG-170</strong> — that consistently showed up at high levels in healthy people and low levels in people with chronic diseases.</p>
+        <p class="mt-sm">The twist? These bacteria are so hard to grow in a lab that scientists had basically ignored them for years. They're part of what researchers are calling the <strong>"hidden microbiome"</strong> — bacteria that exist in us but that we've barely started studying.</p>
+        <p class="mt-sm" style="font-size:13px; color:var(--teal);"><em>Source: da Silva et al., Cell Host &amp; Microbe, February 2026</em></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block">
+    <div class="q-header">
+      <span class="q-num">Q4</span>
+      <span class="q-text">According to the video, your gut microbiome works like a volleyball team. Pick ONE position from the analogy — defense, midfield, or coaching — and explain what your gut bacteria actually do in that role.</span>
+      <span class="answer-chip">Answer Doc → Q4</span>
+    </div>
+    <div class="q-body">
+      <div class="microbiome-zones">
+        <div class="zone-card">
+          <div class="zone-icon">🛡️</div>
+          <div class="zone-name">Defense</div>
+          <div class="zone-desc">Good bacteria take up all the space and food so harmful bacteria can't move in — competition.</div>
+        </div>
+        <div class="zone-card">
+          <div class="zone-icon">⚙️</div>
+          <div class="zone-name">Midfield</div>
+          <div class="zone-desc">They break down fiber you can't digest, make vitamins like vitamin K, and produce useful chemicals.</div>
+        </div>
+        <div class="zone-card">
+          <div class="zone-icon">🧠</div>
+          <div class="zone-name">Coaching</div>
+          <div class="zone-desc">They help train your immune system to know what's safe and what's a threat.</div>
+        </div>
+      </div>
+      <button class="q-hint-btn" onclick="toggleHint(this)">💡 Need a hint?</button>
+      <div class="q-hint">Pick the one that interests you most and write 2 sentences: (1) What do bacteria do in this role? (2) What goes wrong if that role is empty?</div>
+    </div>
+  </div>
+
+  <!-- Volleyball real-world connection -->
+  <div class="vb-callout">
+    <div class="vb-icon">🏐</div>
+    <div>
+      <h4>This is about you — literally</h4>
+      <p>As a volleyball player, you've probably taken antibiotics for something at some point — strep, ear infection, whatever. Here's the thing: antibiotics don't just kill the bacteria making you sick. They hit your whole gut microbiome like a bomb. The good team takes heavy losses. That's why doctors say to eat yogurt (probiotics) when you're on antibiotics — you're trying to rebuild the roster.</p>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block">
+    <div class="q-header">
+      <span class="q-num">Q5</span>
+      <span class="q-text">The Cambridge study found "hidden" bacteria (CAG-170) that are hard to grow in a lab. Why might scientists have missed these bacteria for so long, even though they're inside almost every person on Earth?</span>
+      <span class="answer-chip">Answer Doc → Q5</span>
+    </div>
+    <div class="q-body">
+      <p style="font-size:14px; color:var(--text-muted);">Think about what it would take to study a bacterium. What tools and methods have scientists been using — and what's the limitation of only studying things you can grow in a lab?</p>
+      <button class="q-hint-btn" onclick="toggleHint(this)">💡 Need a hint?</button>
+      <div class="q-hint">If a bacterium won't grow in a petri dish, scientists couldn't study it the traditional way. The Cambridge team used genetic sequencing instead — reading DNA directly from samples without needing to grow anything.</div>
+    </div>
+  </div>
+
+  <!-- Q6 — connect binary fission to microbiome -->
+  <div class="q-block">
+    <div class="q-header">
+      <span class="q-num">Q6</span>
+      <span class="q-text">Connect both parts of this activity: If your gut microbiome has ~38 trillion bacteria, and they reproduce by binary fission every 20–30 minutes — why does taking one course of antibiotics (a week or two) make such a big dent in your microbiome?</span>
+      <span class="answer-chip">Answer Doc → Q6</span>
+    </div>
+    <div class="q-body">
+      <p style="font-size:14px; color:var(--text-muted);">Use what you learned from the binary fission simulator. If bacteria can rebuild that fast, why doesn't the microbiome bounce back immediately?</p>
+      <button class="q-hint-btn" onclick="toggleHint(this)">💡 Need a hint?</button>
+      <div class="q-hint">Think about <em>diversity</em> vs. <em>total numbers</em>. Antibiotics wipe out certain species more than others. Even if the survivors multiply fast, the mix of species — the biodiversity — takes much longer to recover, because some bacteria are rarer or slower to reproduce.</div>
+    </div>
+  </div>
+
+  <!-- Word wall reminder -->
+  <div class="word-wall">
+    <h4>📇 Word Wall Check</h4>
+    <p style="font-size:14px; margin-bottom:10px;">Make sure you have index cards for the new terms from today. Front = word, back = definition in your own words + sketch.</p>
+    <div class="ww-terms">
+      <span class="ww-term">binary fission</span>
+      <span class="ww-term">exponential growth</span>
+      <span class="ww-term">microbiome</span>
+      <span class="ww-term">biodiversity</span>
+      <span class="ww-term">mutualism</span>
+      <span class="ww-term">probiotic</span>
+    </div>
+  </div>
+
+  <!-- ── EXIT TICKET ── -->
+  <div class="exit-ticket">
+    <h3>🎟️ Exit Ticket</h3>
+    <p>Answer ONE of the following in 2–3 sentences. Use at least 2 vocabulary words.</p>
+    <div class="exit-q">Option A — Why is it a problem that antibiotics kill good bacteria along with bad bacteria? Use what you learned about binary fission and the microbiome.</div>
+    <div class="exit-q">Option B — Scientists just found "hidden" gut bacteria in 2026 that may be key to our health. What does that tell us about how much we still have to learn about bacteria?</div>
+    <div class="exit-q">Option C — You are a gut bacterium. Explain your job, your team, and what happens when antibiotics show up.</div>
+  </div>
+
+  <div class="callout callout-teal" style="margin-top:20px;">
+    <strong>🔗 Coming up next:</strong> You've seen how bacteria survive as individuals (binary fission) and as part of a team (microbiome). Next, we look at how they work together as a collective — using chemical signals to launch coordinated attacks. That's <strong>quorum sensing</strong>, and it's one of the coolest things in biology.
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════ -->
+<script>
+// ── Progress bar ──────────────────────────────
+const progressSections = document.querySelectorAll('.q-block, #sim-container, .video-card, .exit-ticket');
+function updateProgress() {
+  let visible = 0;
+  progressSections.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.85) visible++;
+  });
+  const pct = Math.min(100, Math.round((visible / progressSections.length) * 100));
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress);
+
+// ── Timer ─────────────────────────────────────
+let timerStart = null;
+let timerRunning = false;
+function startTimer() {
+  if (!timerRunning) {
+    timerRunning = true;
+    timerStart = Date.now();
+    updateTimer();
+  }
+}
+function updateTimer() {
+  if (!timerRunning) return;
+  const elapsed = Math.floor((Date.now() - timerStart) / 1000);
+  const m = Math.floor(elapsed / 60);
+  const s = elapsed % 60;
+  document.getElementById('timer-display').textContent =
+    `⏱ ${m}:${s.toString().padStart(2,'0')}`;
+  setTimeout(updateTimer, 1000);
+}
+document.addEventListener('click', startTimer, { once: true });
+document.addEventListener('scroll', startTimer, { once: true });
+
+// ── Hint toggle ───────────────────────────────
+function toggleHint(btn) {
+  const hint = btn.nextElementSibling;
+  hint.classList.toggle('open');
+  btn.textContent = hint.classList.contains('open') ? '🔼 Hide hint' : '💡 Need a hint?';
+}
+
+// ── Binary Fission Simulator ──────────────────
+const canvas = document.getElementById('sim-canvas');
+const ctx = canvas.getContext('2d');
+
+let simRunning = false;
+let simTime = 0;         // simulated minutes
+let simBacteria = [];
+let animFrame = null;
+let lastRealTime = null;
+let speedMult = 2;
+const SPLIT_INTERVAL = 20; // simulated minutes per generation
+const MAX_DISPLAY = 300;    // max bacteria drawn on canvas (performance)
+
+const MILESTONES = [
+  { time: 20,  msg: '🧬 First split! 2 bacteria.' },
+  { time: 60,  msg: '⚡ 1 hour in — 8 bacteria. Still tiny.' },
+  { time: 180, msg: '🔥 3 hours — 512 bacteria. Your throat is getting sore.' },
+  { time: 480, msg: '😰 8 hours — 16 million. You are definitely sick now.' },
+  { time: 720, msg: '🚨 12 hours — over 1 billion. Time for antibiotics.' },
+  { time: 1440, msg: '💀 24 hours — 4.7 quintillion. More than grains of sand on Earth.' },
+];
+let reachedMilestones = new Set();
+
+function resizeCanvas() {
+  const wrap = document.getElementById('sim-canvas-wrap');
+  canvas.width = wrap.offsetWidth;
+  canvas.height = 320;
+  canvas.style.height = '320px';
+}
+resizeCanvas();
+window.addEventListener('resize', () => { resizeCanvas(); if (!simRunning) drawIdle(); });
+
+function countAtTime(t) {
+  const gen = Math.floor(t / SPLIT_INTERVAL);
+  return Math.pow(2, gen);
+}
+
+function formatCount(n) {
+  if (n >= 1e18) return (n / 1e18).toFixed(1) + ' quintillion';
+  if (n >= 1e15) return (n / 1e15).toFixed(1) + ' quadrillion';
+  if (n >= 1e12) return (n / 1e12).toFixed(1) + ' trillion';
+  if (n >= 1e9)  return (n / 1e9).toFixed(1) + ' billion';
+  if (n >= 1e6)  return (n / 1e6).toFixed(2) + ' million';
+  if (n >= 1e3)  return n.toLocaleString();
+  return n.toString();
+}
+
+class Bacterium {
+  constructor(x, y, angle, gen) {
+    this.x = x; this.y = y; this.angle = angle; this.gen = gen;
+    this.length = 22 + Math.random() * 8;
+    this.width = 9 + Math.random() * 4;
+    this.splitProgress = 0;
+    this.splitting = false;
+    this.hue = 130 + gen * 10; // shifts green→teal→cyan with generations
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = (Math.random() - 0.5) * 0.5;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.025 + Math.random() * 0.02;
+  }
+
+  draw(ctx) {
+    this.wobble += this.wobbleSpeed;
+    const liveAngle = this.angle + Math.sin(this.wobble) * 0.12;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(liveAngle);
+
+    const alpha = this.splitting ? 0.7 + 0.3 * this.splitProgress : 1;
+    // bright, saturated colors — visible on dark background
+    ctx.fillStyle = `hsla(${this.hue}, 85%, 58%, ${alpha})`;
+    ctx.strokeStyle = `hsla(${this.hue}, 60%, 80%, ${alpha * 0.6})`;
+    ctx.lineWidth = 1.2;
+
+    // capsule / rod shape
+    const hl = this.length / 2;
+    const hw = this.width / 2;
+    ctx.beginPath();
+    ctx.moveTo(-hl + hw, -hw);
+    ctx.lineTo(hl - hw, -hw);
+    ctx.arc(hl - hw, 0, hw, -Math.PI/2, Math.PI/2);
+    ctx.lineTo(-hl + hw, hw);
+    ctx.arc(-hl + hw, 0, hw, Math.PI/2, -Math.PI/2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // bright inner glow stripe
+    ctx.strokeStyle = `hsla(${this.hue}, 60%, 90%, 0.45)`;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(-hl * 0.5, -1);
+    ctx.lineTo(hl * 0.5, -1);
+    ctx.stroke();
+
+    if (this.splitting) {
+      // pinch in middle
+      ctx.strokeStyle = `rgba(0,0,0,0.5)`;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(-1, -hw * (1 - this.splitProgress * 0.65));
+      ctx.lineTo(-1,  hw * (1 - this.splitProgress * 0.65));
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    // bounce off walls
+    if (this.x < 10 || this.x > canvas.width - 10) { this.vx *= -1; this.x = Math.max(10, Math.min(canvas.width-10, this.x)); }
+    if (this.y < 10 || this.y > canvas.height - 10) { this.vy *= -1; this.y = Math.max(10, Math.min(canvas.height-10, this.y)); }
+  }
+}
+
+function populateDisplay(count, gen) {
+  const displayN = Math.min(count, MAX_DISPLAY);
+  // keep existing, add new ones
+  while (simBacteria.length < displayN) {
+    simBacteria.push(new Bacterium(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      Math.random() * Math.PI * 2,
+      gen
+    ));
+  }
+  if (simBacteria.length > displayN) {
+    simBacteria = simBacteria.slice(0, displayN);
+  }
+}
+
+function drawIdle() {
+  if (canvas.width === 0) return; // not ready yet
+  ctx.fillStyle = '#0a1a0a';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // subtle grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < canvas.width; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x, canvas.height); ctx.stroke();
+  }
+  for (let y = 0; y < canvas.height; y += 40) {
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width, y); ctx.stroke();
+  }
+
+  // single starter bacterium in center
+  if (simBacteria.length === 0) {
+    simBacteria.push(new Bacterium(canvas.width/2, canvas.height/2, 0.3, 0));
+  }
+  simBacteria.forEach(b => { b.draw(ctx); });
+
+  // overlay pill
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2 + 50;
+  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  ctx.beginPath();
+  ctx.roundRect(cx - 155, cy - 14, 310, 30, 15);
+  ctx.fill();
+  ctx.fillStyle = '#a5d6b0';
+  ctx.font = '600 13px "Work Sans", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('▶ Press Start to run the simulation', cx, cy);
+}
+
+let genAtLastFrame = 0;
+
+function animLoop(ts) {
+  if (!simRunning) return;
+  if (!lastRealTime) lastRealTime = ts;
+  const realDelta = (ts - lastRealTime) / 1000; // seconds
+  lastRealTime = ts;
+
+  // simulated time advances faster based on speed
+  const simDelta = realDelta * speedMult * 4; // 4 sim-min per real-sec at 1×
+  simTime += simDelta;
+
+  // cap at 24 hours
+  if (simTime >= 1440) {
+    simTime = 1440;
+    simRunning = false;
+    document.getElementById('btn-play').disabled = true;
+    document.getElementById('btn-pause').disabled = true;
+    logMsg('🏁 24 hours complete. That\'s 4.7 quintillion bacteria from just 1!', 'milestone');
+  }
+
+  const gen = Math.floor(simTime / SPLIT_INTERVAL);
+  const count = Math.pow(2, gen);
+
+  // detect generation change — trigger split animation
+  if (gen > genAtLastFrame && count <= MAX_DISPLAY) {
+    simBacteria.forEach(b => { b.splitting = true; b.splitProgress = 0; });
+  }
+  genAtLastFrame = gen;
+
+  // update split progress
+  simBacteria.forEach(b => {
+    if (b.splitting) {
+      b.splitProgress = Math.min(1, b.splitProgress + 0.04);
+      if (b.splitProgress >= 1) b.splitting = false;
+    }
+  });
+
+  populateDisplay(count, gen);
+
+  // draw
+  ctx.fillStyle = '#0a1a0a';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // background grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < canvas.width; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x, canvas.height); ctx.stroke();
+  }
+  for (let y = 0; y < canvas.height; y += 40) {
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width, y); ctx.stroke();
+  }
+
+  simBacteria.forEach(b => { b.update(); b.draw(ctx); });
+
+  // overflow message
+  if (count > MAX_DISPLAY) {
+    ctx.fillStyle = 'rgba(0,0,0,0.65)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#a5d6b0';
+    ctx.font = 'bold 15px "Work Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(`🦠 ${formatCount(count)} bacteria`, canvas.width/2, canvas.height/2 - 12);
+    ctx.font = '13px "Work Sans", sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.fillText('(too many to draw — but they\'re all there)', canvas.width/2, canvas.height/2 + 14);
+  }
+
+  // update stats
+  document.getElementById('stat-count').textContent = formatCount(count);
+  document.getElementById('stat-time').textContent = simTime >= 60
+    ? (simTime/60).toFixed(1) + ' hr'
+    : Math.round(simTime) + ' min';
+  document.getElementById('stat-gen').textContent = gen;
+
+  // milestones
+  MILESTONES.forEach(m => {
+    if (simTime >= m.time && !reachedMilestones.has(m.time)) {
+      reachedMilestones.add(m.time);
+      logMsg(m.msg, 'milestone');
+    }
+  });
+
+  if (simRunning) animFrame = requestAnimationFrame(animLoop);
+}
+
+function simPlay() {
+  if (simRunning) return;
+  simRunning = true;
+  lastRealTime = null;
+  const playBtn = document.getElementById('btn-play');
+  playBtn.disabled = true;
+  playBtn.textContent = '⏳ Running…';
+  document.getElementById('btn-pause').disabled = false;
+  if (simBacteria.length === 0) {
+    simBacteria.push(new Bacterium(canvas.width/2, canvas.height/2, 0.3, 0));
+  }
+  logMsg('▶ Running... watch how fast this gets out of hand.', 'info');
+  animFrame = requestAnimationFrame(animLoop);
+  startTimer();
+}
+function simPause() {
+  simRunning = false;
+  document.getElementById('btn-play').disabled = false;
+  document.getElementById('btn-pause').disabled = true;
+  document.getElementById('btn-play').textContent = '▶ Resume';
+  logMsg('⏸ Paused. Resume when ready.', 'info');
+}
+function simReset() {
+  simRunning = false;
+  cancelAnimationFrame(animFrame);
+  simTime = 0; simBacteria = []; genAtLastFrame = 0; reachedMilestones.clear();
+  const playBtn = document.getElementById('btn-play');
+  playBtn.disabled = false;
+  playBtn.textContent = '▶ Start';
+  document.getElementById('btn-pause').disabled = true;
+  document.getElementById('stat-count').textContent = '1';
+  document.getElementById('stat-time').textContent = '0 min';
+  document.getElementById('stat-gen').textContent = '0';
+  logMsg('↺ Reset. Press Start to run again.', 'info');
+  drawIdle();
+}
+function setSpeed(v) { speedMult = parseInt(v); }
+function logMsg(text, cls) {
+  const p = document.getElementById('sim-log-msg');
+  p.textContent = text;
+  p.className = cls;
+}
+
+// Initial draw — defer one frame so canvas layout is complete
+window.addEventListener('load', () => {
+  updateProgress();
+  requestAnimationFrame(() => {
+    resizeCanvas();
+    drawIdle();
+  });
+});
+</script>
+</body>
+</html>
