@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Did You Eat? | HVB · YSC Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f7faf7; --card:#ffffff; --card2:#f0f7f0;
+  --text:#1a2a1a; --muted:#4a6050;
+  --gd:#1a4a2e; --gm:#2d6a4f; --gl:#d4edd8;
+  --teal:#0d7a6e; --teal-l:#e0f4f2;
+  --gold:#c8900a; --gold-l:#fff8e1; --gold-btn:#f0a800;
+  --coral:#d94f3a; --coral-l:#fff0ee;
+  --purple:#6b4fa0; --purple-l:#f0ebff;
+  --border:#c5dcc5; --shadow:0 2px 14px rgba(0,0,0,.07);
+  --r:12px; --ph:6px;
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0f1a0f;--card:#1a2a1a;--card2:#162216;
+    --text:#e8f5e9;--muted:#8ab898;
+    --gd:#2d6a4f;--gm:#3d8a6f;--gl:#1a3a2a;
+    --teal-l:#0d2a28;--gold-l:#2a2000;--coral-l:#2a0f0a;--purple-l:#1a1030;
+    --border:#2a4a3a;}
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Work Sans',sans-serif;font-size:16px;line-height:1.65;
+  color:var(--text);background:var(--bg);}
+
+/* progress */
+#prog-wrap{position:sticky;top:0;z-index:100;background:var(--gd);height:var(--ph);}
+#prog-bar{height:100%;background:var(--gold-btn);width:0%;transition:width .4s;}
+#prog-label{position:sticky;top:var(--ph);z-index:99;background:var(--gd);
+  color:#c8e6c9;font-family:'IBM Plex Mono',monospace;font-size:11px;
+  padding:3px 16px 4px;display:flex;justify-content:space-between;}
+#timer{color:var(--gold-btn);font-weight:600;}
+
+/* masthead */
+.mast{background:linear-gradient(135deg,#1a4a2e,#2d6a4f 55%,#0d7a6e);
+  color:#fff;padding:32px 24px 28px;text-align:center;position:relative;overflow:hidden;}
+.mast::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 25% 60%,rgba(255,255,255,.04),transparent 55%);
+  pointer-events:none;}
+.mast-eye{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:#a5d6b0;margin-bottom:10px;}
+.mast h1{font-family:'Fraunces',serif;font-size:clamp(26px,5vw,42px);font-weight:900;
+  line-height:1.1;margin-bottom:10px;}
+.mast h1 em{font-style:italic;color:#a5d6b0;}
+.mast-sub{font-size:15px;color:rgba(255,255,255,.8);max-width:520px;margin:0 auto 18px;}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:20px;padding:4px 14px;font-size:12px;
+  font-family:'IBM Plex Mono',monospace;color:#c8e6c9;}
+
+.main{max-width:800px;margin:0 auto;padding:24px 18px 60px;}
+
+/* step header */
+.step-hdr{display:flex;align-items:center;gap:14px;margin:32px 0 14px;}
+.step-num{background:var(--gd);color:#fff;font-family:'IBM Plex Mono',monospace;
+  font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;white-space:nowrap;}
+.step-title{font-family:'Fraunces',serif;font-size:clamp(17px,2.8vw,22px);
+  font-weight:700;color:var(--gd);}
+@media(prefers-color-scheme:dark){.step-title{color:#a5d6b0;}}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow);}
+.card-teal{border-left:4px solid var(--teal);}
+.card-gold{border-left:4px solid var(--gold);}
+
+/* callout */
+.callout{border-radius:var(--r);padding:14px 18px;margin:12px 0;font-size:14.5px;line-height:1.6;}
+.c-teal{background:var(--teal-l);border-left:4px solid var(--teal);}
+.c-gold{background:var(--gold-l);border-left:4px solid var(--gold);}
+.c-coral{background:var(--coral-l);border-left:4px solid var(--coral);}
+.c-green{background:var(--gl);border-left:4px solid var(--gm);}
+
+/* driver banner */
+.driver{background:linear-gradient(90deg,var(--gd),var(--gm));color:#fff;
+  border-radius:var(--r);padding:13px 20px;margin-bottom:14px;
+  display:flex;align-items:center;gap:14px;font-size:14px;}
+.driver-icon{font-size:28px;flex-shrink:0;}
+.driver strong{display:block;font-size:15px;margin-bottom:2px;}
+
+/* ── Gut team cards ── */
+.gut-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.gt-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gt-card.good { border-top: 4px solid var(--teal); }
+.gt-card.bad  { border-top: 4px solid var(--coral); }
+.gt-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.gt-emoji {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card2);
+  border-radius: 8px;
+}
+.gt-name {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.gt-role {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.gt-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0;
+}
+.gt-feeds, .gt-hates {
+  font-size: 12px;
+  line-height: 1.4;
+  border-radius: 6px;
+  padding: 5px 9px;
+}
+.gt-feeds { background: var(--gl); color: var(--gm); }
+.gt-hates { background: var(--card2); color: var(--muted); }
+.gt-card.bad .gt-feeds { background: var(--coral-l); color: var(--coral); }
+
+/* ── GUT SIMULATOR ── */
+#gut-sim{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow);}
+.gs-hdr{background:linear-gradient(90deg,var(--gd),var(--teal));color:#fff;padding:12px 18px;}
+.gs-hdr h3{font-family:'Fraunces',serif;font-size:17px;margin-bottom:2px;}
+.gs-hdr p{font-size:13px;opacity:.85;}
+
+/* food menu */
+.food-menu{padding:14px 18px;background:var(--card2);border-bottom:1px solid var(--border);}
+.food-menu-label{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.08em;color:var(--muted);margin-bottom:10px;}
+.food-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.food-btn{background:var(--card);border:2px solid var(--border);border-radius:10px;
+  padding:8px 12px;cursor:pointer;font-size:13px;font-family:'Work Sans',sans-serif;
+  color:var(--text);transition:all .18s;display:flex;align-items:center;gap:6px;
+  user-select:none;}
+.food-btn:hover{border-color:var(--teal);transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.1);}
+.food-btn.selected{border-color:var(--teal);background:var(--teal-l);}
+.food-btn .food-emoji{font-size:20px;}
+.food-btn .food-name{font-weight:600;font-size:12px;}
+.food-count-row{display:flex;align-items:center;justify-content:space-between;
+  margin-top:10px;font-size:13px;color:var(--muted);}
+.food-count{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--teal);}
+
+/* sim controls */
+.gs-ctrl{display:flex;gap:10px;align-items:center;
+  padding:10px 18px;background:var(--card);border-bottom:1px solid var(--border);}
+.sbtn{background:var(--gd);color:#fff;border:none;border-radius:8px;
+  padding:8px 18px;font-family:'Work Sans',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:background .2s,transform .1s;}
+.sbtn:hover{background:var(--gm);}
+.sbtn:active{transform:scale(.97);}
+.sbtn:disabled{opacity:.45;cursor:not-allowed;}
+.sbtn.sec{background:none;border:2px solid var(--gd);color:var(--gd);}
+@media(prefers-color-scheme:dark){.sbtn.sec{border-color:#a5d6b0;color:#a5d6b0;}}
+.sbtn.sec:hover:not(:disabled){background:var(--gl);}
+
+/* gut canvas */
+#gut-canvas-wrap{background:#0d1a0d;position:relative;overflow:hidden;}
+#gut-canvas{display:block;width:100%;height:260px;}
+
+/* bacteria bars */
+.bac-bars{padding:14px 18px;background:var(--card);border-top:1px solid var(--border);}
+.bac-bar-label{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.06em;color:var(--muted);margin-bottom:10px;text-transform:uppercase;}
+.bac-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bac-name{font-size:12px;font-weight:600;width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bac-track{flex:1;background:var(--card2);border-radius:20px;height:18px;overflow:hidden;
+  border:1px solid var(--border);}
+.bac-fill{height:100%;border-radius:20px;transition:width .8s ease;display:flex;
+  align-items:center;justify-content:flex-end;padding-right:6px;}
+.bac-pct{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  color:#fff;opacity:.9;white-space:nowrap;}
+.bac-emoji{font-size:14px;width:22px;text-align:center;flex-shrink:0;}
+
+/* health meter */
+.health-meter{padding:12px 18px;background:var(--card2);border-top:1px solid var(--border);}
+.hm-label{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.06em;color:var(--muted);margin-bottom:6px;text-transform:uppercase;}
+.hm-track{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  height:24px;overflow:hidden;}
+.hm-fill{height:100%;border-radius:20px;transition:width 1s ease,background 1s ease;
+  display:flex;align-items:center;padding-left:12px;}
+.hm-txt{font-size:12px;font-weight:700;color:#fff;}
+.hm-verdict{margin-top:8px;font-size:14px;font-weight:600;min-height:20px;transition:color .5s;}
+
+/* sim log */
+.gs-log{padding:10px 18px;background:var(--card2);border-top:1px solid var(--border);min-height:40px;}
+.gs-log p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
+.gs-log p.good{color:#56C271;font-weight:600;}
+.gs-log p.bad{color:var(--coral);font-weight:600;}
+.gs-log p.inf{color:var(--teal);}
+
+/* obs box */
+.obs-box{background:var(--card);border:2px dashed var(--border);border-radius:var(--r);
+  padding:16px 18px;margin:12px 0;}
+.obs-box h4{font-family:'Fraunces',serif;font-size:15px;color:var(--gd);margin-bottom:8px;}
+@media(prefers-color-scheme:dark){.obs-box h4{color:#a5d6b0;}}
+.obs-q{background:var(--card2);border-radius:8px;padding:11px 14px;margin-bottom:8px;
+  font-size:14px;border-left:3px solid var(--teal);}
+.obs-q:last-child{margin-bottom:0;}
+.a-chip{background:var(--gold-btn);color:#1a1a00;font-family:'IBM Plex Mono',monospace;
+  font-size:10px;font-weight:600;padding:3px 10px;border-radius:10px;
+  white-space:nowrap;display:inline-block;margin-left:6px;}
+
+/* hint */
+.hint-btn{background:none;border:1.5px solid var(--teal);color:var(--teal);
+  border-radius:8px;padding:5px 13px;font-size:13px;cursor:pointer;
+  margin-top:9px;font-family:'Work Sans',sans-serif;transition:background .2s;}
+.hint-btn:hover{background:var(--teal-l);}
+.hint{display:none;background:var(--teal-l);border:1px solid var(--teal);
+  border-radius:8px;padding:11px 14px;margin-top:9px;font-size:14px;}
+.hint.open{display:block;}
+
+/* conclusion */
+.conclusion-box{background:linear-gradient(135deg,#1a4a2e,#2d6a4f);color:#fff;
+  border-radius:var(--r);padding:22px 26px;margin:20px 0;}
+.conclusion-box h3{font-family:'Fraunces',serif;font-size:20px;margin-bottom:8px;}
+.conclusion-box p{font-size:14px;opacity:.88;line-height:1.65;margin-bottom:10px;}
+.conc-q{background:rgba(255,255,255,.12);border-radius:8px;padding:12px 16px;
+  margin-bottom:8px;font-size:14px;font-weight:600;border-left:3px solid var(--gold-btn);}
+.conc-q:last-child{margin-bottom:0;}
+
+/* word wall */
+.ww{background:var(--gold-l);border:2px dashed var(--gold);border-radius:var(--r);
+  padding:14px 18px;margin:18px 0;}
+.ww h4{font-family:'Fraunces',serif;font-size:15px;color:var(--gold);margin-bottom:8px;}
+.ww-terms{display:flex;flex-wrap:wrap;gap:8px;}
+.ww-term{background:var(--card);border:1px solid var(--gold);border-radius:6px;
+  padding:4px 11px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);}
+
+/* exit */
+.exit{background:linear-gradient(135deg,#1a4a2e,#2d6a4f);color:#fff;
+  border-radius:var(--r);padding:22px 26px;margin-top:28px;}
+.exit h3{font-family:'Fraunces',serif;font-size:19px;margin-bottom:6px;}
+.exit p{font-size:14px;opacity:.85;margin-bottom:12px;}
+.exit-q{background:rgba(255,255,255,.1);border-radius:8px;padding:12px 16px;
+  font-size:14px;font-weight:600;border-left:3px solid var(--gold-btn);}
+
+p{margin-bottom:9px;}p:last-child{margin-bottom:0;}
+strong{font-weight:700;}
+</style>
+</head>
+<body>
+
+<div id="prog-wrap"><div id="prog-bar"></div></div>
+<div id="prog-label">
+  <span>HUMANS VS. BACTERIA · THE GUT LAB</span>
+  <span id="timer">⏱ 0:00</span>
+</div>
+
+<header class="mast">
+  <p class="mast-eye">Humans vs. Bacteria · Activity 4 · Stop 5</p>
+  <h1>What Did You <em>Eat?</em></h1>
+  <p class="mast-sub">Your gut has trillions of bacteria living in it. What you eat decides who wins.</p>
+  <div class="chips">
+    <span class="chip">⏱ ~20 minutes</span>
+    <span class="chip">👥 3 students</span>
+    <span class="chip">🦠 Microbiome</span>
+    <span class="chip">🍔 3 meal rounds</span>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- SETUP -->
+  <div class="step-hdr">
+    <span class="step-num">SETUP · 2 min</span>
+    <h2 class="step-title">What's Living Inside You</h2>
+  </div>
+
+  <div class="card card-teal">
+    <p>Right now, while you're reading this, there are about <strong>38 trillion bacteria</strong> living inside your gut — your intestines. That's roughly the same number as all the human cells in your body.</p>
+    <p>Most of them are there to help you. They digest food your body can't break down on its own, make vitamins, and keep harmful bacteria from moving in. Think of them like a team — different bacteria do different jobs.</p>
+    <p>The big question: <strong>what you eat is what they eat.</strong> Feed them the right stuff and your team thrives. Feed them junk and the wrong bacteria start winning.</p>
+  </div>
+
+  <div class="callout c-gold">
+    <strong>Your question for today:</strong> Does what you eat actually change which gut bacteria win? Each person builds a meal and watches what happens to the gut team. At the end, you compare results.
+  </div>
+
+  <!-- meet your gut team -->
+  <div class="step-hdr" style="margin-top:28px;">
+    <span class="step-num">MEET THE TEAM</span>
+    <h2 class="step-title">Five Bacteria. Two Sides.</h2>
+  </div>
+
+  <p style="font-size:14.5px;color:var(--muted);margin-bottom:14px;">Your gut has thousands of bacteria species, but researchers have identified a handful that consistently matter most for health. Here are the five you'll be tracking today — three on your side, two working against you.</p>
+
+  <div class="gut-team-grid">
+
+    <div class="gt-card good">
+      <div class="gt-top">
+        <span class="gt-emoji">🛡️</span>
+        <div>
+          <div class="gt-name">Lactobacillus</div>
+          <div class="gt-role">The Defender</div>
+        </div>
+      </div>
+      <p class="gt-desc">Produces lactic acid, which makes the gut too acidic for harmful bacteria to survive. This is the same bacteria found in yogurt — which is why yogurt helps your gut. Without it, harmful bacteria can move in and take over.</p>
+      <div class="gt-feeds">🌿 Thrives on: fiber, fermented foods like yogurt</div>
+      <div class="gt-hates">🚫 Killed by: sugar, antibiotics, processed food</div>
+    </div>
+
+    <div class="gt-card good">
+      <div class="gt-top">
+        <span class="gt-emoji">⚙️</span>
+        <div>
+          <div class="gt-name">Bifidobacterium</div>
+          <div class="gt-role">The Supplier</div>
+        </div>
+      </div>
+      <p class="gt-desc">Breaks down fiber that your stomach can't digest on its own and turns it into vitamins B and K that your body needs. It also feeds other good bacteria, acting like a supply chain for the whole gut team.</p>
+      <div class="gt-feeds">🌿 Thrives on: fiber, fruits, beans, whole grains</div>
+      <div class="gt-hates">🚫 Killed by: high-sugar diets, junk food</div>
+    </div>
+
+    <div class="gt-card good">
+      <div class="gt-top">
+        <span class="gt-emoji">🧠</span>
+        <div>
+          <div class="gt-name">Bacteroides</div>
+          <div class="gt-role">The Immune Trainer</div>
+        </div>
+      </div>
+      <p class="gt-desc">Teaches your immune system the difference between safe bacteria and dangerous ones. Without it, your immune system can overreact and attack things it shouldn't — causing inflammation, fatigue, and getting sick more easily.</p>
+      <div class="gt-feeds">🌿 Thrives on: plant-based foods, vegetables</div>
+      <div class="gt-hates">🚫 Drops with: high-fat, low-fiber diets</div>
+    </div>
+
+    <div class="gt-card bad">
+      <div class="gt-top">
+        <span class="gt-emoji">⚠️</span>
+        <div>
+          <div class="gt-name">C. perfringens</div>
+          <div class="gt-role">The Threat</div>
+        </div>
+      </div>
+      <p class="gt-desc">Normally kept at low levels by the good team. But when good bacteria are wiped out, C. perfringens explodes in population and releases toxins that cause inflammation, stomach pain, and can contribute to disease. It loves sugar and processed food.</p>
+      <div class="gt-feeds">⚡ Thrives on: sugar, processed food, red meat</div>
+      <div class="gt-hates">✅ Kept in check by: Lactobacillus and fiber</div>
+    </div>
+
+    <div class="gt-card bad">
+      <div class="gt-top">
+        <span class="gt-emoji">📉</span>
+        <div>
+          <div class="gt-name">Firmicutes</div>
+          <div class="gt-role">The Inflamer</div>
+        </div>
+      </div>
+      <p class="gt-desc">At low levels, Firmicutes are normal and harmless. But when they overgrow — usually from a high-fat, high-sugar diet — they produce chemicals that cause inflammation throughout the body. Athletes with too many Firmicutes report fatigue and slower recovery after games.</p>
+      <div class="gt-feeds">⚡ Thrives on: fatty foods, sugar, low-fiber diets</div>
+      <div class="gt-hates">✅ Balanced by: diverse plant-based diet</div>
+    </div>
+
+  </div>
+
+  <div class="callout c-teal" style="margin-bottom:20px;">
+    <strong>The key idea:</strong> Good bacteria and harmful bacteria are always competing for space and food in your gut. What you eat tips the balance one way or the other — every single meal.
+  </div>
+
+  <!-- player cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0;">
+    <div class="card" style="border-top:4px solid #2BBCB0;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">🏐</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);font-weight:600;margin-bottom:4px;">PLAYER 1</div>
+      <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;">Tournament Day Meal</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px;">What do you actually eat on game day?</div>
+    </div>
+    <div class="card" style="border-top:4px solid #56C271;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">🌱</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#56C271;font-weight:600;margin-bottom:4px;">PLAYER 2</div>
+      <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;">The Healthiest Meal</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px;">Build the meal that makes the gut team happiest.</div>
+    </div>
+    <div class="card" style="border-top:4px solid #FFB347;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">🍟</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#c8900a;font-weight:600;margin-bottom:4px;">PLAYER 3</div>
+      <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;">The Worst Meal</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px;">Build the meal that does the most damage.</div>
+    </div>
+  </div>
+
+  <!-- ══ ROUND 1 ══ -->
+  <div class="step-hdr">
+    <span class="step-num">ROUND 1 · ~5 min</span>
+    <h2 class="step-title">🏐 Player 1 — Tournament Day</h2>
+  </div>
+
+  <div class="driver">
+    <div class="driver-icon">🎮</div>
+    <div>
+      <strong>Player 1 drives this round.</strong>
+      Pick the foods you'd actually eat on a tournament day — be honest. Everyone watches the gut react together.
+    </div>
+  </div>
+
+  <!-- GUT SIMULATOR -->
+  <div id="gut-sim">
+    <div class="gs-hdr">
+      <h3>🦠 Gut Bacteria Simulator</h3>
+      <p>Tap a food to add it — the gut reacts instantly. Tap again to remove it.</p>
+    </div>
+
+    <div class="food-menu">
+      <div class="food-menu-label">Pick your meal — tap to add or remove. The gut reacts instantly.</div>
+      <div class="food-grid" id="food-grid"></div>
+      <div class="food-count-row">
+        <span>Selected: <span class="food-count" id="food-count">0</span> items</span>
+        <span style="font-size:12px;color:var(--muted);">Add or remove foods to see the gut change</span>
+      </div>
+    </div>
+
+    <div class="gs-ctrl">
+      <button class="sbtn" id="btn-run" onclick="runSim()">▶ Run</button>
+      <button class="sbtn sec" onclick="resetSim()">↺ Reset</button>
+    </div>
+
+    <div id="gut-canvas-wrap"><canvas id="gut-canvas"></canvas></div>
+
+    <div class="bac-bars">
+      <div class="bac-bar-label">Gut bacteria levels after your meal</div>
+      <div id="bac-bars-inner"></div>
+    </div>
+
+    <div class="health-meter">
+      <div class="hm-label">Overall Gut Health Score</div>
+      <div class="hm-track"><div class="hm-fill" id="hm-fill" style="width:50%;background:#aaa;"><span class="hm-txt" id="hm-txt">—</span></div></div>
+      <div class="hm-verdict" id="hm-verdict"></div>
+    </div>
+
+    <div class="gs-log"><p id="gs-msg" class="inf">▶ Pick your foods and press Run.</p></div>
+  </div>
+
+  <!-- obs R1 -->
+  <div class="obs-box">
+    <h4>🔍 Round 1 Observations <span class="a-chip">Answer Doc → R1</span></h4>
+    <div class="obs-q">Which bacteria went up after your tournament day meal? Which went down?</div>
+    <div class="obs-q">Does the gut health score surprise you? Why or why not?</div>
+    <button class="hint-btn" onclick="toggleHint(this)">💡 Hint</button>
+    <div class="hint">Look at which foods you picked. Foods high in fiber (fruits, vegetables, beans, whole grains) feed the good bacteria. High sugar and processed foods feed bacteria that cause inflammation. What did your tournament day meal have more of?</div>
+  </div>
+
+  <!-- ══ ROUND 2 ══ -->
+  <div class="step-hdr">
+    <span class="step-num">ROUND 2 · ~5 min</span>
+    <h2 class="step-title">🌱 Player 2 — The Healthiest Meal</h2>
+  </div>
+
+  <div class="driver">
+    <div class="driver-icon">🎮</div>
+    <div>
+      <strong>Player 2 drives this round.</strong>
+      Build the meal that makes the gut bacteria the happiest. Reset first, then pick your foods.
+    </div>
+  </div>
+
+  <div class="callout c-teal" style="margin-bottom:12px;">
+    <strong>Challenge:</strong> Try to get the gut health score as high as possible. Can you hit 90% or above?
+  </div>
+
+  <div class="obs-box">
+    <h4>🔍 Round 2 Observations <span class="a-chip">Answer Doc → R2</span></h4>
+    <div class="obs-q">Which foods made the biggest difference to gut health? What do those foods have in common?</div>
+    <div class="obs-q">As a volleyball player, is a "healthy gut meal" realistic on a tournament day? What's one swap you could actually make?</div>
+    <button class="hint-btn" onclick="toggleHint(this)">💡 Hint</button>
+    <div class="hint">The bacteria that benefit most from a healthy diet feed on fiber — the stuff in plants that your stomach can't break down but bacteria can. That's why fruits, vegetables, beans, and whole grains help the most. They're not just good for you, they're food for your gut team.</div>
+  </div>
+
+  <!-- ══ ROUND 3 ══ -->
+  <div class="step-hdr">
+    <span class="step-num">ROUND 3 · ~5 min</span>
+    <h2 class="step-title">🍟 Player 3 — The Worst Meal</h2>
+  </div>
+
+  <div class="driver">
+    <div class="driver-icon">🎮</div>
+    <div>
+      <strong>Player 3 drives this round.</strong>
+      Build the meal that does the most damage to the gut team. Reset and go.
+    </div>
+  </div>
+
+  <div class="callout c-coral" style="margin-bottom:12px;">
+    <strong>Challenge:</strong> Try to get the gut health score as low as possible. Can you get it below 20%?
+  </div>
+
+  <div class="obs-box">
+    <h4>🔍 Round 3 Observations <span class="a-chip">Answer Doc → R3</span></h4>
+    <div class="obs-q">Which bacteria went up on the worst meal? That bacteria going up is actually bad — why?</div>
+    <div class="obs-q">Look at Round 2 and Round 3 side by side. How different were the gut health scores? What does that tell you about food choices over time?</div>
+    <button class="hint-btn" onclick="toggleHint(this)">💡 Hint</button>
+    <div class="hint">When good bacteria go down, the space they were taking up opens up for harmful bacteria — including ones that cause inflammation and make it harder to fight infections. This is why athletes who eat poorly sometimes get sick more often, even when they're in great physical shape.</div>
+  </div>
+
+  <!-- WRAP-UP -->
+  <div class="step-hdr">
+    <span class="step-num">WRAP-UP · 3 min</span>
+    <h2 class="step-title">👥 Group Conclusion</h2>
+  </div>
+
+  <div class="conclusion-box">
+    <h3>🧠 Put it together</h3>
+    <p>Look at the three rounds together. Talk it through before anyone writes. The person who drove the last round goes first.</p>
+    <div class="conc-q">Q1 — Which single food made the biggest positive difference to gut health across all three rounds? Which single food did the most damage? <span class="a-chip">Answer Doc → Q1</span></div>
+    <div class="conc-q">Q2 — Your gut bacteria can't survive without food either. What do you think happens to the good bacteria when you skip meals or eat very little? <span class="a-chip">Answer Doc → Q2</span></div>
+    <div class="conc-q">Q3 — One of the bacteria in the sim is called <em>Lactobacillus</em> — it's also the main bacteria in yogurt. Why do you think doctors tell athletes to eat yogurt when they're on antibiotics? <span class="a-chip">Answer Doc → Q3</span></div>
+  </div>
+
+  <div class="ww">
+    <h4>📇 Two new words — make index cards</h4>
+    <p style="font-size:14px;margin-bottom:10px;">Front = word, back = your own definition + a quick sketch.</p>
+    <div class="ww-terms">
+      <span class="ww-term">microbiome</span>
+      <span class="ww-term">mutualism</span>
+    </div>
+  </div>
+
+  <div class="exit">
+    <h3>🎟️ Exit Ticket</h3>
+    <p>One sentence — say it out loud or write it down.</p>
+    <div class="exit-q">The food that surprised me most was _______ because I didn't know it _______ the gut bacteria.</div>
+  </div>
+
+  <div class="callout c-teal" style="margin-top:18px;">
+    <strong>🔗 Next session:</strong> You just saw what feeds the good bacteria. Next we'll look at what wipes them out — and why that's a problem for athletes especially.
+  </div>
+
+</main>
+
+<script>
+// ── Progress + Timer ──────────────────────────────
+function updateProgress() {
+  const els = document.querySelectorAll('.obs-box,.conclusion-box,#gut-sim,.exit');
+  let v=0; els.forEach(e=>{if(e.getBoundingClientRect().top<window.innerHeight*.9)v++;});
+  document.getElementById('prog-bar').style.width=Math.min(100,Math.round(v/els.length*100))+'%';
+}
+window.addEventListener('scroll',updateProgress);
+let tStart=null,tGoing=false;
+function startTimer(){
+  if(tGoing)return; tGoing=true; tStart=Date.now();
+  (function tick(){
+    const e=Math.floor((Date.now()-tStart)/1000);
+    document.getElementById('timer').textContent=`⏱ ${Math.floor(e/60)}:${String(e%60).padStart(2,'0')}`;
+    setTimeout(tick,1000);
+  })();
+}
+document.addEventListener('click',startTimer,{once:true});
+document.addEventListener('scroll',startTimer,{once:true});
+
+function toggleHint(btn){
+  const h=btn.nextElementSibling;
+  h.classList.toggle('open');
+  btn.textContent=h.classList.contains('open')?'🔼 Hide hint':'💡 Hint';
+}
+
+// ── Food data ─────────────────────────────────────
+// effect: { lacto, bifido, bacteroides, clostridium, firmicutes }
+// lacto=good(defense), bifido=good(supply), bacteroides=good(immune), clostridium=bad, firmicutes=neutral-bad
+const FOODS = [
+  { emoji:'🍎', name:'Apple',       type:'fruit',    effect:{ lacto:+15, bifido:+12, bacteroides:+8,  clostridium:-10, firmicutes:-5  }},
+  { emoji:'🥦', name:'Broccoli',    type:'veggie',   effect:{ lacto:+18, bifido:+15, bacteroides:+12, clostridium:-12, firmicutes:-8  }},
+  { emoji:'🫐', name:'Blueberries', type:'fruit',    effect:{ lacto:+14, bifido:+10, bacteroides:+9,  clostridium:-8,  firmicutes:-4  }},
+  { emoji:'🥕', name:'Carrots',     type:'veggie',   effect:{ lacto:+12, bifido:+10, bacteroides:+7,  clostridium:-9,  firmicutes:-5  }},
+  { emoji:'🫘', name:'Beans',       type:'fiber',    effect:{ lacto:+20, bifido:+18, bacteroides:+14, clostridium:-15, firmicutes:-10 }},
+  { emoji:'🌾', name:'Whole Grain', type:'fiber',    effect:{ lacto:+16, bifido:+14, bacteroides:+10, clostridium:-11, firmicutes:-7  }},
+  { emoji:'🥛', name:'Yogurt',      type:'probiotic',effect:{ lacto:+22, bifido:+8,  bacteroides:+5,  clostridium:-14, firmicutes:-8  }},
+  { emoji:'🍌', name:'Banana',      type:'fruit',    effect:{ lacto:+10, bifido:+12, bacteroides:+6,  clostridium:-7,  firmicutes:-3  }},
+  { emoji:'🥚', name:'Eggs',        type:'protein',  effect:{ lacto:+2,  bifido:+2,  bacteroides:+3,  clostridium:+2,  firmicutes:+5  }},
+  { emoji:'🍗', name:'Chicken',     type:'protein',  effect:{ lacto:+2,  bifido:+1,  bacteroides:+2,  clostridium:+5,  firmicutes:+8  }},
+  { emoji:'🍕', name:'Pizza',       type:'junk',     effect:{ lacto:-10, bifido:-8,  bacteroides:-5,  clostridium:+15, firmicutes:+12 }},
+  { emoji:'🍟', name:'Fries',       type:'junk',     effect:{ lacto:-12, bifido:-10, bacteroides:-8,  clostridium:+18, firmicutes:+15 }},
+  { emoji:'🥤', name:'Soda',        type:'sugar',    effect:{ lacto:-15, bifido:-12, bacteroides:-10, clostridium:+20, firmicutes:+18 }},
+  { emoji:'🍬', name:'Candy',       type:'sugar',    effect:{ lacto:-14, bifido:-11, bacteroides:-9,  clostridium:+18, firmicutes:+16 }},
+  { emoji:'🍫', name:'Chocolate',   type:'sugar',    effect:{ lacto:-8,  bifido:-6,  bacteroides:-4,  clostridium:+12, firmicutes:+10 }},
+  { emoji:'🧃', name:'Sports Drink',type:'sugar',    effect:{ lacto:-10, bifido:-8,  bacteroides:-6,  clostridium:+14, firmicutes:+12 }},
+  { emoji:'🍞', name:'White Bread', type:'processed',effect:{ lacto:-6,  bifido:-5,  bacteroides:-3,  clostridium:+10, firmicutes:+8  }},
+  { emoji:'🍜', name:'Ramen',       type:'processed',effect:{ lacto:-7,  bifido:-6,  bacteroides:-4,  clostridium:+11, firmicutes:+9  }},
+];
+
+const BACTERIA = [
+  { key:'lacto',       name:'Lactobacillus',  emoji:'🛡️', color:'#2BBCB0', role:'Defense', goodOrBad:'good'  },
+  { key:'bifido',      name:'Bifidobacterium',emoji:'⚙️', color:'#56C271', role:'Supplier', goodOrBad:'good' },
+  { key:'bacteroides', name:'Bacteroides',    emoji:'🧠', color:'#9B7FD4', role:'Immune', goodOrBad:'good'   },
+  { key:'clostridium', name:'C. perfringens', emoji:'⚠️', color:'#FF6B6B', role:'Threat', goodOrBad:'bad'   },
+  { key:'firmicutes',  name:'Firmicutes',     emoji:'📉', color:'#FFB347', role:'Inflamer', goodOrBad:'bad'  },
+];
+
+let selectedFoods = new Set();
+let bacLevels = { lacto:50, bifido:50, bacteroides:50, clostridium:20, firmicutes:20 };
+let simHasRun = false;
+
+// build food grid
+function buildFoodGrid() {
+  const grid = document.getElementById('food-grid');
+  grid.innerHTML = '';
+  FOODS.forEach((f,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'food-btn';
+    btn.id = 'food-'+i;
+    btn.innerHTML = `<span class="food-emoji">${f.emoji}</span><span class="food-name">${f.name}</span>`;
+    btn.onclick = () => toggleFood(i, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function toggleFood(i, btn) {
+  if (selectedFoods.has(i)) {
+    selectedFoods.delete(i);
+    btn.classList.remove('selected');
+  } else {
+    selectedFoods.add(i);
+    btn.classList.add('selected');
+  }
+  document.getElementById('food-count').textContent = selectedFoods.size;
+  // auto-run whenever foods change so the gut reacts immediately
+  if (selectedFoods.size > 0) runSim();
+  else resetSim();
+}
+
+// build bacteria bars (initial)
+function buildBacBars() {
+  const inner = document.getElementById('bac-bars-inner');
+  inner.innerHTML = '';
+  BACTERIA.forEach(b => {
+    const row = document.createElement('div');
+    row.className = 'bac-row';
+    const pct = Math.max(0, Math.min(100, bacLevels[b.key]));
+    row.innerHTML = `
+      <span class="bac-emoji">${b.emoji}</span>
+      <span class="bac-name">${b.name}</span>
+      <div class="bac-track">
+        <div class="bac-fill" id="bar-${b.key}" style="width:${pct}%;background:${b.color};">
+          <span class="bac-pct" id="pct-${b.key}">${Math.round(pct)}%</span>
+        </div>
+      </div>`;
+    inner.appendChild(row);
+  });
+}
+
+function updateBacBars() {
+  BACTERIA.forEach(b => {
+    const pct = Math.max(0, Math.min(100, bacLevels[b.key]));
+    const fill = document.getElementById('bar-'+b.key);
+    const pctEl = document.getElementById('pct-'+b.key);
+    if (fill) { fill.style.width = pct+'%'; }
+    if (pctEl) { pctEl.textContent = Math.round(pct)+'%'; }
+  });
+}
+
+function computeHealth() {
+  const good = (bacLevels.lacto + bacLevels.bifido + bacLevels.bacteroides) / 3;
+  const bad  = (bacLevels.clostridium + bacLevels.firmicutes) / 2;
+  return Math.max(0, Math.min(100, good - bad * 0.5 + 30));
+}
+
+function updateHealthMeter(score) {
+  const fill = document.getElementById('hm-fill');
+  const txt  = document.getElementById('hm-txt');
+  const verdict = document.getElementById('hm-verdict');
+  fill.style.width = score + '%';
+  fill.style.background = score > 70 ? '#56C271' : score > 40 ? '#FFB347' : '#FF6B6B';
+  txt.textContent = Math.round(score) + '%';
+  if (score >= 80) {
+    verdict.textContent = '🌟 Gut team is thriving — great diversity of good bacteria!';
+    verdict.style.color = '#56C271';
+  } else if (score >= 60) {
+    verdict.textContent = '👍 Pretty good — a few more fiber-rich foods would help.';
+    verdict.style.color = var_or('#c8900a','var(--gold)');
+  } else if (score >= 40) {
+    verdict.textContent = '⚠️ Mixed — some good bacteria, but the harmful ones are climbing.';
+    verdict.style.color = '#FFB347';
+  } else {
+    verdict.textContent = '🚨 Gut team is struggling — harmful bacteria are taking over.';
+    verdict.style.color = '#FF6B6B';
+  }
+}
+function var_or(fallback) { return fallback; }
+
+// ── Canvas animation ───────────────────────────────
+const canvas = document.getElementById('gut-canvas');
+const ctx = canvas.getContext('2d');
+let bugs = [], animF = null, isAnimating = false;
+
+function resizeCanvas() {
+  canvas.width  = canvas.parentElement.offsetWidth;
+  canvas.height = 260;
+}
+resizeCanvas();
+window.addEventListener('resize', () => { resizeCanvas(); if (!isAnimating) drawGutIdle(); });
+
+class GutBug {
+  constructor(bac) {
+    this.bac = bac;
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.angle = Math.random() * Math.PI * 2;
+    this.len = 14 + Math.random() * 8;
+    this.w   = 6  + Math.random() * 4;
+    this.vx  = (Math.random() - .5) * .6;
+    this.vy  = (Math.random() - .5) * .6;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpd = .02 + Math.random() * .02;
+    this.alpha = .3 + Math.random() * .5;
+  }
+  draw(ctx) {
+    this.wobble += this.wobbleSpd;
+    const ang = this.angle + Math.sin(this.wobble) * .1;
+    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(ang);
+    ctx.fillStyle   = this.bac.color + Math.round(this.alpha * 255).toString(16).padStart(2,'0');
+    ctx.strokeStyle = this.bac.color + '44';
+    ctx.lineWidth = 1;
+    const hl = this.len/2, hw = this.w/2;
+    ctx.beginPath();
+    ctx.moveTo(-hl+hw,-hw); ctx.lineTo(hl-hw,-hw);
+    ctx.arc(hl-hw,0,hw,-Math.PI/2,Math.PI/2);
+    ctx.lineTo(-hl+hw,hw);
+    ctx.arc(-hl+hw,0,hw,Math.PI/2,-Math.PI/2);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if(this.x<8||this.x>canvas.width-8){this.vx*=-1;}
+    if(this.y<8||this.y>canvas.height-8){this.vy*=-1;}
+  }
+}
+
+function buildBugs(levels) {
+  bugs = [];
+  BACTERIA.forEach(b => {
+    const pct = Math.max(0, Math.min(100, levels[b.key]));
+    const count = Math.round(pct * 0.4); // scale to max ~40 bugs per species
+    for (let i = 0; i < count; i++) bugs.push(new GutBug(b));
+  });
+  // shuffle
+  bugs.sort(() => Math.random() - .5);
+}
+
+function drawGutIdle() {
+  if (!canvas.width) return;
+  ctx.fillStyle = '#0d1a0d';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // subtle grid
+  ctx.strokeStyle = 'rgba(255,255,255,.025)'; ctx.lineWidth = 1;
+  for(let x=0;x<canvas.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}
+  for(let y=0;y<canvas.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}
+  // draw current bugs
+  bugs.forEach(b => b.draw(ctx));
+  if (!simHasRun) {
+    ctx.fillStyle = 'rgba(0,0,0,.55)';
+    ctx.beginPath(); ctx.roundRect(canvas.width/2-170, canvas.height/2-14, 340, 30, 15); ctx.fill();
+    ctx.fillStyle = '#a5d6b0';
+    ctx.font = '600 13px Work Sans,sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('▶ Pick foods above and press Run', canvas.width/2, canvas.height/2);
+  }
+}
+
+function animLoop() {
+  if (!isAnimating) return;
+  ctx.fillStyle = 'rgba(13,26,13,.18)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = 'rgba(255,255,255,.015)'; ctx.lineWidth = 1;
+  for(let x=0;x<canvas.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}
+  for(let y=0;y<canvas.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}
+  bugs.forEach(b => { b.update(); b.draw(ctx); });
+  animF = requestAnimationFrame(animLoop);
+}
+
+// ── Run simulation ─────────────────────────────────
+function runSim() {
+  if (selectedFoods.size === 0) {
+    logMsg('⚠️ Pick at least one food first!', 'bad'); return;
+  }
+
+  // reset levels to baseline
+  bacLevels = { lacto:50, bifido:50, bacteroides:50, clostridium:20, firmicutes:20 };
+
+  // apply each selected food's effects
+  selectedFoods.forEach(i => {
+    const f = FOODS[i];
+    Object.keys(f.effect).forEach(k => {
+      bacLevels[k] = Math.max(0, Math.min(100, bacLevels[k] + f.effect[k]));
+    });
+  });
+
+  updateBacBars();
+  const score = computeHealth();
+  updateHealthMeter(score);
+  buildBugs(bacLevels);
+
+  // start animation
+  isAnimating = true;
+  if (animF) cancelAnimationFrame(animF);
+  animF = requestAnimationFrame(animLoop);
+
+  simHasRun = true;
+
+  // log message
+  const topFood = [...selectedFoods].map(i=>FOODS[i]).sort((a,b)=>
+    (b.effect.lacto+b.effect.bifido) - (a.effect.lacto+a.effect.bifido))[0];
+  const worstFood = [...selectedFoods].map(i=>FOODS[i]).sort((a,b)=>
+    (a.effect.lacto+a.effect.bifido) - (b.effect.lacto+b.effect.bifido))[0];
+
+  if (score >= 70) {
+    logMsg(`✅ Healthy meal! ${topFood.emoji} ${topFood.name} boosted the good bacteria the most.`, 'good');
+  } else if (score >= 40) {
+    logMsg(`⚡ Mixed results. ${topFood.emoji} ${topFood.name} helped, but ${worstFood.emoji} ${worstFood.name} hurt the gut team.`, 'inf');
+  } else {
+    logMsg(`🚨 Rough meal for the gut team. ${worstFood.emoji} ${worstFood.name} fed the harmful bacteria most.`, 'bad');
+  }
+
+  startTimer();
+}
+
+function resetSim() {
+  selectedFoods.clear();
+  document.querySelectorAll('.food-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('food-count').textContent = '0';
+  bacLevels = { lacto:50, bifido:50, bacteroides:50, clostridium:20, firmicutes:20 };
+  updateBacBars();
+  updateHealthMeter(50);
+  document.getElementById('hm-verdict').textContent = '';
+  isAnimating = false;
+  if (animF) cancelAnimationFrame(animF);
+  simHasRun = false;
+  buildBugs(bacLevels);
+  drawGutIdle();
+  logMsg('↺ Reset. Pick new foods for the next round.', 'inf');
+}
+
+function logMsg(t, cls) {
+  const p = document.getElementById('gs-msg');
+  p.textContent = t; p.className = cls;
+}
+
+window.addEventListener('load', () => {
+  updateProgress();
+  requestAnimationFrame(() => {
+    resizeCanvas();
+    buildFoodGrid();
+    buildBacBars();
+    updateHealthMeter(50);
+    buildBugs(bacLevels);
+    drawGutIdle();
+  });
+});
+</script>
+</body>
+</html>
