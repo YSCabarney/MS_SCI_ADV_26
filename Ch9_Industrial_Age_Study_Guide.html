@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 9 Study Guide: Life in the Industrial Age</title>
+<style>
+  :root{
+    --ink:#1f1b16; --paper:#faf6ee; --card:#ffffff; --rule:#e4dccb;
+    --brass:#a8742c; --soot:#3b3a36; --steel:#4a6278; --rust:#a3452f; --green:#3f7a4f;
+    --soft:#f1ead9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 Georgia,"Times New Roman",serif}
+  header{background:var(--soot);color:#f5efe2;padding:2.2rem 1.25rem 1.6rem;border-bottom:6px solid var(--brass)}
+  header .wrap{max-width:960px;margin:0 auto}
+  header small{letter-spacing:.18em;text-transform:uppercase;color:#d9b67a;font:600 .78rem/1 system-ui,sans-serif}
+  header h1{margin:.4rem 0 .3rem;font-size:2.2rem;line-height:1.15}
+  header p{margin:0;color:#d8d0bf;max-width:680px}
+  nav{position:sticky;top:0;z-index:5;background:#fffdf8;border-bottom:1px solid var(--rule);overflow-x:auto;white-space:nowrap}
+  nav .wrap{max-width:960px;margin:0 auto;padding:.5rem 1rem}
+  nav a{display:inline-block;margin-right:.35rem;padding:.35rem .7rem;border-radius:999px;color:var(--soot);text-decoration:none;font:600 .85rem/1 system-ui,sans-serif;border:1px solid var(--rule);background:#fff}
+  nav a:hover{background:var(--soft)}
+  main{max-width:960px;margin:0 auto;padding:1rem 1.1rem 4rem}
+  section{margin-top:2.6rem;scroll-margin-top:3.5rem}
+  h2{font-size:1.6rem;margin:0 0 .3rem;border-bottom:2px solid var(--brass);padding-bottom:.3rem}
+  h2 .tag{font:700 .75rem/1 system-ui,sans-serif;background:var(--brass);color:#fff;padding:.3rem .5rem;border-radius:4px;vertical-align:middle;margin-right:.5rem}
+  h3{font-size:1.2rem;margin:1.6rem 0 .4rem;color:var(--steel)}
+  .lede{color:#5a5246;font-style:italic;margin:.2rem 0 1rem}
+  .box{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0}
+  .bigidea{border-left:6px solid var(--brass);background:#fffaf0}
+  .bigidea b.lbl,.warn b.lbl,.hon b.lbl{display:block;font:700 .75rem/1 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.45rem}
+  .bigidea b.lbl{color:var(--brass)}
+  .warn{border-left:6px solid var(--rust);background:#fff5f1}
+  .warn b.lbl{color:var(--rust)}
+  .hon{border-left:6px solid var(--steel);background:#f3f7fa}
+  .hon b.lbl{color:var(--steel)}
+  ul{padding-left:1.2rem} li{margin:.25rem 0}
+  table{width:100%;border-collapse:collapse;font-size:.95rem;background:#fff}
+  th,td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{background:var(--soft);font:700 .8rem/1.2 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em}
+  td.yr{white-space:nowrap;font-weight:bold;color:var(--steel)}
+  .tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:10px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+  .art{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:1rem;border-top:6px solid var(--steel)}
+  .art.rom{border-top-color:#8a4f7d}.art.real{border-top-color:var(--soot)}.art.imp{border-top-color:#4f9a9a}
+  .art h4{margin:0 0 .2rem;font-size:1.2rem}
+  .art .def{font-style:italic;color:#5a5246;margin:0 0 .5rem}
+  /* timeline */
+  .timeline{position:relative;margin:1rem 0;padding-left:1.4rem;border-left:3px solid var(--brass)}
+  .timeline div{position:relative;margin:0 0 .65rem}
+  .timeline div::before{content:"";position:absolute;left:-1.85rem;top:.45rem;width:.75rem;height:.75rem;border-radius:50%;background:var(--paper);border:3px solid var(--brass)}
+  .timeline b{color:var(--steel);display:inline-block;min-width:3.4rem}
+  /* flashcards */
+  .controls{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.6rem 0 1rem}
+  .controls button,.btn{font:600 .85rem/1 system-ui,sans-serif;padding:.5rem .8rem;border-radius:8px;border:1px solid var(--rule);background:#fff;cursor:pointer;color:var(--ink)}
+  .controls button.on{background:var(--soot);color:#fff;border-color:var(--soot)}
+  .btn.primary{background:var(--brass);border-color:var(--brass);color:#fff}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem}
+  .fc{perspective:900px;height:170px;cursor:pointer}
+  .fc .in{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+  .fc.flip .in{transform:rotateY(180deg)}
+  .fc .f,.fc .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:.9rem;display:flex;flex-direction:column;justify-content:center;border:1px solid var(--rule)}
+  .fc .f{background:#fff;text-align:center;font-size:1.15rem;font-weight:bold}
+  .fc .f small{font:600 .7rem/1 system-ui,sans-serif;color:var(--brass);letter-spacing:.1em;text-transform:uppercase;margin-top:.5rem}
+  .fc .b{background:var(--soot);color:#f5efe2;transform:rotateY(180deg);font-size:.92rem;line-height:1.45;overflow:auto}
+  /* quiz */
+  .q{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:.9rem 1rem;margin:.7rem 0}
+  .q p{margin:0 0 .5rem;font-weight:bold}
+  .q label{display:block;padding:.35rem .5rem;border-radius:6px;cursor:pointer;font-size:.97rem}
+  .q label:hover{background:var(--soft)}
+  .q.right{border-color:var(--green);background:#f2faf4}
+  .q.wrong{border-color:var(--rust);background:#fff5f1}
+  .q .fb{display:none;margin-top:.4rem;font-size:.92rem}
+  .q.right .fb,.q.wrong .fb{display:block}
+  .score{font:700 1.1rem/1.3 system-ui,sans-serif;margin-top:.8rem}
+  details{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:.7rem 1rem;margin:.7rem 0}
+  details summary{cursor:pointer;font-weight:bold}
+  details[open] summary{margin-bottom:.5rem}
+  .chk{display:block;padding:.3rem 0}
+  footer{text-align:center;color:#857a68;font-size:.85rem;padding:2rem 1rem}
+  @media (max-width:640px){
+    body{font-size:16px}
+    header h1{font-size:1.7rem}
+    .tablewrap{border:none;overflow:visible}
+    table,tbody,tr,td{display:block;width:100%}
+    table{background:none}
+    tr:first-child{display:none}
+    tr{background:#fff;border:1px solid var(--rule);border-radius:10px;margin:0 0 .7rem;padding:.4rem .2rem}
+    td{border:none;padding:.25rem .7rem}
+    td::before{content:attr(data-label);display:block;font:700 .68rem/1.2 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--brass)}
+    td:first-child{font-weight:bold;font-size:1.08rem}
+    td:first-child::before{display:none}
+    .q label{padding:.6rem .5rem;font-size:1rem}
+    .q input{transform:scale(1.25);margin-right:.4rem}
+    .fc{height:150px}
+  }
+  @media print{
+    nav,.controls,.btn,#quiz-area button{display:none!important}
+    header{background:none;color:#000;border-bottom:3px solid #000}
+    header p,header small{color:#000}
+    .fc{height:auto;perspective:none}.fc .in{transform:none!important}
+    .fc .f,.fc .b{position:static;backface-visibility:visible;transform:none;background:#fff;color:#000}
+    section{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <small>World History Honors · Chapter 9 Test Prep</small>
+  <h1>Life in the Industrial Age<br>(c. 1800–1914)</h1>
+  <p>Covers 9.1 The Industrial Revolution Spreads · 9.2 The Rise of Cities · 9.3 Changing Attitudes and Beliefs · the art movements (Romanticism, Realism, Impressionism) · plus the review sheet.</p>
+</div></header>
+
+<nav><div class="wrap">
+  <a href="#big">Big Picture</a><a href="#s1">9.1 Industry</a><a href="#inv">Inventors</a><a href="#s2">9.2 Cities</a><a href="#s3">9.3 Attitudes</a><a href="#arts">The Arts</a><a href="#fix">Fix Your Notes</a><a href="#cards">Flashcards</a><a href="#quiz">Practice Test</a><a href="#essay">Essays</a><a href="#check">Checklist</a>
+</div></nav>
+
+<main>
+
+<!-- BIG PICTURE -->
+<section id="big">
+  <h2>The Big Picture</h2>
+  <div class="box bigidea">
+    <b class="lbl">The whole chapter in four sentences</b>
+    In the late 1800s the Industrial Revolution entered a <b>second phase</b>, driven by <b>steel, electricity, and chemicals</b> instead of just coal, iron, and textiles. New industrial powers (Belgium, Germany, France, the U.S.) caught up to Britain, and businesses grew into giant <b>corporations</b> and <b>monopolies</b> funded by selling <b>stock</b>. Millions of people moved into crowded <b>cities</b>, where science (especially <b>germ theory</b>) and reform slowly made life healthier. All this change shook up old ideas about <b>women, education, religion, science, and art</b>.
+  </div>
+
+  <h3>Timeline to anchor everything</h3>
+  <div class="timeline">
+    <div><b>1800</b> Volta's battery</div>
+    <div><b>1803</b> Dalton's atomic theory</div>
+    <div><b>1831</b> Faraday's dynamo (electric generator)</div>
+    <div><b>1839</b> Daguerre's photographs · Goodyear's vulcanized rubber</div>
+    <div><b>1844</b> Morse's telegraph line goes live</div>
+    <div><b>1846</b> Morton demonstrates anesthesia (ether)</div>
+    <div><b>1850s</b> Urban renewal rebuilds Paris</div>
+    <div><b>1856</b> Bessemer process makes cheap steel</div>
+    <div><b>1859</b> Darwin publishes <i>On the Origin of Species</i></div>
+    <div><b>1860</b> Nightingale opens the first nursing school</div>
+    <div><b>1865</b> William &amp; Catherine Booth found the Salvation Army</div>
+    <div><b>1867</b> Nobel patents dynamite</div>
+    <div><b>1869</b> Mendeleev's periodic table</div>
+    <div><b>1876</b> Bell's telephone · Otto's internal combustion engine</div>
+    <div><b>1879</b> Edison's practical light bulb</div>
+    <div><b>1880s</b> Benz and Daimler build early automobiles · Koch identifies the TB bacterium (1882)</div>
+    <div><b>1890s</b> Marconi's radio</div>
+    <div><b>1903</b> Wright brothers fly at Kitty Hawk</div>
+    <div><b>1911</b> Triangle Shirtwaist Factory fire (NYC)</div>
+    <div><b>1913</b> Ford's moving assembly line</div>
+    <div><b>1919–20</b> 18th Amendment (Prohibition) · 19th Amendment (women's suffrage, 1920)</div>
+  </div>
+</section>
+
+<!-- 9.1 -->
+<section id="s1">
+  <h2><span class="tag">9.1</span>The Industrial Revolution Spreads</h2>
+  <p class="lede">Textbook pp. 298–304</p>
+
+  <h3>I. The Second Phase (late 1800s–1900s)</h3>
+  <ul>
+    <li><b>New industrial powers</b> showed up to compete with Britain.</li>
+    <li>Factories were powered by <b>electricity</b>, not just steam.</li>
+    <li><b>New products</b>, especially <b>steel</b> (and chemicals).</li>
+    <li>Business got organized differently, into <b>giant companies</b>.</li>
+    <li>The economies of the whole <b>Western world</b> were transformed.</li>
+  </ul>
+  <div class="box hon"><b class="lbl">Honors-level thinking</b>
+    <b>What made the second phase different from the first?</b> The first phase was textiles, coal, iron, and steam, and it was mostly British. The second was steel, electricity, chemicals, and oil. It spread across many countries, it was organized by huge corporations, and it was run by companies that <i>hired scientists</i> (see Section IV). Think "era of science" rather than "era of tinkerers."
+  </div>
+
+  <h3>II. New Industrial Powers Emerge</h3>
+  <ul>
+    <li>Industry spread to <b>Belgium first</b>. <b>William Cockerill</b> opened factories there using British know-how.</li>
+    <li>Then to <b>Germany, France, and the United States</b>.</li>
+    <li><b>Why they caught up quickly:</b> plenty of <b>natural resources</b> (coal, iron), <b>capital</b> to invest, and they could <b>follow Britain's lead</b>. They copied proven technology instead of inventing it from scratch.</li>
+    <li><b>How Britain tried to protect its lead:</b> it made it <b>illegal to export textile machines</b> or for skilled mechanics to leave the country.</li>
+    <li><b>Did it work? No.</b> People smuggled the ideas out. <b>Samuel Slater</b> memorized the designs of British textile machines and rebuilt them in the U.S.</li>
+  </ul>
+
+  <h3>III. Uneven Development</h3>
+  <ul>
+    <li>Some nations industrialized slowly, mainly in <b>Eastern and Southern Europe</b> (for example Russia, Austria-Hungary, Spain, and southern Italy).</li>
+    <li><b>Why:</b> they lacked <b>natural resources</b> and <b>capital</b>, had little <b>government support</b>, and some rulers and social elites <b>feared the changes</b> industry would bring (they still relied on peasant farming).</li>
+  </ul>
+
+  <h3>IV. Technology Sparks Growth</h3>
+  <ul>
+    <li>By the 1880s companies were hiring <b>chemists and engineers</b> to develop new products and machines, which is why it became an <b>"era of science."</b></li>
+    <li><b>The dynamo</b> (Faraday) generated electricity. Without it there's no light bulb, no electric motors, and no electric streetcars. It's the reason electricity became the new power source.</li>
+    <li><b>Interchangeable parts</b> and the <b>assembly line</b> (Henry Ford) made mass production cheap and fast.</li>
+  </ul>
+
+  <h3>V. The Rise of Big Business</h3>
+  <ul>
+    <li>New technology required lots of money, or <b>capital</b>.</li>
+    <li>To raise it, companies sold <b>stock</b>, which means shares of ownership, to investors.</li>
+    <li>A <b>corporation</b> is a business owned by many investors who buy shares of stock. Investors risk only the amount they invested.</li>
+    <li>Some grew into <b>monopolies</b> that controlled an entire industry by wiping out the competition:
+      <ul>
+        <li><b>Alfred Krupp</b> (Germany): <b>steel</b> and weapons</li>
+        <li><b>John D. Rockefeller</b> (U.S.): <b>Standard Oil Company</b> (oil)</li>
+        <li><b>Andrew Carnegie</b> (U.S.): made <b>steel</b> affordable, with a massive operation in <b>Pittsburgh, PA</b></li>
+      </ul>
+    </li>
+    <li>A <b>cartel</b> is a group of companies that join together to control the production and price of a product.</li>
+    <li><b>Why monopolies are bad for consumers:</b> with no competition, they can set high prices and push out smaller businesses.</li>
+  </ul>
+  <div class="box bigidea"><b class="lbl">Cause → Effect chain (great for short answers)</b>
+    New technology is expensive → companies need <b>capital</b> → they sell <b>stock</b> → <b>corporations</b> form → the biggest crush rivals → <b>monopolies and cartels</b>.
+  </div>
+</section>
+
+<!-- INVENTORS -->
+<section id="inv">
+  <h2>Inventors &amp; Inventions</h2>
+  <p class="lede">Know the WHO, the WHAT, and roughly the WHEN.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Person</th><th>Invention / Contribution</th><th>Date</th><th>Why it mattered</th></tr>
+    <tr><td>Henry Bessemer</td><td>Bessemer process: cheap way to turn iron into <b>steel</b></td><td class="yr">1856</td><td>Steel built railroads, bridges, and <b>skyscrapers</b>, so it made modern cities possible</td></tr>
+    <tr><td>Alfred Nobel</td><td>Dynamite</td><td class="yr">1867</td><td>Blasting for mines, tunnels, and railroads (his fortune later funded the Nobel Prizes)</td></tr>
+    <tr><td>Alessandro Volta</td><td>First battery</td><td class="yr">1800</td><td>First steady source of electric current</td></tr>
+    <tr><td>Michael Faraday</td><td>Electric motor; <b>dynamo</b> (generator)</td><td class="yr">1821 / 1831</td><td>The dynamo is today's <b>generator</b>. It made electricity practical</td></tr>
+    <tr><td>Thomas Edison</td><td>Practical light bulb (plus phonograph and more)</td><td class="yr">1879</td><td>Brightened homes, factories, and streets</td></tr>
+    <tr><td>Nikolaus Otto</td><td>Internal combustion engine (four-stroke "Otto cycle")</td><td class="yr">1876</td><td>Adapted to run on gasoline and used in automobiles</td></tr>
+    <tr><td>Karl Benz / Gottlieb Daimler</td><td>Early gasoline-powered automobiles; Daimler's was an early four-wheeled car</td><td class="yr">1880s</td><td>Start of the auto age</td></tr>
+    <tr><td>Wilbur &amp; Orville Wright</td><td>First powered airplane flight</td><td class="yr">1903</td><td>Kitty Hawk, NC: the start of aviation</td></tr>
+    <tr><td>Samuel F. B. Morse</td><td>Telegraph (sends coded messages: Morse code)</td><td class="yr">1844</td><td>Near-instant long-distance <b>communication</b></td></tr>
+    <tr><td>Alexander Graham Bell</td><td>Telephone</td><td class="yr">1876</td><td><b>Communication</b> by voice</td></tr>
+    <tr><td>Guglielmo Marconi</td><td>Radio (wireless telegraph)</td><td class="yr">1890s</td><td><b>Communication</b> without wires</td></tr>
+    <tr><td>Henry Ford</td><td>Assembly line</td><td class="yr">1913</td><td>Mass-produced the Model T cheaply</td></tr>
+    <tr><td>Charles Goodyear</td><td>Vulcanized rubber</td><td class="yr">1839</td><td>Durable rubber, later used for tires</td></tr>
+  </table></div>
+  <div class="box hon"><b class="lbl">Review sheet Q4: three communication inventions</b>
+    Telegraph (Morse) · Telephone (Bell) · Radio (Marconi)
+  </div>
+</section>
+
+<!-- 9.2 -->
+<section id="s2">
+  <h2><span class="tag">9.2</span>The Rise of Cities</h2>
+
+  <h3>The problem</h3>
+  <p>Cities exploded in size as people came for factory jobs. Human and animal <b>waste was left in the streets</b>, water was dirty, and people got sick and died from diseases like <b>cholera</b> and <b>tuberculosis</b>.</p>
+
+  <h3>VI. Germ Theory: medicine catches up</h3>
+  <p><b>Germ theory</b> is the idea that infectious diseases are caused by certain <b>microbes</b> (germs).</p>
+  <div class="tablewrap"><table>
+    <tr><th>Person</th><th>Contribution</th><th>In plain English</th></tr>
+    <tr><td>Louis Pasteur</td><td><b>Pasteurization</b>: heating liquids to kill microbes</td><td>Safe, clean <b>milk</b>. He also helped prove germ theory</td></tr>
+    <tr><td>Robert Koch</td><td>Identified the bacteria that cause <b>tuberculosis</b> (and cholera)</td><td>If you know the germ, you can work to prevent it</td></tr>
+    <tr><td>Joseph Lister</td><td><b>Antiseptics</b> to prevent infection during surgery</td><td>Keep wounds and tools clean</td></tr>
+    <tr><td>Florence Nightingale</td><td>Opened the <b>first nursing school</b> (1860)</td><td>Disgusted by filthy hospitals, she made cleanliness and nursing a profession</td></tr>
+    <tr><td>William Morton</td><td><b>Anesthesia</b> (ether)</td><td>Surgery without agony</td></tr>
+  </table></div>
+
+  <h3>Making cities better</h3>
+  <ul>
+    <li><b>Urban renewal</b> means fixing up and rebuilding poor parts of a city. The most extensive example was <b>Paris in the 1850s</b> (wide boulevards, parks, and new sewers).</li>
+    <li><b>Steel</b> made skyscrapers possible, which is how cities like New York grew <i>up</i>.</li>
+    <li><b>Mutual aid societies</b> were self-help groups that aided sick or injured workers.</li>
+    <li><b>Standard of living</b> measures the quality and availability of necessities and comforts in a society. For most workers it slowly <b>rose</b> by the late 1800s.</li>
+  </ul>
+
+  <h3>Factory dangers: the Triangle Shirtwaist Fire (1911)</h3>
+  <div class="box">
+    At the Triangle Shirtwaist Factory in New York City, mostly young immigrant women worked long hours sewing blouses. In 1911 a fire broke out (probably from a discarded cigarette or match in a scrap bin). Exit doors were <b>locked</b>, the fire escape collapsed, and there were few safety measures. <b>146 workers died</b>.<br><br>
+    <b>Positive effects:</b> public outrage led to new <b>fire-safety and labor laws</b>, including <b>sprinklers</b>, <b>multiple unlocked exits</b>, fire drills, extinguishers, and factory inspections. It also strengthened labor unions.
+  </div>
+</section>
+
+<!-- 9.3 -->
+<section id="s3">
+  <h2><span class="tag">9.3</span>Changing Attitudes and Beliefs</h2>
+  <p class="lede">Textbook pp. 312–318 · the "Progressive" spirit of making progress</p>
+
+  <h3>Women's roles</h3>
+  <ul>
+    <li><b>Cult of domesticity</b>: the idea that women belonged at <b>home</b> and men belonged at <b>work</b>.</li>
+    <li><b>Goals of the women's movement:</b> the right to <b>vote</b> (suffrage), to <b>own property</b>, fairer marriage and <b>divorce</b> laws, access to <b>education</b>, and <b>temperance</b>.</li>
+    <li><b>Why it faced opposition:</b> many believed men were superior, that women were "too emotional" to vote, and that a woman's place was in the home, not in politics.</li>
+    <li><b>Women's suffrage</b> means women's right to vote. In the U.S. it was won with the <b>19th Amendment (1920)</b>.</li>
+    <li><b>Elizabeth Cady Stanton</b> organized the women's rights movement (with <b>Susan B. Anthony</b>).</li>
+    <li><b>Sojourner Truth</b> was an African American abolitionist and suffragist.</li>
+    <li>Suffragists like Susan B. Anthony were <b>arrested</b> in their fight for equality.</li>
+  </ul>
+
+  <h3>Education</h3>
+  <ul>
+    <li>Governments created <b>free public schools</b> and made attendance <b>compulsory</b>, and they built <b>secondary schools</b> (high schools).</li>
+    <li>Teachers received <b>training</b>; <b>science</b> was added to the curriculum; <b>colleges for women</b> opened.</li>
+    <li><b>Why more kids went to school:</b> schools got better, laws required it, and industry needed literate workers. Also, fewer children were needed on farms.</li>
+  </ul>
+
+  <h3>Science</h3>
+  <ul>
+    <li><b>John Dalton</b>: modern <b>atomic theory</b>.</li>
+    <li><b>Dmitri Mendeleev</b>: the <b>periodic table</b>.</li>
+    <li><b>Charles Darwin</b>: <i>On the Origin of Species</i> (1859), the theory of <b>evolution</b> by <b>natural selection</b> ("survival of the fittest").</li>
+    <li><b>Why Darwin was controversial:</b> his ideas <b>challenged religious beliefs</b> about creation. Others twisted them into <b>Social Darwinism</b>, applying "survival of the fittest" to people and nations, which was used to justify <b>racism</b>, imperialism, and ignoring the poor.</li>
+    <li><b>Racism</b>: the <b>unscientific</b> belief that one racial group is superior to another.</li>
+  </ul>
+
+  <h3>Religion &amp; reform</h3>
+  <ul>
+    <li>Despite challenges from science, <b>Christianity remained a major force</b> in Western society.</li>
+    <li><b>Social gospel</b>: a movement that urged Christians to do social service, helping the less fortunate.</li>
+    <li><b>Salvation Army</b>: a Christian charity movement founded by <b>William and Catherine Booth</b> to promote the social gospel.</li>
+    <li><b>Temperance movement</b>: a campaign to limit or ban alcohol. It led to <b>Prohibition</b> under the <b>18th Amendment</b> (no buying or selling alcohol).</li>
+  </ul>
+  <div class="box hon"><b class="lbl">Amendment trick</b>
+    <b>18</b> came first and took the drinks away. <b>19</b> came next and gave women the vote. Both took effect around <b>1920</b>.
+  </div>
+</section>
+
+<!-- ARTS -->
+<section id="arts">
+  <h2>The Arts in the Industrial Age</h2>
+  <p class="lede">Three movements. Know the definition and the examples for each.</p>
+  <div class="grid">
+    <div class="art rom">
+      <h4>Romanticism</h4>
+      <p class="def">Early-1800s style that appealed to <b>emotion</b> and imagination and celebrated nature (a reaction against cold reason and ugly factories).</p>
+      <ul>
+        <li><b>William Wordsworth</b>: poet of the power and beauty of <b>nature</b></li>
+        <li><b>Victor Hugo</b>: <i>The Hunchback of Notre Dame</i> recreated France's past</li>
+        <li><b>Ludwig van Beethoven</b>: composer who combined classical forms with a stirring range of sound</li>
+      </ul>
+    </div>
+    <div class="art real">
+      <h4>Realism</h4>
+      <p class="def">Mid-to-late-1800s movement that tried to represent the <b>world as it really was</b>, harsh parts included.</p>
+      <ul>
+        <li><b>Charles Dickens</b>: portrayed slum dwellers and factory workers. His novel <i>Oliver Twist</i> exposed child labor, crime, and poverty</li>
+        <li><b>Victor Hugo</b> (later): <i>Les Misérables</i>, about how hunger drove a good man to crime</li>
+        <li><b>Louis Daguerre</b>: improved photography (daguerreotypes, 1839). The camera captured reality exactly</li>
+      </ul>
+    </div>
+    <div class="art imp">
+      <h4>Impressionism</h4>
+      <p class="def">Late-1800s school of painting that tried to capture <b>fleeting visual impressions</b> of light and color.</p>
+      <ul>
+        <li><b>Claude Monet</b>: placed brushstrokes of color side by side and let the viewer's eye blend them</li>
+        <li><b>Vincent van Gogh</b>: experimented with bold brushstrokes and dreamlike images (often called a <i>post</i>-Impressionist)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box bigidea"><b class="lbl">Quick way to remember the order</b>
+    <b>Romanticism</b> = "How does it make me <i>feel</i>?" → <b>Realism</b> = "Show it how it <i>is</i>." → <b>Impressionism</b> = "Show how it <i>looked for one moment</i>."
+  </div>
+</section>
+
+<!-- FIX NOTES -->
+<section id="fix">
+  <h2>⚠ Fix These in Your Notes</h2>
+  <p class="lede">A few spots in the handwritten notes and worksheets don't match the facts. Correct these before the test.</p>
+  <div class="box warn">
+    <b class="lbl">Corrections</b>
+    <ul>
+      <li><b>Steel quiz Q23 (made steel affordable, factory in Pittsburgh):</b> the answer is <b>b. Andrew Carnegie</b>, not d. (Abraham Darby was an earlier British ironmaker.)</li>
+      <li><b>Romanticism card:</b> Victor Hugo wrote <i>The Hunchback of Notre Dame</i> and <i>Les Misérables</i>. <b><i>The Three Musketeers</i> was written by Alexandre Dumas</b>, not Hugo.</li>
+      <li><b>Impressionism card:</b> it's Claude <b>Monet</b> (with an O). Édouard <b>Manet</b> is a different painter.</li>
+      <li><b>Realism:</b> <i>Oliver Twist</i> is a book <b>by Dickens</b>, not a separate author. For "two realist writers," a safer answer is <b>Dickens</b> and <b>Hugo</b> (for <i>Les Misérables</i>).</li>
+      <li><b>Dates on the inventors sheet:</b> Edison's light bulb was <b>1879</b> (not 1870). Otto's engine was <b>1876</b> (not 1800). Faraday's dynamo was <b>1831</b>. Nobel's dynamite was <b>1867</b>.</li>
+      <li><b>Name spelling:</b> the man who brought British textile machine designs to the U.S. was <b>Samuel Slater</b>.</li>
+      <li><b>Mutual-aid society vs. social gospel:</b> a mutual-aid society is a <i>workers'</i> self-help group. The social gospel is a <i>religious</i> movement urging service to the poor.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FLASHCARDS -->
+<section id="cards">
+  <h2>Flashcards</h2>
+  <p class="lede">Tap a card to flip it. Filter by section, or shuffle.</p>
+  <div class="controls" id="fc-filters"></div>
+  <div class="cards" id="fc-grid"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <h2>Practice Test</h2>
+  <p class="lede">Modeled on the review sheet and section quizzes. Answer everything, then check.</p>
+  <div id="quiz-area"></div>
+  <button class="btn primary" id="grade">Check my answers</button>
+  <button class="btn" id="reset">Reset</button>
+  <div class="score" id="score"></div>
+</section>
+
+<!-- ESSAYS -->
+<section id="essay">
+  <h2>Short Answer &amp; Essay Practice</h2>
+  <p class="lede">Try answering out loud or on paper first, then open the model outline. Honors answers give a claim, specific evidence, and the "so what."</p>
+
+  <details><summary>1. How did the Industrial Revolution spread in the late 1800s, and why could other nations catch up to Britain so quickly?</summary>
+    <ul><li><b>Claim:</b> Industry spread from Britain to Belgium, then Germany, France, and the U.S.</li>
+    <li><b>Evidence:</b> Britain banned exporting machines, but people smuggled out the know-how (Cockerill to Belgium, Slater to the U.S.). The newcomers had coal, iron, and capital.</li>
+    <li><b>So what:</b> Latecomers could <i>copy</i> proven technology instead of inventing it, so they skipped Britain's trial and error. Germany and the U.S. eventually out-produced Britain in steel.</li></ul>
+  </details>
+
+  <details><summary>2. Why were some countries slow to industrialize? Give examples.</summary>
+    <ul><li>Eastern and Southern Europe (Russia, Austria-Hungary, Spain, southern Italy).</li>
+    <li>They lacked natural resources and capital, their governments gave little support, and elites feared that industry would upset the old social order built on peasant farming.</li></ul>
+  </details>
+
+  <details><summary>3. What was the dynamo's impact on the Industrial Revolution?</summary>
+    <ul><li>Faraday's dynamo generated electricity in large amounts, which made it a practical power source.</li>
+    <li>It powered factories, lighting (Edison's bulb), electric motors, streetcars, and communication.</li>
+    <li>It shifted the Industrial Revolution from steam power to electric power, which is a defining feature of the second phase.</li></ul>
+  </details>
+
+  <details><summary>4. How did the need for capital lead to new ways of organizing business?</summary>
+    <ul><li>New technology (steel mills, rail networks, power plants) cost more than any single owner had.</li>
+    <li>Companies sold stock, which created corporations owned by many investors with limited risk.</li>
+    <li>The biggest corporations formed monopolies and cartels (Rockefeller's Standard Oil, Krupp's steel), which raises the question of whether that power hurt consumers.</li></ul>
+  </details>
+
+  <details><summary>5. Explain what happened at the Triangle Shirtwaist Factory in 1911 and what positive effects came from it.</summary>
+    <ul><li><b>What:</b> a fire in a NYC garment factory. The doors were locked and there were no real safety measures, and 146 workers (mostly young immigrant women) died.</li>
+    <li><b>Why so deadly:</b> locked exits, a flimsy fire escape, crowded floors, and flammable fabric scraps.</li>
+    <li><b>Positive effects:</b> new fire codes and labor laws (sprinklers, unlocked and multiple exits, fire drills, factory inspections) and stronger unions.</li></ul>
+  </details>
+
+  <details><summary>6. What were the goals of the women's movement, and why did it face opposition?</summary>
+    <ul><li><b>Goals:</b> suffrage, property rights, fair marriage and divorce laws, education, and temperance.</li>
+    <li><b>Opposition:</b> the cult of domesticity (women belong at home), the belief that men were superior, and claims that women were too emotional for politics.</li>
+    <li><b>Outcome:</b> the 19th Amendment (1920) in the U.S.</li></ul>
+  </details>
+
+  <details><summary>7. What idea did Darwin propose, and why was it so controversial?</summary>
+    <ul><li>Evolution by natural selection, published in <i>On the Origin of Species</i> (1859).</li>
+    <li>It challenged religious teachings about creation.</li>
+    <li>It was misused as Social Darwinism to justify racism, imperialism, and ignoring the poor. Darwin wrote about species, but others applied "survival of the fittest" to human societies.</li></ul>
+  </details>
+
+  <details><summary>8. In your opinion, what was the most important invention of the late 19th / early 20th century? Explain.</summary>
+    <p>There's no single right answer, but strong answers <b>pick one</b>, give <b>2–3 specific effects</b>, and <b>connect it to other inventions</b>. Example: <b>Electricity (the dynamo)</b> powered the light bulb, telephone, and electric motors, let factories run anywhere and all night, and is still the backbone of modern life. Steel or the internal combustion engine are also strong choices.</p>
+  </details>
+</section>
+
+<!-- CHECKLIST -->
+<section id="check">
+  <h2>Night-Before Checklist</h2>
+  <div class="box" id="checklist"></div>
+</section>
+
+</main>
+
+<footer>Chapter 9: Life in the Industrial Age · Study Guide</footer>
+
+<script>
+/* label table cells for phone layout */
+document.querySelectorAll("table").forEach(t=>{
+  const heads=[...t.querySelectorAll("tr:first-child th")].map(th=>th.textContent);
+  t.querySelectorAll("tr").forEach(r=>[...r.querySelectorAll("td")].forEach((td,i)=>td.setAttribute("data-label",heads[i]||"")));
+});
+
+/* ---------- FLASHCARDS ---------- */
+const CARDS = [
+ // 9.1
+ ["9.1","Second phase of the Industrial Revolution","Late 1800s: steel, electricity, and chemicals; new industrial powers; giant corporations."],
+ ["9.1","Interchangeable parts","Identical components that can be used in place of one another in manufacturing."],
+ ["9.1","Assembly line","A production method that breaks a complex job into a series of smaller tasks (Henry Ford)."],
+ ["9.1","Stock","Shares of ownership in a company, sold to investors to raise capital."],
+ ["9.1","Capital","Money invested in a business. New technology required lots of it."],
+ ["9.1","Corporation","A business owned by many investors who buy shares of stock."],
+ ["9.1","Monopoly","Complete control of an industry by one company that wipes out competition (e.g., Standard Oil)."],
+ ["9.1","Cartel","A group of companies that join together to control the production and price of a product."],
+ ["9.1","Bessemer process","1856: an inexpensive way to make steel from iron."],
+ ["9.1","Dynamo","Faraday's electric generator (1831). It made electricity a practical power source."],
+ ["9.1","Andrew Carnegie","American steel pioneer who made steel affordable, with a massive operation in Pittsburgh, PA."],
+ ["9.1","John D. Rockefeller","Oil: built the Standard Oil Company monopoly."],
+ ["9.1","Alfred Krupp","German steel (and weapons) giant."],
+ ["9.1","William Cockerill","Opened factories in Belgium, the first country after Britain to industrialize."],
+ ["9.1","Samuel Slater","Brought British textile machine designs to the U.S. despite Britain's export ban."],
+ ["9.1","Nikolaus Otto","Internal combustion engine (1876). Adapted to run on gasoline, it powered automobiles."],
+ ["9.1","Morse / Bell / Marconi","Telegraph (1844) / Telephone (1876) / Radio (1890s): the communication revolution."],
+ // 9.2
+ ["9.2","Germ theory","The theory that infectious diseases are caused by certain microbes."],
+ ["9.2","Louis Pasteur","Pasteurization: heating liquids like milk to kill microbes."],
+ ["9.2","Robert Koch","Identified the bacteria that cause tuberculosis (and cholera)."],
+ ["9.2","Joseph Lister","Antiseptics to prevent infection in surgery."],
+ ["9.2","Florence Nightingale","Opened the first nursing school (1860) and championed clean hospitals."],
+ ["9.2","William Morton","Anesthesia (ether) for painless surgery."],
+ ["9.2","Urban renewal","Fixing up and rebuilding poor parts of a city. The most extensive was Paris in the 1850s."],
+ ["9.2","Mutual aid society","A self-help group that aids sick or injured workers."],
+ ["9.2","Standard of living","Measures the quality and availability of necessities and comforts in a society."],
+ ["9.2","Triangle Shirtwaist Fire","1911, NYC: 146 workers died behind locked doors, which led to fire-safety and labor laws."],
+ // 9.3
+ ["9.3","Cult of domesticity","The idea that women belonged at home and men at work."],
+ ["9.3","Women's suffrage","Women's right to vote. U.S.: 19th Amendment, 1920."],
+ ["9.3","Elizabeth Cady Stanton","Organized the movement for women's rights (with Susan B. Anthony)."],
+ ["9.3","Sojourner Truth","African American abolitionist and suffragist."],
+ ["9.3","John Dalton","Developed modern atomic theory."],
+ ["9.3","Dmitri Mendeleev","Created the periodic table."],
+ ["9.3","Charles Darwin","On the Origin of Species (1859): evolution by natural selection."],
+ ["9.3","Natural selection","'Survival of the fittest': organisms best suited to their environment survive and reproduce."],
+ ["9.3","Social Darwinism","Misapplying 'survival of the fittest' to people and nations, used to justify racism and imperialism."],
+ ["9.3","Racism","The unscientific belief that one racial group is superior to another."],
+ ["9.3","Temperance movement","A campaign to limit or ban alcohol, which led to Prohibition (18th Amendment)."],
+ ["9.3","Social gospel","A movement urging Christians to do social service for the less fortunate."],
+ ["9.3","Salvation Army","Christian charity movement founded by William and Catherine Booth."],
+ // Arts
+ ["Arts","Romanticism","19th-century artistic style that appealed to emotion. Wordsworth, Hugo, Beethoven."],
+ ["Arts","Realism","19th-century movement that tried to represent the world as it was. Dickens, Daguerre."],
+ ["Arts","Impressionism","Late-1800s painting that captured fleeting visual impressions. Monet, Van Gogh."],
+ ["Arts","William Wordsworth","Romantic poet of the power and beauty of nature."],
+ ["Arts","Victor Hugo","Hunchback of Notre Dame (romantic) and Les Misérables (realistic)."],
+ ["Arts","Ludwig van Beethoven","Romantic composer who combined classical forms with a stirring range of sound."],
+ ["Arts","Charles Dickens","Realist author of Oliver Twist, about slums, child labor, and poverty."],
+ ["Arts","Louis Daguerre","Improved photography (daguerreotype, 1839)."],
+ ["Arts","Claude Monet","Placed brushstrokes of color side by side and let the eye blend them."],
+ ["Arts","Vincent van Gogh","Bold brushstrokes and dreamlike images."]
+];
+let fcFilter="All", fcOrder=CARDS.map((_,i)=>i);
+function renderFilters(){
+  const f=document.getElementById("fc-filters");
+  f.innerHTML="";
+  ["All","9.1","9.2","9.3","Arts"].forEach(s=>{
+    const b=document.createElement("button");b.textContent=s;if(s===fcFilter)b.className="on";
+    b.onclick=()=>{fcFilter=s;renderFilters();renderCards();};f.appendChild(b);
+  });
+  const sh=document.createElement("button");sh.textContent="🔀 Shuffle";
+  sh.onclick=()=>{fcOrder.sort(()=>Math.random()-.5);renderCards();};f.appendChild(sh);
+  const fl=document.createElement("button");fl.textContent="Flip all back";
+  fl.onclick=()=>document.querySelectorAll(".fc").forEach(c=>c.classList.remove("flip"));f.appendChild(fl);
+}
+function renderCards(){
+  const g=document.getElementById("fc-grid");g.innerHTML="";
+  fcOrder.forEach(i=>{
+    const [sec,front,back]=CARDS[i];
+    if(fcFilter!=="All"&&sec!==fcFilter)return;
+    const d=document.createElement("div");d.className="fc";
+    d.innerHTML=`<div class="in"><div class="f">${front}<small>${sec}</small></div><div class="b">${back}</div></div>`;
+    d.onclick=()=>d.classList.toggle("flip");g.appendChild(d);
+  });
+}
+renderFilters();renderCards();
+
+/* ---------- QUIZ ---------- */
+const QUIZ=[
+ {q:"The Bessemer process produces:",o:["Oil","Steel","Electricity","Rubber"],a:1,e:"Bessemer (1856) made steel cheaply from iron."},
+ {q:"The dynamo, the modern-day generator, was invented by:",o:["Thomas Edison","James Watt","Michael Faraday","Nikolaus Otto"],a:2,e:"Faraday, 1831."},
+ {q:"Who built the internal combustion engine (1876) that was later adapted to power automobiles?",o:["Michael Faraday","Robert Fulton","James Watt","Nikolaus Otto"],a:3,e:"Otto, 1876."},
+ {q:"The main purpose of selling stock was to allow companies to raise:",o:["prices","capital","production","wages"],a:1,e:"Stock = selling shares to raise capital."},
+ {q:"Which product made the growth of major modern cities like NYC (skyscrapers) possible?",o:["cars","trains","steel","iron ore"],a:2,e:"Steel frames let buildings go up, way up."},
+ {q:"John D. Rockefeller was associated with:",o:["steelmaking","NYC skyscrapers","the oil industry","airline travel"],a:2,e:"Standard Oil Company."},
+ {q:"Which American made steel affordable, with a massive factory in Pittsburgh, PA?",o:["John Rockefeller","Andrew Carnegie","Alfred Krupp","Abraham Darby"],a:1,e:"Carnegie. (Krupp was German; Darby was an earlier British ironmaker.)"},
+ {q:"Which country industrialized first after Britain?",o:["Russia","Belgium","Spain","Japan"],a:1,e:"Belgium, helped by William Cockerill."},
+ {q:"How did Britain try to protect its industrial lead?",o:["It raised taxes on coal","It banned exporting textile machines and skilled mechanics","It built a navy blockade","It sold its patents"],a:1,e:"And it didn't work: Samuel Slater and others carried the ideas out."},
+ {q:"Businesses owned by many investors who buy stock are called:",o:["cartels","corporations","monopolies","mutual-aid societies"],a:1,e:""},
+ {q:"A group of companies that join together to control the production and price of a product is a:",o:["corporation","union","cartel","stock exchange"],a:2,e:""},
+ {q:"The idea that harmful microbes cause illness is:",o:["urbanization","urban renewal","Social Darwinism","germ theory"],a:3,e:""},
+ {q:"Who opened the first school for nursing?",o:["Florence Nightingale","Elizabeth Cady Stanton","Catherine Booth","Sojourner Truth"],a:0,e:"1860, London."},
+ {q:"Robert Koch identified the bacteria that cause:",o:["polio","tuberculosis","the flu","smallpox"],a:1,e:"Also cholera."},
+ {q:"The most extensive urban renewal of the 1850s took place in:",o:["London","New York","Paris","Berlin"],a:2,e:""},
+ {q:"A self-help group that aids sick or injured workers is a:",o:["social gospel","mutual-aid society","cartel","temperance league"],a:1,e:""},
+ {q:"Who opened the Salvation Army to promote the social gospel?",o:["Charles Dickens","William and Catherine Booth","Louis Pasteur","Susan B. Anthony"],a:1,e:""},
+ {q:"Who created modern atomic theory?",o:["Mendeleev","Darwin","Dalton","Koch"],a:2,e:"Mendeleev made the periodic table."},
+ {q:"The temperance movement eventually led to which amendment?",o:["18th (Prohibition)","19th (Suffrage)","13th","15th"],a:0,e:""},
+ {q:"Women's suffrage was guaranteed in the U.S. by the:",o:["18th Amendment","19th Amendment","1st Amendment","21st Amendment"],a:1,e:"1920."},
+ {q:"(Romanticism / Realism) art attempted to represent the world as it was.",o:["Romanticism","Realism"],a:1,e:""},
+ {q:"Which artist placed brushstrokes of color side by side and let the eye mix them?",o:["Claude Monet","Vincent van Gogh","Louis Daguerre","Ludwig van Beethoven"],a:0,e:""},
+ {q:"Victor Hugo's novel about how hunger drove a good man to crime:",o:["Faust","Oliver Twist","Les Misérables","The Three Musketeers"],a:2,e:"Oliver Twist is Dickens; The Three Musketeers is Dumas."},
+ {q:"A Romantic-style composer:",o:["Beethoven","Dickens","Monet","Wordsworth"],a:0,e:"Wordsworth is Romantic too, but he's a poet."},
+ // T/F
+ {q:"TRUE or FALSE: The spread of industry caused no changes to the existing social structure in the Western world.",o:["True","False"],a:1,e:"Huge changes: a new middle class, a working class, cities, and reform movements."},
+ {q:"TRUE or FALSE: All women openly accepted the restrictions placed on them by society.",o:["True","False"],a:1,e:""},
+ {q:"TRUE or FALSE: Despite reformers' efforts, public schools remained inaccessible for most children.",o:["True","False"],a:1,e:"Free and compulsory schooling spread widely."},
+ {q:"TRUE or FALSE: Darwin's theory of natural selection was readily accepted by all.",o:["True","False"],a:1,e:""},
+ {q:"TRUE or FALSE: Despite challenges from new scientific ideas, Christianity continued to be a major force in Western society.",o:["True","False"],a:0,e:""},
+ {q:"TRUE or FALSE: Susan B. Anthony and other suffragists were arrested during their fight for equality.",o:["True","False"],a:0,e:""}
+];
+function renderQuiz(){
+  const area=document.getElementById("quiz-area");area.innerHTML="";
+  QUIZ.forEach((item,i)=>{
+    const d=document.createElement("div");d.className="q";d.id="q"+i;
+    d.innerHTML=`<p>${i+1}. ${item.q}</p>`+item.o.map((opt,j)=>
+      `<label><input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(97+j)}. ${opt}</label>`).join("")+
+      `<div class="fb"></div>`;
+    area.appendChild(d);
+  });
+  document.getElementById("score").textContent="";
+}
+document.getElementById("grade").onclick=()=>{
+  let right=0;
+  QUIZ.forEach((item,i)=>{
+    const d=document.getElementById("q"+i);
+    const pick=d.querySelector("input:checked");
+    d.classList.remove("right","wrong");
+    const fb=d.querySelector(".fb");
+    if(pick&&+pick.value===item.a){right++;d.classList.add("right");fb.innerHTML="✅ Correct. "+item.e;}
+    else{d.classList.add("wrong");fb.innerHTML=`❌ Answer: <b>${item.o[item.a]}</b>. ${item.e}`;}
+  });
+  const pct=Math.round(right/QUIZ.length*100);
+  document.getElementById("score").textContent=`Score: ${right} / ${QUIZ.length} (${pct}%)` +
+    (pct>=90?". Ready for the test.":pct>=75?". Close. Review the red ones and the flashcards.":". Go back through the sections, then try again.");
+  document.getElementById("score").scrollIntoView({behavior:"smooth",block:"center"});
+};
+document.getElementById("reset").onclick=renderQuiz;
+renderQuiz();
+
+/* open all essay outlines when printing */
+window.addEventListener("beforeprint",()=>document.querySelectorAll("details").forEach(d=>d.open=true));
+
+/* ---------- CHECKLIST ---------- */
+const CHECK=[
+ "I can explain what made the SECOND phase of the Industrial Revolution different",
+ "I can name the new industrial powers and explain why they caught up so fast",
+ "I can explain why Eastern and Southern Europe industrialized slowly",
+ "I can match every inventor to their invention (and a rough date)",
+ "I know the chain: capital → stock → corporation → monopoly/cartel",
+ "I know Carnegie = steel, Rockefeller = oil, Krupp = German steel",
+ "I can name all five germ-theory/medicine people and what each did",
+ "I can define urban renewal, mutual-aid society, and standard of living",
+ "I can explain the Triangle Shirtwaist Fire AND its positive effects",
+ "I know the goals of the women's movement and why it faced opposition",
+ "I know the 18th vs. 19th Amendment",
+ "I can explain Darwin's idea, why it was controversial, and Social Darwinism",
+ "I can define Romanticism, Realism, and Impressionism with examples",
+ "I fixed the mistakes listed in 'Fix These in Your Notes'",
+ "I scored 90%+ on the practice test"
+];
+document.getElementById("checklist").innerHTML=CHECK.map(c=>`<label class="chk"><input type="checkbox"> ${c}</label>`).join("");
+</script>
+</body>
+</html>
